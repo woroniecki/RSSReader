@@ -1,0 +1,29 @@
+{
+  "RTK Slice reducer": {
+    "prefix": "rr",
+    "body": [
+      "    ${1}(state, { payload }: PayloadAction<${2}>) {",
+      "      state.${3} = payload",
+      "      Adapter.addMany(state, payload)",
+      "    },"
+    ],
+    "description": "RTK Slice reducer"
+  },
+  "RTK Slice prepared reducer": {
+    "prefix": "rpr",
+    "body": [
+      "    ${1}: {",
+      "      reducer(",
+      "        state,",
+      "        action: PayloadAction<${3}>",
+      "      ) {",
+      "        state. = action.payload",
+      "      },",
+      "      prepare(payload: ${2}) {",
+      "        return { payload }",
+      "      }",
+      "    }"
+    ],
+    "description": "RTK Slice prepared reducer"
+  }
+}

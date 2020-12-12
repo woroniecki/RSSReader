@@ -1,0 +1,32 @@
+{
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "git.ignoreLimitWarning": true, //  NOTE:  ignores the warning when there are too many changes in a repository
+  "javascript.suggest.completeFunctionCalls": true,
+  "eslint.codeAction.disableRuleComment": {
+    "enable": true,
+    "location": "separateLine"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.rulers": [80, 120],
+  "editor.tabSize": 2,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.formatOnSave": true,
+  "todohighlight.isEnable": true,
+  "todohighlight.keywords": [
+    {
+      "text": "NOTE:",
+      "backgroundColor": "lawngreen",
+      "color": "#fff"
+    },
+    {
+      "text": "TODO:",
+      "backgroundColor": "#03A9F4"
+    },
+    {
+      "text": "FIXME:",
+      "backgroundColor": "#FF7043"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "ReactFC": {
+    "prefix": "rfc",
+    "body": [
+      "import React from 'react';",
+      "import { useHistory } from 'react-router-dom';",
+      "",
+      "export interface $1Props {",
+      "  ",
+      "}",
+      " ",
+      "export const $1: React.FC<$1Props> = props => {",
+      "  const dispatch = useAppDispatch()",
+      "  const {push} = useHistory()",
+      "  const { t } = useTranslation()",
+      "  ",
+      "  return (",
+      "         $1",
+      "       )",
+      "}",
+      " ",
+      "export default $1"
+    ],
+    "description": ""
+  }
+}

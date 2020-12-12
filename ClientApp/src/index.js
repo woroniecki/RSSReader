@@ -13,29 +13,24 @@ import AppNavbar from './components/AppNavbar'
 import AppHome from './components/AppHome'
 import Register from './components/Register'
 import Login from './components/Login'
-import { ThemeProvider } from '@material-ui/core/styles'
-import { createMuiTheme } from '@material-ui/core/styles'
 import { Provider } from 'react-redux'
 import { store } from 'store/store'
 // A custom theme for this app
-const theme = createMuiTheme()
 
 const history = createBrowserHistory()
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <Router history={history}>
-          <AppNavbar />
-          <Switch>
-            <Route exact path="/" component={AppHome} />
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
-            <Route>404</Route>
-          </Switch>
-        </Router>
-      </ThemeProvider>
+      <Router history={history}>
+        <AppNavbar />
+        <Switch>
+          <Route exact path="/" component={AppHome} />
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
+          <Route>404</Route>
+        </Switch>
+      </Router>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

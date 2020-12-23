@@ -28,6 +28,12 @@ namespace RSSReader.Controllers
             _config = config;
         }
 
+        [HttpGet]
+        public string Get()
+        {
+            return "getigeti";
+        }
+
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] UserForRegisterDto model)
@@ -61,10 +67,13 @@ namespace RSSReader.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserForLoginDto model)
         {
-            var user = await _userManager.FindByNameAsync(model.UsernameOrEmail);
+            if (!ModelState.IsValid)
+                return BadRequest("Wrong data");
+
+            var user = await _userManager.FindByNameAsync(model.Username);
 
             if (user == null)
-                user = await _userManager.FindByEmailAsync(model.UsernameOrEmail);
+                user = await _userManager.FindByEmailAsync(model.Username);
 
             if (user == null)
                 return Unauthorized("Wrong data");

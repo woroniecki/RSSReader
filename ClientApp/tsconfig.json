@@ -16,17 +16,9 @@
     "strictNullChecks": false,
     "target": "es6",
     "pretty": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "**/mock/*"
-  ]
+  "include": ["src"],
+  "exclude": ["**/mock/*"]
 }

@@ -52,13 +52,13 @@ namespace RSSReader.UnitTests
 
             _loginUsernameModel = new Dtos.UserForLoginDto()
             {
-                UsernameOrEmail = "username",
+                Username = "username",
                 Password = "password"
             };
 
             _loginEmailModel = new Dtos.UserForLoginDto()
             {
-                UsernameOrEmail = "user@mail.com",
+                Username = "user@mail.com",
                 Password = "password"
             };
 
@@ -148,9 +148,9 @@ namespace RSSReader.UnitTests
         public async Task Login_LoginByUsername_ReturnOkLoggedUser()
         {
             //ARRANGE
-            _userToLogin.UserName = _loginUsernameModel.UsernameOrEmail;
+            _userToLogin.UserName = _loginUsernameModel.Username;
 
-            _userManagerMock.Setup(x => x.FindByNameAsync(_loginUsernameModel.UsernameOrEmail))
+            _userManagerMock.Setup(x => x.FindByNameAsync(_loginUsernameModel.Username))
                             .Returns(Task.FromResult(_userToLogin));
 
             _userManagerMock.Setup(x => x.CheckPasswordAsync(_userToLogin, _loginUsernameModel.Password))
@@ -166,7 +166,7 @@ namespace RSSReader.UnitTests
             Assert.IsTrue(result_expires > DateTime.Now);
             Assert.That(
                 result_user.UserName,
-                Is.EqualTo(_loginUsernameModel.UsernameOrEmail)
+                Is.EqualTo(_loginUsernameModel.Username)
                 );
         }
 
@@ -174,9 +174,9 @@ namespace RSSReader.UnitTests
         public async Task Login_LoginByEmail_ReturnOkLoggedUser()
         {
             //ARRANGE
-            _userToLogin.Email = _loginEmailModel.UsernameOrEmail;
+            _userToLogin.Email = _loginEmailModel.Username;
 
-            _userManagerMock.Setup(x => x.FindByEmailAsync(_loginEmailModel.UsernameOrEmail))
+            _userManagerMock.Setup(x => x.FindByEmailAsync(_loginEmailModel.Username))
                             .Returns(Task.FromResult(_userToLogin));
 
             _userManagerMock.Setup(x => x.CheckPasswordAsync(_userToLogin, _loginUsernameModel.Password))
@@ -190,14 +190,14 @@ namespace RSSReader.UnitTests
             Assert.IsInstanceOf<OkObjectResult>(result);
             Assert.IsInstanceOf<string>(result_token);
             Assert.IsTrue(result_expires > DateTime.Now);
-            Assert.That( result_user.Email, Is.EqualTo(_loginEmailModel.UsernameOrEmail));
+            Assert.That( result_user.Email, Is.EqualTo(_loginEmailModel.Username));
         }
 
         [Test]
         public async Task Login_UserWithUsernameOrEmailNotExists_ReturnUnauthorized()
         {
             //ARRANGE
-            _userToLogin.UserName = _loginUsernameModel.UsernameOrEmail;
+            _userToLogin.UserName = _loginUsernameModel.Username;
             _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                             .Returns(Task.FromResult<IdentityUser>(null));
 
@@ -217,7 +217,7 @@ namespace RSSReader.UnitTests
         public async Task Login_WrongPassword_ReturnUnauthorized()
         {
             //ARRANGE
-            _userToLogin.UserName = _loginUsernameModel.UsernameOrEmail;
+            _userToLogin.UserName = _loginUsernameModel.Username;
             _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                             .Returns(Task.FromResult<IdentityUser>(_userToLogin));
 

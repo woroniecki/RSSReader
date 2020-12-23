@@ -8,13 +8,13 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle.js'
 import { createBrowserHistory } from 'history'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { store } from 'store/store'
+import { Provider } from 'react-redux'
 
 import AppNavbar from './components/AppNavbar'
 import AppHome from './components/AppHome'
 import Register from './components/Register'
 import Login from './components/Login'
-import { Provider } from 'react-redux'
-import { store } from 'store/store'
 // A custom theme for this app
 
 const history = createBrowserHistory()

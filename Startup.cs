@@ -48,6 +48,8 @@ namespace RSSReader
                 options.User.RequireUniqueEmail = false;
             });
 
+            services.AddCors();
+
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
@@ -76,6 +78,8 @@ namespace RSSReader
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseEndpoints(endpoints =>
             {

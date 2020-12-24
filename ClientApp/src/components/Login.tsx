@@ -19,7 +19,7 @@ export const Login: React.FC<LoginProps> = props => {
       password: '',
     },
     validationSchema: Yup.object().shape({
-      username: Yup.string().min(3, 'Too Short!').required('Required'),
+      username: Yup.string().required('Required'),
       password: Yup.string().required('Required'),
     }),
     onSubmit: values => {

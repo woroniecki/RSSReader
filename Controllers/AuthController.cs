@@ -95,8 +95,8 @@ namespace RSSReader.Controllers
                                 new Claim(ClaimTypes.Name, user.Email)
                     }
                 ),
-                Issuer = "http://localhost:5000/",//TODO
-                Audience = "http://localhost:5000/",//TODO
+                //Issuer = "http://localhost:5000/",//TODO
+                //Audience = "http://localhost:5000/",//TODO
                 Expires = DateTime.Now.AddHours(3),
                 SigningCredentials = creds,
             };

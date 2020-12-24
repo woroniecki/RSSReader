@@ -26,9 +26,6 @@ export const UserNavbar: React.FC<UserNavbarProps> = props => {
   } else {
     returnValue = (
       <Nav>
-        <Link to="/register" className="nav-link">
-          {userName}
-        </Link>
         <NavDropdown title={userName} id="collasible-nav-dropdown" alignRight>
           <NavDropdown.Item href="">Panel</NavDropdown.Item>
           <NavDropdown.Divider />

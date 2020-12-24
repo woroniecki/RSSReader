@@ -28,12 +28,6 @@ namespace RSSReader.Controllers
             _config = config;
         }
 
-        [HttpGet]
-        public string Get()
-        {
-            return "getigeti";
-        }
-
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] UserForRegisterDto model)

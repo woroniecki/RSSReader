@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RSSReader.Data;
 
 namespace RSSReader.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201224221230_added blogs table")]
+    partial class addedblogstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -229,39 +231,6 @@ namespace RSSReader.Migrations
                     b.ToTable("Blogs");
                 });
 
-            modelBuilder.Entity("RSSReader.Models.BlogSubscription", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("BlogId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("FirstSubscribeDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("LastSubscribeDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("LastUnsubscribeDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlogId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("BlogSubscriptions");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -311,21 +280,6 @@ namespace RSSReader.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("RSSReader.Models.BlogSubscription", b =>
-                {
-                    b.HasOne("RSSReader.Models.Blog", "Blog")
-                        .WithMany()
-                        .HasForeignKey("BlogId");
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Blog");
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

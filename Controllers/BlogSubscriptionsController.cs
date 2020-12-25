@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using RSSReader.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,24 @@ namespace RSSReader.Controllers
                 return Unauthorized();
             
             return Ok(new { data = user });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSubscribedBlogsList()
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddBlogSubscription(BlogSubscriptionForAddDto blogSubscriptionForAddDto)
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DisableBlogSubscription()
+        {
+            return Ok();
         }
     }
 }

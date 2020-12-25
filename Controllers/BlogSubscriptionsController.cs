@@ -17,12 +17,10 @@ namespace RSSReader.Controllers
     public class BlogSubscriptionsController : Controller
     {
         private UserManager<IdentityUser> _userManager;
-        private readonly IConfiguration _config;
 
-        public BlogSubscriptionsController(UserManager<IdentityUser> userManager, IConfiguration config)
+        public BlogSubscriptionsController(UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
-            _config = config;
         }
 
         [HttpGet]

@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.AspNetCore.Identity;
+using Moq;
+using NUnit.Framework;
 using RSSReader.Dtos;
 using System.Threading.Tasks;
 
@@ -7,13 +9,18 @@ namespace RSSReader.UnitTests
     [TestFixture]
     class BlogSubscriptionsControllerTests
     {
+        private Mock<UserManager<IdentityUser>> _userManagerMock;
         BlogSubscriptionForAddDto _blogSubscriptionForAddDto;
 
         [SetUp]
         public void SetUp()
         {
             //Mocks
-            
+            _userManagerMock = new Mock<UserManager<IdentityUser>>(
+                Mock.Of<IUserStore<IdentityUser>>(),
+                null, null, null, null, null, null, null, null
+                );
+
             //Dto
             _blogSubscriptionForAddDto = new Dtos.BlogSubscriptionForAddDto()
             {

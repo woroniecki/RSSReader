@@ -6,6 +6,7 @@ namespace RSSReader.UnitTests
     [TestFixture]
     class BlogSubscriptionsControllerTests
     {
+
         #region AddBlogSubscription
 
         [Test]
@@ -29,7 +30,17 @@ namespace RSSReader.UnitTests
         }
 
         [Test]
-        public async Task AddBlogSubscription_EnablesAlreadyExistingBlogsub_CreatedResult()
+        public async Task AddBlogSubscription_EnablesAlreadyExistingBlogsub_Ok()
+        {
+            //ARRANGE
+
+            //ACT
+
+            //ASSERT
+        }
+
+        [Test]
+        public async Task AddBlogSubscription_CantFindUserFromClaims_Unauthorized()
         {
             //ARRANGE
 

@@ -7,5 +7,6 @@ namespace RSSReader.Dtos
 {
     public class BlogSubscriptionForAddDto
     {
+        public string BlogUrl { get; set; }
     }
 }

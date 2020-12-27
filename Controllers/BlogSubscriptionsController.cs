@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using RSSReader.Dtos;
+using RSSReader.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,29 +15,24 @@ namespace RSSReader.Controllers
     [ApiController]
     [Authorize]
     [Route("api/[controller]")]
-    public class BlogSubscriptionsController : Controller
+    public class BlogSubscriptionsController : APIBaseController
     {
-        private UserManager<IdentityUser> _userManager;
-
         public BlogSubscriptionsController(UserManager<IdentityUser> userManager)
+            : base(userManager)
         {
-            _userManager = userManager;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            var user = await _userManager.FindByIdAsync(id);
-
+            IdentityUser user = await GetCurrentUser();
             if (user == null)
                 return Unauthorized();
-            
+
             return Ok(new { data = user });
         }
 
-        [HttpGet]
+        [HttpGet("list")]
         public async Task<IActionResult> GetSubscribedBlogsList()
         {
             return Ok();

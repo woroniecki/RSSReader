@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
+using Moq.Protected;
 using NUnit.Framework;
+using RSSReader.Controllers;
 using RSSReader.Dtos;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace RSSReader.UnitTests
@@ -10,6 +14,7 @@ namespace RSSReader.UnitTests
     class BlogSubscriptionsControllerTests
     {
         private Mock<UserManager<IdentityUser>> _userManagerMock;
+        private Mock<BlogSubscriptionsController> _blogSubscriptionsControllerMock;
         BlogSubscriptionForAddDto _blogSubscriptionForAddDto;
 
         [SetUp]
@@ -20,6 +25,11 @@ namespace RSSReader.UnitTests
                 Mock.Of<IUserStore<IdentityUser>>(),
                 null, null, null, null, null, null, null, null
                 );
+
+            _blogSubscriptionsControllerMock = new Mock<BlogSubscriptionsController>(
+                _userManagerMock.Object
+                );
+            _blogSubscriptionsControllerMock.CallBase = true;
 
             //Dto
             _blogSubscriptionForAddDto = new Dtos.BlogSubscriptionForAddDto()
@@ -64,10 +74,16 @@ namespace RSSReader.UnitTests
         public async Task AddBlogSubscription_CantFindUserFromClaims_Unauthorized()
         {
             //ARRANGE
+            _blogSubscriptionsControllerMock.Protected()
+                .Setup<Task<IdentityUser>>("GetCurrentUser")
+                .Returns(Task.FromResult<IdentityUser>(null))
+                .Verifiable();
 
             //ACT
+            var result = await _blogSubscriptionsControllerMock.Object.GetSubscribedBlogsList();
 
             //ASSERT
+            Assert.IsInstanceOf<UnauthorizedObjectResult>(result);
         }
 
         [Test]

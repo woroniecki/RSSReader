@@ -58,11 +58,11 @@ namespace RSSReader.Controllers
             return Ok(subs);
         }
 
-        [HttpPost("add")]
+        [HttpPost("subscribe")]
         public async Task<IActionResult> Subscribe(SubscriptionForAddDto subscriptionForAddDto)
         {
             ApiUser user = await GetCurrentUser();
-            
+
             if (user == null)
                 return Unauthorized("Auth failed");
 
@@ -77,7 +77,7 @@ namespace RSSReader.Controllers
                     Url = subscriptionForAddDto.BlogUrl
                 };
 
-                if(!await _blogRepository.AddAsync(blog))
+                if (!await _blogRepository.AddAsync(blog))
                     return BadRequest("Internal server error");
             }
 
@@ -88,27 +88,51 @@ namespace RSSReader.Controllers
             {
                 subscription = new Subscription(user, blog);
 
-                if(!await _subRepository.AddAsync(subscription))
+                if (!await _subRepository.AddAsync(subscription))
                     return BadRequest("Internal server error");
 
                 return Created("route to set", subscription);
             }
-            else if(!subscription.Active)
+            else if (!subscription.Active)
             {
                 subscription.Active = true;
-                if(!await _readerRepository.SaveAllAsync())
+                subscription.LastSubscribeDate = DateTime.Now;
+
+                if (!await _readerRepository.SaveAllAsync())
                     return BadRequest("Internal server error");
 
                 return Ok(subscription);
             }
 
-            return Ok(subscription);
+            return BadRequest("Is alredy subscribed");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Unsubscribe()
+        [HttpPost("{id}/unsubscribe")]
+        public async Task<IActionResult> Unsubscribe(int id)
         {
-            return Ok();
+            ApiUser user = await GetCurrentUser();
+
+            if (user == null)
+                return Unauthorized("Auth failed");
+
+            if (!user.Subscriptions.Any(x => x.Id == id))
+                return Unauthorized();
+
+            var sub = await _subRepository.Get(id);
+
+            if (sub == null)
+                return BadRequest("Subscription doesn't exists");
+
+            if (!sub.Active)
+                return BadRequest("Subscription is already not active");
+
+            sub.Active = false;
+            sub.LastUnsubscribeDate = DateTime.Now;
+
+            if(!await _readerRepository.SaveAllAsync())
+                return BadRequest("Internal server error");
+
+            return Ok(sub);
         }
     }
 }

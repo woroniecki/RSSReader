@@ -12,6 +12,8 @@ using System;
 
 using RSSReader.UnitTests.Helpers;
 using RSSReader.Models;
+using AutoMapper;
+using RSSReader.Helpers;
 
 namespace RSSReader.UnitTests
 {
@@ -20,6 +22,7 @@ namespace RSSReader.UnitTests
     {
         private Mock<UserManager<ApiUser>> _userManagerMock;
         private Mock<IConfiguration> _configurationMock;
+        private IMapper _mapper;
         private Dtos.UserForRegisterDto _registerModel;
         private Dtos.UserForLoginDto _loginUsernameModel;
         private UserForLoginDto _loginEmailModel;
@@ -43,6 +46,12 @@ namespace RSSReader.UnitTests
             _configurationMock.Setup(x => x.GetSection("AppSettings:Token"))
                               .Returns(configSectionMock.Object);
 
+            var mockMapper = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfiles());
+            });
+            _mapper = mockMapper.CreateMapper();
+
             //Dto
             _registerModel = new Dtos.UserForRegisterDto()
             {
@@ -64,7 +73,7 @@ namespace RSSReader.UnitTests
             };
 
             //Controller
-            _authController = new AuthController(_userManagerMock.Object, _configurationMock.Object);
+            _authController = new AuthController(_userManagerMock.Object, _configurationMock.Object, _mapper);
 
             //Data
             _userToLogin = new ApiUser()
@@ -233,12 +242,12 @@ namespace RSSReader.UnitTests
             Assert.That(result_data, Is.EqualTo("Wrong data"));
         }
 
-        private static void GetDataFromLoginResult(IActionResult result, out string result_token, out DateTime result_expires, out ApiUser result_user)
+        private static void GetDataFromLoginResult(IActionResult result, out string result_token, out DateTime result_expires, out UserForReturnDto result_user)
         {
             var result_data = (result as ObjectResult).Value;
             result_token = result_data.GetProperty("token") as string;
             result_expires = (DateTime)result_data.GetProperty("expiration");
-            result_user = result_data.GetProperty("user") as ApiUser;
+            result_user = result_data.GetProperty("user") as UserForReturnDto;
         }
 
         #endregion

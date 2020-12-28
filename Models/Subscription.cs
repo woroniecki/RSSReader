@@ -23,7 +23,7 @@ namespace RSSReader.Models
         public DateTime FirstSubscribeDate { get; set; }
         public DateTime LastSubscribeDate { get; set; }
         public DateTime LastUnsubscribeDate { get; set; }
-        public Blog Blog { get; set; }
-        public ApiUser User { get; set; }
+        public virtual Blog Blog { get; set; }
+        public virtual ApiUser User { get; set; }
     }
 }

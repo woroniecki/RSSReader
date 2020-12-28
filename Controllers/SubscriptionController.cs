@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using RSSReader.Data;
 using RSSReader.Dtos;
@@ -48,16 +49,20 @@ namespace RSSReader.Controllers
         public async Task<IActionResult> GetList()
         {
             ApiUser user = await GetCurrentUser();
+
             if (user == null)
                 return Unauthorized("Auth failed");
 
-            return Ok();
+            var subs = user.Subscriptions;
+
+            return Ok(subs);
         }
 
         [HttpPost("add")]
         public async Task<IActionResult> Subscribe(SubscriptionForAddDto subscriptionForAddDto)
         {
             ApiUser user = await GetCurrentUser();
+            
             if (user == null)
                 return Unauthorized("Auth failed");
 

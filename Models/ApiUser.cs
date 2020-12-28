@@ -8,6 +8,6 @@ namespace RSSReader.Models
 {
     public class ApiUser : IdentityUser
     {
-        public ICollection<Subscription> Subscriptions { get; set; }
+        public virtual ICollection<Subscription> Subscriptions { get; set; }
     }
 }

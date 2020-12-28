@@ -9,7 +9,7 @@ namespace RSSReader.Models
     public class Subscription
     {
         public Subscription() { }
-        public Subscription(IdentityUser user, Blog blog)
+        public Subscription(ApiUser user, Blog blog)
         {
             Active = true;
             FirstSubscribeDate = DateTime.Now;
@@ -24,6 +24,6 @@ namespace RSSReader.Models
         public DateTime LastSubscribeDate { get; set; }
         public DateTime LastUnsubscribeDate { get; set; }
         public Blog Blog { get; set; }
-        public IdentityUser User { get; set; }
+        public ApiUser User { get; set; }
     }
 }

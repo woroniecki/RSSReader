@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RSSReader.Dtos;
+using RSSReader.Models;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,12 +18,12 @@ namespace RSSReader.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        private UserManager<IdentityUser> _userManager;
+        private UserManager<ApiUser> _userManager;
         private readonly IConfiguration _config;
 
         //private readonly IEmailSender _emailSender; UnComment if you want to add Email Verification also.
 
-        public AuthController(UserManager<IdentityUser> userManager, IConfiguration config)
+        public AuthController(UserManager<ApiUser> userManager, IConfiguration config)
         {
             _userManager = userManager;
             _config = config;
@@ -42,7 +43,7 @@ namespace RSSReader.Controllers
             if (await _userManager.FindByEmailAsync(model.Email) != null)
                 return BadRequest("User with this email already exists");
 
-            var new_user = new IdentityUser
+            var new_user = new ApiUser
             {
                 UserName = model.Username,
                 Email = model.Email,

@@ -15,13 +15,13 @@ namespace RSSReader.UnitTests
     [TestFixture]
     class SubscriptionsControllerTests
     {
-        private Mock<UserManager<IdentityUser>> _userManagerMock;
+        private Mock<UserManager<ApiUser>> _userManagerMock;
         private Mock<IReaderRepository> _readerRepository;
         private Mock<IBlogRepository> _blogRepositoryMock;
         private Mock<ISubRepository> _subRepositoryMock;
         private Mock<SubscriptionController> _subscriptionControllerMock;
         private SubscriptionForAddDto _subForAddDto;
-        private IdentityUser _user;
+        private ApiUser _user;
         private Blog _blog;
         private Subscription _subscription;
 
@@ -29,8 +29,8 @@ namespace RSSReader.UnitTests
         public void SetUp()
         {
             //Mocks
-            _userManagerMock = new Mock<UserManager<IdentityUser>>(
-                Mock.Of<IUserStore<IdentityUser>>(),
+            _userManagerMock = new Mock<UserManager<ApiUser>>(
+                Mock.Of<IUserStore<ApiUser>>(),
                 null, null, null, null, null, null, null, null
                 );
 
@@ -53,7 +53,7 @@ namespace RSSReader.UnitTests
             };
 
             //Data
-            _user = new IdentityUser()
+            _user = new ApiUser()
             {
                 Id = "0",
                 UserName = "username",
@@ -74,7 +74,7 @@ namespace RSSReader.UnitTests
         {
             //ARRANGE
             _subscriptionControllerMock.Protected()
-                .Setup<Task<IdentityUser>>("GetCurrentUser")
+                .Setup<Task<ApiUser>>("GetCurrentUser")
                 .Returns(Task.FromResult(_user))
                 .Verifiable();
 
@@ -104,7 +104,7 @@ namespace RSSReader.UnitTests
         {
             //ARRANGE
             _subscriptionControllerMock.Protected()
-                .Setup<Task<IdentityUser>>("GetCurrentUser")
+                .Setup<Task<ApiUser>>("GetCurrentUser")
                 .Returns(Task.FromResult(_user))
                 .Verifiable();
 
@@ -132,7 +132,7 @@ namespace RSSReader.UnitTests
         {
             //ARRANGE
             _subscriptionControllerMock.Protected()
-                .Setup<Task<IdentityUser>>("GetCurrentUser")
+                .Setup<Task<ApiUser>>("GetCurrentUser")
                 .Returns(Task.FromResult(_user))
                 .Verifiable();
 
@@ -165,8 +165,8 @@ namespace RSSReader.UnitTests
         {
             //ARRANGE
             _subscriptionControllerMock.Protected()
-                .Setup<Task<IdentityUser>>("GetCurrentUser")
-                .Returns(Task.FromResult<IdentityUser>(null))
+                .Setup<Task<ApiUser>>("GetCurrentUser")
+                .Returns(Task.FromResult<ApiUser>(null))
                 .Verifiable();
 
             //ACT

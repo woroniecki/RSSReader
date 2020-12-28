@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using RSSReader.Data;
+using RSSReader.Models;
 using System.Text;
 
 namespace RSSReader
@@ -27,7 +28,7 @@ namespace RSSReader
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<ApiUser>()
                 .AddEntityFrameworkStores<DataContext>();
 
             services.Configure<IdentityOptions>(options =>

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace RSSReader.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class ApiUser : IdentityUser
     {
+        public ICollection<Subscription> Subscriptions { get; set; }
     }
 }

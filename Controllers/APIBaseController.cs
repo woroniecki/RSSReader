@@ -11,14 +11,14 @@ namespace RSSReader.Controllers
 {
     public abstract class APIBaseController : Controller
     {
-        private UserManager<IdentityUser> _userManager;
+        private UserManager<ApiUser> _userManager;
 
-        public APIBaseController(UserManager<IdentityUser> userManager)
+        public APIBaseController(UserManager<ApiUser> userManager)
         {
             _userManager = userManager;
         }
 
-        protected virtual async Task<IdentityUser> GetCurrentUser()
+        protected virtual async Task<ApiUser> GetCurrentUser()
         {
             var id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             return await _userManager.FindByIdAsync(id);

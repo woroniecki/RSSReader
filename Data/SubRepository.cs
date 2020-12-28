@@ -22,7 +22,7 @@ namespace RSSReader.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<Subscription> GetByUserAndBlogAsync(IdentityUser user, Blog blog)
+        public async Task<Subscription> GetByUserAndBlogAsync(ApiUser user, Blog blog)
         {
             return await _context.Subscriptions
                 .FirstOrDefaultAsync(x => x.User == user && x.Blog == blog);
@@ -31,7 +31,7 @@ namespace RSSReader.Data
 
     public interface ISubRepository
     {
-        Task<Subscription> GetByUserAndBlogAsync(IdentityUser user, Blog blog);
+        Task<Subscription> GetByUserAndBlogAsync(ApiUser user, Blog blog);
         Task<bool> AddAsync(Subscription blogSub);
     }
 }

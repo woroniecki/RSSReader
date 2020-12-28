@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RSSReader.Data
 {
-    public class DataContext : IdentityDbContext
+    public class DataContext : IdentityDbContext<ApiUser>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<Blog> Blogs { get; set; }

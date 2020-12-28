@@ -11,26 +11,27 @@ using RSSReader.Dtos;
 using System;
 
 using RSSReader.UnitTests.Helpers;
+using RSSReader.Models;
 
 namespace RSSReader.UnitTests
 {
     [TestFixture]
     public class AuthControllerTests
     {
-        private Mock<UserManager<IdentityUser>> _userManagerMock;
+        private Mock<UserManager<ApiUser>> _userManagerMock;
         private Mock<IConfiguration> _configurationMock;
         private Dtos.UserForRegisterDto _registerModel;
         private Dtos.UserForLoginDto _loginUsernameModel;
         private UserForLoginDto _loginEmailModel;
         private AuthController _authController;
-        private IdentityUser _userToLogin;
+        private ApiUser _userToLogin;
 
         [SetUp]
         public void SetUp()
         {
             //Mocks
-            _userManagerMock = new Mock<UserManager<IdentityUser>>(
-                Mock.Of<IUserStore<IdentityUser>>(),
+            _userManagerMock = new Mock<UserManager<ApiUser>>(
+                Mock.Of<IUserStore<ApiUser>>(),
                 null, null, null, null, null, null, null, null
                 );
 
@@ -66,7 +67,7 @@ namespace RSSReader.UnitTests
             _authController = new AuthController(_userManagerMock.Object, _configurationMock.Object);
 
             //Data
-            _userToLogin = new IdentityUser()
+            _userToLogin = new ApiUser()
             {
                 Id = "0",
                 UserName = "username",
@@ -82,12 +83,12 @@ namespace RSSReader.UnitTests
             //ARRANGE
             var identityResultMock = new Mock<IdentityResultWrapper>(true);
 
-            _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<IdentityUser>(), _registerModel.Password))
+            _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<ApiUser>(), _registerModel.Password))
                            .Returns(Task.FromResult<IdentityResult>(identityResultMock.Object));
 
             //ACT
             var result = await _authController.Register(_registerModel);
-            var result_data_user = (result as CreatedResult).Value as IdentityUser;
+            var result_data_user = (result as CreatedResult).Value as ApiUser;
 
             //ASSERT
             Assert.IsInstanceOf<CreatedResult>(result);
@@ -100,7 +101,7 @@ namespace RSSReader.UnitTests
         {
             //ARRANGE
             _userManagerMock.Setup(x => x.FindByNameAsync(_registerModel.Username))
-                            .Returns(Task.FromResult(new IdentityUser()));
+                            .Returns(Task.FromResult(new ApiUser()));
 
             //ACT
             var result = await _authController.Register(_registerModel);
@@ -114,7 +115,7 @@ namespace RSSReader.UnitTests
         {
             //ARRANGE
             _userManagerMock.Setup(x => x.FindByEmailAsync(_registerModel.Email))
-                            .Returns(Task.FromResult(new IdentityUser()));
+                            .Returns(Task.FromResult(new ApiUser()));
 
             //ACT
             var result = await _authController.Register(_registerModel);
@@ -129,7 +130,7 @@ namespace RSSReader.UnitTests
             //ARRANGE
             var identityResultMock = new Mock<IdentityResultWrapper>(false);
 
-            _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<IdentityUser>(), _registerModel.Password))
+            _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<ApiUser>(), _registerModel.Password))
                            .Returns(Task.FromResult<IdentityResult>(identityResultMock.Object));
 
             //ACT
@@ -198,10 +199,10 @@ namespace RSSReader.UnitTests
             //ARRANGE
             _userToLogin.UserName = _loginUsernameModel.Username;
             _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
-                            .Returns(Task.FromResult<IdentityUser>(null));
+                            .Returns(Task.FromResult<ApiUser>(null));
 
             _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>()))
-                            .Returns(Task.FromResult<IdentityUser>(null));
+                            .Returns(Task.FromResult<ApiUser>(null));
 
             //ACT
             var result = await _authController.Login(_loginUsernameModel);
@@ -218,7 +219,7 @@ namespace RSSReader.UnitTests
             //ARRANGE
             _userToLogin.UserName = _loginUsernameModel.Username;
             _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
-                            .Returns(Task.FromResult<IdentityUser>(_userToLogin));
+                            .Returns(Task.FromResult<ApiUser>(_userToLogin));
 
             _userManagerMock.Setup(x => x.CheckPasswordAsync(_userToLogin, _loginUsernameModel.Password))
                             .Returns(Task.FromResult(false));
@@ -232,12 +233,12 @@ namespace RSSReader.UnitTests
             Assert.That(result_data, Is.EqualTo("Wrong data"));
         }
 
-        private static void GetDataFromLoginResult(IActionResult result, out string result_token, out DateTime result_expires, out IdentityUser result_user)
+        private static void GetDataFromLoginResult(IActionResult result, out string result_token, out DateTime result_expires, out ApiUser result_user)
         {
             var result_data = (result as ObjectResult).Value;
             result_token = result_data.GetProperty("token") as string;
             result_expires = (DateTime)result_data.GetProperty("expiration");
-            result_user = result_data.GetProperty("user") as IdentityUser;
+            result_user = result_data.GetProperty("user") as ApiUser;
         }
 
         #endregion

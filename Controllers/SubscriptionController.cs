@@ -23,7 +23,7 @@ namespace RSSReader.Controllers
         private readonly IBlogRepository _blogRepository;
 
         public SubscriptionController(
-            UserManager<IdentityUser> userManager,
+            UserManager<ApiUser> userManager,
             IReaderRepository readerRepository,
             ISubRepository subRepository,
             IBlogRepository blogRepository)
@@ -37,7 +37,7 @@ namespace RSSReader.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IdentityUser user = await GetCurrentUser();
+            ApiUser user = await GetCurrentUser();
             if (user == null)
                 return Unauthorized();
 
@@ -47,13 +47,17 @@ namespace RSSReader.Controllers
         [HttpGet("list")]
         public async Task<IActionResult> GetList()
         {
+            ApiUser user = await GetCurrentUser();
+            if (user == null)
+                return Unauthorized("Auth failed");
+
             return Ok();
         }
 
         [HttpPost("add")]
         public async Task<IActionResult> Subscribe(SubscriptionForAddDto subscriptionForAddDto)
         {
-            IdentityUser user = await GetCurrentUser();
+            ApiUser user = await GetCurrentUser();
             if (user == null)
                 return Unauthorized("Auth failed");
 

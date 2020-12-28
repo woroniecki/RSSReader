@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -20,13 +21,15 @@ namespace RSSReader.Controllers
     {
         private UserManager<ApiUser> _userManager;
         private readonly IConfiguration _config;
+        private readonly IMapper _mapper;
 
         //private readonly IEmailSender _emailSender; UnComment if you want to add Email Verification also.
 
-        public AuthController(UserManager<ApiUser> userManager, IConfiguration config)
+        public AuthController(UserManager<ApiUser> userManager, IConfiguration config, IMapper mapper)
         {
             _userManager = userManager;
             _config = config;
+            this._mapper = mapper;
         }
 
         [HttpPost]
@@ -97,11 +100,13 @@ namespace RSSReader.Controllers
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
+            var userToReturn = _mapper.Map<UserForReturnDto>(user);
+
             return Ok(new
             {
                 token = tokenHandler.WriteToken(token),
                 expiration = token.ValidTo,
-                user = user
+                user = userToReturn
             });
         }
     }

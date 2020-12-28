@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using RSSReader.Data;
 using RSSReader.Models;
 using System.Text;
+using AutoMapper;
 
 namespace RSSReader
 {
@@ -64,6 +65,8 @@ namespace RSSReader
                 opt.SerializerSettings.ReferenceLoopHandling =
                 Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
+
+            services.AddAutoMapper(typeof(ReaderRepository).Assembly);
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

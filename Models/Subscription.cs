@@ -6,8 +6,18 @@ using System.Threading.Tasks;
 
 namespace RSSReader.Models
 {
-    public class BlogSubscription
+    public class Subscription
     {
+        public Subscription() { }
+        public Subscription(IdentityUser user, Blog blog)
+        {
+            Active = true;
+            FirstSubscribeDate = DateTime.Now;
+            LastSubscribeDate = DateTime.Now;
+            LastUnsubscribeDate = DateTime.MinValue;
+            Blog = blog;
+            User = user;
+        }
         public int Id { get; set; }
         public bool Active { get; set; }
         public DateTime FirstSubscribeDate { get; set; }

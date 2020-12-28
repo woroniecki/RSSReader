@@ -71,7 +71,6 @@ namespace RSSReader.UnitTests
                 Id = "0",
                 UserName = "username",
                 Email = "user@mail.com"
-
             };
         }
 

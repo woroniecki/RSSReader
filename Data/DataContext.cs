@@ -12,6 +12,6 @@ namespace RSSReader.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<Blog> Blogs { get; set; }
-        public DbSet<BlogSubscription> BlogSubscriptions { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
     }
 }

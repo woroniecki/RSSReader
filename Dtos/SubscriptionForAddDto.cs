@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RSSReader.Dtos
 {
-    public class BlogSubscriptionForAddDto
+    public class SubscriptionForAddDto
     {
         [Required]
         public string BlogUrl { get; set; }

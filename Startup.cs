@@ -52,6 +52,9 @@ namespace RSSReader
             });
 
             services.AddCors();
+            services.AddScoped<IReaderRepository, ReaderRepository>();
+            services.AddScoped<IBlogRepository, BlogRepository>();
+            services.AddScoped<ISubRepository, SubRepository>();
 
             services.AddControllersWithViews();
 

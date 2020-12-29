@@ -28,8 +28,8 @@ export const Register: React.FC<RegisterProps> = props => {
         .max(20, 'Max 20 characters')
         .required('Required'),
     }),
-    onSubmit: values => {
-      register(values)
+    onSubmit: async values => {
+      await register(values)
     },
   })
 

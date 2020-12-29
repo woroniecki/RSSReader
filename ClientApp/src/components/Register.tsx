@@ -116,7 +116,7 @@ export const Register: React.FC<RegisterProps> = props => {
         </Alert>
 
         <Button variant="primary" type="submit">
-          Submit
+          Register
         </Button>
       </Form>
     </div>

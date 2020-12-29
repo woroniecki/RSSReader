@@ -95,7 +95,7 @@ export const Login: React.FC<LoginProps> = props => {
         </Alert>
 
         <Button variant="primary" type="submit">
-          Submit
+          Login
         </Button>
       </Form>
     </div>

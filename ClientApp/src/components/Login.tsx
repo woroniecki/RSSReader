@@ -89,9 +89,11 @@ export const Login: React.FC<LoginProps> = props => {
             </Form.Control.Feedback>
           ) : null}
         </Form.Group>
+
         <Alert show={showAlert} variant="danger">
           {errorText}
         </Alert>
+
         <Button variant="primary" type="submit">
           Submit
         </Button>

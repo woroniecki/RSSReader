@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import { Button, Form } from 'react-bootstrap'
+import Alert from 'react-bootstrap/Alert'
 import { useFormik } from 'formik'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
+import { useAppDispatch } from 'store/store'
+import { layoutSlice } from 'store/slices'
 import * as Yup from 'yup'
 import { register } from '../api/authApi'
 
@@ -10,6 +13,9 @@ export interface RegisterProps {}
 
 export const Register: React.FC<RegisterProps> = props => {
   const { push } = useHistory()
+  const dispatch = useAppDispatch()
+  const [showAlert, setShowAlert] = React.useState(false)
+  const [errorText, setErrorText] = React.useState('')
 
   const formik = useFormik({
     initialValues: {
@@ -29,7 +35,16 @@ export const Register: React.FC<RegisterProps> = props => {
         .required('Required'),
     }),
     onSubmit: async values => {
-      await register(values)
+      setShowAlert(false)
+      dispatch(layoutSlice.actions.setLoader(true))
+      try {
+        await register(values)
+        push('/login')
+      } catch (err) {
+        setShowAlert(true)
+        setErrorText(err.response.data)
+      }
+      dispatch(layoutSlice.actions.setLoader(false))
     },
   })
 
@@ -95,6 +110,10 @@ export const Register: React.FC<RegisterProps> = props => {
             </Form.Control.Feedback>
           ) : null}
         </Form.Group>
+
+        <Alert show={showAlert} variant="danger">
+          {errorText}
+        </Alert>
 
         <Button variant="primary" type="submit">
           Submit

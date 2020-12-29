@@ -12,7 +12,6 @@ import { store } from 'store/store'
 import { Provider } from 'react-redux'
 
 import AppNavbar from './components/AppNavbar'
-import AppHome from './components/AppHome'
 import Register from './components/Register'
 import Login from './components/Login'
 // A custom theme for this app
@@ -23,13 +22,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router history={history}>
-        <AppNavbar />
-        <Switch>
-          <Route exact path="/" component={AppHome} />
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
-          <Route>404</Route>
-        </Switch>
+        <App />
       </Router>
     </Provider>
   </React.StrictMode>,

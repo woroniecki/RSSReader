@@ -30,7 +30,7 @@ export const login = async (data: LoginRequest) => {
       data,
     })
     return res.data as LoginResponse
-  } catch (err) {
-    throw err
+  } catch (error) {
+    throw error
   }
 }

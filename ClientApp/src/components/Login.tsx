@@ -1,17 +1,22 @@
 import React, { Component } from 'react'
 import { Button, Form } from 'react-bootstrap'
+import Alert from 'react-bootstrap/Alert'
 import { useFormik } from 'formik'
 import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { authSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
+import { layoutSlice } from 'store/slices'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 export interface LoginProps {}
 
 export const Login: React.FC<LoginProps> = props => {
   const { push } = useHistory()
   const dispatch = useAppDispatch()
+  const [showAlert, setShowAlert] = React.useState(false)
+  const [errorText, setErrorText] = React.useState('')
 
   const formik = useFormik({
     initialValues: {
@@ -22,13 +27,23 @@ export const Login: React.FC<LoginProps> = props => {
       username: Yup.string().required('Required'),
       password: Yup.string().required('Required'),
     }),
-    onSubmit: values => {
-      dispatch(
+    onSubmit: async values => {
+      setShowAlert(false)
+      dispatch(layoutSlice.actions.setLoader(true))
+      const promise = await dispatch(
         authSlice.login({
           username: values.username,
           password: values.password,
         })
       )
+      dispatch(layoutSlice.actions.setLoader(false))
+
+      if (authSlice.login.fulfilled.match(promise)) {
+        push('/')
+      } else {
+        setShowAlert(true)
+        setErrorText(promise.payload)
+      }
     },
   })
 
@@ -74,7 +89,9 @@ export const Login: React.FC<LoginProps> = props => {
             </Form.Control.Feedback>
           ) : null}
         </Form.Group>
-
+        <Alert show={showAlert} variant="danger">
+          {errorText}
+        </Alert>
         <Button variant="primary" type="submit">
           Submit
         </Button>

@@ -1,16 +1,22 @@
 import React from 'react'
-import { Nav, NavDropdown } from 'react-bootstrap'
+import { Button, Nav, NavDropdown } from 'react-bootstrap'
 import { Link, useHistory } from 'react-router-dom'
-import { authSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
+import { authSlice } from 'store/slices'
+import { useAppDispatch } from 'store/store'
 
 export interface UserNavbarProps {}
 
 export const UserNavbar: React.FC<UserNavbarProps> = props => {
   const { push } = useHistory()
   const { userName } = useSelector(authSlice.stateSelector)
+  const dispatch = useAppDispatch()
 
   let returnValue
+
+  function OnLogout() {
+    dispatch(authSlice.actions.logout())
+  }
 
   if (!userName) {
     returnValue = (
@@ -29,9 +35,9 @@ export const UserNavbar: React.FC<UserNavbarProps> = props => {
         <NavDropdown title={userName} id="collasible-nav-dropdown" alignRight>
           <NavDropdown.Item href="">Panel</NavDropdown.Item>
           <NavDropdown.Divider />
-          <Link to="/register" className="dropdown-item" role="button">
+          <Button className="dropdown-item" role="button" onClick={OnLogout}>
             Logout
-          </Link>
+          </Button>
         </NavDropdown>
       </Nav>
     )

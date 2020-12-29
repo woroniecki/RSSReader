@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import * as authApi from '../../api/authApi'
 import { LoginRequest, LoginResponse } from '../../api/api.types'
 import { RootState } from 'store/rootReducer'
+import { createAction } from '@reduxjs/toolkit'
 const AUTH = 'auth'
 interface AuthState {
   token?: string
@@ -19,14 +20,17 @@ export const login = createAsyncThunk<
   // Return type of the payload creator
   LoginResponse,
   // First argument to the payload creator
-  LoginRequest
->(`${AUTH}/login`, async (params, thunkApi) => {
+  LoginRequest,
+  {
+    rejectValue: string
+  }
+>(`${AUTH}/login`, async (params, { rejectWithValue }) => {
   try {
     const res = await authApi.login(params)
-
     return res
   } catch (err) {
-    throw err
+    // console.log(err.response)
+    return rejectWithValue(err.response.data)
   }
 })
 
@@ -34,7 +38,11 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    // login: (state, action: PayloadAction<number>) => state + action.payload,
+    logout: state => {
+      state.token = null
+      state.expiration = null
+      state.userName = null
+    },
     // logout: (state, action: PayloadAction<number>) => state - action.payload,
   },
   extraReducers: builder => {

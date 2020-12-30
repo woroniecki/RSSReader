@@ -3,6 +3,7 @@ import * as authApi from '../../api/authApi'
 import { LoginRequest, LoginResponse } from '../../api/api.types'
 import { RootState } from 'store/rootReducer'
 import { createAction } from '@reduxjs/toolkit'
+import { setAuthHeader } from 'utils/setHeader'
 const AUTH = 'auth'
 interface AuthState {
   token?: string
@@ -50,6 +51,8 @@ const authSlice = createSlice({
       state.token = payload.token
       state.expiration = payload.expiration
       state.userName = payload.user.userName
+      setAuthHeader(payload.token)
+
       // both `state` and `action` are now correctly typed
       // based on the slice state and the `pending` action creator
     })

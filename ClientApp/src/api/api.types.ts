@@ -12,3 +12,21 @@ export interface LoginResponse {
   expiration: number
   user: User
 }
+
+export interface Blog {
+  id: number
+  name: string
+  url: string
+}
+
+export interface Subscription {
+  id: number
+  blog: Blog
+  firstSubscribeDate: string
+  lastSubscribeDate: string
+  lastUnsubscribeDate: string
+}
+
+export interface SubscriptionsListResponse {
+  list: Subscription[]
+}

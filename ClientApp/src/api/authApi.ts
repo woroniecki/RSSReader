@@ -1,17 +1,10 @@
-﻿import axios from 'axios'
+﻿import axios from 'api/axios'
 import env from 'react-dotenv'
 import { LoginRequest, LoginResponse } from './api.types'
 
 export const register = async (data: any) => {
   try {
-    const jsonValues = JSON.stringify(data, null, 2)
-    const res = await axios(env.API_URL + `/api/auth/register`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      data: jsonValues,
-    })
+    const res = await axios.post(`/api/auth/register`, data)
   } catch (error) {
     throw error
   }
@@ -19,13 +12,7 @@ export const register = async (data: any) => {
 
 export const login = async (data: LoginRequest) => {
   try {
-    const res = await axios(env.API_URL + `/api/auth/login`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      data,
-    })
+    const res = await axios.post(`/api/auth/login`, data)
     return res.data as LoginResponse
   } catch (error) {
     throw error

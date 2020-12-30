@@ -10,7 +10,7 @@ import { createBrowserHistory } from 'history'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import { store } from 'store/store'
 import { Provider } from 'react-redux'
-
+import './api/axios'
 import AppNavbar from './components/AppNavbar'
 import Register from './components/Register'
 import Login from './components/Login'

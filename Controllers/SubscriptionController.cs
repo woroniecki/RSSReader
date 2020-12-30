@@ -53,7 +53,7 @@ namespace RSSReader.Controllers
             if (user == null)
                 return Unauthorized("Auth failed");
 
-            var subs = user.Subscriptions;
+            var subs = user.Subscriptions.Where(x => x.Active);
 
             return Ok(subs);
         }

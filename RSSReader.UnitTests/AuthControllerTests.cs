@@ -14,6 +14,10 @@ using RSSReader.UnitTests.Helpers;
 using RSSReader.Models;
 using AutoMapper;
 using RSSReader.Helpers;
+using AutoWrapper.Wrappers;
+using static Microsoft.AspNetCore.Http.StatusCodes;
+using static RSSReader.Data.Response;
+using System.Linq;
 
 namespace RSSReader.UnitTests
 {
@@ -87,7 +91,7 @@ namespace RSSReader.UnitTests
         #region Register
 
         [Test]
-        public async Task Register_CreateNewUser_ReturnCreatedResult()
+        public async Task Register_CreateNewUser_CreatedResponse()
         {
             //ARRANGE
             var identityResultMock = new Mock<IdentityResultWrapper>(true);
@@ -97,44 +101,63 @@ namespace RSSReader.UnitTests
 
             //ACT
             var result = await _authController.Register(_registerModel);
-            var result_data_user = (result as CreatedResult).Value as ApiUser;
+            var result_data_user = result.Result as UserForReturnDto;
 
             //ASSERT
-            Assert.IsInstanceOf<CreatedResult>(result);
+            Assert.That(result.Message, Is.EqualTo(MsgCreatedRecord));
+            Assert.That(result.StatusCode, Is.EqualTo(Status201Created));
             Assert.That(result_data_user.UserName, Is.EqualTo(_registerModel.Username));
             Assert.That(result_data_user.Email, Is.EqualTo(_registerModel.Email));
         }
 
         [Test]
-        public async Task Register_UsernameAlreadyTaken_ReturnBadRequest()
+        public async Task Register_UsernameAlreadyTaken_UsernameFieldError()
         {
             //ARRANGE
             _userManagerMock.Setup(x => x.FindByNameAsync(_registerModel.Username))
                             .Returns(Task.FromResult(new ApiUser()));
 
             //ACT
-            var result = await _authController.Register(_registerModel);
+            var ex = Assert.ThrowsAsync<ApiProblemDetailsException>(
+                () => _authController.Register(_registerModel)
+                );
+
+            var error_key = _authController.ModelState.Keys.First();
+            var error_msg = _authController.ModelState[error_key]
+                .Errors.First().ErrorMessage;
 
             //ASSERT
-            Assert.IsInstanceOf<BadRequestObjectResult>(result);
+            Assert.That(ex.StatusCode, Is.EqualTo(Status422UnprocessableEntity));
+            Assert.False(_authController.ModelState.IsValid);
+            Assert.That(error_key, Is.EqualTo(nameof(UserForRegisterDto.Username)));
+            Assert.That(error_msg, Is.EqualTo(MsgErrUsernameTaken));
         }
 
         [Test]
-        public async Task Register_EmailAlreadyTaken_ReturnBadRequest()
+        public async Task Register_EmailAlreadyTaken_EmailFieldError()
         {
             //ARRANGE
             _userManagerMock.Setup(x => x.FindByEmailAsync(_registerModel.Email))
                             .Returns(Task.FromResult(new ApiUser()));
 
             //ACT
-            var result = await _authController.Register(_registerModel);
+            var ex = Assert.ThrowsAsync<ApiProblemDetailsException>(
+                () => _authController.Register(_registerModel)
+                );
+
+            var error_key = _authController.ModelState.Keys.First();
+            var error_msg = _authController.ModelState[error_key]
+                .Errors.First().ErrorMessage;
 
             //ASSERT
-            Assert.IsInstanceOf<BadRequestObjectResult>(result);
+            Assert.That(ex.StatusCode, Is.EqualTo(Status422UnprocessableEntity));
+            Assert.False(_authController.ModelState.IsValid);
+            Assert.That(error_key, Is.EqualTo(nameof(UserForRegisterDto.Email)));
+            Assert.That(error_msg, Is.EqualTo(MsgErrEmailTaken));
         }
 
         [Test]
-        public async Task Register_CreateUserFails_ReturnBadRequest()
+        public async Task Register_CreateUserFails_BadRequestResponse()
         {
             //ARRANGE
             var identityResultMock = new Mock<IdentityResultWrapper>(false);
@@ -146,7 +169,8 @@ namespace RSSReader.UnitTests
             var result = await _authController.Register(_registerModel);
 
             //ASSERT
-            Assert.IsInstanceOf<BadRequestObjectResult>(result);
+            Assert.That(result.Message, Is.EqualTo(MsgErrRequestFailed));
+            Assert.That(result.StatusCode, Is.EqualTo(Status400BadRequest));
         }
 
         #endregion
@@ -215,7 +239,7 @@ namespace RSSReader.UnitTests
 
             //ACT
             var result = await _authController.Login(_loginUsernameModel);
-            var result_data = (result as ObjectResult).Value as string;
+            var result_data = result.Result as string;
 
             //PASSWORD
             Assert.IsInstanceOf<UnauthorizedObjectResult>(result);
@@ -235,16 +259,16 @@ namespace RSSReader.UnitTests
 
             //ACT
             var result = await _authController.Login(_loginUsernameModel);
-            var result_data = (result as ObjectResult).Value as string;
+            var result_data = result.Result as string;
 
             //PASSWORD
             Assert.IsInstanceOf<UnauthorizedObjectResult>(result);
             Assert.That(result_data, Is.EqualTo("Wrong data"));
         }
 
-        private static void GetDataFromLoginResult(IActionResult result, out string result_token, out DateTime result_expires, out UserForReturnDto result_user)
+        private static void GetDataFromLoginResult(ApiResponse result, out string result_token, out DateTime result_expires, out UserForReturnDto result_user)
         {
-            var result_data = (result as ObjectResult).Value;
+            var result_data = result.Result;
             result_token = result_data.GetProperty("token") as string;
             result_expires = (DateTime)result_data.GetProperty("expiration");
             result_user = result_data.GetProperty("user") as UserForReturnDto;

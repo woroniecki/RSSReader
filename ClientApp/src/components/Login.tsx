@@ -8,18 +8,17 @@ import * as Yup from 'yup'
 import { authSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import { layoutSlice } from 'store/slices'
-import { unwrapResult } from '@reduxjs/toolkit'
+import { applyValidationErrors } from 'utils/utils'
 
 export interface LoginProps {}
 
 export const Login: React.FC<LoginProps> = props => {
   const { push } = useHistory()
   const dispatch = useAppDispatch()
-  const [showAlert, setShowAlert] = React.useState(false)
-  const [errorText, setErrorText] = React.useState('')
 
   const formik = useFormik({
     initialValues: {
+      global: '',
       username: '',
       password: '',
     },
@@ -28,7 +27,6 @@ export const Login: React.FC<LoginProps> = props => {
       password: Yup.string().required('Required'),
     }),
     onSubmit: async values => {
-      setShowAlert(false)
       dispatch(layoutSlice.actions.setLoader(true))
       const promise = await dispatch(
         authSlice.login({
@@ -41,8 +39,7 @@ export const Login: React.FC<LoginProps> = props => {
       if (authSlice.login.fulfilled.match(promise)) {
         push('/')
       } else {
-        setShowAlert(true)
-        setErrorText(promise.payload)
+        applyValidationErrors(formik, promise.payload)
       }
     },
   })
@@ -90,8 +87,8 @@ export const Login: React.FC<LoginProps> = props => {
           ) : null}
         </Form.Group>
 
-        <Alert show={showAlert} variant="danger">
-          {errorText}
+        <Alert show={formik.errors.global != null} variant="danger">
+          {formik.errors.global}
         </Alert>
 
         <Button variant="primary" type="submit">

@@ -13,6 +13,9 @@ using RSSReader.Data;
 using RSSReader.Models;
 using System.Text;
 using AutoMapper;
+using AutoWrapper;
+using Microsoft.AspNetCore.Mvc;
+using AutoWrapper.Wrappers;
 
 namespace RSSReader
 {
@@ -54,6 +57,16 @@ namespace RSSReader
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
+
+            services.Configure<ApiBehaviorOptions>(options => {
+                //options.SuppressModelStateInvalidFilter = true;
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    //var modelState = actionContext.ModelState.Values;
+                    throw new ApiProblemDetailsException(actionContext.ModelState);
+                };
+            });
+            services.AddMvc();
 
             services.AddCors();
             services.AddScoped<IReaderRepository, ReaderRepository>();
@@ -107,6 +120,10 @@ namespace RSSReader
             app.UseSpaStaticFiles();
 
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
+            {
+                UseApiProblemDetailsException = true
+            });
 
             app.UseAuthentication();
             app.UseRouting();

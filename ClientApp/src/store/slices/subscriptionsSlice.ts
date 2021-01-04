@@ -40,7 +40,6 @@ const subscriptionsSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(getList.fulfilled, (state, { payload }) => {
-      console.log(payload)
       subscriptionsAdapter.setAll(state, payload)
       //state.entities[payload.id] = payload
       // both `state` and `action` are now correctly typed

@@ -6,15 +6,15 @@ export const register = async (data: any) => {
   try {
     const res = await axios.post(`/api/auth/register`, data)
   } catch (error) {
-    throw error
+    throw error.response
   }
 }
 
 export const login = async (data: LoginRequest) => {
   try {
     const res = await axios.post(`/api/auth/login`, data)
-    return res.data as LoginResponse
+    return res.data.result as LoginResponse
   } catch (error) {
-    throw error
+    throw error.response
   }
 }

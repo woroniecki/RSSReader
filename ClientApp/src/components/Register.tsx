@@ -8,17 +8,17 @@ import { useAppDispatch } from 'store/store'
 import { layoutSlice } from 'store/slices'
 import * as Yup from 'yup'
 import { register } from '../api/authApi'
+import { applyValidationErrors } from 'utils/utils'
 
 export interface RegisterProps {}
 
 export const Register: React.FC<RegisterProps> = props => {
   const { push } = useHistory()
   const dispatch = useAppDispatch()
-  const [showAlert, setShowAlert] = React.useState(false)
-  const [errorText, setErrorText] = React.useState('')
 
   const formik = useFormik({
     initialValues: {
+      global: '',
       username: '',
       email: '',
       password: '',
@@ -35,14 +35,12 @@ export const Register: React.FC<RegisterProps> = props => {
         .required('Required'),
     }),
     onSubmit: async values => {
-      setShowAlert(false)
       dispatch(layoutSlice.actions.setLoader(true))
       try {
         await register(values)
         push('/login')
       } catch (err) {
-        setShowAlert(true)
-        setErrorText(err.response.data)
+        applyValidationErrors(formik, err.data)
       }
       dispatch(layoutSlice.actions.setLoader(false))
     },
@@ -111,8 +109,8 @@ export const Register: React.FC<RegisterProps> = props => {
           ) : null}
         </Form.Group>
 
-        <Alert show={showAlert} variant="danger">
-          {errorText}
+        <Alert show={formik.errors.global != null} variant="danger">
+          {formik.errors.global}
         </Alert>
 
         <Button variant="primary" type="submit">

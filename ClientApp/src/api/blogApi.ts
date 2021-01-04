@@ -5,7 +5,7 @@ import { Subscription } from './api.types'
 export const getSubscribtionsList = async () => {
   try {
     const res = await axios.get(`/api/subscription/list`)
-    return res.data as Subscription[]
+    return res.data.result as Subscription[]
   } catch (error) {
     throw error
   }

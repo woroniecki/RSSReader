@@ -30,8 +30,7 @@ export const login = createAsyncThunk<
     const res = await authApi.login(params)
     return res
   } catch (err) {
-    // console.log(err.response)
-    return rejectWithValue(err.response.data)
+    return rejectWithValue(err.data)
   }
 })
 

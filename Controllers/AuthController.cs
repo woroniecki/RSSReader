@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoWrapper.Wrappers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -6,12 +7,12 @@ using Microsoft.IdentityModel.Tokens;
 using RSSReader.Dtos;
 using RSSReader.Models;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.AspNetCore.Http.StatusCodes;
+using static RSSReader.Data.Response;
 
 namespace RSSReader.Controllers
 {
@@ -34,17 +35,16 @@ namespace RSSReader.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] UserForRegisterDto model)
+        public async Task<ApiResponse> Register([FromBody] UserForRegisterDto model)
         {
-            if (!ModelState.IsValid)
-                return BadRequest("Wrong data");
-
-            var user = await _userManager.FindByNameAsync(model.Username);
             if (await _userManager.FindByNameAsync(model.Username) != null)
-                return BadRequest("User with this name already exists");
+                ModelState.AddModelError(nameof(UserForRegisterDto.Username), MsgErrUsernameTaken);
 
             if (await _userManager.FindByEmailAsync(model.Email) != null)
-                return BadRequest("User with this email already exists");
+                ModelState.AddModelError(nameof(UserForRegisterDto.Email), MsgErrEmailTaken);
+
+            if (!ModelState.IsValid)
+                throw new ApiProblemDetailsException(ModelState);
 
             var new_user = new ApiUser
             {
@@ -54,30 +54,28 @@ namespace RSSReader.Controllers
             };
 
             var result = await _userManager.CreateAsync(new_user, model.Password);
+            var userToReturn = _mapper.Map<UserForReturnDto>(new_user);
 
             if (result.Succeeded)
-                return Created("route to set", new_user);
+                return new ApiResponse(MsgCreatedRecord, userToReturn, Status201Created);
 
-            return BadRequest("Request failed");
+            return ErrRequestFailed;
         }
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] UserForLoginDto model)
+        public async Task<ApiResponse> Login([FromBody] UserForLoginDto model)
         {
-            if (!ModelState.IsValid)
-                return BadRequest("Wrong data");
-
             var user = await _userManager.FindByNameAsync(model.Username);
 
             if (user == null)
                 user = await _userManager.FindByEmailAsync(model.Username);
 
             if (user == null)
-                return Unauthorized("Wrong data");
+                return ErrWrongCredentials;
 
             if (!await _userManager.CheckPasswordAsync(user, model.Password))
-                return Unauthorized("Wrong data");
+                return ErrWrongCredentials;
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -102,12 +100,15 @@ namespace RSSReader.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var userToReturn = _mapper.Map<UserForReturnDto>(user);
 
-            return Ok(new
-            {
-                token = tokenHandler.WriteToken(token),
-                expiration = token.ValidTo,
-                user = userToReturn
-            });
+            return new ApiResponse(
+                MsgSucceed,
+                new
+                {
+                    token = tokenHandler.WriteToken(token),
+                    expiration = token.ValidTo,
+                    user = userToReturn
+                },
+                Status200OK);
         }
     }
 }

@@ -169,8 +169,7 @@ namespace RSSReader.UnitTests
             var result = await _authController.Register(_registerModel);
 
             //ASSERT
-            Assert.That(result.Message, Is.EqualTo(MsgErrRequestFailed));
-            Assert.That(result.StatusCode, Is.EqualTo(Status400BadRequest));
+            Assert.That(result, Is.EqualTo(ErrRequestFailed));
         }
 
         #endregion
@@ -194,7 +193,7 @@ namespace RSSReader.UnitTests
             GetDataFromLoginResult(result, out var result_token, out var result_expires, out var result_user);
 
             //ASSERT
-            Assert.IsInstanceOf<OkObjectResult>(result);
+            Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
             Assert.IsInstanceOf<string>(result_token);
             Assert.IsTrue(result_expires > DateTime.Now);
             Assert.That(
@@ -220,7 +219,7 @@ namespace RSSReader.UnitTests
             GetDataFromLoginResult(result, out var result_token, out var result_expires, out var result_user);
 
             //ASSERT
-            Assert.IsInstanceOf<OkObjectResult>(result);
+            Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
             Assert.IsInstanceOf<string>(result_token);
             Assert.IsTrue(result_expires > DateTime.Now);
             Assert.That( result_user.Email, Is.EqualTo(_loginEmailModel.Username));
@@ -241,9 +240,8 @@ namespace RSSReader.UnitTests
             var result = await _authController.Login(_loginUsernameModel);
             var result_data = result.Result as string;
 
-            //PASSWORD
-            Assert.IsInstanceOf<UnauthorizedObjectResult>(result);
-            Assert.That(result_data, Is.EqualTo("Wrong data"));
+            //ASSERT
+            Assert.That(result, Is.EqualTo(ErrWrongCredentials));
         }
 
         [Test]
@@ -261,9 +259,8 @@ namespace RSSReader.UnitTests
             var result = await _authController.Login(_loginUsernameModel);
             var result_data = result.Result as string;
 
-            //PASSWORD
-            Assert.IsInstanceOf<UnauthorizedObjectResult>(result);
-            Assert.That(result_data, Is.EqualTo("Wrong data"));
+            //ASSERT
+            Assert.That(result, Is.EqualTo(ErrWrongCredentials));
         }
 
         private static void GetDataFromLoginResult(ApiResponse result, out string result_token, out DateTime result_expires, out UserForReturnDto result_user)

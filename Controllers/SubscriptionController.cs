@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoWrapper.Wrappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static Microsoft.AspNetCore.Http.StatusCodes;
+using static RSSReader.Data.Response;
 
 namespace RSSReader.Controllers
 {
@@ -46,16 +49,16 @@ namespace RSSReader.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> GetList()
+        public async Task<ApiResponse> GetList()
         {
             ApiUser user = await GetCurrentUser();
 
             if (user == null)
-                return Unauthorized("Auth failed");
+                return ErrUnauhtorized;
 
             var subs = user.Subscriptions.Where(x => x.Active);
 
-            return Ok(subs);
+            return new ApiResponse(MsgSucceed, subs, Status200OK);
         }
 
         [HttpPost("subscribe")]
@@ -108,31 +111,31 @@ namespace RSSReader.Controllers
         }
 
         [HttpPost("{id}/unsubscribe")]
-        public async Task<IActionResult> Unsubscribe(int id)
+        public async Task<ApiResponse> Unsubscribe(int id)
         {
             ApiUser user = await GetCurrentUser();
 
             if (user == null)
-                return Unauthorized("Auth failed");
+                return ErrUnauhtorized;
 
             if (!user.Subscriptions.Any(x => x.Id == id))
-                return Unauthorized();
+                return ErrUnauhtorized;
 
             var sub = await _subRepository.Get(id);
 
             if (sub == null)
-                return BadRequest("Subscription doesn't exists");
+                return ErrEntityNotExists;//Never should happend
 
             if (!sub.Active)
-                return BadRequest("Subscription is already not active");
+                return ErrSubAlreadyDisabled;
 
             sub.Active = false;
             sub.LastUnsubscribeDate = DateTime.Now;
 
             if(!await _readerRepository.SaveAllAsync())
-                return BadRequest("Internal server error");
+                return ErrRequestFailed;
 
-            return Ok(sub);
+            return new ApiResponse(MsgSucceed, sub, Status200OK);
         }
     }
 }

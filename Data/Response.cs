@@ -9,11 +9,17 @@ namespace RSSReader.Data
         public static string MsgErrEmailTaken = "Email is already taken.";
         public static string MsgErrRequestFailed = "Request failed, internal server error.";
         public static string MsgErrWrongCredentials = "Wrong credentials.";
+        public static string MsgErrUnauthorized = "Unauthorized user.";
+        public static string MsgErrSubAlreadyDisabled = "Subscription is already disabled.";
+        public static string MsgErrEntityNotExists = "Subscription is already not active.";
 
         public static string MsgCreatedRecord = "New record has been created in the database.";
         public static string MsgSucceed = "Succeed.";
 
         public static ApiResponse ErrRequestFailed = new ApiResponse(MsgErrRequestFailed, null, Status400BadRequest);
         public static ApiResponse ErrWrongCredentials = new ApiResponse(MsgErrWrongCredentials, null, Status401Unauthorized);
+        public static ApiResponse ErrUnauhtorized = new ApiResponse(MsgErrUnauthorized, null, Status401Unauthorized);
+        public static ApiResponse ErrSubAlreadyDisabled = new ApiResponse(MsgErrSubAlreadyDisabled, null, Status400BadRequest);
+        public static ApiResponse ErrEntityNotExists = new ApiResponse(MsgErrEntityNotExists, null, Status400BadRequest);
     }
 }

@@ -157,7 +157,7 @@ namespace RSSReader.UnitTests
         }
 
         [Test]
-        public async Task Register_CreateUserFails_BadRequestResponse()
+        public async Task Register_CreateUserFails_RequestFailed()
         {
             //ARRANGE
             var identityResultMock = new Mock<IdentityResultWrapper>(false);
@@ -177,7 +177,7 @@ namespace RSSReader.UnitTests
         #region Login
 
         [Test]
-        public async Task Login_LoginByUsername_ReturnOkLoggedUser()
+        public async Task Login_LoginByUsername_OkLoggedUser()
         {
             //ARRANGE
             _userToLogin.UserName = _loginUsernameModel.Username;
@@ -203,7 +203,7 @@ namespace RSSReader.UnitTests
         }
 
         [Test]
-        public async Task Login_LoginByEmail_ReturnOkLoggedUser()
+        public async Task Login_LoginByEmail_OkLoggedUser()
         {
             //ARRANGE
             _userToLogin.Email = _loginEmailModel.Username;
@@ -226,7 +226,7 @@ namespace RSSReader.UnitTests
         }
 
         [Test]
-        public async Task Login_UserWithUsernameOrEmailNotExists_ReturnUnauthorized()
+        public async Task Login_UserWithUsernameOrEmailNotExists_ErrWrongCredentials()
         {
             //ARRANGE
             _userToLogin.UserName = _loginUsernameModel.Username;
@@ -245,7 +245,7 @@ namespace RSSReader.UnitTests
         }
 
         [Test]
-        public async Task Login_WrongPassword_ReturnUnauthorized()
+        public async Task Login_WrongPassword_ErrWrongCredentials()
         {
             //ARRANGE
             _userToLogin.UserName = _loginUsernameModel.Username;

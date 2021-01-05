@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static Microsoft.AspNetCore.Http.StatusCodes;
+using static RSSReader.Data.Response;
 
 namespace RSSReader.UnitTests
 {
@@ -228,10 +230,11 @@ namespace RSSReader.UnitTests
             //ACT
             var result = await _subscriptionControllerMock.Object
                 .Unsubscribe(0);
-            var result_data = (result as ObjectResult).Value as Subscription;
+            var result_data = result.Result as Subscription;
 
             //ASSERT
-            Assert.IsInstanceOf<OkObjectResult>(result);
+            Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
+            Assert.That(result.Message, Is.EqualTo(MsgSucceed));
             Assert.False(result_data.Active);
             Assert.That(result_data.LastUnsubscribeDate, Is.GreaterThanOrEqualTo(startTime));
             _readerRepository.Verify(x => x.SaveAllAsync(), Times.Once);
@@ -251,7 +254,7 @@ namespace RSSReader.UnitTests
                 .Unsubscribe(0);
 
             //ASSERT
-            Assert.IsInstanceOf<UnauthorizedObjectResult>(result);
+            Assert.That(result, Is.EqualTo(ErrUnauhtorized));
         }
 
         [Test]
@@ -271,11 +274,11 @@ namespace RSSReader.UnitTests
                 .Unsubscribe(0);
 
             //ASSERT
-            Assert.IsInstanceOf<UnauthorizedResult>(result);
+            Assert.That(result, Is.EqualTo(ErrUnauhtorized));
         }
 
         [Test]
-        public async Task Unsubscribe_SubIsAlreadyDisabled_BadRequest()
+        public async Task Unsubscribe_SubIsAlreadyDisabled_ErrSubAlreadyDisabled()
         {
             //ARRANGE
             _subscriptionControllerMock.Protected()
@@ -299,17 +302,17 @@ namespace RSSReader.UnitTests
             //ACT
             var result = await _subscriptionControllerMock.Object
                 .Unsubscribe(0);
-            var result_data = (result as ObjectResult).Value as Subscription;
+            var result_data = result.Result as Subscription;
 
             //ASSERT
-            Assert.IsInstanceOf<BadRequestObjectResult>(result);
+            Assert.That(result, Is.EqualTo(ErrSubAlreadyDisabled));
             Assert.False(sub.Active);
             Assert.That(sub.LastUnsubscribeDate, Is.LessThan(startTime));
             _readerRepository.Verify(x => x.SaveAllAsync(), Times.Never);
         }
 
         [Test]
-        public async Task Unsubscribe_SubCantBeFoundInDB_BadRequest()
+        public async Task Unsubscribe_SubCantBeFoundInDB_ErrEntityNotExists()
         {
             //ARRANGE
             _subscriptionControllerMock.Protected()
@@ -330,7 +333,7 @@ namespace RSSReader.UnitTests
                 .Unsubscribe(0);
 
             //ASSERT
-            Assert.IsInstanceOf<BadRequestObjectResult>(result);
+            Assert.That(result, Is.EqualTo(ErrEntityNotExists));
         }
 
         #endregion

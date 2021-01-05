@@ -98,7 +98,8 @@ namespace RSSReader.UnitTests
                 .Subscribe(_subForAddDto);
 
             //ASSERT
-            Assert.IsInstanceOf<CreatedResult>(result);
+            Assert.That(result.StatusCode, Is.EqualTo(Status201Created));
+            Assert.That(result.Message, Is.EqualTo(MsgCreated));
             _blogRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Blog>()), Times.Once);
             _subRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Subscription>()), Times.Once);
         }
@@ -126,7 +127,8 @@ namespace RSSReader.UnitTests
                 .Subscribe(_subForAddDto);
 
             //ASSERT
-            Assert.IsInstanceOf<CreatedResult>(result);
+            Assert.That(result.StatusCode, Is.EqualTo(Status201Created));
+            Assert.That(result.Message, Is.EqualTo(MsgCreated));
             _blogRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Blog>()), Times.Never);
             _subRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Subscription>()), Times.Once);
         }
@@ -155,10 +157,11 @@ namespace RSSReader.UnitTests
             //ACT
             var result = await _subscriptionControllerMock.Object
                 .Subscribe(_subForAddDto);
-            var result_data = (result as ObjectResult).Value as Subscription;
+            var result_data = result.Result as Subscription;
 
             //ASSERT
-            Assert.IsInstanceOf<OkObjectResult>(result);
+            Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
+            Assert.That(result.Message, Is.EqualTo(MsgSucceed));
             Assert.True(result_data.Active);
             Assert.That(result_data.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
             _readerRepository.Verify(x => x.SaveAllAsync(), Times.Once);
@@ -180,7 +183,7 @@ namespace RSSReader.UnitTests
                 .Subscribe(_subForAddDto);
 
             //ASSERT
-            Assert.IsInstanceOf<UnauthorizedObjectResult>(result);
+            Assert.That(result, Is.EqualTo(ErrUnauhtorized));
         }
 
         [Test]

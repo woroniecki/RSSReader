@@ -62,12 +62,12 @@ namespace RSSReader.Controllers
         }
 
         [HttpPost("subscribe")]
-        public async Task<IActionResult> Subscribe(SubscriptionForAddDto subscriptionForAddDto)
+        public async Task<ApiResponse> Subscribe(SubscriptionForAddDto subscriptionForAddDto)
         {
             ApiUser user = await GetCurrentUser();
 
             if (user == null)
-                return Unauthorized("Auth failed");
+                return ErrUnauhtorized;
 
             Blog blog = await _blogRepository
                 .GetByUrlAsync(subscriptionForAddDto.BlogUrl);
@@ -81,7 +81,7 @@ namespace RSSReader.Controllers
                 };
 
                 if (!await _blogRepository.AddAsync(blog))
-                    return BadRequest("Internal server error");
+                    return ErrRequestFailed;
             }
 
             Subscription subscription = await _subRepository
@@ -92,9 +92,9 @@ namespace RSSReader.Controllers
                 subscription = new Subscription(user, blog);
 
                 if (!await _subRepository.AddAsync(subscription))
-                    return BadRequest("Internal server error");
+                    return ErrRequestFailed;
 
-                return Created("route to set", subscription);
+                return new ApiResponse(MsgCreated, subscription, Status201Created);
             }
             else if (!subscription.Active)
             {
@@ -102,12 +102,12 @@ namespace RSSReader.Controllers
                 subscription.LastSubscribeDate = DateTime.Now;
 
                 if (!await _readerRepository.SaveAllAsync())
-                    return BadRequest("Internal server error");
+                    return ErrEntityNotExists;
 
-                return Ok(subscription);
+                return new ApiResponse(MsgSucceed, subscription, Status200OK);
             }
 
-            return BadRequest("Is alredy subscribed");
+            return ErrSubAlreadyEnabled;
         }
 
         [HttpPost("{id}/unsubscribe")]

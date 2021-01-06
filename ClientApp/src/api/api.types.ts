@@ -30,3 +30,7 @@ export interface Subscription {
 export interface SubscriptionsListResponse {
   list: Subscription[]
 }
+
+export interface AddSubscriptionRequest {
+  blogUrl: string
+}

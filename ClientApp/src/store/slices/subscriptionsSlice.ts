@@ -5,11 +5,7 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit'
 import * as blogApi from '../../api/blogApi'
-import {
-  Subscription,
-  Blog,
-  SubscriptionsListResponse,
-} from '../../api/api.types'
+import { Subscription, AddSubscriptionRequest } from '../../api/api.types'
 import { RootState } from 'store/rootReducer'
 const SUBSCRIPTIONS = 'subscriptions'
 
@@ -34,17 +30,38 @@ export const getList = createAsyncThunk<
   }
 })
 
+export const postAddSubscription = createAsyncThunk<
+  // Return type of the payload creator
+  Subscription,
+  // First argument to the payload creator
+  AddSubscriptionRequest,
+  {
+    rejectValue: string
+  }
+>(`${SUBSCRIPTIONS}/addSubscription`, async (params, { rejectWithValue }) => {
+  try {
+    const res = await blogApi.postAddSubscribtions(params)
+    return res
+  } catch (err) {
+    return rejectWithValue(err.response.data)
+  }
+})
+
 const subscriptionsSlice = createSlice({
   name: 'subscriptions',
   initialState: subscriptionsAdapter.getInitialState(),
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(getList.fulfilled, (state, { payload }) => {
-      subscriptionsAdapter.setAll(state, payload)
-      //state.entities[payload.id] = payload
-      // both `state` and `action` are now correctly typed
-      // based on the slice state and the `pending` action creator
-    })
+    builder
+      .addCase(getList.fulfilled, (state, { payload }) => {
+        subscriptionsAdapter.setAll(state, payload)
+        //state.entities[payload.id] = payload
+        // both `state` and `action` are now correctly typed
+        // based on the slice state and the `pending` action creator
+      })
+      .addCase(postAddSubscription.fulfilled, (state, { payload }) => {
+        subscriptionsAdapter.addOne(state, payload)
+      })
   },
 })
 

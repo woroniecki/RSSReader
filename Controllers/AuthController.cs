@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using RSSReader.Data;
 using RSSReader.Dtos;
 using RSSReader.Models;
 using System;
@@ -21,16 +22,16 @@ namespace RSSReader.Controllers
     public class AuthController : Controller
     {
         private UserManager<ApiUser> _userManager;
-        private readonly IConfiguration _config;
+        private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
         //private readonly IEmailSender _emailSender; UnComment if you want to add Email Verification also.
 
-        public AuthController(UserManager<ApiUser> userManager, IConfiguration config, IMapper mapper)
+        public AuthController(UserManager<ApiUser> userManager, IAuthService authService, IMapper mapper)
         {
             _userManager = userManager;
-            _config = config;
-            this._mapper = mapper;
+            _authService = authService;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -77,35 +78,16 @@ namespace RSSReader.Controllers
             if (!await _userManager.CheckPasswordAsync(user, model.Password))
                 return ErrWrongCredentials;
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes(_config.GetSection("AppSettings:Token").Value));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(
-                    new Claim[]{
-                                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                                new Claim(ClaimTypes.Name, user.Email)
-                    }
-                ),
-                //Issuer = "http://localhost:5000/",//TODO
-                //Audience = "http://localhost:5000/",//TODO
-                Expires = DateTime.UtcNow.AddHours(3),
-                SigningCredentials = creds,
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var token = _authService.CreateAuthToken(user.Id, user.UserName, 
+                out DateTime expiresTime);
             var userToReturn = _mapper.Map<UserForReturnDto>(user);
 
             return new ApiResponse(
                 MsgSucceed,
                 new
                 {
-                    token = tokenHandler.WriteToken(token),
-                    expiration = token.ValidTo,
+                    token = token,
+                    expiration = expiresTime,
                     user = userToReturn
                 },
                 Status200OK);

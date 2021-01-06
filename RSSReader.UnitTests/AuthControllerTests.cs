@@ -18,6 +18,7 @@ using AutoWrapper.Wrappers;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 using System.Linq;
+using RSSReader.Data;
 
 namespace RSSReader.UnitTests
 {
@@ -25,7 +26,7 @@ namespace RSSReader.UnitTests
     public class AuthControllerTests
     {
         private Mock<UserManager<ApiUser>> _userManagerMock;
-        private Mock<IConfiguration> _configurationMock;
+        private Mock<IAuthService> _authserviceMock;
         private IMapper _mapper;
         private Dtos.UserForRegisterDto _registerModel;
         private Dtos.UserForLoginDto _loginUsernameModel;
@@ -42,13 +43,10 @@ namespace RSSReader.UnitTests
                 null, null, null, null, null, null, null, null
                 );
 
-            _configurationMock = new Mock<IConfiguration>();
+            _authserviceMock = new Mock<IAuthService>();
 
             var configSectionMock = new Mock<IConfigurationSection>();
             configSectionMock.Setup(x => x.Value).Returns("you cant break me, secret key");
-
-            _configurationMock.Setup(x => x.GetSection("AppSettings:Token"))
-                              .Returns(configSectionMock.Object);
 
             var mockMapper = new MapperConfiguration(cfg =>
             {
@@ -77,7 +75,7 @@ namespace RSSReader.UnitTests
             };
 
             //Controller
-            _authController = new AuthController(_userManagerMock.Object, _configurationMock.Object, _mapper);
+            _authController = new AuthController(_userManagerMock.Object, _authserviceMock.Object, _mapper);
 
             //Data
             _userToLogin = new ApiUser()
@@ -188,6 +186,11 @@ namespace RSSReader.UnitTests
             _userManagerMock.Setup(x => x.CheckPasswordAsync(_userToLogin, _loginUsernameModel.Password))
                             .Returns(Task.FromResult(true));
 
+            DateTime outExpiresTime = DateTime.UtcNow.AddMinutes(20);
+            _authserviceMock.Setup(
+                x => x.CreateAuthToken(_userToLogin.Id, _userToLogin.UserName, out outExpiresTime))
+                .Returns("created token");
+
             //ACT
             var result = await _authController.Login(_loginUsernameModel);
             GetDataFromLoginResult(result, out var result_token, out var result_expires, out var result_user);
@@ -213,6 +216,11 @@ namespace RSSReader.UnitTests
 
             _userManagerMock.Setup(x => x.CheckPasswordAsync(_userToLogin, _loginUsernameModel.Password))
                             .Returns(Task.FromResult(true));
+
+            DateTime outExpiresTime = DateTime.UtcNow.AddMinutes(20);
+            _authserviceMock.Setup(
+                x => x.CreateAuthToken(_userToLogin.Id, _userToLogin.UserName, out outExpiresTime))
+                .Returns("created token");
 
             //ACT
             var result = await _authController.Login(_loginEmailModel);

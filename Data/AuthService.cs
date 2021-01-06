@@ -18,9 +18,12 @@ namespace RSSReader.Data
     public class AuthService : IAuthService
     {
         private readonly IConfiguration _config;
-        public AuthService(IConfiguration config)
+        private readonly DataContext _context;
+
+        public AuthService(IConfiguration config, DataContext context)
         {
             this._config = config;
+            this._context = context;
         }
         public string CreateAuthToken(string id, string name, out DateTime expiresTime)
         {
@@ -48,26 +51,43 @@ namespace RSSReader.Data
             return tokenHandler.WriteToken(token);
         }
 
-        public RefreshToken CreateRefreshToken(string authToken)
+        public async Task<RefreshToken> CreateRefreshToken(ApiUser user, string authToken)
         {
             using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
             {
                 var randomBytes = new byte[64];
                 rngCryptoServiceProvider.GetBytes(randomBytes);
-                return new RefreshToken
+                var refreshToken = new RefreshToken
                 {
                     Token = Convert.ToBase64String(randomBytes),
                     AuthToken = authToken,
                     Expires = DateTime.UtcNow.AddMinutes(20),
                     Created = DateTime.UtcNow
                 };
+
+                user.RefreshTokens.Add(refreshToken);
+                
+                if (await _context.SaveChangesAsync() > 0)
+                    return refreshToken;
             }
+            return null;
+        }
+
+        public async Task<RefreshToken> UseRefreshToken(RefreshToken refreshToken, ApiUser user)
+        {
+            if (!refreshToken.IsActive)
+                return null;
+
+            refreshToken.Revoked = DateTime.UtcNow;
+
+            return null;
         }
     }
 
     public interface IAuthService
     {
-        public RefreshToken CreateRefreshToken(string authToken);
+        public Task<RefreshToken> CreateRefreshToken(ApiUser user, string authToken);
         public string CreateAuthToken(string id, string name, out DateTime expiresTime);
+        public Task<RefreshToken> UseRefreshToken(RefreshToken refreshToken, ApiUser user)
     }
 }

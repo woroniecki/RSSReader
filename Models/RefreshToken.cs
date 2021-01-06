@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace RSSReader.Models
 {
-    [Owned]
     public class RefreshToken
     {
         [JsonIgnore]

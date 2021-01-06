@@ -25,6 +25,9 @@ namespace RSSReader.UnitTests
     [TestFixture]
     public class AuthControllerTests
     {
+        private const string REFRESH_TOKEN_STR = "REFRESH_TOKEN";
+        private const string AUTH_TOKEN_STR = "REFRESH_TOKEN";
+
         private Mock<UserManager<ApiUser>> _userManagerMock;
         private Mock<IAuthService> _authserviceMock;
         private IMapper _mapper;
@@ -189,11 +192,21 @@ namespace RSSReader.UnitTests
             DateTime outExpiresTime = DateTime.UtcNow.AddMinutes(20);
             _authserviceMock.Setup(
                 x => x.CreateAuthToken(_userToLogin.Id, _userToLogin.UserName, out outExpiresTime))
-                .Returns("created token");
+                .Returns(AUTH_TOKEN_STR);
+
+            _authserviceMock.Setup(
+                x => x.CreateRefreshToken(_userToLogin, AUTH_TOKEN_STR))
+                .Returns(Task.FromResult(
+                    new RefreshToken()
+                    {
+                        Token = REFRESH_TOKEN_STR,
+                        Expires = DateTime.UtcNow.AddDays(1)
+                    }
+                ));
 
             //ACT
             var result = await _authController.Login(_loginUsernameModel);
-            GetDataFromLoginResult(result, out var result_token, out var result_expires, out var result_user);
+            GetDataFromLoginResult(result, out var result_token, out var result_expires, out var result_user, out var refresh_token);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
@@ -203,6 +216,8 @@ namespace RSSReader.UnitTests
                 result_user.UserName,
                 Is.EqualTo(_loginUsernameModel.Username)
                 );
+            Assert.That(refresh_token.Token, Is.EqualTo(REFRESH_TOKEN_STR));
+            Assert.That(refresh_token.Expires, Is.GreaterThan(DateTime.UtcNow));
         }
 
         [Test]
@@ -220,17 +235,29 @@ namespace RSSReader.UnitTests
             DateTime outExpiresTime = DateTime.UtcNow.AddMinutes(20);
             _authserviceMock.Setup(
                 x => x.CreateAuthToken(_userToLogin.Id, _userToLogin.UserName, out outExpiresTime))
-                .Returns("created token");
+                .Returns(AUTH_TOKEN_STR);
+
+            _authserviceMock.Setup(
+                x => x.CreateRefreshToken(_userToLogin, AUTH_TOKEN_STR))
+                .Returns(Task.FromResult(
+                    new RefreshToken()
+                    {
+                        Token = REFRESH_TOKEN_STR,
+                        Expires = DateTime.UtcNow.AddDays(1)
+                    }
+                ));
 
             //ACT
             var result = await _authController.Login(_loginEmailModel);
-            GetDataFromLoginResult(result, out var result_token, out var result_expires, out var result_user);
+            GetDataFromLoginResult(result, out var result_token, out var result_expires, out var result_user, out var refresh_token);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
             Assert.IsInstanceOf<string>(result_token);
             Assert.IsTrue(result_expires > DateTime.UtcNow);
-            Assert.That( result_user.Email, Is.EqualTo(_loginEmailModel.Username));
+            Assert.That(result_user.Email, Is.EqualTo(_loginEmailModel.Username));
+            Assert.That(refresh_token.Token, Is.EqualTo(REFRESH_TOKEN_STR));
+            Assert.That(refresh_token.Expires, Is.GreaterThan(DateTime.UtcNow));
         }
 
         [Test]
@@ -271,11 +298,12 @@ namespace RSSReader.UnitTests
             Assert.That(result, Is.EqualTo(ErrWrongCredentials));
         }
 
-        private static void GetDataFromLoginResult(ApiResponse result, out string result_token, out DateTime result_expires, out UserForReturnDto result_user)
+        private static void GetDataFromLoginResult(ApiResponse result, out string result_token, out DateTime result_expires, out UserForReturnDto result_user, out RefreshTokenForReturnDto refresh_token)
         {
             var result_data = result.Result;
             result_token = result_data.GetProperty("token") as string;
             result_expires = (DateTime)result_data.GetProperty("expiration");
+            refresh_token = result_data.GetProperty("refreshToken") as RefreshTokenForReturnDto;
             result_user = result_data.GetProperty("user") as UserForReturnDto;
         }
 

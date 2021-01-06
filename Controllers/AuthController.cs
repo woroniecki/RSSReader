@@ -19,7 +19,7 @@ namespace RSSReader.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : Controller
+    public class AuthController : APIBaseController
     {
         private UserManager<ApiUser> _userManager;
         private readonly IAuthService _authService;
@@ -27,7 +27,8 @@ namespace RSSReader.Controllers
 
         //private readonly IEmailSender _emailSender; UnComment if you want to add Email Verification also.
 
-        public AuthController(UserManager<ApiUser> userManager, IAuthService authService, IMapper mapper)
+        public AuthController(UserManager<ApiUser> userManager, IAuthService authService, IMapper mapper) 
+            : base(userManager)
         {
             _userManager = userManager;
             _authService = authService;
@@ -80,7 +81,13 @@ namespace RSSReader.Controllers
 
             var token = _authService.CreateAuthToken(user.Id, user.UserName, 
                 out DateTime expiresTime);
+
+            var refreshToken = await _authService.CreateRefreshToken(user, token);
+            if (refreshToken == null)
+                return ErrRequestFailed;
+
             var userToReturn = _mapper.Map<UserForReturnDto>(user);
+            var refreshTokenToReturn = _mapper.Map<RefreshTokenForReturnDto>(refreshToken);
 
             return new ApiResponse(
                 MsgSucceed,
@@ -88,9 +95,23 @@ namespace RSSReader.Controllers
                 {
                     token = token,
                     expiration = expiresTime,
+                    refreshToken = refreshTokenToReturn,
                     user = userToReturn
                 },
                 Status200OK);
+        }
+
+        [HttpPost]
+        [Route("refresh")]
+        public async Task<ApiResponse> Refresh()
+        {
+            ApiUser user = await GetCurrentUser();
+            if (user == null)
+                return ErrUnauhtorized;
+
+            string value = Request.Headers["Authorization"];
+
+            return new ApiResponse(MsgSucceed, new { value = value }, Status200OK);
         }
     }
 }

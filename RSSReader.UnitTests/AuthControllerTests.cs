@@ -195,7 +195,7 @@ namespace RSSReader.UnitTests
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
             Assert.IsInstanceOf<string>(result_token);
-            Assert.IsTrue(result_expires > DateTime.Now);
+            Assert.IsTrue(result_expires > DateTime.UtcNow);
             Assert.That(
                 result_user.UserName,
                 Is.EqualTo(_loginUsernameModel.Username)
@@ -221,7 +221,7 @@ namespace RSSReader.UnitTests
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
             Assert.IsInstanceOf<string>(result_token);
-            Assert.IsTrue(result_expires > DateTime.Now);
+            Assert.IsTrue(result_expires > DateTime.UtcNow);
             Assert.That( result_user.Email, Is.EqualTo(_loginEmailModel.Username));
         }
 

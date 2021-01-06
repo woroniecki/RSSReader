@@ -99,7 +99,7 @@ namespace RSSReader.Controllers
             else if (!subscription.Active)
             {
                 subscription.Active = true;
-                subscription.LastSubscribeDate = DateTime.Now;
+                subscription.LastSubscribeDate = DateTime.UtcNow;
 
                 if (!await _readerRepository.SaveAllAsync())
                     return ErrEntityNotExists;
@@ -130,7 +130,7 @@ namespace RSSReader.Controllers
                 return ErrSubAlreadyDisabled;
 
             sub.Active = false;
-            sub.LastUnsubscribeDate = DateTime.Now;
+            sub.LastUnsubscribeDate = DateTime.UtcNow;
 
             if(!await _readerRepository.SaveAllAsync())
                 return ErrRequestFailed;

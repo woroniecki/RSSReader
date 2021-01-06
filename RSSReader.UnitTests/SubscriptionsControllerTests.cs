@@ -152,7 +152,7 @@ namespace RSSReader.UnitTests
 
             _readerRepository.Setup(x => x.SaveAllAsync())
                 .Returns(Task.FromResult(true));
-            var startTime = DateTime.Now;
+            var startTime = DateTime.UtcNow;
 
             //ACT
             var result = await _subscriptionControllerMock.Object
@@ -229,7 +229,7 @@ namespace RSSReader.UnitTests
             _subRepositoryMock.Setup(x => x.Get(0))
                 .Returns(Task.FromResult(sub));
 
-            var startTime = DateTime.Now;
+            var startTime = DateTime.UtcNow;
             //ACT
             var result = await _subscriptionControllerMock.Object
                 .Unsubscribe(0);
@@ -301,7 +301,7 @@ namespace RSSReader.UnitTests
             _subRepositoryMock.Setup(x => x.Get(0))
                 .Returns(Task.FromResult(sub));
 
-            var startTime = DateTime.Now;
+            var startTime = DateTime.UtcNow;
             //ACT
             var result = await _subscriptionControllerMock.Object
                 .Unsubscribe(0);
@@ -330,7 +330,7 @@ namespace RSSReader.UnitTests
             _subRepositoryMock.Setup(x => x.Get(0))
                 .Returns(Task.FromResult<Subscription>(null));
 
-            var startTime = DateTime.Now;
+            var startTime = DateTime.UtcNow;
             //ACT
             var result = await _subscriptionControllerMock.Object
                 .Unsubscribe(0);

@@ -13,8 +13,8 @@ namespace RSSReader.Models
         public Subscription(ApiUser user, Blog blog)
         {
             Active = true;
-            FirstSubscribeDate = DateTime.Now;
-            LastSubscribeDate = DateTime.Now;
+            FirstSubscribeDate = DateTime.UtcNow;
+            LastSubscribeDate = DateTime.UtcNow;
             LastUnsubscribeDate = DateTime.MinValue;
             Blog = blog;
             User = user;

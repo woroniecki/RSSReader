@@ -93,7 +93,7 @@ namespace RSSReader.Controllers
                 ),
                 //Issuer = "http://localhost:5000/",//TODO
                 //Audience = "http://localhost:5000/",//TODO
-                Expires = DateTime.Now.AddHours(3),
+                Expires = DateTime.UtcNow.AddHours(3),
                 SigningCredentials = creds,
             };
 

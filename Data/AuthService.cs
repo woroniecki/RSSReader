@@ -73,14 +73,9 @@ namespace RSSReader.Data
             return null;
         }
 
-        public async Task<RefreshToken> UseRefreshToken(RefreshToken refreshToken, ApiUser user)
+        public void UseRefreshToken(RefreshToken refreshToken)
         {
-            if (!refreshToken.IsActive)
-                return null;
-
             refreshToken.Revoked = DateTime.UtcNow;
-
-            return null;
         }
     }
 
@@ -88,6 +83,6 @@ namespace RSSReader.Data
     {
         public Task<RefreshToken> CreateRefreshToken(ApiUser user, string authToken);
         public string CreateAuthToken(string id, string name, out DateTime expiresTime);
-        public Task<RefreshToken> UseRefreshToken(RefreshToken refreshToken, ApiUser user)
+        public void UseRefreshToken(RefreshToken refreshToken);
     }
 }

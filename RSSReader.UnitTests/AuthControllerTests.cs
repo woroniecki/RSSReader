@@ -298,12 +298,12 @@ namespace RSSReader.UnitTests
             Assert.That(result, Is.EqualTo(ErrWrongCredentials));
         }
 
-        private static void GetDataFromLoginResult(ApiResponse result, out string result_token, out DateTime result_expires, out UserForReturnDto result_user, out RefreshTokenForReturnDto refresh_token)
+        private static void GetDataFromLoginResult(ApiResponse result, out string result_token, out DateTime result_expires, out UserForReturnDto result_user, out TokenForReturnDto refresh_token)
         {
             var result_data = result.Result;
             result_token = result_data.GetProperty("token") as string;
             result_expires = (DateTime)result_data.GetProperty("expiration");
-            refresh_token = result_data.GetProperty("refreshToken") as RefreshTokenForReturnDto;
+            refresh_token = result_data.GetProperty("refreshToken") as TokenForReturnDto;
             result_user = result_data.GetProperty("user") as UserForReturnDto;
         }
 

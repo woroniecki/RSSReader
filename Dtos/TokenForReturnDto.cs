@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RSSReader.Dtos
 {
-    public class RefreshTokenForReturnDto
+    public class TokenForReturnDto
     {
         public string Token { get; set; }
         public DateTime Expires { get; set; }

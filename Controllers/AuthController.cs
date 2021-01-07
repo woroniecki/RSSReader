@@ -9,6 +9,7 @@ using RSSReader.Dtos;
 using RSSReader.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace RSSReader.Controllers
 
         //private readonly IEmailSender _emailSender; UnComment if you want to add Email Verification also.
 
-        public AuthController(UserManager<ApiUser> userManager, IAuthService authService, IMapper mapper) 
+        public AuthController(UserManager<ApiUser> userManager, IAuthService authService, IMapper mapper)
             : base(userManager)
         {
             _userManager = userManager;
@@ -79,15 +80,44 @@ namespace RSSReader.Controllers
             if (!await _userManager.CheckPasswordAsync(user, model.Password))
                 return ErrWrongCredentials;
 
-            var token = _authService.CreateAuthToken(user.Id, user.UserName, 
-                out DateTime expiresTime);
+            return await GenerateTokens(user);
+        }
+
+        [HttpPost]
+        [Route("refresh")]
+        public async Task<ApiResponse> Refresh([FromBody] string sentRefreshToken)
+        {
+            ApiUser user = await GetCurrentUser();
+            if (user == null)
+                return ErrUnauhtorized;
+
+            var refresh_token = user.RefreshTokens.Where(x => x.Token == sentRefreshToken).FirstOrDefault();
+
+            if (refresh_token == null)
+                return ErrEntityNotExists;
+
+            string value = Request.Headers["Authorization"];
+            if ("Bearer " + refresh_token.AuthToken != value)
+                return ErrBadRequest;
+
+            if (!refresh_token.IsActive)
+                return ErrBadRequest;
+
+            refresh_token.Revoked = DateTime.UtcNow;
+            return await GenerateTokens(user);
+        }
+
+        private async Task<ApiResponse> GenerateTokens(ApiUser user)
+        {
+            var token = _authService.CreateAuthToken(user.Id, user.UserName,
+                            out DateTime expiresTime);
 
             var refreshToken = await _authService.CreateRefreshToken(user, token);
             if (refreshToken == null)
                 return ErrRequestFailed;
 
+            var refreshTokenToReturn = _mapper.Map<TokenForReturnDto>(refreshToken);
             var userToReturn = _mapper.Map<UserForReturnDto>(user);
-            var refreshTokenToReturn = _mapper.Map<RefreshTokenForReturnDto>(refreshToken);
 
             return new ApiResponse(
                 MsgSucceed,
@@ -99,19 +129,6 @@ namespace RSSReader.Controllers
                     user = userToReturn
                 },
                 Status200OK);
-        }
-
-        [HttpPost]
-        [Route("refresh")]
-        public async Task<ApiResponse> Refresh()
-        {
-            ApiUser user = await GetCurrentUser();
-            if (user == null)
-                return ErrUnauhtorized;
-
-            string value = Request.Headers["Authorization"];
-
-            return new ApiResponse(MsgSucceed, new { value = value }, Status200OK);
         }
     }
 }

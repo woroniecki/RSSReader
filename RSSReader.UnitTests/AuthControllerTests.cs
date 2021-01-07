@@ -308,5 +308,39 @@ namespace RSSReader.UnitTests
         }
 
         #endregion
+
+        #region Refresh
+
+        [Test]
+        public async void Refresh_CantFindUser_ErrUnauthorized()
+        {
+
+        }
+
+        [Test]
+        public async void Refresh_CantFindRefreshToken_ErrUnauthorized()
+        {
+
+        }
+
+        [Test]
+        public async void Refresh_WrongAuthToken_ErrBadRequest()
+        {
+
+        }
+
+        [Test]
+        public async void Refresh_RefreshTokenAlreadyInactive_ErrBadRequest()
+        {
+
+        }
+
+        [Test]
+        public async void Refresh_RefreshTokens_Ok()
+        {
+
+        }
+
+        #endregion
     }
 }

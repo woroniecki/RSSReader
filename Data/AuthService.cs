@@ -8,6 +8,7 @@ using RSSReader.Dtos;
 using RSSReader.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -51,7 +52,7 @@ namespace RSSReader.Data
             return tokenHandler.WriteToken(token);
         }
 
-        public async Task<RefreshToken> CreateRefreshToken(ApiUser user, string authToken)
+        public async Task<RefreshToken> CreateRefreshToken(ApiUser user)
         {
             using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
             {
@@ -60,7 +61,6 @@ namespace RSSReader.Data
                 var refreshToken = new RefreshToken
                 {
                     Token = Convert.ToBase64String(randomBytes),
-                    AuthToken = authToken,
                     Expires = DateTime.UtcNow.AddMinutes(20),
                     Created = DateTime.UtcNow
                 };
@@ -72,17 +72,11 @@ namespace RSSReader.Data
             }
             return null;
         }
-
-        public void UseRefreshToken(RefreshToken refreshToken)
-        {
-            refreshToken.Revoked = DateTime.UtcNow;
-        }
     }
 
     public interface IAuthService
     {
-        public Task<RefreshToken> CreateRefreshToken(ApiUser user, string authToken);
+        public Task<RefreshToken> CreateRefreshToken(ApiUser user);
         public string CreateAuthToken(string id, string name, out DateTime expiresTime);
-        public void UseRefreshToken(RefreshToken refreshToken);
     }
 }

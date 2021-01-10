@@ -91,14 +91,11 @@ namespace RSSReader.Controllers
             if (user == null)
                 return ErrUnauhtorized;
 
-            var refresh_token = user.RefreshTokens.Where(x => x.Token == sentRefreshToken).FirstOrDefault();
+            var refresh_token = user.RefreshTokens
+                .Where(x => x.Token == sentRefreshToken).FirstOrDefault();
 
             if (refresh_token == null)
                 return ErrEntityNotExists;
-
-            string value = Request.Headers["Authorization"];
-            if ("Bearer " + refresh_token.AuthToken != value)
-                return ErrBadRequest;
 
             if (!refresh_token.IsActive)
                 return ErrBadRequest;
@@ -112,19 +109,23 @@ namespace RSSReader.Controllers
             var token = _authService.CreateAuthToken(user.Id, user.UserName,
                             out DateTime expiresTime);
 
-            var refreshToken = await _authService.CreateRefreshToken(user, token);
+            var refreshToken = await _authService.CreateRefreshToken(user);
             if (refreshToken == null)
                 return ErrRequestFailed;
 
             var refreshTokenToReturn = _mapper.Map<TokenForReturnDto>(refreshToken);
+            var authTokenToReturn = new TokenForReturnDto()
+            {
+                Token = token,
+                Expires = expiresTime
+            };
             var userToReturn = _mapper.Map<UserForReturnDto>(user);
 
             return new ApiResponse(
                 MsgSucceed,
                 new
                 {
-                    token = token,
-                    expiration = expiresTime,
+                    authToken = authTokenToReturn,
                     refreshToken = refreshTokenToReturn,
                     user = userToReturn
                 },

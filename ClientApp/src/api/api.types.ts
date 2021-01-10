@@ -7,9 +7,14 @@ export interface LoginRequest {
   username: string
   password: string
 }
-export interface LoginResponse {
+
+export interface Token {
   token: string
-  expiration: number
+  expires: number
+}
+export interface LoginResponse {
+  authToken: Token
+  refreshToken: Token
   user: User
 }
 

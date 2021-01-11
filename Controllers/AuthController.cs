@@ -102,6 +102,9 @@ namespace RSSReader.Controllers
             if (refresh_token == null)
                 return ErrEntityNotExists;
 
+            if (refresh_token.AuthToken != refreshTokenDto.AuthToken)
+                return ErrUnauhtorized;
+
             if (!refresh_token.IsActive)
                 return ErrBadRequest;
 
@@ -114,7 +117,7 @@ namespace RSSReader.Controllers
             var token = _authService.CreateAuthToken(user.Id, user.UserName,
                             out DateTime expiresTime);
 
-            var refreshToken = await _authService.CreateRefreshToken(user);
+            var refreshToken = await _authService.CreateRefreshToken(user, token);
             if (refreshToken == null)
                 return ErrRequestFailed;
 

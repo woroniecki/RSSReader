@@ -38,6 +38,7 @@ namespace RSSReader.UnitTests
         private AuthController _authController;
         private Mock<AuthController> _authControllerMock;
         private ApiUser _userToLogin;
+        private DataForRefreshTokenDto _dataForRefreshTokenDto;
 
         [SetUp]
         public void SetUp()
@@ -92,6 +93,12 @@ namespace RSSReader.UnitTests
                 Id = "0",
                 UserName = "username",
                 Email = "user@mail.com"
+            };
+
+            _dataForRefreshTokenDto = new DataForRefreshTokenDto()
+            {
+                RefreshToken = REFRESH_TOKEN_STR,
+                AuthToken = AUTH_TOKEN_STR
             };
         }
 
@@ -201,7 +208,7 @@ namespace RSSReader.UnitTests
                 .Returns(AUTH_TOKEN_STR);
 
             _authserviceMock.Setup(
-                x => x.CreateRefreshToken(_userToLogin))
+                x => x.CreateRefreshToken(_userToLogin, AUTH_TOKEN_STR))
                 .Returns(Task.FromResult(
                     new RefreshToken()
                     {
@@ -244,7 +251,7 @@ namespace RSSReader.UnitTests
                 .Returns(AUTH_TOKEN_STR);
 
             _authserviceMock.Setup(
-                x => x.CreateRefreshToken(_userToLogin))
+                x => x.CreateRefreshToken(_userToLogin, AUTH_TOKEN_STR))
                 .Returns(Task.FromResult(
                     new RefreshToken()
                     {
@@ -317,19 +324,47 @@ namespace RSSReader.UnitTests
         #region Refresh
 
         [Test]
-        public async Task Refresh_CantFindUser_ErrUnauthorized()
+        public async Task Refresh_CantGetUserIdFromClaims_ErrUnauthorized()
         {
             //ARRANGE
-            _authControllerMock.Protected()
-                .Setup<Task<ApiUser>>("GetCurrentUser")
-                .Returns(Task.FromResult<ApiUser>(null))
+            _authserviceMock.Setup(x => x.GetUserIdFromToken(AUTH_TOKEN_STR))
+                .Returns<string>(null)
                 .Verifiable();
-
+            
             //ACT
-            var result = await _authController.Refresh(REFRESH_TOKEN_STR);
+            var result = await _authController.Refresh(_dataForRefreshTokenDto);
 
             //ASSERT
             Assert.That(result, Is.EqualTo(ErrUnauhtorized));
+        }
+
+        [Test]
+        public async Task Refresh_CantFindUserWithId_ErrUnauhtorized()
+        {
+            //ARRANGE
+            RefreshToken wrong_token = new RefreshToken()
+            {
+                Token = REFRESH_TOKEN_STR + "FAKE",
+                AuthToken = AUTH_TOKEN_STR,
+                Expires = DateTime.UtcNow.AddMinutes(-1)
+            };
+
+            _authserviceMock.Setup(x => x.GetUserIdFromToken(AUTH_TOKEN_STR))
+                .Returns(_userToLogin.Id)
+                .Verifiable();
+
+            _userManagerMock.Setup(x => x.FindByIdAsync(_userToLogin.Id))
+                .Returns(Task.FromResult<ApiUser>(null))
+                .Verifiable();
+
+            _userToLogin.RefreshTokens = Enumerable.Repeat(wrong_token, 1).ToList();
+
+            //ACT
+            var result = await _authController.Refresh(_dataForRefreshTokenDto);
+
+            //ASSERT
+            Assert.That(result, Is.EqualTo(ErrUnauhtorized));
+
         }
 
         [Test]
@@ -339,22 +374,55 @@ namespace RSSReader.UnitTests
             RefreshToken wrong_token = new RefreshToken()
             {
                 Token = REFRESH_TOKEN_STR + "FAKE",
+                AuthToken = AUTH_TOKEN_STR,
                 Expires = DateTime.UtcNow.AddMinutes(-1)
             };
-            
-            _authControllerMock.Protected()
-                .Setup<Task<ApiUser>>("GetCurrentUser")
+
+            _authserviceMock.Setup(x => x.GetUserIdFromToken(AUTH_TOKEN_STR))
+                .Returns(_userToLogin.Id)
+                .Verifiable();
+
+            _userManagerMock.Setup(x => x.FindByIdAsync(_userToLogin.Id))
                 .Returns(Task.FromResult(_userToLogin))
                 .Verifiable();
 
             _userToLogin.RefreshTokens = Enumerable.Repeat(wrong_token, 1).ToList();
 
             //ACT
-            var result = await _authController.Refresh(AUTH_TOKEN_STR);
+            var result = await _authController.Refresh(_dataForRefreshTokenDto);
 
             //ASSERT
+            Assert.That(result.Message, Is.EqualTo(ErrEntityNotExists.Message));
             Assert.That(result, Is.EqualTo(ErrEntityNotExists));
+        }
 
+        [Test]
+        public async Task Refresh_PrivdedAuthTokenOtherThanInRefresh_Unauthorized()
+        {
+            //ARRANGE
+            RefreshToken old_token = new RefreshToken()
+            {
+                Token = REFRESH_TOKEN_STR,
+                AuthToken = AUTH_TOKEN_STR + "WRONG",
+                Expires = DateTime.UtcNow.AddMinutes(10)
+            };
+
+            _authserviceMock.Setup(x => x.GetUserIdFromToken(AUTH_TOKEN_STR))
+                .Returns(_userToLogin.Id)
+                .Verifiable();
+
+            _userManagerMock.Setup(x => x.FindByIdAsync(_userToLogin.Id))
+                .Returns(Task.FromResult(_userToLogin))
+                .Verifiable();
+
+            _userToLogin.RefreshTokens = Enumerable.Repeat(old_token, 1).ToList();
+
+            //ACT
+            var result = await _authController.Refresh(_dataForRefreshTokenDto);
+
+            //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(Status401Unauthorized));
+            Assert.That(result, Is.EqualTo(ErrUnauhtorized));
         }
 
         [Test]
@@ -364,18 +432,22 @@ namespace RSSReader.UnitTests
             RefreshToken old_token = new RefreshToken()
             {
                 Token = REFRESH_TOKEN_STR,
+                AuthToken = AUTH_TOKEN_STR,
                 Expires = DateTime.UtcNow.AddMinutes(-1)
             };
 
-            _authControllerMock.Protected()
-                .Setup<Task<ApiUser>>("GetCurrentUser")
+            _authserviceMock.Setup(x => x.GetUserIdFromToken(AUTH_TOKEN_STR))
+                .Returns(_userToLogin.Id)
+                .Verifiable();
+
+            _userManagerMock.Setup(x => x.FindByIdAsync(_userToLogin.Id))
                 .Returns(Task.FromResult(_userToLogin))
                 .Verifiable();
 
             _userToLogin.RefreshTokens = Enumerable.Repeat(old_token, 1).ToList();
 
             //ACT
-            var result = await _authController.Refresh(REFRESH_TOKEN_STR);
+            var result = await _authController.Refresh(_dataForRefreshTokenDto);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status400BadRequest));
@@ -389,34 +461,42 @@ namespace RSSReader.UnitTests
             RefreshToken old_token = new RefreshToken()
             {
                 Token = REFRESH_TOKEN_STR,
+                AuthToken = AUTH_TOKEN_STR,
                 Expires = DateTime.UtcNow.AddMinutes(10)
             };
 
             string new_refresh_token_str = REFRESH_TOKEN_STR + "new";
+            string new_auth_token_str = AUTH_TOKEN_STR + "new";
             RefreshToken new_token = new RefreshToken()
             {
                 Token = new_refresh_token_str,
+                AuthToken = new_auth_token_str,
                 Expires = DateTime.UtcNow.AddMinutes(10)
             };
 
-            _authControllerMock.Protected()
-                .Setup<Task<ApiUser>>("GetCurrentUser")
+            _authserviceMock.Setup(x => x.GetUserIdFromToken(AUTH_TOKEN_STR))
+                .Returns(_userToLogin.Id)
+                .Verifiable();
+
+            _userManagerMock.Setup(x => x.FindByIdAsync(_userToLogin.Id))
                 .Returns(Task.FromResult(_userToLogin))
                 .Verifiable();
 
             _userToLogin.RefreshTokens = Enumerable.Repeat(old_token, 1).ToList();
 
-            _authserviceMock.Setup(x => x.CreateRefreshToken(_userToLogin))
+            _authserviceMock.Setup(x => x.CreateRefreshToken(_userToLogin, AUTH_TOKEN_STR))
                 .Returns(Task.FromResult(new_token));
 
             var auth_expires = DateTime.UtcNow.AddMinutes(20);
             _authserviceMock.Setup(x => x.CreateAuthToken(
                 _userToLogin.Id, _userToLogin.UserName, out auth_expires))
-                .Returns(AUTH_TOKEN_STR);
+                .Returns(AUTH_TOKEN_STR)
+                .Verifiable();
 
             //ACT
             var start_time = DateTime.UtcNow;
-            var result = await _authController.Refresh(REFRESH_TOKEN_STR);
+            var result = await _authController.Refresh(_dataForRefreshTokenDto);
+
             GetDataFromLoginResult(result, out var auth_token, out var result_user, out var refresh_token);
 
             //ASSERT

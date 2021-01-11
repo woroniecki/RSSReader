@@ -52,7 +52,7 @@ namespace RSSReader.Data
             return tokenHandler.WriteToken(token);
         }
 
-        public async Task<RefreshToken> CreateRefreshToken(ApiUser user)
+        public async Task<RefreshToken> CreateRefreshToken(ApiUser user, string authToken)
         {
             using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
             {
@@ -61,6 +61,7 @@ namespace RSSReader.Data
                 var refreshToken = new RefreshToken
                 {
                     Token = Convert.ToBase64String(randomBytes),
+                    AuthToken = authToken,
                     Expires = DateTime.UtcNow.AddMinutes(20),
                     Created = DateTime.UtcNow
                 };
@@ -90,7 +91,7 @@ namespace RSSReader.Data
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
             if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512, StringComparison.InvariantCultureIgnoreCase))
-                throw new SecurityTokenException("Invalid token");
+                return null;
 
             var id_claim = principal.FindFirst(ClaimTypes.NameIdentifier);
             return id_claim != null ? id_claim.Value : null;
@@ -99,7 +100,7 @@ namespace RSSReader.Data
 
     public interface IAuthService
     {
-        public Task<RefreshToken> CreateRefreshToken(ApiUser user);
+        public Task<RefreshToken> CreateRefreshToken(ApiUser user, string authToken);
         public string CreateAuthToken(string id, string name, out DateTime expiresTime);
         public string GetUserIdFromToken(string token);
     }

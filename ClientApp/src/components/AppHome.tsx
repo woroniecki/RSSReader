@@ -4,7 +4,7 @@ import { useAppDispatch } from 'store/store'
 import { AddSub } from './AppHome/AddSub'
 import { BlogCard } from './AppHome/BlogCard'
 import { getSubscribtionsList } from '../api/blogApi'
-import { subscriptionsSlice } from 'store/slices'
+import { authSlice, subscriptionsSlice } from 'store/slices'
 import { subscriptionsAdapter } from 'store/slices/subscriptionsSlice'
 import { useSelector } from 'react-redux'
 
@@ -13,6 +13,7 @@ export interface AppHomeProps {}
 export const AppHome: React.FC<AppHomeProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
+  const { token } = useSelector(authSlice.stateSelector)
   const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
 
   const fetchList = async () => {
@@ -23,8 +24,11 @@ export const AppHome: React.FC<AppHomeProps> = props => {
     }
   }
   React.useEffect(() => {
-    fetchList()
-  }, [])
+    if (token) {
+      fetchList()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token])
 
   const renderBlogList = () =>
     subscriptionsList.map(el => (

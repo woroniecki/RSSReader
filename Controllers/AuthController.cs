@@ -85,14 +85,19 @@ namespace RSSReader.Controllers
 
         [HttpPost]
         [Route("refresh")]
-        public async Task<ApiResponse> Refresh([FromBody] string sentRefreshToken)
+        public async Task<ApiResponse> Refresh([FromBody] DataForRefreshTokenDto refreshTokenDto)
         {
-            ApiUser user = await GetCurrentUser();
+            string user_id = _authService.GetUserIdFromToken(refreshTokenDto.AuthToken);
+            if (string.IsNullOrEmpty(user_id))
+                return ErrUnauhtorized;
+
+            var user = await _userManager.FindByIdAsync(user_id);
             if (user == null)
                 return ErrUnauhtorized;
 
             var refresh_token = user.RefreshTokens
-                .Where(x => x.Token == sentRefreshToken).FirstOrDefault();
+                .Where(x => x.Token == refreshTokenDto.RefreshToken)
+                .FirstOrDefault();
 
             if (refresh_token == null)
                 return ErrEntityNotExists;

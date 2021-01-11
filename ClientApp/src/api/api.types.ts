@@ -8,6 +8,11 @@ export interface LoginRequest {
   password: string
 }
 
+export interface RefreshRequest {
+  refreshToken: string
+  authToken: string
+}
+
 export interface Token {
   token: string
   expires: number

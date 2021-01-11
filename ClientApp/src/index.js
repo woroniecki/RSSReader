@@ -14,6 +14,7 @@ import './api/axios'
 import AppNavbar from './components/AppNavbar'
 import Register from './components/Register'
 import Login from './components/Login'
+import useRefreshToken from 'components/useRefreshToken'
 // A custom theme for this app
 
 const history = createBrowserHistory()

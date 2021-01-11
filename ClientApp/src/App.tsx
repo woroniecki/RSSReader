@@ -10,11 +10,13 @@ import { Router, Switch, Route } from 'react-router'
 import AppSpinner from './components/AppSpinner'
 import { useSelector } from 'react-redux'
 import { layoutSlice } from 'store/slices'
+import useRefreshToken from 'components/useRefreshToken'
 
 function App() {
   const { loader } = useSelector(layoutSlice.stateSelector)
   return (
     <>
+      {useRefreshToken()}
       <AppNavbar />
       <Switch>
         <Route exact path="/" component={AppHome} />

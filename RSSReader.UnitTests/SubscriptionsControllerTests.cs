@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Moq.Protected;
 using NUnit.Framework;
 using RSSReader.Controllers;
 using RSSReader.Data;
@@ -19,11 +18,11 @@ namespace RSSReader.UnitTests
     [TestFixture]
     class SubscriptionsControllerTests
     {
-        private Mock<UserManager<ApiUser>> _userManagerMock;
         private Mock<IReaderRepository> _readerRepository;
+        private Mock<IUserRepository> _userRepository;
         private Mock<IBlogRepository> _blogRepositoryMock;
-        private Mock<ISubRepository> _subRepositoryMock;
-        private Mock<SubscriptionController> _subscriptionControllerMock;
+        private Mock<ISubscriptionRepository> _subRepositoryMock;
+        private SubscriptionController _subscriptionController;
         private SubscriptionForAddDto _subForAddDto;
         private ApiUser _user;
         private Blog _blog;
@@ -33,22 +32,19 @@ namespace RSSReader.UnitTests
         public void SetUp()
         {
             //Mocks
-            _userManagerMock = new Mock<UserManager<ApiUser>>(
-                Mock.Of<IUserStore<ApiUser>>(),
-                null, null, null, null, null, null, null, null
-                );
-
             _readerRepository = new Mock<IReaderRepository>();
-            _subRepositoryMock = new Mock<ISubRepository>();
+            Mock_ReaderRepository_SaveAllAsync(true);
+
+            _userRepository = new Mock<IUserRepository>();
+            _subRepositoryMock = new Mock<ISubscriptionRepository>();
             _blogRepositoryMock = new Mock<IBlogRepository>();
 
-            _subscriptionControllerMock = new Mock<SubscriptionController>(
-                _userManagerMock.Object,
+            _subscriptionController = new SubscriptionController(
+                _userRepository.Object,
                 _readerRepository.Object,
                 _subRepositoryMock.Object,
                 _blogRepositoryMock.Object
                 );
-            _subscriptionControllerMock.CallBase = true;
 
             //Dto
             _subForAddDto = new Dtos.SubscriptionForAddDto()
@@ -61,8 +57,9 @@ namespace RSSReader.UnitTests
             {
                 Id = "0",
                 UserName = "username",
-                Email = "user@mail.com"
-            };
+                Email = "user@mail.com",
+                Subscriptions = new HashSet<Subscription>()
+        };
             _blog = new Blog()
             {
                 Url = "Http://blog.com",
@@ -71,31 +68,73 @@ namespace RSSReader.UnitTests
             _subscription = new Subscription(_user, _blog);
         }
 
+        #region Mock
+        private void Mock_UserRepository_GetCurrentUser(ApiUser returnedUser)
+        {
+            _userRepository.Setup(x => x.GetCurrentUser(It.IsAny<Controller>()))
+                            .Returns(Task.FromResult(returnedUser))
+                            .Verifiable();
+        }
+
+        private void Mock_BlogRepository_GetByUrlAsync(string blogUrl, Blog returnedValue)
+        {
+            _blogRepositoryMock.Setup(x => x.GetByUrlAsync(blogUrl))
+                            .Returns(Task.FromResult(returnedValue));
+        }
+
+        private void Mock_BlogRepository_AddAsync(Blog blog, bool returnedValue)
+        {
+            _blogRepositoryMock.Setup(x => x.AddAsync(blog))
+                            .Returns(Task.FromResult(returnedValue));
+        }
+
+        private void Mock_BlogRepository_AddAsync(bool returnedValue)
+        {
+            _blogRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Blog>()))
+                            .Returns(Task.FromResult(returnedValue));
+        }
+
+        private void Mock_SubscriptionRepository_GetByUserAndBlogAsync(
+            ApiUser user, Blog returnedBlog, Subscription returnedSub)
+        {
+            _subRepositoryMock.Setup(x => x.GetByUserAndBlogAsync(_user, returnedBlog))
+                            .Returns(Task.FromResult(returnedSub));
+        }
+
+        private void Mock_SubscriptionRepository_AddAsync(Subscription sub, bool returnedValue)
+        {
+            _subRepositoryMock.Setup(x => x.AddAsync(sub))
+                            .Returns(Task.FromResult(returnedValue));
+        }
+
+        private void Mock_SubscriptionRepository_AddAsync(bool returnedValue)
+        {
+            _subRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Subscription>()))
+                            .Returns(Task.FromResult(returnedValue));
+        }
+
+        private void Mock_ReaderRepository_SaveAllAsync(bool returnedValue)
+        {
+            _readerRepository.Setup(x => x.SaveAllAsync())
+                            .Returns(Task.FromResult(returnedValue));
+        }
+        #endregion
+
         #region Subscribe
 
         [Test]
         public async Task Subscribe_CreateBlogSubAndBlogRowInDB_CreatedResult()
         {
             //ARRANGE
-            _subscriptionControllerMock.Protected()
-                .Setup<Task<ApiUser>>("GetCurrentUser")
-                .Returns(Task.FromResult(_user))
-                .Verifiable();
+            Mock_UserRepository_GetCurrentUser(_user);
 
-            _blogRepositoryMock.Setup(x => x.GetByUrlAsync(_subForAddDto.BlogUrl))
-                .Returns(Task.FromResult<Blog>(null));
-            _blogRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Blog>()))
-                .Returns(Task.FromResult(true));
-            
-            _subRepositoryMock.Setup(x => x.GetByUserAndBlogAsync(
-                _user, It.IsAny<Blog>()))
-                .Returns(Task.FromResult<Subscription>(null));
-            _subRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Subscription>()))
-                .Returns(Task.FromResult(true));
+            Mock_BlogRepository_GetByUrlAsync(_subForAddDto.BlogUrl, null);
+            Mock_BlogRepository_AddAsync(true);
+
+            Mock_SubscriptionRepository_AddAsync(true);
             
             //ACT
-            var result = await _subscriptionControllerMock.Object
-                .Subscribe(_subForAddDto);
+            var result = await _subscriptionController.Subscribe(_subForAddDto);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status201Created));
@@ -108,23 +147,15 @@ namespace RSSReader.UnitTests
         public async Task Subscribe_CreatesBlogSubWithAlreadyExisitingBlogRow_CreatedResult()
         {
             //ARRANGE
-            _subscriptionControllerMock.Protected()
-                .Setup<Task<ApiUser>>("GetCurrentUser")
-                .Returns(Task.FromResult(_user))
-                .Verifiable();
+            Mock_UserRepository_GetCurrentUser(_user);
 
-            _blogRepositoryMock.Setup(x => x.GetByUrlAsync(_subForAddDto.BlogUrl))
-                .Returns(Task.FromResult(_blog));
+            Mock_BlogRepository_GetByUrlAsync(_subForAddDto.BlogUrl, _blog);
+            Mock_SubscriptionRepository_GetByUserAndBlogAsync(_user, _blog, null);
 
-            _subRepositoryMock.Setup(x => x.GetByUserAndBlogAsync(
-                _user, _blog))
-                .Returns(Task.FromResult<Subscription>(null));
-            _subRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Subscription>()))
-                .Returns(Task.FromResult(true));
+            Mock_SubscriptionRepository_AddAsync(true);
 
             //ACT
-            var result = await _subscriptionControllerMock.Object
-                .Subscribe(_subForAddDto);
+            var result = await _subscriptionController.Subscribe(_subForAddDto);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status201Created));
@@ -137,26 +168,16 @@ namespace RSSReader.UnitTests
         public async Task Subscribe_EnablesAlreadyExistingBlogsub_Ok()
         {
             //ARRANGE
-            _subscriptionControllerMock.Protected()
-                .Setup<Task<ApiUser>>("GetCurrentUser")
-                .Returns(Task.FromResult(_user))
-                .Verifiable();
+            Mock_UserRepository_GetCurrentUser(_user);
 
-            _blogRepositoryMock.Setup(x => x.GetByUrlAsync(_subForAddDto.BlogUrl))
-                .Returns(Task.FromResult(_blog));
+            Mock_BlogRepository_GetByUrlAsync(_subForAddDto.BlogUrl, _blog);
 
             _subscription.Active = false;
-            _subRepositoryMock.Setup(x => x.GetByUserAndBlogAsync(
-                _user, _blog))
-                .Returns(Task.FromResult(_subscription));
-
-            _readerRepository.Setup(x => x.SaveAllAsync())
-                .Returns(Task.FromResult(true));
-            var startTime = DateTime.UtcNow;
+            Mock_SubscriptionRepository_GetByUserAndBlogAsync(_user, _blog, _subscription);
 
             //ACT
-            var result = await _subscriptionControllerMock.Object
-                .Subscribe(_subForAddDto);
+            var startTime = DateTime.UtcNow;
+            var result = await _subscriptionController.Subscribe(_subForAddDto);
             var result_data = result.Result as Subscription;
 
             //ASSERT
@@ -173,14 +194,10 @@ namespace RSSReader.UnitTests
         public async Task Subscribe_CantFindUserFromClaims_Unauthorized()
         {
             //ARRANGE
-            _subscriptionControllerMock.Protected()
-                .Setup<Task<ApiUser>>("GetCurrentUser")
-                .Returns(Task.FromResult<ApiUser>(null))
-                .Verifiable();
+            Mock_UserRepository_GetCurrentUser(null);
 
             //ACT
-            var result = await _subscriptionControllerMock.Object
-                .Subscribe(_subForAddDto);
+            var result = await _subscriptionController.Subscribe(_subForAddDto);
 
             //ASSERT
             Assert.That(result, Is.EqualTo(ErrUnauhtorized));
@@ -214,25 +231,14 @@ namespace RSSReader.UnitTests
         public async Task Unsubscribe_DisableSubscription_Ok()
         {
             //ARRANGE
-            _subscriptionControllerMock.Protected()
-                .Setup<Task<ApiUser>>("GetCurrentUser")
-                .Returns(Task.FromResult<ApiUser>(_user))
-                .Verifiable();
+            Mock_UserRepository_GetCurrentUser(_user);
 
-            _readerRepository.Setup(x => x.SaveAllAsync())
-                .Returns(Task.FromResult(true));
-
-            _user.Subscriptions = new HashSet<Subscription>();
             var sub = new Subscription() { Id = 0, Active = true };
             _user.Subscriptions.Add(sub);
 
-            _subRepositoryMock.Setup(x => x.Get(0))
-                .Returns(Task.FromResult(sub));
-
             var startTime = DateTime.UtcNow;
             //ACT
-            var result = await _subscriptionControllerMock.Object
-                .Unsubscribe(0);
+            var result = await _subscriptionController.Unsubscribe(0);
             var result_data = result.Result as Subscription;
 
             //ASSERT
@@ -247,34 +253,10 @@ namespace RSSReader.UnitTests
         public async Task Unsubscribe_CantFindUserFromClaims_Unauthorized()
         {
             //ARRANGE
-            _subscriptionControllerMock.Protected()
-                .Setup<Task<ApiUser>>("GetCurrentUser")
-                .Returns(Task.FromResult<ApiUser>(null))
-                .Verifiable();
+            Mock_UserRepository_GetCurrentUser(null);
 
             //ACT
-            var result = await _subscriptionControllerMock.Object
-                .Unsubscribe(0);
-
-            //ASSERT
-            Assert.That(result, Is.EqualTo(ErrUnauhtorized));
-        }
-
-        [Test]
-        public async Task Unsubscribe_CantFindSubInUserCollection_Unauthorized()
-        {
-            //ARRANGE
-            _subscriptionControllerMock.Protected()
-                .Setup<Task<ApiUser>>("GetCurrentUser")
-                .Returns(Task.FromResult<ApiUser>(_user))
-                .Verifiable();
-
-            _user.Subscriptions = new HashSet<Subscription>();
-            _user.Subscriptions.Add(new Subscription() { Id = 1 });
-
-            //ACT
-            var result = await _subscriptionControllerMock.Object
-                .Unsubscribe(0);
+            var result = await _subscriptionController.Unsubscribe(0);
 
             //ASSERT
             Assert.That(result, Is.EqualTo(ErrUnauhtorized));
@@ -284,12 +266,8 @@ namespace RSSReader.UnitTests
         public async Task Unsubscribe_SubIsAlreadyDisabled_ErrSubAlreadyDisabled()
         {
             //ARRANGE
-            _subscriptionControllerMock.Protected()
-                .Setup<Task<ApiUser>>("GetCurrentUser")
-                .Returns(Task.FromResult<ApiUser>(_user))
-                .Verifiable();
+            Mock_UserRepository_GetCurrentUser(_user);
 
-            _user.Subscriptions = new HashSet<Subscription>();
             var sub = new Subscription()
             {
                 Id = 0,
@@ -298,13 +276,9 @@ namespace RSSReader.UnitTests
             };
             _user.Subscriptions.Add(sub);
 
-            _subRepositoryMock.Setup(x => x.Get(0))
-                .Returns(Task.FromResult(sub));
-
-            var startTime = DateTime.UtcNow;
             //ACT
-            var result = await _subscriptionControllerMock.Object
-                .Unsubscribe(0);
+            var startTime = DateTime.UtcNow;
+            var result = await _subscriptionController.Unsubscribe(0);
             var result_data = result.Result as Subscription;
 
             //ASSERT
@@ -318,26 +292,20 @@ namespace RSSReader.UnitTests
         public async Task Unsubscribe_SubCantBeFoundInDB_ErrEntityNotExists()
         {
             //ARRANGE
-            _subscriptionControllerMock.Protected()
-                .Setup<Task<ApiUser>>("GetCurrentUser")
-                .Returns(Task.FromResult<ApiUser>(_user))
-                .Verifiable();
+            Mock_UserRepository_GetCurrentUser(_user);
 
-            _user.Subscriptions = new HashSet<Subscription>();
-            var sub = new Subscription() { Id = 0 };
+            var sub = new Subscription() { Id = 1 };
             _user.Subscriptions.Add(sub);
 
-            _subRepositoryMock.Setup(x => x.Get(0))
-                .Returns(Task.FromResult<Subscription>(null));
-
-            var startTime = DateTime.UtcNow;
             //ACT
-            var result = await _subscriptionControllerMock.Object
-                .Unsubscribe(0);
+            var startTime = DateTime.UtcNow;
+            var result = await _subscriptionController.Unsubscribe(0);
 
             //ASSERT
             Assert.That(result, Is.EqualTo(ErrEntityNotExists));
         }
+
+        
 
         #endregion
     }

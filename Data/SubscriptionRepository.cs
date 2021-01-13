@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace RSSReader.Data
 {
-    public class SubRepository : ISubRepository
+    public class SubscriptionRepository : ISubscriptionRepository
     {
         private readonly DataContext _context;
 
-        public SubRepository(DataContext context)
+        public SubscriptionRepository(DataContext context)
         {
             _context = context;
         }
@@ -26,17 +26,11 @@ namespace RSSReader.Data
             return await _context.Subscriptions
                 .FirstOrDefaultAsync(x => x.User == user && x.Blog == blog);
         }
-        public async Task<Subscription> Get(int id)
-        {
-            return await _context.Subscriptions
-                .FirstOrDefaultAsync(x => x.Id == id);
-        }
     }
 
-    public interface ISubRepository
+    public interface ISubscriptionRepository
     {
         Task<Subscription> GetByUserAndBlogAsync(ApiUser user, Blog blog);
         Task<bool> AddAsync(Subscription blogSub);
-        Task<Subscription> Get(int id);
     }
 }

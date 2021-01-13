@@ -20,7 +20,7 @@ namespace RSSReader.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : APIBaseController
+    public class AuthController : Controller
     {
         private UserManager<ApiUser> _userManager;
         private readonly IAuthService _authService;
@@ -29,7 +29,6 @@ namespace RSSReader.Controllers
         //private readonly IEmailSender _emailSender; UnComment if you want to add Email Verification also.
 
         public AuthController(UserManager<ApiUser> userManager, IAuthService authService, IMapper mapper)
-            : base(userManager)
         {
             _userManager = userManager;
             _authService = authService;

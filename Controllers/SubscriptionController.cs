@@ -20,28 +20,29 @@ namespace RSSReader.Controllers
     [ApiController]
     [Authorize]
     [Route("api/[controller]")]
-    public class SubscriptionController : APIBaseController
+    public class SubscriptionController : Controller
     {
+        private readonly IUserRepository _userRepository;
         private readonly IReaderRepository _readerRepository;
-        private readonly ISubRepository _subRepository;
+        private readonly ISubscriptionRepository _subRepository;
         private readonly IBlogRepository _blogRepository;
 
         public SubscriptionController(
-            UserManager<ApiUser> userManager,
+            IUserRepository userRepository,
             IReaderRepository readerRepository,
-            ISubRepository subRepository,
+            ISubscriptionRepository subRepository,
             IBlogRepository blogRepository)
-            : base(userManager)
         {
-            this._readerRepository = readerRepository;
-            this._subRepository = subRepository;
-            this._blogRepository = blogRepository;
+            _userRepository = userRepository;
+            _readerRepository = readerRepository;
+            _subRepository = subRepository;
+            _blogRepository = blogRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            ApiUser user = await GetCurrentUser();
+            ApiUser user = await _userRepository.GetCurrentUser(this);
             if (user == null)
                 return Unauthorized();
 
@@ -51,7 +52,7 @@ namespace RSSReader.Controllers
         [HttpGet("list")]
         public async Task<ApiResponse> GetList()
         {
-            ApiUser user = await GetCurrentUser();
+            ApiUser user = await _userRepository.GetCurrentUser(this);
 
             if (user == null)
                 return ErrUnauhtorized;
@@ -64,13 +65,14 @@ namespace RSSReader.Controllers
         [HttpPost("subscribe")]
         public async Task<ApiResponse> Subscribe(SubscriptionForAddDto subscriptionForAddDto)
         {
-            ApiUser user = await GetCurrentUser();
+            ApiUser user = await _userRepository.GetCurrentUser(this);
 
             if (user == null)
                 return ErrUnauhtorized;
 
             Blog blog = await _blogRepository
                 .GetByUrlAsync(subscriptionForAddDto.BlogUrl);
+            Subscription subscription = null;
 
             if (blog == null)
             {
@@ -83,9 +85,10 @@ namespace RSSReader.Controllers
                 if (!await _blogRepository.AddAsync(blog))
                     return ErrRequestFailed;
             }
-
-            Subscription subscription = await _subRepository
-                .GetByUserAndBlogAsync(user, blog);
+            else
+            {
+                subscription = await _subRepository.GetByUserAndBlogAsync(user, blog);
+            }
 
             if (subscription == null)
             {
@@ -113,15 +116,12 @@ namespace RSSReader.Controllers
         [HttpPost("{id}/unsubscribe")]
         public async Task<ApiResponse> Unsubscribe(int id)
         {
-            ApiUser user = await GetCurrentUser();
+            ApiUser user = await _userRepository.GetCurrentUser(this);
 
             if (user == null)
                 return ErrUnauhtorized;
 
-            if (!user.Subscriptions.Any(x => x.Id == id))
-                return ErrUnauhtorized;
-
-            var sub = await _subRepository.Get(id);
+            var sub = user.Subscriptions.Where(x => x.Id == id).FirstOrDefault();
 
             if (sub == null)
                 return ErrEntityNotExists;//Never should happend

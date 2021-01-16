@@ -1,19 +1,16 @@
 ﻿using AutoWrapper.Wrappers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using RSSReader.Data;
 using RSSReader.Dtos;
+using RSSReader.Helpers;
 using RSSReader.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
+using static RSSReader.Data.UserRepository;
 
 namespace RSSReader.Controllers
 {
@@ -39,20 +36,11 @@ namespace RSSReader.Controllers
             _blogRepository = blogRepository;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            ApiUser user = await _userRepository.GetCurrentUser(this);
-            if (user == null)
-                return Unauthorized();
-
-            return Ok(new { data = user });
-        }
-
         [HttpGet("list")]
         public async Task<ApiResponse> GetList()
         {
-            ApiUser user = await _userRepository.GetCurrentUser(this);
+            ApiUser user = await _userRepository
+                .GetWithSubscriptions(BY_USERID(this.GetCurUserId()));
 
             if (user == null)
                 return ErrUnauhtorized;
@@ -65,7 +53,8 @@ namespace RSSReader.Controllers
         [HttpPost("subscribe")]
         public async Task<ApiResponse> Subscribe(SubscriptionForAddDto subscriptionForAddDto)
         {
-            ApiUser user = await _userRepository.GetCurrentUser(this);
+            ApiUser user = await _userRepository
+                .Get(BY_USERID(this.GetCurUserId()));
 
             if (user == null)
                 return ErrUnauhtorized;
@@ -116,7 +105,8 @@ namespace RSSReader.Controllers
         [HttpPost("{id}/unsubscribe")]
         public async Task<ApiResponse> Unsubscribe(int id)
         {
-            ApiUser user = await _userRepository.GetCurrentUser(this);
+            ApiUser user = await _userRepository
+                .GetWithSubscriptions(BY_USERID(this.GetCurUserId()));
 
             if (user == null)
                 return ErrUnauhtorized;

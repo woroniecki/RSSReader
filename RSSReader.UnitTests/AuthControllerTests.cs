@@ -18,6 +18,8 @@ using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 using System.Linq;
 using RSSReader.Data;
+using System.Linq.Expressions;
+using UserPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.ApiUser, bool>>;
 
 namespace RSSReader.UnitTests
 {
@@ -28,6 +30,7 @@ namespace RSSReader.UnitTests
         private const string AUTH_TOKEN_STR = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwIiwidW5pcXVlX25hbWUiOiJ1c2VybmFtZSIsIm5iZiI6MTYxMDU2OTUyMCwiZXhwIjoxNjEwNTgwMzIwLCJpYXQiOjE2MTA1Njk1MjB9.ZaFHLEUtyOHqBMgwO5hyR_eWeNvxBGt4ioGplfyHwSeO6gm80f_21laU4bFnDulwUrAgrc25GFvOSeVpE9_nBw";
 
         private Mock<UserManager<ApiUser>> _userManagerMock;
+        private Mock<IUserRepository> _userRepository;
         private IAuthService _authservice;
         private IMapper _mapper;
         private Dtos.UserForRegisterDto _registerModel;
@@ -55,6 +58,8 @@ namespace RSSReader.UnitTests
 
             _readerRepo = new Mock<IReaderRepository>();
             Mock_ReaderRepository_SaveAllAsync(true);
+
+            _userRepository = new Mock<IUserRepository>();
 
             _authservice = new AuthService(configuration.Object, _readerRepo.Object);
 
@@ -84,9 +89,6 @@ namespace RSSReader.UnitTests
                 Password = "password"
             };
 
-            //Controller
-            _authController = new AuthController(_userManagerMock.Object, _authservice, _mapper);
-
             //Data
             _userToLogin = new ApiUser()
             {
@@ -101,6 +103,11 @@ namespace RSSReader.UnitTests
                 RefreshToken = REFRESH_TOKEN_STR,
                 AuthToken = AUTH_TOKEN_STR
             };
+
+            //Controller
+            _authController = new AuthController(
+                _userManagerMock.Object, _userRepository.Object, _authservice, _mapper
+                );
         }
 
         #region Mocks
@@ -119,31 +126,34 @@ namespace RSSReader.UnitTests
                             .Verifiable();
         }
 
-        private void Mock_UserManager_FindByNameAsync(string name, ApiUser returnedUser)
+        private void Mock_UserRepo_Get(ApiUser returnedUser)
         {
-            _userManagerMock.Setup(x => x.FindByNameAsync(name))
-                            .Returns(Task.FromResult(returnedUser))
-                            .Verifiable();
+            Expression<Func<IUserRepository, Task<ApiUser>>> expression =
+                returnedUser != null ?
+                x => x.Get(It.Is<UserPred>(x => x.Compile().Invoke(returnedUser))) :
+                x => x.Get(It.IsAny<UserPred>());
+
+            _userRepository.Setup(expression)
+            .Returns(Task.FromResult(returnedUser))
+            .Verifiable();
         }
 
-        private void Mock_UserManager_FindByEmailAsync(string email, ApiUser returnedUser)
+        private void Mock_UserRepo_GetWithRefreshTokens(ApiUser returnedUser)
         {
-            _userManagerMock.Setup(x => x.FindByEmailAsync(email))
-                            .Returns(Task.FromResult(returnedUser))
-                            .Verifiable();
+            Expression<Func<IUserRepository, Task<ApiUser>>> expression =
+                returnedUser != null ?
+                x => x.GetWithRefreshTokens(It.Is<UserPred>(x => x.Compile().Invoke(returnedUser))) :
+                x => x.GetWithRefreshTokens(It.IsAny<UserPred>());
+
+            _userRepository.Setup(expression)
+            .Returns(Task.FromResult(returnedUser))
+            .Verifiable();
         }
 
         private void Mock_UserManager_CheckPasswordAsync(ApiUser user, string password, bool returnedValue)
         {
             _userManagerMock.Setup(x => x.CheckPasswordAsync(user, password))
                                         .Returns(Task.FromResult(returnedValue));
-        }
-
-        private void Mock_UserManager_FindByIdAsync(string id, ApiUser returnedUser)
-        {
-            _userManagerMock.Setup(x => x.FindByIdAsync(id))
-                            .Returns(Task.FromResult(returnedUser))
-                            .Verifiable();
         }
 
         #endregion
@@ -170,7 +180,9 @@ namespace RSSReader.UnitTests
         public async Task Register_UsernameAlreadyTaken_UsernameFieldError()
         {
             //ARRANGE
-            Mock_UserManager_FindByNameAsync(_registerModel.Username, new ApiUser());
+            Mock_UserRepo_Get(
+                new ApiUser() { UserName = _registerModel.Username }
+                );
 
             //ACT
             var ex = Assert.ThrowsAsync<ApiProblemDetailsException>(
@@ -192,7 +204,9 @@ namespace RSSReader.UnitTests
         public async Task Register_EmailAlreadyTaken_EmailFieldError()
         {
             //ARRANGE
-            Mock_UserManager_FindByEmailAsync(_registerModel.Email, new ApiUser());
+            Mock_UserRepo_Get(
+                new ApiUser() { Email = _registerModel.Email }
+                );
 
             //ACT
             var ex = Assert.ThrowsAsync<ApiProblemDetailsException>(
@@ -233,7 +247,7 @@ namespace RSSReader.UnitTests
             //ARRANGE
             _userToLogin.UserName = _loginUsernameModel.Username;
 
-            Mock_UserManager_FindByNameAsync(_loginUsernameModel.Username, _userToLogin);
+            Mock_UserRepo_GetWithRefreshTokens(_userToLogin);
             Mock_UserManager_CheckPasswordAsync(
                 _userToLogin, _loginUsernameModel.Password, true
                 );
@@ -251,7 +265,7 @@ namespace RSSReader.UnitTests
         {
             //ARRANGE
             _userToLogin.Email = _loginEmailModel.Username;
-            Mock_UserManager_FindByEmailAsync(_loginEmailModel.Username, _userToLogin);
+            Mock_UserRepo_GetWithRefreshTokens(_userToLogin);
             Mock_UserManager_CheckPasswordAsync(
                 _userToLogin, _loginUsernameModel.Password, true
                 );
@@ -270,8 +284,7 @@ namespace RSSReader.UnitTests
         public async Task Login_UserWithUsernameOrEmailNotExists_ErrWrongCredentials()
         {
             //ARRANGE
-            Mock_UserManager_FindByNameAsync(_loginEmailModel.Username, null);
-            Mock_UserManager_FindByEmailAsync(_loginEmailModel.Username, null);
+            Mock_UserRepo_Get(null);
 
             //ACT
             var result = await _authController.Login(_loginUsernameModel);
@@ -284,7 +297,7 @@ namespace RSSReader.UnitTests
         public async Task Login_WrongPassword_ErrWrongCredentials()
         {
             //ARRANGE
-            Mock_UserManager_FindByEmailAsync(_loginEmailModel.Username, _userToLogin);
+            Mock_UserRepo_Get(_userToLogin);
             Mock_UserManager_CheckPasswordAsync(
                 _userToLogin, _loginUsernameModel.Password, false
                 );
@@ -325,7 +338,7 @@ namespace RSSReader.UnitTests
         public async Task Refresh_CantFindUserWithId_ErrUnauhtorized()
         {
             //ARRANGE
-            Mock_UserManager_FindByIdAsync(_userToLogin.Id, null);
+            Mock_UserRepo_GetWithRefreshTokens (null);
 
             //ACT
             var result = await _authController.Refresh(_dataForRefreshTokenDto);
@@ -339,7 +352,7 @@ namespace RSSReader.UnitTests
         public async Task Refresh_CantFindRefreshToken_ErrEntityNotExists()
         {
             //ARRANGE
-            Mock_UserManager_FindByIdAsync(_userToLogin.Id, _userToLogin);
+            Mock_UserRepo_GetWithRefreshTokens(_userToLogin);
 
             _userToLogin.RefreshTokens = Enumerable.Repeat(
                 new RefreshToken() { Token = "Wrong" }, 3)
@@ -357,7 +370,7 @@ namespace RSSReader.UnitTests
         public async Task Refresh_PrivdedAuthTokenOtherThanInRefresh_Unauthorized()
         {
             //ARRANGE
-            Mock_UserManager_FindByIdAsync(_userToLogin.Id, _userToLogin);
+            Mock_UserRepo_GetWithRefreshTokens(_userToLogin);
 
             RefreshToken old_token = new RefreshToken()
             {
@@ -379,7 +392,7 @@ namespace RSSReader.UnitTests
         public async Task Refresh_RefreshTokenAlreadyInactive_ErrBadRequest()
         {
             //ARRANGE
-            Mock_UserManager_FindByIdAsync(_userToLogin.Id, _userToLogin);
+            Mock_UserRepo_GetWithRefreshTokens(_userToLogin);
 
             RefreshToken old_token = new RefreshToken()
             {
@@ -401,7 +414,7 @@ namespace RSSReader.UnitTests
         public async Task Refresh_RefreshTokens_OkAuthTokenAndRefreshToken()
         {
             //ARRANGE
-            Mock_UserManager_FindByIdAsync(_userToLogin.Id, _userToLogin);
+            Mock_UserRepo_GetWithRefreshTokens(_userToLogin);
 
             RefreshToken token = new RefreshToken()
             {

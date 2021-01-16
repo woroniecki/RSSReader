@@ -32,8 +32,7 @@ namespace RSSReader
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(options => options
-                .UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
-                .UseLazyLoadingProxies());
+                .UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<ApiUser>()
                 .AddEntityFrameworkStores<DataContext>();
 

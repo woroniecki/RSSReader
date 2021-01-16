@@ -2,19 +2,15 @@
 using AutoWrapper.Wrappers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using RSSReader.Data;
 using RSSReader.Dtos;
 using RSSReader.Models;
 using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
+using static RSSReader.Data.UserRepository;
 
 namespace RSSReader.Controllers
 {
@@ -23,14 +19,20 @@ namespace RSSReader.Controllers
     public class AuthController : Controller
     {
         private UserManager<ApiUser> _userManager;
+        private readonly IUserRepository _userRepo;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
         //private readonly IEmailSender _emailSender; UnComment if you want to add Email Verification also.
 
-        public AuthController(UserManager<ApiUser> userManager, IAuthService authService, IMapper mapper)
+        public AuthController(
+            UserManager<ApiUser> userManager, 
+            IUserRepository userRepository,
+            IAuthService authService, 
+            IMapper mapper)
         {
             _userManager = userManager;
+            _userRepo = userRepository;
             _authService = authService;
             _mapper = mapper;
         }
@@ -39,10 +41,10 @@ namespace RSSReader.Controllers
         [Route("register")]
         public async Task<ApiResponse> Register([FromBody] UserForRegisterDto model)
         {
-            if (await _userManager.FindByNameAsync(model.Username) != null)
+            if (await _userRepo.Get(BY_USERNAME(model.Username)) != null)
                 ModelState.AddModelError(nameof(UserForRegisterDto.Username), MsgErrUsernameTaken);
 
-            if (await _userManager.FindByEmailAsync(model.Email) != null)
+            if (await _userRepo.Get(BY_USEREMAIL(model.Email)) != null)
                 ModelState.AddModelError(nameof(UserForRegisterDto.Email), MsgErrEmailTaken);
 
             if (!ModelState.IsValid)
@@ -68,10 +70,12 @@ namespace RSSReader.Controllers
         [Route("login")]
         public async Task<ApiResponse> Login([FromBody] UserForLoginDto model)
         {
-            var user = await _userManager.FindByNameAsync(model.Username);
+            var user = await _userRepo
+                .GetWithRefreshTokens(BY_USERNAME(model.Username));
 
             if (user == null)
-                user = await _userManager.FindByEmailAsync(model.Username);
+                user = await _userRepo
+                    .GetWithRefreshTokens(BY_USEREMAIL(model.Username));
 
             if (user == null)
                 return ErrWrongCredentials;
@@ -90,7 +94,7 @@ namespace RSSReader.Controllers
             if (string.IsNullOrEmpty(user_id))
                 return ErrUnauhtorized;
 
-            var user = await _userManager.FindByIdAsync(user_id);
+            var user = await _userRepo.GetWithRefreshTokens(BY_USERID(user_id));
             if (user == null)
                 return ErrUnauhtorized;
 

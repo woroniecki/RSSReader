@@ -25,11 +25,17 @@ namespace RSSReader.Data
             await _context.Blogs.AddAsync(blog);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public Task<IEnumerable<UserPostData>> GetUserPostDatasAsync(int blogId, string userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public interface IBlogRepository
     {
         Task<Blog> GetByUrlAsync(string url);
         Task<bool> AddAsync(Blog blog);
+        Task<IEnumerable<UserPostData>> GetUserPostDatasAsync(int blogId, string userId);
     }
 }

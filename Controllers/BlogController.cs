@@ -9,6 +9,8 @@ using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 using static RSSReader.Data.UserRepository;
 using RSSReader.Models;
+using RSSReader.Data;
+using RSSReader.Helpers;
 
 namespace RSSReader.Controllers
 {
@@ -17,10 +19,26 @@ namespace RSSReader.Controllers
     [Route("api/[controller]")]
     public class BlogController : Controller
     {
-        [HttpGet("{id}/list")]
-        public async Task<ApiResponse> GetUserPostDataList()
+        private readonly IBlogRepository _blogRepo;
+        private readonly IUserRepository _userRepo;
+
+        public BlogController(IBlogRepository blogRepo, IUserRepository userRepo)
         {
-            return new ApiResponse(MsgSucceed, new List<UserPostData>(), Status200OK);
+            _blogRepo = blogRepo;
+            _userRepo = userRepo;
+        }
+
+        [HttpGet("{id}/list")]
+        public async Task<ApiResponse> GetUserPostDataList(int blogId)
+        {
+            ApiUser user = await _userRepo.Get(BY_USERID(this.GetCurUserId()));
+
+            if (user == null)
+                return ErrUnauhtorized;
+
+            var result_list = await _blogRepo.GetUserPostDatasAsync(blogId, user.Id);
+
+            return new ApiResponse(MsgSucceed, result_list, Status200OK);
         }
     }
 }

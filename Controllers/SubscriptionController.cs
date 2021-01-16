@@ -45,6 +45,7 @@ namespace RSSReader.Controllers
             if (user == null)
                 return ErrUnauhtorized;
 
+            //TODO async and move to repo, needs tests
             var subs = user.Subscriptions.Where(x => x.Active);
 
             return new ApiResponse(MsgSucceed, subs, Status200OK);

@@ -26,9 +26,12 @@ namespace RSSReader.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<IEnumerable<UserPostData>> GetUserPostDatasAsync(int blogId, string userId)
+        public async Task<IEnumerable<UserPostData>> GetUserPostDatasAsync(int blogId, string userId)
         {
-            throw new NotImplementedException();
+            return await _context.UserPostDatas
+                .Include(x => x.Post)
+                .Where(x => x.User.Id == userId && x.Post.Blog.Id == blogId)
+                .ToListAsync();
         }
     }
 

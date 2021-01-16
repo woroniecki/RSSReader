@@ -111,7 +111,19 @@ namespace RSSReader.UnitTests
             Assert.IsInstanceOf<IEnumerable<UserPostData>>(result.Result);
             Assert.That(result.Result, Is.EquivalentTo(_resultList));
         }
-        
+
+        #endregion
+
+        #region ReadPost
+        [Test]
+        public async Task ReadPost_CreateNewPostAndUserPostData_NewUserPostData()
+        {
+            //ARRANGE
+            //ACT
+            var result = await _blogController.ReadPost();
+            //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(Status201Created));
+        }
         #endregion
     }
 }

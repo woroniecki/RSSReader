@@ -28,7 +28,7 @@ namespace RSSReader.Controllers
             _userRepo = userRepo;
         }
 
-        [HttpGet("{id}/list")]
+        [HttpGet("{blogId}/list")]
         public async Task<ApiResponse> GetUserPostDataList(int blogId)
         {
             ApiUser user = await _userRepo.Get(BY_USERID(this.GetCurUserId()));
@@ -39,6 +39,12 @@ namespace RSSReader.Controllers
             var result_list = await _blogRepo.GetUserPostDatasAsync(blogId, user.Id);
 
             return new ApiResponse(MsgSucceed, result_list, Status200OK);
+        }
+
+        [HttpPost("{blogId}/readpost")]
+        public async Task<ApiResponse> ReadPost()
+        {
+            return new ApiResponse(MsgCreated, null, Status201Created);
         }
     }
 }

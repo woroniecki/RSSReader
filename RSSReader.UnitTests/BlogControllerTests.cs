@@ -1,5 +1,8 @@
 ﻿using NUnit.Framework;
 using RSSReader.Controllers;
+using RSSReader.Models;
+using RSSReader.UnitTests.Helpers;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
@@ -26,9 +29,10 @@ namespace RSSReader.UnitTests
 
             //ACT
             var result = await _blogController.GetUserPostDataList();
-
+            
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
+            Assert.IsInstanceOf<IEnumerable<UserPostData>>(result.Result);
         }
         
         #endregion

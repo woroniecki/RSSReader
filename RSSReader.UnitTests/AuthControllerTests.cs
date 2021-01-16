@@ -313,7 +313,7 @@ namespace RSSReader.UnitTests
         private static void GetDataFromLoginResult(ApiResponse result, out TokenForReturnDto auth_token, out UserForReturnDto result_user, out TokenForReturnDto refresh_token)
         {
             var result_data = result.Result;
-            auth_token = result_data.GetProperty("authToken") as TokenForReturnDto; ;
+            auth_token = result_data.GetProperty("authToken") as TokenForReturnDto;
             refresh_token = result_data.GetProperty("refreshToken") as TokenForReturnDto;
             result_user = result_data.GetProperty("user") as UserForReturnDto;
         }

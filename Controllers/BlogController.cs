@@ -8,6 +8,7 @@ using AutoWrapper.Wrappers;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 using static RSSReader.Data.UserRepository;
+using RSSReader.Models;
 
 namespace RSSReader.Controllers
 {
@@ -19,7 +20,7 @@ namespace RSSReader.Controllers
         [HttpGet("{id}/list")]
         public async Task<ApiResponse> GetUserPostDataList()
         {
-            return new ApiResponse(MsgSucceed, null, Status200OK);
+            return new ApiResponse(MsgSucceed, new List<UserPostData>(), Status200OK);
         }
     }
 }

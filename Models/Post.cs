@@ -7,6 +7,7 @@ namespace RSSReader.Models
 {
     public class Post
     {
+        public Post() { }
         public Post(string name, string url, Blog blog)
         {
             this.Name = name;
@@ -16,9 +17,6 @@ namespace RSSReader.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
-        public DateTime FirstSubscribeDate { get; set; }
-        public DateTime LastSubscribeDate { get; set; }
-        public DateTime LastUnsubscribeDate { get; set; }
         public Blog Blog { get; set; }
     }
 }

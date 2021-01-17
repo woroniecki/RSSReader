@@ -17,6 +17,8 @@ using static RSSReader.Data.Response;
 using static RSSReader.Data.UserRepository;
 using UserPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.ApiUser, bool>>;
 using BlogPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.Blog, bool>>;
+using PostPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.Post, bool>>;
+using UserPostDataPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.UserPostData, bool>>;
 using RSSReader.Dtos;
 
 namespace RSSReader.UnitTests
@@ -28,10 +30,15 @@ namespace RSSReader.UnitTests
 
         private BlogController _blogController;
         private Mock<IBlogRepository> _blogRepo;
-        private Mock<IUserRepository> _userRepository;
+        private Mock<IPostRepository> _postRepo;
+        private Mock<IUserPostDataRepository> _userPostDataRepo;
+        private Mock<IUserRepository> _userRepo;
+        private Mock<IReaderRepository> _readerRepo;
         private List<UserPostData> _resultList;
         private ApiUser _user;
         private Blog _blog;
+        private Post _post;
+        private UserPostData _userPostData;
         private DataForReadPostDto _readPostModel;
 
         [SetUp]
@@ -39,7 +46,10 @@ namespace RSSReader.UnitTests
         {
             //Mock
             _blogRepo = new Mock<IBlogRepository>();
-            _userRepository = new Mock<IUserRepository>();
+            _postRepo = new Mock<IPostRepository>();
+            _userPostDataRepo = new Mock<IUserPostDataRepository>();
+            _userRepo = new Mock<IUserRepository>();
+            _readerRepo = new Mock<IReaderRepository>();
 
             //Data
             _resultList = Enumerable.Repeat(
@@ -60,9 +70,22 @@ namespace RSSReader.UnitTests
                 Name = "name",
                 PostUrl = "www.test.com/1"
             };
+            _post = new Post()
+            {
+                Id = 1,
+                Name = _readPostModel.Name,
+                Url = _readPostModel.PostUrl,
+                Blog = _blog,
+            };
+            _userPostData = new UserPostData(_post, _user);
 
             //Controller
-            _blogController = new BlogController(_blogRepo.Object, _userRepository.Object);
+            _blogController = new BlogController(
+                _readerRepo.Object, 
+                _blogRepo.Object,
+                _postRepo.Object,
+                _userPostDataRepo.Object,
+                _userRepo.Object);
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
                                     new Claim(ClaimTypes.NameIdentifier, _user.Id)
                                }, "TestAuthentication"));
@@ -88,7 +111,7 @@ namespace RSSReader.UnitTests
                 x => x.Get(It.Is<UserPred>(x => x.Compile().Invoke(returnedUser))) :
                 x => x.Get(It.IsAny<UserPred>());
 
-            _userRepository.Setup(expression)
+            _userRepo.Setup(expression)
             .Returns(Task.FromResult(returnedUser))
             .Verifiable();
         }
@@ -102,6 +125,30 @@ namespace RSSReader.UnitTests
 
             _blogRepo.Setup(expression)
             .Returns(Task.FromResult(returnedBlog))
+            .Verifiable();
+        }
+
+        private void Mock_PostRepository_Get(Post returnedPost)
+        {
+            Expression<Func<IPostRepository, Task<Post>>> expression =
+                returnedPost != null ?
+                x => x.Get(It.Is<PostPred>(x => x.Compile().Invoke(returnedPost))) :
+                x => x.Get(It.IsAny<PostPred>());
+
+            _postRepo.Setup(expression)
+            .Returns(Task.FromResult(returnedPost))
+            .Verifiable();
+        }
+        
+        private void Mock_UserPostDataRepository_GetWithPost(UserPostData userPostData)
+        {
+            Expression<Func<IUserPostDataRepository, Task<UserPostData>>> expression =
+                userPostData != null ?
+                x => x.GetWithPost(It.Is<UserPostDataPred>(x => x.Compile().Invoke(userPostData))) :
+                x => x.GetWithPost(It.IsAny<UserPostDataPred>());
+
+            _userPostDataRepo.Setup(expression)
+            .Returns(Task.FromResult(userPostData))
             .Verifiable();
         }
 
@@ -137,6 +184,12 @@ namespace RSSReader.UnitTests
             Assert.That(result.Result, Is.EquivalentTo(_resultList));
         }
 
+        private void Mock_ReaderRepository_SaveAllAsync(bool returnedValue)
+        {
+            _readerRepo.Setup(x => x.SaveAllAsync())
+                            .Returns(Task.FromResult(returnedValue))
+                            .Verifiable();
+        }
         #endregion
 
         #region ReadPost
@@ -168,22 +221,113 @@ namespace RSSReader.UnitTests
         }
 
         [Test]
-        public async Task ReadPost_CreateNewPostAndUserPostData_NewUserPostData()
+        public async Task ReadPost_SaveAllAsyncFailder_ErrRequestFailed()
         {
             //ARRANGE
             Mock_UserRepository_Get(_user);
             Mock_BlogRepository_Get(_blog);
+            Mock_ReaderRepository_SaveAllAsync(false);
 
             //ACT
             var result = await _blogController.ReadPost(_blog.Id, _readPostModel);
 
             //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(ErrRequestFailed.StatusCode));
+            _readerRepo.Verify(x => x.SaveAllAsync());
+        }
+
+            [Test]
+        public async Task ReadPost_CreateNewPostAndUserPostData_NewUserPostData()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(_user);
+            Mock_BlogRepository_Get(_blog);
+            Mock_ReaderRepository_SaveAllAsync(true);
+            Mock_PostRepository_Get(null);
+
+            //ACT
+            var start_time = DateTime.UtcNow;
+            var result = await _blogController.ReadPost(_blog.Id, _readPostModel);
+
+            //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status201Created));
             Assert.IsInstanceOf<UserPostData>(result.Result);
+
             var result_obj = result.Result as UserPostData;
             Assert.That(result_obj.Post.Url, Is.EqualTo(_readPostModel.PostUrl));
             Assert.That(result_obj.Post.Name, Is.EqualTo(_readPostModel.Name));
             Assert.That(result_obj.Post.Blog.Id, Is.EqualTo(_blog.Id));
+            Assert.That(result_obj.User.Id, Is.EqualTo(_user.Id));
+            Assert.That(result_obj.FirstDateOpen, Is.GreaterThanOrEqualTo(start_time));
+            Assert.That(result_obj.LastDateOpen, Is.GreaterThanOrEqualTo(start_time));
+
+            _readerRepo.Verify(x => x.SaveAllAsync());
+            _readerRepo.Verify(x => x.Add(It.IsAny<Post>()));
+            _readerRepo.Verify(x => x.Add(It.IsAny<UserPostData>()));
+        }
+
+        [Test]
+        public async Task ReadPost_GetPostAndCreateUserPostData_NewUserPostData()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(_user);
+            Mock_BlogRepository_Get(_blog);
+            Mock_ReaderRepository_SaveAllAsync(true);
+            Mock_PostRepository_Get(_post);
+            Mock_UserPostDataRepository_GetWithPost(null);
+
+            //ACT
+            var start_time = DateTime.UtcNow;
+            var result = await _blogController.ReadPost(_blog.Id, _readPostModel);
+
+            //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(Status201Created));
+            Assert.IsInstanceOf<UserPostData>(result.Result);
+
+            var result_obj = result.Result as UserPostData;
+            Assert.That(result_obj.Post.Url, Is.EqualTo(_readPostModel.PostUrl));
+            Assert.That(result_obj.Post.Name, Is.EqualTo(_readPostModel.Name));
+            Assert.That(result_obj.Post.Blog.Id, Is.EqualTo(_blog.Id));
+            Assert.That(result_obj.User.Id, Is.EqualTo(_user.Id));
+            Assert.That(result_obj.FirstDateOpen, Is.GreaterThanOrEqualTo(start_time));
+            Assert.That(result_obj.LastDateOpen, Is.GreaterThanOrEqualTo(start_time));
+
+            _readerRepo.Verify(x => x.SaveAllAsync());
+            _readerRepo.Verify(x => x.Add(It.IsAny<Post>()), Times.Never);
+            _readerRepo.Verify(x => x.Add(It.IsAny<UserPostData>()));
+        }
+
+        [Test]
+        public async Task ReadPost_GetPostAndUpdateUserPostData_UpdatedUserPostData()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(_user);
+            Mock_BlogRepository_Get(_blog);
+            Mock_ReaderRepository_SaveAllAsync(true);
+            Mock_PostRepository_Get(_post);
+            Mock_PostRepository_Get(_post);
+            Mock_UserPostDataRepository_GetWithPost(_userPostData);
+
+            //ACT
+            var start_time = DateTime.UtcNow;
+            var result = await _blogController.ReadPost(_blog.Id, _readPostModel);
+
+            //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
+            Assert.IsInstanceOf<UserPostData>(result.Result);
+
+            var result_obj = result.Result as UserPostData;
+            Assert.That(result_obj.Post.Url, Is.EqualTo(_readPostModel.PostUrl));
+            Assert.That(result_obj.Post.Name, Is.EqualTo(_readPostModel.Name));
+            Assert.That(result_obj.Post.Blog.Id, Is.EqualTo(_blog.Id));
+            Assert.That(result_obj.User.Id, Is.EqualTo(_user.Id));
+            Assert.That(result_obj.FirstDateOpen, Is.LessThanOrEqualTo(start_time));
+            Assert.That(result_obj.LastDateOpen, Is.GreaterThanOrEqualTo(start_time));
+
+            _readerRepo.Verify(x => x.SaveAllAsync());
+            _readerRepo.Verify(x => x.Add(It.IsAny<Post>()), Times.Never);
+            _readerRepo.Verify(x => x.Add(It.IsAny<UserPostData>()), Times.Never);
+            _readerRepo.Verify(x => x.Update(It.IsAny<UserPostData>()));
         }
         #endregion
     }

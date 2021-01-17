@@ -9,6 +9,8 @@ using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 using static RSSReader.Data.UserRepository;
 using static RSSReader.Data.BlogRepository;
+using static RSSReader.Data.PostRepository;
+using static RSSReader.Data.UserPostDataRepository;
 using RSSReader.Models;
 using RSSReader.Data;
 using RSSReader.Helpers;
@@ -21,12 +23,23 @@ namespace RSSReader.Controllers
     [Route("api/[controller]")]
     public class BlogController : Controller
     {
+        private readonly IReaderRepository _readerRepo;
         private readonly IBlogRepository _blogRepo;
+        private readonly IPostRepository _postRepo;
+        private readonly IUserPostDataRepository _userPostDataRepo;
         private readonly IUserRepository _userRepo;
 
-        public BlogController(IBlogRepository blogRepo, IUserRepository userRepo)
+        public BlogController(
+            IReaderRepository readerRepo,
+            IBlogRepository blogRepo,
+            IPostRepository postRepo,
+            IUserPostDataRepository userPostDataRepo,
+            IUserRepository userRepo)
         {
+            _readerRepo = readerRepo;
             _blogRepo = blogRepo;
+            _postRepo = postRepo;
+            _userPostDataRepo = userPostDataRepo;
             _userRepo = userRepo;
         }
 
@@ -55,26 +68,38 @@ namespace RSSReader.Controllers
                 return ErrEntityNotExists;
 
             UserPostData user_post_data = null;
-            var post = await _blogRepo.GetPostByUrl(data.PostUrl);
+            var post = await _postRepo.Get(BY_POSTURL(data.PostUrl));
             if(post == null)
             {
                 post = new Post(data.Name, data.PostUrl, blog);
+                _readerRepo.Add(post);
             }
             else
             {
-
+                user_post_data = await _userPostDataRepo.GetWithPost(
+                    BY_USERPOSTDATAPOSTANDUSER(user, post)
+                    );
             }
 
-            if(user_post_data == null)
+            ApiResponse returnedResponse;
+            if (user_post_data == null)
             {
-                user_post_data = new UserPostData()
-                {
-                    Post = post
-                };
+                user_post_data = new UserPostData(post, user);
+                _readerRepo.Add(user_post_data);
+                returnedResponse = new ApiResponse(MsgCreated, user_post_data, Status201Created);
             }
+            else
+            {
+                user_post_data.LastDateOpen = DateTime.UtcNow;
+                _readerRepo.Update(user_post_data);
+                returnedResponse = new ApiResponse(MsgUpdated, user_post_data, Status200OK);
+            }
+
+            if (!await _readerRepo.SaveAllAsync())
+                return ErrRequestFailed;
 
             //TODO return DTO
-            return new ApiResponse(MsgCreated, user_post_data, Status201Created);
+            return returnedResponse;
         }
     }
 }

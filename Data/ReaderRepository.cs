@@ -23,6 +23,11 @@ namespace RSSReader.Data
             _context.Remove(entity);
         }
 
+        public void Update<T>(T entity) where T : class
+        {
+            _context.Update(entity);
+        }
+
         public async Task<bool> SaveAllAsync()
         {
             return await _context.SaveChangesAsync() > 0;
@@ -33,6 +38,7 @@ namespace RSSReader.Data
     {
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
+        void Update<T>(T entity) where T : class;
         Task<bool> SaveAllAsync();
     }
 }

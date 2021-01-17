@@ -18,6 +18,7 @@ namespace RSSReader.Data
         public static string MsgCreatedRecord = "New record has been created in the database.";
         public static string MsgSucceed = "Succeed.";
         public static string MsgCreated = "Created new entity.";
+        public static string MsgUpdated = "Entity updated.";
 
         public static ApiResponse ErrRequestFailed = new ApiResponse(MsgErrRequestFailed, null, Status400BadRequest);
         public static ApiResponse ErrBadRequest = new ApiResponse(MsgErrBadRequest, null, Status400BadRequest);

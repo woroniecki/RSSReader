@@ -33,11 +33,17 @@ namespace RSSReader.Data
                 .Where(x => x.User.Id == userId && x.Post.Blog.Id == blogId)
                 .ToListAsync();
         }
+
+        public Task<Post> GetPostByUrl(string url)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public interface IBlogRepository
     {
         Task<Blog> GetByUrlAsync(string url);
+        Task<Post> GetPostByUrl(string url);
         Task<bool> AddAsync(Blog blog);
         Task<IEnumerable<UserPostData>> GetUserPostDatasAsync(int blogId, string userId);
     }

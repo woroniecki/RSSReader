@@ -116,13 +116,38 @@ namespace RSSReader.UnitTests
 
         #region ReadPost
         [Test]
+        public async Task ReadPost_CantFindUserFromClaim_Unauthorized()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(null);
+
+            //ACT
+            var result = await _blogController.ReadPost("");
+
+            //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(Status401Unauthorized));
+        }
+
+        [Test]
         public async Task ReadPost_CreateNewPostAndUserPostData_NewUserPostData()
         {
             //ARRANGE
+            Mock_UserRepository_Get(_user);
+            var postData = new Post()
+            {
+                Id = 0,
+                Url = "www.test.com",
+                Blog = null
+            };
+
             //ACT
-            var result = await _blogController.ReadPost();
+            var result = await _blogController.ReadPost(postData.Url);
+
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status201Created));
+            Assert.IsInstanceOf<UserPostData>(result.Result);
+            var result_obj = result.Result as UserPostData;
+            Assert.That(result_obj.Post.Url, Is.EqualTo(postData.Url));
         }
         #endregion
     }

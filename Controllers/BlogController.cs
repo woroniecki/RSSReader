@@ -37,14 +37,42 @@ namespace RSSReader.Controllers
                 return ErrUnauhtorized;
 
             var result_list = await _blogRepo.GetUserPostDatasAsync(blogId, user.Id);
-
+            //TODO return DTO
             return new ApiResponse(MsgSucceed, result_list, Status200OK);
         }
 
         [HttpPost("{blogId}/readpost")]
-        public async Task<ApiResponse> ReadPost()
+        public async Task<ApiResponse> ReadPost(string postUrl)
         {
-            return new ApiResponse(MsgCreated, null, Status201Created);
+            ApiUser user = await _userRepo.Get(BY_USERID(this.GetCurUserId()));
+
+            if (user == null)
+                return ErrUnauhtorized;
+
+            UserPostData user_post_data = null;
+            var post = await _blogRepo.GetPostByUrl(postUrl);
+            if(post == null)
+            {
+                post = new Post()
+                {
+                    Url = postUrl
+                };
+            }
+            else
+            {
+
+            }
+
+            if(user_post_data == null)
+            {
+                user_post_data = new UserPostData()
+                {
+                    Post = post
+                };
+            }
+
+            //TODO return DTO
+            return new ApiResponse(MsgCreated, user_post_data, Status201Created);
         }
     }
 }

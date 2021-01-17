@@ -3,17 +3,26 @@ using RSSReader.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace RSSReader.Data
 {
     public class BlogRepository : IBlogRepository
     {
+        public static Expression<Func<Blog, bool>> BY_BLOGID(int id) => q => q.Id == id;
+        public static Expression<Func<Blog, bool>> BY_BLOGURL(string url) => q => q.Url == url;
+
         private readonly DataContext _context;
 
         public BlogRepository(DataContext context)
         {
             _context = context;
+        }
+        public async Task<Blog> Get(Expression<Func<Blog, bool>> predicate)
+        {
+            return await _context.Blogs
+                .FirstOrDefaultAsync(predicate);
         }
         public async Task<Blog> GetByUrlAsync(string url)
         {
@@ -42,6 +51,7 @@ namespace RSSReader.Data
 
     public interface IBlogRepository
     {
+        Task<Blog> Get(Expression<Func<Blog, bool>> predicate);
         Task<Blog> GetByUrlAsync(string url);
         Task<Post> GetPostByUrl(string url);
         Task<bool> AddAsync(Blog blog);

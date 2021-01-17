@@ -8,9 +8,11 @@ using AutoWrapper.Wrappers;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 using static RSSReader.Data.UserRepository;
+using static RSSReader.Data.BlogRepository;
 using RSSReader.Models;
 using RSSReader.Data;
 using RSSReader.Helpers;
+using RSSReader.Dtos;
 
 namespace RSSReader.Controllers
 {
@@ -42,20 +44,24 @@ namespace RSSReader.Controllers
         }
 
         [HttpPost("{blogId}/readpost")]
-        public async Task<ApiResponse> ReadPost(string postUrl)
+        public async Task<ApiResponse> ReadPost(int blogId, [FromBody]DataForReadPostDto data)
         {
             ApiUser user = await _userRepo.Get(BY_USERID(this.GetCurUserId()));
-
             if (user == null)
                 return ErrUnauhtorized;
 
+            Blog blog = await _blogRepo.Get(BY_BLOGID(blogId));
+            if (blog == null)
+                return ErrEntityNotExists;
+
             UserPostData user_post_data = null;
-            var post = await _blogRepo.GetPostByUrl(postUrl);
+            var post = await _blogRepo.GetPostByUrl(data.PostUrl);
             if(post == null)
             {
                 post = new Post()
                 {
-                    Url = postUrl
+                    Url = data.PostUrl,
+                    Blog = blog
                 };
             }
             else

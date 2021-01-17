@@ -16,6 +16,8 @@ using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 using static RSSReader.Data.UserRepository;
 using UserPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.ApiUser, bool>>;
+using BlogPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.Blog, bool>>;
+using RSSReader.Dtos;
 
 namespace RSSReader.UnitTests
 {
@@ -29,6 +31,8 @@ namespace RSSReader.UnitTests
         private Mock<IUserRepository> _userRepository;
         private List<UserPostData> _resultList;
         private ApiUser _user;
+        private Blog _blog;
+        private DataForReadPostDto _readPostModel;
 
         [SetUp]
         public void SetUp()
@@ -46,6 +50,14 @@ namespace RSSReader.UnitTests
                 Id = "2",
                 UserName = "username",
                 Email = "user@mail.com"
+            };
+            _blog = new Blog()
+            {
+                Id = 1
+            };
+            _readPostModel = new DataForReadPostDto()
+            {
+                PostUrl = "www.test.com/1"
             };
 
             //Controller
@@ -77,6 +89,18 @@ namespace RSSReader.UnitTests
 
             _userRepository.Setup(expression)
             .Returns(Task.FromResult(returnedUser))
+            .Verifiable();
+        }
+
+        private void Mock_BlogRepository_Get(Blog returnedBlog)
+        {
+            Expression<Func<IBlogRepository, Task<Blog>>> expression =
+                returnedBlog != null ?
+                x => x.Get(It.Is<BlogPred>(x => x.Compile().Invoke(returnedBlog))) :
+                x => x.Get(It.IsAny<BlogPred>());
+
+            _blogRepo.Setup(expression)
+            .Returns(Task.FromResult(returnedBlog))
             .Verifiable();
         }
 
@@ -122,10 +146,24 @@ namespace RSSReader.UnitTests
             Mock_UserRepository_Get(null);
 
             //ACT
-            var result = await _blogController.ReadPost("");
+            var result = await _blogController.ReadPost(1, _readPostModel);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status401Unauthorized));
+        }
+
+        [Test]
+        public async Task ReadPost_BlogWithIdDoesntExist_ErrEntityNotExists()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(_user);
+            Mock_BlogRepository_Get(null);
+
+            //ACT
+            var result = await _blogController.ReadPost(1, _readPostModel);
+
+            //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(ErrEntityNotExists.StatusCode));
         }
 
         [Test]
@@ -133,21 +171,17 @@ namespace RSSReader.UnitTests
         {
             //ARRANGE
             Mock_UserRepository_Get(_user);
-            var postData = new Post()
-            {
-                Id = 0,
-                Url = "www.test.com",
-                Blog = null
-            };
+            Mock_BlogRepository_Get(_blog);
 
             //ACT
-            var result = await _blogController.ReadPost(postData.Url);
+            var result = await _blogController.ReadPost(_blog.Id, _readPostModel);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status201Created));
             Assert.IsInstanceOf<UserPostData>(result.Result);
             var result_obj = result.Result as UserPostData;
-            Assert.That(result_obj.Post.Url, Is.EqualTo(postData.Url));
+            Assert.That(result_obj.Post.Url, Is.EqualTo(_readPostModel.PostUrl));
+            Assert.That(result_obj.Post.Blog.Id, Is.EqualTo(_blog.Id));
         }
         #endregion
     }

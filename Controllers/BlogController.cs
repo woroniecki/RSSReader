@@ -58,11 +58,7 @@ namespace RSSReader.Controllers
             var post = await _blogRepo.GetPostByUrl(data.PostUrl);
             if(post == null)
             {
-                post = new Post()
-                {
-                    Url = data.PostUrl,
-                    Blog = blog
-                };
+                post = new Post(data.Name, data.PostUrl, blog);
             }
             else
             {

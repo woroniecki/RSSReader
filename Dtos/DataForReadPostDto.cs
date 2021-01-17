@@ -7,6 +7,7 @@ namespace RSSReader.Dtos
 {
     public class DataForReadPostDto
     {
+        public string Name { get; set; }
         public string PostUrl { get; set; }
     }
 }

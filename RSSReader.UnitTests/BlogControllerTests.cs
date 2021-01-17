@@ -57,6 +57,7 @@ namespace RSSReader.UnitTests
             };
             _readPostModel = new DataForReadPostDto()
             {
+                Name = "name",
                 PostUrl = "www.test.com/1"
             };
 
@@ -146,7 +147,7 @@ namespace RSSReader.UnitTests
             Mock_UserRepository_Get(null);
 
             //ACT
-            var result = await _blogController.ReadPost(1, _readPostModel);
+            var result = await _blogController.ReadPost(0, null);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status401Unauthorized));
@@ -160,7 +161,7 @@ namespace RSSReader.UnitTests
             Mock_BlogRepository_Get(null);
 
             //ACT
-            var result = await _blogController.ReadPost(1, _readPostModel);
+            var result = await _blogController.ReadPost(0, null);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(ErrEntityNotExists.StatusCode));
@@ -181,6 +182,7 @@ namespace RSSReader.UnitTests
             Assert.IsInstanceOf<UserPostData>(result.Result);
             var result_obj = result.Result as UserPostData;
             Assert.That(result_obj.Post.Url, Is.EqualTo(_readPostModel.PostUrl));
+            Assert.That(result_obj.Post.Name, Is.EqualTo(_readPostModel.Name));
             Assert.That(result_obj.Post.Blog.Id, Is.EqualTo(_blog.Id));
         }
         #endregion

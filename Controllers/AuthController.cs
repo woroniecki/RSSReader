@@ -10,7 +10,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
-using static RSSReader.Data.UserRepository;
+using static RSSReader.Data.Repositories.UserRepository;
+using RSSReader.Data.Repositories;
 
 namespace RSSReader.Controllers
 {

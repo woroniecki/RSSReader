@@ -6,9 +6,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace RSSReader.Data
+namespace RSSReader.Data.Repositories
 {
-    public class PostRepository : IPostRepository
+    public class PostRepository : BaseRepository<Post>, IPostRepository
     {
         public static Expression<Func<Post, bool>> BY_POSTID(int id) => q => q.Id == id;
         public static Expression<Func<Post, bool>> BY_POSTURL(string url) => q => q.Url == url;
@@ -16,18 +16,13 @@ namespace RSSReader.Data
         private readonly DataContext _context;
 
         public PostRepository(DataContext context)
+            : base(context.Posts)
         {
             _context = context;
         }
-        public async Task<Post> Get(Expression<Func<Post, bool>> predicate)
-        {
-            return await _context.Posts
-                .FirstOrDefaultAsync(predicate);
-        }
     }
 
-    public interface IPostRepository
+    public interface IPostRepository : IBaseRepository<Post>
     {
-        Task<Post> Get(Expression<Func<Post, bool>> predicate);
     }
 }

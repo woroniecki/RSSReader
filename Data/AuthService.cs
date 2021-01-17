@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using RSSReader.Data.Repositories;
 using RSSReader.Dtos;
 using RSSReader.Models;
 using System;

@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Authorization;
 using AutoWrapper.Wrappers;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
-using static RSSReader.Data.UserRepository;
-using static RSSReader.Data.BlogRepository;
-using static RSSReader.Data.PostRepository;
-using static RSSReader.Data.UserPostDataRepository;
+using static RSSReader.Data.Repositories.UserRepository;
+using static RSSReader.Data.Repositories.BlogRepository;
+using static RSSReader.Data.Repositories.PostRepository;
+using static RSSReader.Data.Repositories.UserPostDataRepository;
 using RSSReader.Models;
-using RSSReader.Data;
+using RSSReader.Data.Repositories;
 using RSSReader.Helpers;
 using RSSReader.Dtos;
 

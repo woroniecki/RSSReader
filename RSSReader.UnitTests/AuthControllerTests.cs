@@ -20,6 +20,7 @@ using System.Linq;
 using RSSReader.Data;
 using System.Linq.Expressions;
 using UserPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.ApiUser, bool>>;
+using RSSReader.Data.Repositories;
 
 namespace RSSReader.UnitTests
 {

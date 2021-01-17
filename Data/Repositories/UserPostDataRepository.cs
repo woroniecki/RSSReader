@@ -6,9 +6,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace RSSReader.Data
+namespace RSSReader.Data.Repositories
 {
-    public class UserPostDataRepository : IUserPostDataRepository
+    public class UserPostDataRepository : BaseRepository<UserPostData>, IUserPostDataRepository
     {
         public static Expression<Func<UserPostData, bool>> BY_USERPOSTDATAPOSTANDUSER(ApiUser user, Post post) 
             => q => q.User.Id == user.Id && q.Post.Id == post.Id;
@@ -16,6 +16,7 @@ namespace RSSReader.Data
         private readonly DataContext _context;
 
         public UserPostDataRepository(DataContext context)
+            : base(context.UserPostDatas)
         {
             _context = context;
         }
@@ -27,7 +28,7 @@ namespace RSSReader.Data
         }
     }
 
-    public interface IUserPostDataRepository
+    public interface IUserPostDataRepository : IBaseRepository<UserPostData>
     {
         Task<UserPostData> GetWithPost(Expression<Func<UserPostData, bool>> predicate);
     }

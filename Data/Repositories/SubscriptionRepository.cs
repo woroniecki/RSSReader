@@ -6,13 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RSSReader.Data
+namespace RSSReader.Data.Repositories
 {
-    public class SubscriptionRepository : ISubscriptionRepository
+    public class SubscriptionRepository : BaseRepository<Subscription>, ISubscriptionRepository
     {
         private readonly DataContext _context;
 
         public SubscriptionRepository(DataContext context)
+            : base(context.Subscriptions)
         {
             _context = context;
         }
@@ -28,7 +29,7 @@ namespace RSSReader.Data
         }
     }
 
-    public interface ISubscriptionRepository
+    public interface ISubscriptionRepository : IBaseRepository<Subscription>
     {
         Task<Subscription> GetByUserAndBlogAsync(ApiUser user, Blog blog);
         Task<bool> AddAsync(Subscription blogSub);

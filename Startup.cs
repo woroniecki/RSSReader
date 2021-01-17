@@ -16,6 +16,7 @@ using AutoMapper;
 using AutoWrapper;
 using Microsoft.AspNetCore.Mvc;
 using AutoWrapper.Wrappers;
+using RSSReader.Data.Repositories;
 
 namespace RSSReader
 {

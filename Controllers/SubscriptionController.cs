@@ -1,7 +1,7 @@
 ﻿using AutoWrapper.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RSSReader.Data;
+using RSSReader.Data.Repositories;
 using RSSReader.Dtos;
 using RSSReader.Helpers;
 using RSSReader.Models;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
-using static RSSReader.Data.UserRepository;
+using static RSSReader.Data.Repositories.UserRepository;
 
 namespace RSSReader.Controllers
 {

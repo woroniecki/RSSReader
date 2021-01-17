@@ -6,9 +6,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace RSSReader.Data
+namespace RSSReader.Data.Repositories
 {
-    public class BlogRepository : IBlogRepository
+    public class BlogRepository : BaseRepository<Blog>, IBlogRepository
     {
         public static Expression<Func<Blog, bool>> BY_BLOGID(int id) => q => q.Id == id;
         public static Expression<Func<Blog, bool>> BY_BLOGURL(string url) => q => q.Url == url;
@@ -16,13 +16,9 @@ namespace RSSReader.Data
         private readonly DataContext _context;
 
         public BlogRepository(DataContext context)
+            : base(context.Blogs)
         {
             _context = context;
-        }
-        public async Task<Blog> Get(Expression<Func<Blog, bool>> predicate)
-        {
-            return await _context.Blogs
-                .FirstOrDefaultAsync(predicate);
         }
         public async Task<Blog> GetByUrlAsync(string url)
         {
@@ -49,9 +45,8 @@ namespace RSSReader.Data
         }
     }
 
-    public interface IBlogRepository
+    public interface IBlogRepository : IBaseRepository<Blog>
     {
-        Task<Blog> Get(Expression<Func<Blog, bool>> predicate);
         Task<Blog> GetByUrlAsync(string url);
         Task<Post> GetPostByUrl(string url);
         Task<bool> AddAsync(Blog blog);

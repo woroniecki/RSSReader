@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using RSSReader.Controllers;
 using RSSReader.Data;
+using RSSReader.Data.Repositories;
 using RSSReader.Dtos;
 using RSSReader.Models;
 using System;

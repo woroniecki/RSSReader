@@ -1,5 +1,5 @@
-import axios from 'api/axios'
 import env from 'react-dotenv'
+import axios from 'api/axios'
 import { Subscription, AddSubscriptionRequest } from './api.types'
 
 export const getSubscribtionsList = async () => {

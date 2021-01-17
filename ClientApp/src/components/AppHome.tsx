@@ -32,7 +32,12 @@ export const AppHome: React.FC<AppHomeProps> = props => {
 
   const renderBlogList = () =>
     subscriptionsList.map(el => (
-      <BlogCard key={el.id} title={el.blog.name} description={el.blog.name} />
+      <BlogCard
+        key={el.id}
+        id={el.id}
+        title={el.blog.name}
+        description={el.blog.name}
+      />
     ))
 
   return (

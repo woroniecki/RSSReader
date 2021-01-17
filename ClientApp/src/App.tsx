@@ -11,17 +11,19 @@ import AppSpinner from './components/AppSpinner'
 import { useSelector } from 'react-redux'
 import { layoutSlice } from 'store/slices'
 import useRefreshToken from 'components/useRefreshToken'
+import SingleBlog from 'components/SingleBlog'
 
 function App() {
   const { loader } = useSelector(layoutSlice.stateSelector)
+  useRefreshToken()
   return (
     <>
-      {useRefreshToken()}
       <AppNavbar />
       <Switch>
         <Route exact path="/" component={AppHome} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
+        <Route path="/blog/:id" component={SingleBlog} />
         <Route>404</Route>
       </Switch>
       {loader && <AppSpinner />}

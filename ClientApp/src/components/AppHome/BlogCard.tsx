@@ -7,6 +7,7 @@ import { useAppDispatch } from 'store/store'
 export interface BlogCardProps {
   title: string
   description: string
+  id: number
 }
 
 export const BlogCard: React.FC<BlogCardProps> = props => {
@@ -20,7 +21,9 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
         <Card.Body>
           <Card.Title>{props.title}</Card.Title>
           <Card.Text>{props.description}</Card.Text>
-          <Button variant="primary">Go somewhere</Button>
+          <Button onClick={() => push(`/blog/${props.id}`)} variant="primary">
+            Read {props.id}
+          </Button>
         </Card.Body>
       </Card>
     </div>

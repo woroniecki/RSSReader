@@ -1,5 +1,5 @@
-﻿import axios from 'api/axios'
-import env from 'react-dotenv'
+﻿import env from 'react-dotenv'
+import axios from 'api/axios'
 import { LoginRequest, LoginResponse, RefreshRequest } from './api.types'
 
 export const register = async (data: any) => {

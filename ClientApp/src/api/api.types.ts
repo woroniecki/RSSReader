@@ -44,3 +44,13 @@ export interface SubscriptionsListResponse {
 export interface AddSubscriptionRequest {
   blogUrl: string
 }
+
+export interface Post {
+  title: string
+  summary: string
+  content: string
+  imageUrl: string
+  feedUrl: string
+  author: string
+  publishDate: string
+}

@@ -40,7 +40,7 @@ namespace RSSReader.UnitTests
         private AuthController _authController;
         private ApiUser _userToLogin;
         private DataForRefreshTokenDto _dataForRefreshTokenDto;
-        private Mock<IReaderRepository> _readerRepo;
+        private Mock<Data.Repositories.IReaderRepository> _readerRepo;
 
         [SetUp]
         public void SetUp()
@@ -57,7 +57,7 @@ namespace RSSReader.UnitTests
             configuration.Setup(x => x.GetSection("AppSettings:Token"))
                 .Returns(configSectionMock.Object);
 
-            _readerRepo = new Mock<IReaderRepository>();
+            _readerRepo = new Mock<Data.Repositories.IReaderRepository>();
             Mock_ReaderRepository_SaveAllAsync(true);
 
             _userRepository = new Mock<IUserRepository>();

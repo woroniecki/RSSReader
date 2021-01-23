@@ -69,13 +69,14 @@ namespace RSSReader
             services.AddMvc();
 
             services.AddCors();
-            services.AddScoped<IReaderRepository, ReaderRepository>();
+            services.AddScoped<Data.Repositories.IReaderRepository, ReaderRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBlogRepository, BlogRepository>();
             services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IUserPostDataRepository, UserPostDataRepository>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IFeedService, FeedService>();
 
             services.AddControllers().AddNewtonsoftJson(opt =>
             {

@@ -14,6 +14,8 @@ namespace RSSReader.Data
         public static string MsgErrSubAlreadyDisabled = "Subscription is already disabled.";
         public static string MsgErrSubAlreadyEnabled = "Subscription is already enabled.";
         public static string MsgErrEntityNotExists = "Entity doesn't exists.";
+        public static string MsgErrParsing = "Parsing error.";
+        public static string MsgErrExternalServerIssue = "Cant get content form external server.";
 
         public static string MsgCreatedRecord = "New record has been created in the database.";
         public static string MsgSucceed = "Succeed.";
@@ -27,5 +29,7 @@ namespace RSSReader.Data
         public static ApiResponse ErrSubAlreadyDisabled = new ApiResponse(MsgErrSubAlreadyDisabled, null, Status400BadRequest);
         public static ApiResponse ErrSubAlreadyEnabled = new ApiResponse(MsgErrSubAlreadyEnabled, null, Status400BadRequest);
         public static ApiResponse ErrEntityNotExists = new ApiResponse(MsgErrEntityNotExists, null, Status400BadRequest);
+        public static ApiResponse ErrParsing = new ApiResponse(MsgErrParsing, null, Status400BadRequest);
+        public static ApiResponse ErrExternalServerIssue = new ApiResponse(MsgErrExternalServerIssue, null, Status400BadRequest);
     }
 }

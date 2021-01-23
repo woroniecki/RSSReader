@@ -21,9 +21,9 @@ namespace RSSReader.Data
     {
         private readonly IConfiguration _config;
         private readonly DataContext _context;
-        private readonly IReaderRepository _readerRepo;
+        private readonly Repositories.IReaderRepository _readerRepo;
 
-        public AuthService(IConfiguration config, IReaderRepository readerRepo)
+        public AuthService(IConfiguration config, Repositories.IReaderRepository readerRepo)
         {
             this._config = config;
             this._readerRepo = readerRepo;

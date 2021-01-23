@@ -23,7 +23,7 @@ namespace RSSReader.UnitTests
     [TestFixture]
     class SubscriptionsControllerTests
     {
-        private Mock<IReaderRepository> _readerRepository;
+        private Mock<Data.Repositories.IReaderRepository> _readerRepository;
         private Mock<IUserRepository> _userRepository;
         private Mock<IBlogRepository> _blogRepositoryMock;
         private Mock<ISubscriptionRepository> _subRepositoryMock;
@@ -37,7 +37,7 @@ namespace RSSReader.UnitTests
         public void SetUp()
         {
             //Mocks
-            _readerRepository = new Mock<IReaderRepository>();
+            _readerRepository = new Mock<Data.Repositories.IReaderRepository>();
             Mock_ReaderRepository_SaveAllAsync(true);
 
             _userRepository = new Mock<IUserRepository>();

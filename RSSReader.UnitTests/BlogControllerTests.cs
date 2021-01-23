@@ -21,6 +21,9 @@ using PostPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models
 using UserPostDataPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.UserPostData, bool>>;
 using RSSReader.Dtos;
 using RSSReader.Data.Repositories;
+using Microsoft.Toolkit.Parsers.Rss;
+using AutoWrapper.Wrappers;
+using System.IO;
 
 namespace RSSReader.UnitTests
 {
@@ -35,6 +38,7 @@ namespace RSSReader.UnitTests
         private Mock<IUserPostDataRepository> _userPostDataRepo;
         private Mock<IUserRepository> _userRepo;
         private Mock<IReaderRepository> _readerRepo;
+        private Mock<FeedService> _feedService;
         private List<UserPostData> _resultList;
         private ApiUser _user;
         private Blog _blog;
@@ -51,10 +55,14 @@ namespace RSSReader.UnitTests
             _userPostDataRepo = new Mock<IUserPostDataRepository>();
             _userRepo = new Mock<IUserRepository>();
             _readerRepo = new Mock<IReaderRepository>();
+            _feedService = new Mock<FeedService>()
+            {
+                CallBase = true
+            };
 
             //Data
             _resultList = Enumerable.Repeat(
-                new UserPostData() {  }, 1)
+                new UserPostData() { }, 1)
                 .ToList();
             _user = new ApiUser()
             {
@@ -64,7 +72,8 @@ namespace RSSReader.UnitTests
             };
             _blog = new Blog()
             {
-                Id = 1
+                Id = 1,
+                Url = "itsnotworkingbloglink.com"
             };
             _readPostModel = new DataForReadPostDto()
             {
@@ -82,11 +91,12 @@ namespace RSSReader.UnitTests
 
             //Controller
             _blogController = new BlogController(
-                _readerRepo.Object, 
+                _readerRepo.Object,
                 _blogRepo.Object,
                 _postRepo.Object,
                 _userPostDataRepo.Object,
-                _userRepo.Object);
+                _userRepo.Object,
+                _feedService.Object);
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
                                     new Claim(ClaimTypes.NameIdentifier, _user.Id)
                                }, "TestAuthentication"));
@@ -140,7 +150,7 @@ namespace RSSReader.UnitTests
             .Returns(Task.FromResult(returnedPost))
             .Verifiable();
         }
-        
+
         private void Mock_UserPostDataRepository_GetWithPost(UserPostData userPostData)
         {
             Expression<Func<IUserPostDataRepository, Task<UserPostData>>> expression =
@@ -153,6 +163,19 @@ namespace RSSReader.UnitTests
             .Verifiable();
         }
 
+        private void Mock_ReaderRepository_SaveAllAsync(bool returnedValue)
+        {
+            _readerRepo.Setup(x => x.SaveAllAsync())
+                            .Returns(Task.FromResult(returnedValue))
+                            .Verifiable();
+        }
+
+        private void Mock_FeedService_GetFeed(string url, string returnedValue)
+        {
+            _feedService.Setup(x => x.GetFeed(url))
+                        .Returns(Task.FromResult(returnedValue))
+                        .Verifiable();
+        }
         #endregion
 
         #region GetUserPostDataList
@@ -178,18 +201,11 @@ namespace RSSReader.UnitTests
 
             //ACT
             var result = await _blogController.GetUserPostDataList(BLOG_ID);
-            
+
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
             Assert.IsInstanceOf<IEnumerable<UserPostData>>(result.Result);
             Assert.That(result.Result, Is.EquivalentTo(_resultList));
-        }
-
-        private void Mock_ReaderRepository_SaveAllAsync(bool returnedValue)
-        {
-            _readerRepo.Setup(x => x.SaveAllAsync())
-                            .Returns(Task.FromResult(returnedValue))
-                            .Verifiable();
         }
         #endregion
 
@@ -237,7 +253,7 @@ namespace RSSReader.UnitTests
             _readerRepo.Verify(x => x.SaveAllAsync());
         }
 
-            [Test]
+        [Test]
         public async Task ReadPost_CreateNewPostAndUserPostData_NewUserPostData()
         {
             //ARRANGE
@@ -329,6 +345,78 @@ namespace RSSReader.UnitTests
             _readerRepo.Verify(x => x.Add(It.IsAny<Post>()), Times.Never);
             _readerRepo.Verify(x => x.Add(It.IsAny<UserPostData>()), Times.Never);
             _readerRepo.Verify(x => x.Update(It.IsAny<UserPostData>()));
+        }
+        #endregion
+
+        #region Open
+
+        [Test]
+        public async Task Open_HappyPath_ReturnsPostList()
+        {
+            //ARRANGE
+            string feed_data = null;
+            using (StreamReader r = new StreamReader("../../../Data/feeddata.xml"))
+            {
+                feed_data = r.ReadToEnd();
+            }
+             
+            Mock_BlogRepository_Get(_blog);
+            Mock_FeedService_GetFeed(_blog.Url, feed_data);
+
+            //ACT
+            var result = await _blogController.Open(_blog.Id);
+
+            //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
+            Assert.IsInstanceOf<IEnumerable<RssSchema>>(result.Result);
+            var list = result.Result as IEnumerable<RssSchema>;
+            Assert.That(list.Count(), Is.GreaterThan(5));
+        }
+
+        [Test]
+        public async Task Open_CantGetFeed_ErrExternalServerError()
+        {
+            //ARRANGE
+            Mock_BlogRepository_Get(_blog);
+            Mock_FeedService_GetFeed(_blog.Url, null);
+            //ACT
+            var result = await _blogController.Open(_blog.Id);
+
+            //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(Status400BadRequest));
+            Assert.That(result.Message, Is.EqualTo(MsgErrExternalServerIssue));
+            _feedService.Verify(x => x.GetFeed(_blog.Url), Times.Once);
+        }
+
+        [Test]
+        public async Task Open_CantParseFeed_ErrParsing()
+        {
+            //ARRANGE
+            const string FAILING_FEED_DATA = "{ 123dsf234asd3454: 123}";
+            Mock_BlogRepository_Get(_blog);
+            Mock_FeedService_GetFeed(_blog.Url, FAILING_FEED_DATA);
+
+            //ACT
+            var result = await _blogController.Open(_blog.Id);
+
+            //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(Status400BadRequest));
+            Assert.That(result.Message, Is.EqualTo(MsgErrParsing));
+            _feedService.Verify(x => x.GetFeed(_blog.Url), Times.Once);
+            _feedService.Verify(x => x.ParseFeed(FAILING_FEED_DATA), Times.Once);
+        }
+
+        [Test]
+        public async Task Open_CantFindBlog_ErrEntityNotExists()
+        {
+            //ARRANGE
+            Mock_BlogRepository_Get(null);
+            //ACT
+            var result = await _blogController.Open(_blog.Id);
+
+            //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(Status400BadRequest));
+            Assert.That(result.Message, Is.EqualTo(MsgErrEntityNotExists));
         }
         #endregion
     }

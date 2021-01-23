@@ -15,6 +15,8 @@ using RSSReader.Models;
 using RSSReader.Data.Repositories;
 using RSSReader.Helpers;
 using RSSReader.Dtos;
+using Microsoft.Toolkit.Parsers.Rss;
+using RSSReader.Data;
 
 namespace RSSReader.Controllers
 {
@@ -23,24 +25,27 @@ namespace RSSReader.Controllers
     [Route("api/[controller]")]
     public class BlogController : Controller
     {
-        private readonly IReaderRepository _readerRepo;
+        private readonly Data.Repositories.IReaderRepository _readerRepo;
         private readonly IBlogRepository _blogRepo;
         private readonly IPostRepository _postRepo;
         private readonly IUserPostDataRepository _userPostDataRepo;
         private readonly IUserRepository _userRepo;
+        private readonly Data.IFeedService _feedService;
 
         public BlogController(
-            IReaderRepository readerRepo,
+            Data.Repositories.IReaderRepository readerRepo,
             IBlogRepository blogRepo,
             IPostRepository postRepo,
             IUserPostDataRepository userPostDataRepo,
-            IUserRepository userRepo)
+            IUserRepository userRepo,
+            Data.IFeedService feedService)
         {
             _readerRepo = readerRepo;
             _blogRepo = blogRepo;
             _postRepo = postRepo;
             _userPostDataRepo = userPostDataRepo;
             _userRepo = userRepo;
+            _feedService = feedService;
         }
 
         [HttpGet("{blogId}/list")]
@@ -100,6 +105,24 @@ namespace RSSReader.Controllers
 
             //TODO return DTO
             return returnedResponse;
+        }
+
+        [HttpGet("{blogid}")]
+        public async Task<ApiResponse> Open(int blogid)
+        {
+            var blog = await _blogRepo.Get(BY_BLOGID(blogid));
+            if (blog == null)
+                return ErrEntityNotExists;
+
+            var feed = await _feedService.GetFeed(blog.Url);
+            if (feed == null)
+                return ErrExternalServerIssue;
+
+            var parsedFeed = _feedService.ParseFeed(feed);
+            if (parsedFeed == null)
+                return ErrParsing;
+
+            return new ApiResponse(MsgSucceed, parsedFeed, Status200OK);
         }
     }
 }

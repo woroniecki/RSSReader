@@ -46,6 +46,7 @@ export interface AddSubscriptionRequest {
 }
 
 export interface Post {
+  id: number
   title: string
   summary: string
   content: string

@@ -4,10 +4,8 @@ import {
   LoginRequest,
   LoginResponse,
   RefreshRequest,
-  Token,
 } from '../../api/api.types'
 import { RootState } from 'store/rootReducer'
-import { createAction } from '@reduxjs/toolkit'
 import { setAuthHeader } from 'utils/setHeader'
 import {
   cleatTokenDataFromStorage as clearTokenDataFromStorage,

@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux'
 import { layoutSlice } from 'store/slices'
 import useRefreshToken from 'components/useRefreshToken'
 import SingleBlog from 'components/SingleBlog'
+import SingleArticle from 'components/SingleArticle'
 
 function App() {
   const { loader } = useSelector(layoutSlice.stateSelector)
@@ -23,7 +24,8 @@ function App() {
         <Route exact path="/" component={AppHome} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
-        <Route path="/blog/:id" component={SingleBlog} />
+        <Route path="/blog/:id" exact component={SingleBlog} />
+        <Route path="/blog/:id/article/:articleid" component={SingleArticle} />
         <Route>404</Route>
       </Switch>
       {loader && <AppSpinner />}

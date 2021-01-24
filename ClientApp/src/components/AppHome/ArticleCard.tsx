@@ -1,18 +1,22 @@
 import React from 'react'
 import { Card, Button } from 'react-bootstrap'
 import Image from 'react-bootstrap/Image'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 
-export interface BlogCardProps {
-  title: string
-  description: string
+export interface ArticleCardProps {
   id: number
+  title: string
+  summary: string
+  content: string
+  url: string
+  imageUrl: string
 }
 
-export const BlogCard: React.FC<BlogCardProps> = props => {
+export const ArticleCard: React.FC<ArticleCardProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
+  const { id } = useParams<{ id: string }>()
 
   return (
     <div className="container-fluid" style={{ marginTop: 5 }}>
@@ -20,19 +24,19 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
         <div className="col-12 mt-3">
           <Card>
             <div className="card-horizontal">
-              <div className="img-square-wrapper">
-                <Image src="https://picsum.photos/150/150" />
-              </div>
               <Card.Body>
                 <Card.Title>{props.title}</Card.Title>
-                <Card.Text>{props.description}</Card.Text>
+                <Card.Text>{props.summary}</Card.Text>
                 <Button
-                  onClick={() => push(`/blog/${props.id}`)}
+                  onClick={() => push(`/blog/${id}/article/${props.id}`)}
                   variant="primary"
                 >
-                  Open
+                  Read
                 </Button>
               </Card.Body>
+              <div className="img-square-wrapper">
+                <Image src={props.imageUrl} className="const-img-150" />
+              </div>
             </div>
           </Card>
         </div>
@@ -41,4 +45,4 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
   )
 }
 
-export default BlogCard
+export default ArticleCard

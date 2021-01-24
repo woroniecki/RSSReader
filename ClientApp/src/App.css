@@ -7,6 +7,16 @@
   pointer-events: none;
 }
 
+.const-img-150 {
+  max-width: 150px;
+  max-height: 150px;
+}
+
+.card-horizontal {
+  display: flex;
+  flex: 1 1 auto;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

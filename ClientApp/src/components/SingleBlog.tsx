@@ -3,10 +3,10 @@ import React, { useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
-import { subscriptionsSlice } from 'store/slices'
+import { subscriptionsSlice, articlesSlice, authSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import * as blogApi from '../api/blogApi'
-import BlogCard from './AppHome/BlogCard'
+import ArticleCard from './AppHome/ArticleCard'
 
 export interface SingleBlogProps {}
 
@@ -17,46 +17,50 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
   const { id } = useParams<{ id: string }>()
+  const { token } = useSelector(authSlice.stateSelector)
   const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
-  const [posts, setPosts] = useState<Post[]>(null)
-  const [executed, setExecuted] = useState(false)
+  const articlesList = useSelector(articlesSlice.selectAll)
 
-  const fetchPostList = async (id: string) => {
-    if (executed) return
-    setExecuted(true)
+  const fetchList = async () => {
+    const subId = parseInt(id)
+    if (subId == NaN) return
 
-    const numberId = parseInt(id)
-    if (numberId == NaN) return
-
-    const sub = subscriptionsList.find(el => el.id == numberId)
+    const sub = subscriptionsList.find(el => el.id == subId)
     if (sub == null) return
 
-    const response = await blogApi.getPostsList(sub.blog.id)
+    const promise = await dispatch(articlesSlice.getArticles(sub.blog.id))
 
-    setPosts(response)
+    if (articlesSlice.getArticles.fulfilled.match(promise)) {
+    } else {
+    }
   }
+  React.useEffect(() => {
+    if (token) {
+      fetchList()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token])
 
-  const renderPosts = () => {
-    if (posts == null) return
-
-    return posts.map(el => (
-      <BlogCard
-        key={el.title}
-        id={0}
+  const renderArticles = () => {
+    return articlesList.map(el => (
+      <ArticleCard
+        key={el.id}
+        id={el.id}
         title={el.title}
-        description={el.summary}
+        summary={el.summary}
+        content={el.content}
+        url={el.feedUrl}
+        imageUrl={el.imageUrl}
       />
     ))
   }
 
-  fetchPostList(id)
-
   return (
     <div style={{ marginTop: 15 }} className="container">
       <Button onClick={() => push('/')} variant="primary">
-        Return {id}
+        Return
       </Button>
-      {renderPosts()}
+      {renderArticles()}
     </div>
   )
 }

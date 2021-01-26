@@ -8,6 +8,6 @@ namespace RSSReader.Dtos
     public class TokenForReturnDto
     {
         public string Token { get; set; }
-        public DateTime Expires { get; set; }
+        public long Expires { get; set; }
     }
 }

@@ -23,8 +23,11 @@ export const getArticles = createAsyncThunk<
 >(`${ARTICLES}/list`, async (blogid, { rejectWithValue }) => {
   try {
     const res = await blogApi.getPostsList(blogid)
-    let id = 0
-    res.map(el => (el.id = id++))
+    let id = blogid * 1000 //To have unique ID, max amount of posts is 1000
+    res.map(el => {
+      el.id = id++
+      el.blogId = blogid
+    })
     return res
   } catch (err) {
     return rejectWithValue(err.response.data)

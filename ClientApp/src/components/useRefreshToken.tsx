@@ -10,20 +10,22 @@ export interface useRefreshTokenProps {}
 export const useRefreshToken = () => {
   const dispatch = useAppDispatch()
 
-  const tokenData = getTokenDataFromStorage()
+  React.useEffect(() => {
+    const tokenData = getTokenDataFromStorage()
 
-  if (tokenData == null) {
-    return
-  }
+    if (tokenData == null) {
+      return
+    }
 
-  //if (tokenData.refreshExpires > 0) {
-  const promise = dispatch(
-    authSlice.refresh({
-      refreshToken: tokenData.refreshToken,
-      authToken: tokenData.authToken,
-    })
-  )
-  //}
+    if (tokenData.refreshExpires > Date.now()) {
+      const promise = dispatch(
+        authSlice.refresh({
+          refreshToken: tokenData.refreshToken,
+          authToken: tokenData.authToken,
+        })
+      )
+    }
+  }, [])
 
   return
 }

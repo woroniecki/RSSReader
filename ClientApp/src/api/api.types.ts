@@ -47,6 +47,7 @@ export interface AddSubscriptionRequest {
 
 export interface Post {
   id: number
+  blogId: number
   title: string
   summary: string
   content: string

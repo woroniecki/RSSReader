@@ -9,7 +9,9 @@ namespace RSSReader.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<ApiUser, UserForReturnDto>();
-            CreateMap<RefreshToken, TokenForReturnDto>();
+            CreateMap<RefreshToken, TokenForReturnDto>()
+                .ForMember(dest => dest.Expires, opt => 
+                opt.MapFrom(src => src.Expires.NowFrom1970()));
         }
     }
 }

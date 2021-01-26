@@ -1,5 +1,5 @@
 export const refreshTokenHeader = 'refreshToken'
-export const refreshTokenExpiresHeader = 'refreshTokenExpires'
+export const refreshExpiresHeader = 'refreshTokenExpires'
 export const authTokenHeader = 'authToken'
 
 export interface StorageTokenData {
@@ -11,36 +11,31 @@ export interface StorageTokenData {
 export const saveTokenDataToStorage = (
   authToken: string,
   refreshToken: string,
-  refreshTokenExpires: number
+  refreshExpires: number
 ) => {
   localStorage.setItem(authTokenHeader, authToken)
   localStorage.setItem(refreshTokenHeader, refreshToken)
-  localStorage.setItem(
-    refreshTokenExpiresHeader,
-    refreshTokenExpires.toString()
-  )
+  localStorage.setItem(refreshExpiresHeader, refreshExpires.toString())
 }
 
 export const getTokenDataFromStorage = () => {
   const authToken = localStorage.getItem(authTokenHeader)
   const refreshToken = localStorage.getItem(refreshTokenHeader)
-  const refreshTokenExpires = Number(
-    localStorage.getItem(refreshTokenExpiresHeader)
-  )
+  const refreshExpires = Number(localStorage.getItem(refreshExpiresHeader))
 
   if (authToken == null) return null
   if (refreshToken == null) return null
-  if (refreshTokenExpires == null || refreshTokenExpires == NaN) return null
+  if (refreshExpires == null || refreshExpires == NaN) return null
 
   return ({
     authToken: authToken,
     refreshToken: refreshToken,
-    refreshTokenExpires: refreshTokenExpires,
+    refreshExpires: refreshExpires,
   } as unknown) as StorageTokenData
 }
 
 export const cleatTokenDataFromStorage = () => {
   localStorage.removeItem(authTokenHeader)
   localStorage.removeItem(refreshTokenHeader)
-  localStorage.removeItem(refreshTokenExpiresHeader)
+  localStorage.removeItem(refreshExpiresHeader)
 }

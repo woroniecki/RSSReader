@@ -12,6 +12,7 @@ using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 using static RSSReader.Data.Repositories.UserRepository;
 using RSSReader.Data.Repositories;
+using RSSReader.Helpers;
 
 namespace RSSReader.Controllers
 {
@@ -129,7 +130,7 @@ namespace RSSReader.Controllers
             var authTokenToReturn = new TokenForReturnDto()
             {
                 Token = token,
-                Expires = expiresTime
+                Expires = expiresTime.NowFrom1970()
             };
             var userToReturn = _mapper.Map<UserForReturnDto>(user);
 

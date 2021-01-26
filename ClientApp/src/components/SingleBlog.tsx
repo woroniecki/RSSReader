@@ -7,6 +7,7 @@ import { subscriptionsSlice, articlesSlice, authSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import * as blogApi from '../api/blogApi'
 import ArticleCard from './AppHome/ArticleCard'
+import { layoutSlice } from 'store/slices'
 
 export interface SingleBlogProps {}
 
@@ -21,18 +22,29 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
   const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
   const articlesList = useSelector(articlesSlice.selectAll)
 
-  const fetchList = async () => {
+  const getCurrentBlogId = () => {
     const subId = parseInt(id)
-    if (subId == NaN) return
+    if (subId == NaN) return -1
 
     const sub = subscriptionsList.find(el => el.id == subId)
-    if (sub == null) return
+    if (sub == null) return -1
 
-    const promise = await dispatch(articlesSlice.getArticles(sub.blog.id))
+    return sub.blog.id
+  }
+
+  const fetchList = async () => {
+    const blogid = getCurrentBlogId()
+    if (blogid < 0) return
+
+    dispatch(layoutSlice.actions.setLoader(true))
+
+    const promise = await dispatch(articlesSlice.getArticles(blogid))
 
     if (articlesSlice.getArticles.fulfilled.match(promise)) {
     } else {
     }
+
+    dispatch(layoutSlice.actions.setLoader(false))
   }
   React.useEffect(() => {
     if (token) {
@@ -42,17 +54,22 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
   }, [token])
 
   const renderArticles = () => {
-    return articlesList.map(el => (
-      <ArticleCard
-        key={el.id}
-        id={el.id}
-        title={el.title}
-        summary={el.summary}
-        content={el.content}
-        url={el.feedUrl}
-        imageUrl={el.imageUrl}
-      />
-    ))
+    const blogid = getCurrentBlogId()
+    if (blogid < 0) return
+
+    return articlesList
+      .filter(el => el.blogId == blogid)
+      .map(el => (
+        <ArticleCard
+          key={el.id}
+          id={el.id}
+          title={el.title}
+          summary={el.summary}
+          content={el.content}
+          url={el.feedUrl}
+          imageUrl={el.imageUrl}
+        />
+      ))
   }
 
   return (

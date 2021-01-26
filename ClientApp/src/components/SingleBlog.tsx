@@ -36,6 +36,9 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
     const blogid = getCurrentBlogId()
     if (blogid < 0) return
 
+    const list_already_taken = articlesList.find(el => el.blogId == blogid)
+    if (list_already_taken != null) return
+
     dispatch(layoutSlice.actions.setLoader(true))
 
     const promise = await dispatch(articlesSlice.getArticles(blogid))

@@ -443,9 +443,9 @@ namespace RSSReader.UnitTests
             GetDataFromLoginResult(result, out var result_token, out var result_user, out var refresh_token);
             Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
             Assert.IsInstanceOf<string>(result_token.Token);
-            Assert.That(result_token.Expires, Is.GreaterThan(DateTime.UtcNow));
+            Assert.That(result_token.Expires, Is.GreaterThan(DateTime.UtcNow.From1970()));
             Assert.IsInstanceOf<string>(refresh_token.Token);
-            Assert.That(refresh_token.Expires, Is.GreaterThan(DateTime.UtcNow));
+            Assert.That(refresh_token.Expires, Is.GreaterThan(DateTime.UtcNow.From1970()));
             Assert.That(
                 result_user.UserName,
                 Is.EqualTo(providedUsername)

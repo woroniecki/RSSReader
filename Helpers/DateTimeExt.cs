@@ -12,7 +12,7 @@ namespace RSSReader.Helpers
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        public static long NowFrom1970(this DateTime date)
+        public static long From1970(this DateTime date)
         {
             return (long)(date.Subtract(new DateTime(1970, 1, 1))).TotalSeconds * 1000;
         }

@@ -130,7 +130,7 @@ namespace RSSReader.Controllers
             var authTokenToReturn = new TokenForReturnDto()
             {
                 Token = token,
-                Expires = expiresTime.NowFrom1970()
+                Expires = expiresTime.From1970()
             };
             var userToReturn = _mapper.Map<UserForReturnDto>(user);
 

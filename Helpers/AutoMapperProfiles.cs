@@ -11,7 +11,7 @@ namespace RSSReader.Helpers
             CreateMap<ApiUser, UserForReturnDto>();
             CreateMap<RefreshToken, TokenForReturnDto>()
                 .ForMember(dest => dest.Expires, opt => 
-                opt.MapFrom(src => src.Expires.NowFrom1970()));
+                opt.MapFrom(src => src.Expires.From1970()));
         }
     }
 }

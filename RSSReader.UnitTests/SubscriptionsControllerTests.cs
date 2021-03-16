@@ -27,6 +27,7 @@ namespace RSSReader.UnitTests
         private Mock<IUserRepository> _userRepository;
         private Mock<IBlogRepository> _blogRepositoryMock;
         private Mock<ISubscriptionRepository> _subRepositoryMock;
+        private IFeedService _feedService;
         private SubscriptionController _subscriptionController;
         private SubscriptionForAddDto _subForAddDto;
         private ApiUser _user;
@@ -43,11 +44,12 @@ namespace RSSReader.UnitTests
             _userRepository = new Mock<IUserRepository>();
             _subRepositoryMock = new Mock<ISubscriptionRepository>();
             _blogRepositoryMock = new Mock<IBlogRepository>();
+            _feedService = new FeedService();
 
             //Dto
             _subForAddDto = new Dtos.SubscriptionForAddDto()
             {
-                BlogUrl = "Http://blog.com"
+                BlogUrl = "https://blogs.microsoft.com/feed/"
             };
 
             //Data
@@ -60,8 +62,8 @@ namespace RSSReader.UnitTests
             };
             _blog = new Blog()
             {
-                Url = "Http://blog.com",
-                Name = "Http://blog.com"
+                Url = "https://blogs.microsoft.com/feed/",
+                Name = "https://blogs.microsoft.com/feed/"
             };
             _subscription = new Subscription(_user, _blog);
 
@@ -71,7 +73,8 @@ namespace RSSReader.UnitTests
                 _userRepository.Object,
                 _readerRepository.Object,
                 _subRepositoryMock.Object,
-                _blogRepositoryMock.Object
+                _blogRepositoryMock.Object,
+                _feedService
                 );
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
@@ -238,14 +241,32 @@ namespace RSSReader.UnitTests
         public async Task Subscribe_InvalidBlogUrl_BadRequest()
         {
             //ARRANGE
+            Mock_UserRepository_Get(_user);
+            _subForAddDto.BlogUrl = "http://wrongurl.com.pl";
 
             //ACT
+            var result = await _subscriptionController.Subscribe(_subForAddDto);
 
             //ASSERT
+            Assert.That(result, Is.EqualTo(ErrInvalidFeedUrl));
         }
 
         [Test]
-        public async Task Subscribe_BlogWithDeliveredUrlNotExists_BadRequest()
+        public async Task Subscribe_NoFeedContentUnderUrl_BadRequest()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(_user);
+            _subForAddDto.BlogUrl = "https://blogs.microsoft.com/";
+
+            //ACT
+            var result = await _subscriptionController.Subscribe(_subForAddDto);
+
+            //ASSERT
+            Assert.That(result, Is.EqualTo(ErrNoContentUnderFeedUrl));
+        }
+
+        [Test]
+        public async Task Subscribe_BlogUrlIsNotFeed_BadRequest()
         {
             //ARRANGE
 

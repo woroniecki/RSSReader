@@ -86,25 +86,25 @@ namespace RSSReader.Controllers
                     );
             }
 
-            ApiResponse returnedResponse;
+            ApiResponse returned_response;
             if (user_post_data == null)
             {
                 user_post_data = new UserPostData(post, user);
                 _readerRepo.Add(user_post_data);
-                returnedResponse = new ApiResponse(MsgCreated, user_post_data, Status201Created);
+                returned_response = new ApiResponse(MsgCreated, user_post_data, Status201Created);
             }
             else
             {
                 user_post_data.LastDateOpen = DateTime.UtcNow;
                 _readerRepo.Update(user_post_data);
-                returnedResponse = new ApiResponse(MsgUpdated, user_post_data, Status200OK);
+                returned_response = new ApiResponse(MsgUpdated, user_post_data, Status200OK);
             }
 
             if (!await _readerRepo.SaveAllAsync())
                 return ErrRequestFailed;
 
             //TODO return DTO
-            return returnedResponse;
+            return returned_response;
         }
 
         [HttpGet("{blogid}")]
@@ -114,7 +114,7 @@ namespace RSSReader.Controllers
             if (blog == null)
                 return ErrEntityNotExists;
 
-            var feed = await _feedService.GetFeed(blog.Url);
+            var feed = await _feedService.GetContent(blog.Url);
             if (feed == null)
                 return ErrExternalServerIssue;
 

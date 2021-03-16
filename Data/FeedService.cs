@@ -7,9 +7,30 @@ using System.Threading.Tasks;
 
 namespace RSSReader.Data
 {
+    public enum FeedUrlError
+    {
+        NONE,
+        WRONG_URL,
+        NO_FEED_CONTENT
+    }
     public class FeedService : IFeedService
     {
-        public virtual async Task<string> GetFeed(string url)
+        /// If url exist and can be parsed as feed return true
+        public async Task<FeedUrlError> VerifyFeedUrl(string url)
+        {
+            string feed = await GetContent(url);
+            if (string.IsNullOrEmpty(feed))
+                return FeedUrlError.WRONG_URL;
+
+            IEnumerable<RssSchema> feed_list = ParseFeed(feed);
+            if (feed_list == null)
+                return FeedUrlError.NO_FEED_CONTENT;
+
+            return FeedUrlError.NONE;
+        }
+
+        /// Returns content under url or null if url can't be reached
+        public virtual async Task<string> GetContent(string url)
         {
             string feed = null;
 
@@ -26,6 +47,7 @@ namespace RSSReader.Data
             }
         }
 
+        /// Returns parsed collection of posts or null if can't parse
         public virtual IEnumerable<RssSchema> ParseFeed(string feed)
         {
             var parser = new RssParser();
@@ -42,7 +64,8 @@ namespace RSSReader.Data
 
     public interface IFeedService
     {
-        Task<string> GetFeed(string url);
+        Task<FeedUrlError> VerifyFeedUrl(string url);
+        Task<string> GetContent(string url);
         IEnumerable<RssSchema> ParseFeed(string feed);
     }
 }

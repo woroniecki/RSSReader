@@ -172,7 +172,7 @@ namespace RSSReader.UnitTests
 
         private void Mock_FeedService_GetFeed(string url, string returnedValue)
         {
-            _feedService.Setup(x => x.GetFeed(url))
+            _feedService.Setup(x => x.GetContent(url))
                         .Returns(Task.FromResult(returnedValue))
                         .Verifiable();
         }
@@ -385,7 +385,7 @@ namespace RSSReader.UnitTests
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status400BadRequest));
             Assert.That(result.Message, Is.EqualTo(MsgErrExternalServerIssue));
-            _feedService.Verify(x => x.GetFeed(_blog.Url), Times.Once);
+            _feedService.Verify(x => x.GetContent(_blog.Url), Times.Once);
         }
 
         [Test]
@@ -402,7 +402,7 @@ namespace RSSReader.UnitTests
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status400BadRequest));
             Assert.That(result.Message, Is.EqualTo(MsgErrParsing));
-            _feedService.Verify(x => x.GetFeed(_blog.Url), Times.Once);
+            _feedService.Verify(x => x.GetContent(_blog.Url), Times.Once);
             _feedService.Verify(x => x.ParseFeed(FAILING_FEED_DATA), Times.Once);
         }
 

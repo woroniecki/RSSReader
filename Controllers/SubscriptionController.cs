@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 using static RSSReader.Data.Repositories.UserRepository;
+using RSSReader.Data;
 
 namespace RSSReader.Controllers
 {
@@ -23,17 +24,20 @@ namespace RSSReader.Controllers
         private readonly IReaderRepository _readerRepository;
         private readonly ISubscriptionRepository _subRepository;
         private readonly IBlogRepository _blogRepository;
+        private readonly IFeedService _feedService;
 
         public SubscriptionController(
             IUserRepository userRepository,
             IReaderRepository readerRepository,
             ISubscriptionRepository subRepository,
-            IBlogRepository blogRepository)
+            IBlogRepository blogRepository,
+            IFeedService feedService)
         {
             _userRepository = userRepository;
             _readerRepository = readerRepository;
             _subRepository = subRepository;
             _blogRepository = blogRepository;
+            _feedService = feedService;
         }
 
         [HttpGet("list")]
@@ -59,6 +63,16 @@ namespace RSSReader.Controllers
 
             if (user == null)
                 return ErrUnauhtorized;
+
+            FeedUrlError url_error = await _feedService.VerifyFeedUrl(subscriptionForAddDto.BlogUrl);
+
+            switch (url_error)
+            {
+                case FeedUrlError.WRONG_URL:
+                    return ErrInvalidFeedUrl;
+                case FeedUrlError.NO_FEED_CONTENT:
+                    return ErrNoContentUnderFeedUrl;
+            }
 
             Blog blog = await _blogRepository
                 .GetByUrlAsync(subscriptionForAddDto.BlogUrl);

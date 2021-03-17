@@ -28,11 +28,11 @@ namespace RSSReader.Data
         public static ApiResponse ErrBadRequest = new ApiResponse(MsgErrBadRequest, null, Status400BadRequest);
         public static ApiResponse ErrWrongCredentials = new ApiResponse(MsgErrWrongCredentials, null, Status401Unauthorized);
         public static ApiResponse ErrUnauhtorized = new ApiResponse(MsgErrUnauthorized, null, Status401Unauthorized);
-        public static ApiResponse ErrInvalidFeedUrl = new ApiResponse(MsgErrInvalidFeedUrl, null, Status400BadRequest);
+        public static ApiResponse ErrInvalidFeedUrl = new ApiResponse(MsgErrInvalidFeedUrl, null, Status404NotFound);
         public static ApiResponse ErrNoContentUnderFeedUrl = new ApiResponse(MsgErrNoContentUnderFeedUrl, null, Status400BadRequest);
         public static ApiResponse ErrSubAlreadyDisabled = new ApiResponse(MsgErrSubAlreadyDisabled, null, Status400BadRequest);
         public static ApiResponse ErrSubAlreadyEnabled = new ApiResponse(MsgErrSubAlreadyEnabled, null, Status400BadRequest);
-        public static ApiResponse ErrEntityNotExists = new ApiResponse(MsgErrEntityNotExists, null, Status400BadRequest);
+        public static ApiResponse ErrEntityNotExists = new ApiResponse(MsgErrEntityNotExists, null, Status404NotFound);
         public static ApiResponse ErrParsing = new ApiResponse(MsgErrParsing, null, Status400BadRequest);
         public static ApiResponse ErrExternalServerIssue = new ApiResponse(MsgErrExternalServerIssue, null, Status400BadRequest);
     }

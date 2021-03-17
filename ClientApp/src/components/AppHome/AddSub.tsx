@@ -5,6 +5,7 @@ import { useAppDispatch } from 'store/store'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { subscriptionsSlice } from 'store/slices'
+import { applyValidationErrors } from 'utils/utils'
 
 export interface AddSubProps {}
 
@@ -17,11 +18,10 @@ export const AddSub: React.FC<AddSubProps> = props => {
       global: '',
       url: '',
     },
-    validationSchema: Yup.object().shape({
-      url: Yup.string().required('Required'),
-    }),
+    //validationSchema: Yup.object().shape({
+    //  url: Yup.string().required('Required'),
+    //}),
     onSubmit: async values => {
-      console.log(values)
 
       const promise = await dispatch(
         subscriptionsSlice.postAddSubscription({
@@ -30,8 +30,13 @@ export const AddSub: React.FC<AddSubProps> = props => {
       )
 
       if (subscriptionsSlice.postAddSubscription.fulfilled.match(promise)) {
-      } else {
-        console.log(promise.payload)
+      } 
+      else 
+      {
+        console.log(formik.errors.global)
+        applyValidationErrors(formik, promise.error)
+        //formik.setFieldError('global', 'global errrrr')
+        //formik.setFieldError('url', 'URLRERERER')
       }
     },
   })
@@ -52,15 +57,19 @@ export const AddSub: React.FC<AddSubProps> = props => {
         <FormControl
           type="text"
           aria-describedby="basic-addon1"
-          placeholder="https://exampleblog.com"
+          placeholder="https://exampleblog.com/feed/"
           id="url"
           name="url"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.url}
-          isInvalid={!!formik.touched.url && !!formik.errors.url}
+          isInvalid={!!formik.touched.url && (!!formik.errors.url || !!formik.errors.global)}
           required
         />
+        <Form.Control.Feedback type="invalid">
+          {formik.errors.global}
+          {formik.errors.url}
+        </Form.Control.Feedback>
       </InputGroup>
     </Form>
   )

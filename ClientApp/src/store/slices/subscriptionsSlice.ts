@@ -43,7 +43,7 @@ export const postAddSubscription = createAsyncThunk<
     const res = await blogApi.postAddSubscribtions(params)
     return res
   } catch (err) {
-    return rejectWithValue(err.response.data)
+    throw err.data
   }
 })
 

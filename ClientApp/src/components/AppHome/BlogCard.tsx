@@ -3,6 +3,8 @@ import { Card, Button } from 'react-bootstrap'
 import Image from 'react-bootstrap/Image'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
+import { subscriptionsSlice } from 'store/slices'
+import { useSelector } from 'react-redux'
 
 export interface BlogCardProps {
   title: string
@@ -13,6 +15,15 @@ export interface BlogCardProps {
 export const BlogCard: React.FC<BlogCardProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
+  const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
+
+  const unsubcribeBlog = async (id: number) => {
+    const promise = await dispatch(subscriptionsSlice.putUnsubscribeBlog(id))
+
+    if (subscriptionsSlice.putUnsubscribeBlog.fulfilled.match(promise)) {
+    } else {
+    }
+  }
 
   return (
     <div className="container-fluid" style={{ marginTop: 5 }}>
@@ -33,6 +44,16 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
                   Open
                 </Button>
               </Card.Body>
+              <div className="img-square-wrapper">
+                <Button
+                  onClick={() => {
+                    unsubcribeBlog(props.id)
+                  }}
+                  variant="primary"
+                >
+                  Unsubscribe
+                </Button>
+              </div>
             </div>
           </Card>
         </div>

@@ -117,7 +117,7 @@ namespace RSSReader.Controllers
             return ErrSubAlreadyEnabled;
         }
 
-        [HttpPost("{id}/unsubscribe")]
+        [HttpPut("{id}/unsubscribe")]
         public async Task<ApiResponse> Unsubscribe(int id)
         {
             ApiUser user = await _userRepository

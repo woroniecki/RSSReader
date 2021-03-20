@@ -415,8 +415,7 @@ namespace RSSReader.UnitTests
             var result = await _blogController.Open(_blog.Id);
 
             //ASSERT
-            Assert.That(result.StatusCode, Is.EqualTo(Status400BadRequest));
-            Assert.That(result.Message, Is.EqualTo(MsgErrEntityNotExists));
+            Assert.That(result, Is.EqualTo(ErrEntityNotExists));
         }
         #endregion
     }

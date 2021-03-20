@@ -47,6 +47,23 @@ export const postAddSubscription = createAsyncThunk<
   }
 })
 
+export const putUnsubscribeBlog = createAsyncThunk<
+  // Return type of the payload creator
+  Subscription,
+  // First argument to the payload creator
+  number,
+  {
+    rejectValue: string
+  }
+>(`${SUBSCRIPTIONS}/unsubscribeBlog`, async (params, { rejectWithValue }) => {
+  try {
+    const res = await blogApi.putUnsubscribeBlog(params)
+    return res
+  } catch (err) {
+    throw err.data
+  }
+})
+
 const subscriptionsSlice = createSlice({
   name: 'subscriptions',
   initialState: subscriptionsAdapter.getInitialState(),
@@ -61,6 +78,9 @@ const subscriptionsSlice = createSlice({
       })
       .addCase(postAddSubscription.fulfilled, (state, { payload }) => {
         subscriptionsAdapter.addOne(state, payload)
+      })
+      .addCase(putUnsubscribeBlog.fulfilled, (state, { payload }) => {
+        subscriptionsAdapter.removeOne(state, payload.id)
       })
   },
 })

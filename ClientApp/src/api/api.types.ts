@@ -27,6 +27,8 @@ export interface Blog {
   id: number
   name: string
   url: string
+  description: string
+  imageUrl: string
 }
 
 export interface Subscription {

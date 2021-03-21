@@ -12,6 +12,8 @@ using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 using static RSSReader.Data.Repositories.UserRepository;
 using RSSReader.Data;
+using System.Collections.Generic;
+using Microsoft.Toolkit.Parsers.Rss;
 
 namespace RSSReader.Controllers
 {
@@ -64,27 +66,24 @@ namespace RSSReader.Controllers
             if (user == null)
                 return ErrUnauhtorized;
 
-            FeedUrlError url_error = await _feedService.VerifyFeedUrl(subscriptionForAddDto.BlogUrl);
-
-            switch (url_error)
-            {
-                case FeedUrlError.WRONG_URL:
-                    return ErrInvalidFeedUrl;
-                case FeedUrlError.NO_FEED_CONTENT:
-                    return ErrNoContentUnderFeedUrl;
-            }
-
             Blog blog = await _blogRepository
                 .GetByUrlAsync(subscriptionForAddDto.BlogUrl);
             Subscription subscription = null;
 
             if (blog == null)
             {
-                blog = new Blog()
-                {
-                    Name = subscriptionForAddDto.BlogUrl,
-                    Url = subscriptionForAddDto.BlogUrl
-                };
+                string feed_content = await _feedService.GetContent(subscriptionForAddDto.BlogUrl);
+                if(string.IsNullOrEmpty(feed_content))
+                    return ErrInvalidFeedUrl;
+
+                IEnumerable<RssSchema> feed = _feedService.ParseFeed(feed_content);
+                if(feed == null)
+                    return ErrNoContentUnderFeedUrl;
+
+                blog = _feedService.CreateBlogObject(
+                    subscriptionForAddDto.BlogUrl,
+                    feed_content,
+                    feed);
 
                 if (!await _blogRepository.AddAsync(blog))
                     return ErrRequestFailed;

@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux'
 export interface BlogCardProps {
   title: string
   description: string
+  imageUrl: string
   id: number
 }
 
@@ -25,6 +26,9 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
     }
   }
 
+  const no_blog_img_url =
+    'https://www.pngfind.com/pngs/m/269-2693798_png-file-svg-blog-vector-icon-png-transparent.png'
+
   return (
     <div className="container-fluid" style={{ marginTop: 5 }}>
       <div className="row">
@@ -32,7 +36,10 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
           <Card>
             <div className="card-horizontal">
               <div className="img-square-wrapper">
-                <Image src="https://picsum.photos/150/150" />
+                <Image
+                  width={100}
+                  src={props.imageUrl ? props.imageUrl : no_blog_img_url}
+                />
               </div>
               <Card.Body>
                 <Card.Title>{props.title}</Card.Title>

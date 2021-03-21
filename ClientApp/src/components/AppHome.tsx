@@ -36,7 +36,8 @@ export const AppHome: React.FC<AppHomeProps> = props => {
         key={el.id}
         id={el.id}
         title={el.blog.name}
-        description={el.blog.name}
+        description={el.blog.description}
+        imageUrl={el.blog.imageUrl}
       />
     ))
 

@@ -53,25 +53,38 @@ namespace RSSReader.Data
 
             XDocument xml = XDocument.Parse(feed, LoadOptions.PreserveWhitespace);
 
-            IEnumerable<XElement> titles = xml.Descendants("title");
-            if (titles.FirstOrDefault() != null)
+            XElement title_element = xml.Descendants()
+                .FirstOrDefault(p => p.Name.LocalName == "title");
+            if (title_element != null)
             {
-                title = titles.First().Value;
+                title = title_element.Value;
             }
 
-            IEnumerable<XElement> descriptions = xml.Descendants("description");
-            if (descriptions.FirstOrDefault() != null)
+            XElement description_element = xml.Descendants()
+                .FirstOrDefault(p => p.Name.LocalName == "description");
+            if (description_element != null)
             {
-                description = descriptions.First().Value;
+                description = description_element.Value;
             }
-
-            IEnumerable<XElement> images = xml.Descendants("image");
-            if (images.FirstOrDefault() != null)
+            else
             {
-                IEnumerable<XElement> image_urls = images.First().Descendants("url");
-                if (image_urls.FirstOrDefault() != null)
+                XElement subtitle_element = xml.Descendants()
+                    .FirstOrDefault(p => p.Name.LocalName == "subtitle");
+                if (subtitle_element != null)
                 {
-                    image_url = image_urls.First().Value;
+                    description = subtitle_element.Value;
+                }
+            }
+
+            XElement image_element = xml.Descendants()
+                .FirstOrDefault(p => p.Name.LocalName == "image");
+            if (image_element != null)
+            {
+                XElement imag_url_element = image_element.Descendants()
+                    .FirstOrDefault(p => p.Name.LocalName == "url");
+                if (imag_url_element != null)
+                {
+                    image_url = imag_url_element.Value;
                 }
             }
 

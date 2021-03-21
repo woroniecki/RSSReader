@@ -27,7 +27,7 @@ namespace RSSReader.UnitTests
         private Mock<IUserRepository> _userRepository;
         private Mock<IBlogRepository> _blogRepositoryMock;
         private Mock<ISubscriptionRepository> _subRepositoryMock;
-        private IFeedService _feedService;
+        private Mock<FeedService> _feedService;
         private SubscriptionController _subscriptionController;
         private SubscriptionForAddDto _subForAddDto;
         private ApiUser _user;
@@ -44,7 +44,10 @@ namespace RSSReader.UnitTests
             _userRepository = new Mock<IUserRepository>();
             _subRepositoryMock = new Mock<ISubscriptionRepository>();
             _blogRepositoryMock = new Mock<IBlogRepository>();
-            _feedService = new FeedService();
+            _feedService = new Mock<FeedService>()
+            {
+                CallBase = true
+            };
 
             //Dto
             _subForAddDto = new Dtos.SubscriptionForAddDto()
@@ -74,7 +77,7 @@ namespace RSSReader.UnitTests
                 _readerRepository.Object,
                 _subRepositoryMock.Object,
                 _blogRepositoryMock.Object,
-                _feedService
+                _feedService.Object
                 );
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
@@ -150,6 +153,12 @@ namespace RSSReader.UnitTests
         private void Mock_ReaderRepository_SaveAllAsync(bool returnedValue)
         {
             _readerRepository.Setup(x => x.SaveAllAsync())
+                            .Returns(Task.FromResult(returnedValue));
+        }
+
+        private void Mock_FeedService_GetContent(string url, string returnedValue)
+        {
+            _feedService.Setup(x => x.GetContent(url))
                             .Returns(Task.FromResult(returnedValue));
         }
         #endregion
@@ -243,6 +252,7 @@ namespace RSSReader.UnitTests
             //ARRANGE
             Mock_UserRepository_Get(_user);
             _subForAddDto.BlogUrl = "http://wrongurl.com.pl";
+            Mock_FeedService_GetContent(_subForAddDto.BlogUrl, null);
 
             //ACT
             var result = await _subscriptionController.Subscribe(_subForAddDto);

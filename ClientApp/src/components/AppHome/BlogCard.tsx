@@ -48,7 +48,7 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
                   onClick={() => push(`/blog/${props.id}`)}
                   variant="primary"
                 >
-                  Open
+                  Read
                 </Button>
               </Card.Body>
               <div className="img-square-wrapper">
@@ -58,7 +58,7 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
                   }}
                   variant="primary"
                 >
-                  Unsubscribe
+                  U
                 </Button>
               </div>
             </div>

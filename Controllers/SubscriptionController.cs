@@ -12,6 +12,7 @@ using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 using static RSSReader.Data.Repositories.UserRepository;
 using static RSSReader.Data.Repositories.BlogRepository;
+using static RSSReader.Data.Repositories.SubscriptionRepository;
 using RSSReader.Data;
 using System.Collections.Generic;
 using Microsoft.Toolkit.Parsers.Rss;
@@ -90,7 +91,7 @@ namespace RSSReader.Controllers
             }
             else
             {
-                subscription = await _subRepository.GetByUserAndBlogAsync(user, blog);
+                subscription = await _subRepository.Get(BY_USERANDBLOG(user, blog));
             }
 
             if (subscription == null)

@@ -18,6 +18,7 @@ using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 using UserPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.ApiUser, bool>>;
 using BlogPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.Blog, bool>>;
+using SubPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.Subscription, bool>>;
 
 namespace RSSReader.UnitTests
 {
@@ -141,8 +142,14 @@ namespace RSSReader.UnitTests
         private void Mock_SubscriptionRepository_GetByUserAndBlogAsync(
             ApiUser user, Blog returnedBlog, Subscription returnedSub)
         {
-            _subRepositoryMock.Setup(x => x.GetByUserAndBlogAsync(_user, returnedBlog))
-                            .Returns(Task.FromResult(returnedSub));
+            Expression<Func<ISubscriptionRepository, Task<Subscription>>> expression =
+                returnedSub != null ?
+                x => x.Get(It.Is<SubPred>(x => x.Compile().Invoke(returnedSub))) :
+                x => x.Get(It.IsAny<SubPred>());
+
+            _subRepositoryMock.Setup(expression)
+            .Returns(Task.FromResult(returnedSub))
+            .Verifiable();
         }
 
         private void Mock_SubscriptionRepository_AddAsync(Subscription sub, bool returnedValue)

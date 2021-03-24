@@ -24,7 +24,7 @@ namespace RSSReader.UnitTests
 
         #region CreateBlogObject
         [Test]
-        public async Task CreateBlogObject_Ok_CreatedBlogWithAllInfoFields()
+        public void CreateBlogObject_Ok_CreatedBlogWithAllInfoFields()
         {
             //ARRANGE
             string feed_data = null;
@@ -45,7 +45,7 @@ namespace RSSReader.UnitTests
         }
 
         [Test]
-        public async Task CreateBlogObject_Ok_CreatedBlogDescriptionFromSubtitle()
+        public void CreateBlogObject_Ok_CreatedBlogDescriptionFromSubtitle()
         {
             //ARRANGE
             string feed_data = null;

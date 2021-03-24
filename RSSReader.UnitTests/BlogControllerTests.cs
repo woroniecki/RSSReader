@@ -106,13 +106,15 @@ namespace RSSReader.UnitTests
 
         #region Mock
 
-        private void Mock_BlogRepostiory_GetUserPostDatasAsync(
-            int blogId, string userId,
+        private void Mock_UserPostDataRepository_GetListWithPosts(
             IEnumerable<UserPostData> returnedList)
         {
-            _blogRepo.Setup(x => x.GetUserPostDatasAsync(blogId, userId))
-                .Returns(Task.FromResult(returnedList))
-                .Verifiable();
+            Expression<Func<IUserPostDataRepository, Task<IEnumerable<UserPostData>>>> expression =
+                x => x.GetListWithPosts(It.IsAny<UserPostDataPred>());
+
+            _userPostDataRepo.Setup(expression)
+            .Returns(Task.FromResult(returnedList))
+            .Verifiable();
         }
 
         private void Mock_UserRepository_Get(ApiUser returnedUser)
@@ -197,7 +199,7 @@ namespace RSSReader.UnitTests
         {
             //ARRANGE
             Mock_UserRepository_Get(_user);
-            Mock_BlogRepostiory_GetUserPostDatasAsync(BLOG_ID, _user.Id, _resultList);
+            Mock_UserPostDataRepository_GetListWithPosts(_resultList);
 
             //ACT
             var result = await _blogController.GetUserPostDataList(BLOG_ID);

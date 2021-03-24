@@ -56,7 +56,9 @@ namespace RSSReader.Controllers
             if (user == null)
                 return ErrUnauhtorized;
 
-            var result_list = await _blogRepo.GetUserPostDatasAsync(blogId, user.Id);
+            var result_list = await _userPostDataRepo.GetListWithPosts(
+                BY_BLOGIDANDUSERID(blogId, user.Id)
+                );
             //TODO return DTO
             return new ApiResponse(MsgSucceed, result_list, Status200OK);
         }
@@ -82,7 +84,7 @@ namespace RSSReader.Controllers
             else
             {
                 user_post_data = await _userPostDataRepo.GetWithPost(
-                    BY_USERPOSTDATAPOSTANDUSER(user, post)
+                    BY_USERANDPOST(user, post)
                     );
             }
 

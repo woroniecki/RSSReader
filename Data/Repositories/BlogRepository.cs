@@ -26,19 +26,10 @@ namespace RSSReader.Data.Repositories
             await _context.Blogs.AddAsync(blog);
             return await _context.SaveChangesAsync() > 0;
         }
-
-        public async Task<IEnumerable<UserPostData>> GetUserPostDatasAsync(int blogId, string userId)
-        {
-            return await _context.UserPostDatas
-                .Include(x => x.Post)
-                .Where(x => x.User.Id == userId && x.Post.Blog.Id == blogId)
-                .ToListAsync();
-        }
     }
 
     public interface IBlogRepository : IBaseRepository<Blog>
     {
         Task<bool> AddAsync(Blog blog);
-        Task<IEnumerable<UserPostData>> GetUserPostDatasAsync(int blogId, string userId);
     }
 }

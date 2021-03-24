@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RSSReader.Data;
 
 namespace RSSReader.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210324180906_post_fields_content_atuthor_pubdate_img")]
+    partial class post_fields_content_atuthor_pubdate_img
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,9 +224,6 @@ namespace RSSReader.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("LastPostsRefreshDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")

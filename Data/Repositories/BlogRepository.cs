@@ -20,10 +20,6 @@ namespace RSSReader.Data.Repositories
         {
             _context = context;
         }
-        public async Task<Blog> GetByUrlAsync(string url)
-        {
-            return await _context.Blogs.FirstOrDefaultAsync(x => x.Url == url);
-        }
 
         public async Task<bool> AddAsync(Blog blog)
         {
@@ -38,17 +34,10 @@ namespace RSSReader.Data.Repositories
                 .Where(x => x.User.Id == userId && x.Post.Blog.Id == blogId)
                 .ToListAsync();
         }
-
-        public Task<Post> GetPostByUrl(string url)
-        {
-            throw new NotImplementedException();
-        }
     }
 
     public interface IBlogRepository : IBaseRepository<Blog>
     {
-        Task<Blog> GetByUrlAsync(string url);
-        Task<Post> GetPostByUrl(string url);
         Task<bool> AddAsync(Blog blog);
         Task<IEnumerable<UserPostData>> GetUserPostDatasAsync(int blogId, string userId);
     }

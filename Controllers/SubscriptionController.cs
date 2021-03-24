@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 using static RSSReader.Data.Repositories.UserRepository;
+using static RSSReader.Data.Repositories.BlogRepository;
 using RSSReader.Data;
 using System.Collections.Generic;
 using Microsoft.Toolkit.Parsers.Rss;
@@ -66,8 +67,7 @@ namespace RSSReader.Controllers
             if (user == null)
                 return ErrUnauhtorized;
 
-            Blog blog = await _blogRepository
-                .GetByUrlAsync(subscriptionForAddDto.BlogUrl);
+            Blog blog = await _blogRepository.Get(BY_BLOGURL(subscriptionForAddDto.BlogUrl));
             Subscription subscription = null;
 
             if (blog == null)

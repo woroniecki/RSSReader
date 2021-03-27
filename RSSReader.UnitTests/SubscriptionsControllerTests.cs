@@ -303,16 +303,6 @@ namespace RSSReader.UnitTests
             Assert.That(result, Is.EqualTo(ErrNoContentUnderFeedUrl));
         }
 
-        [Test]
-        public async Task Subscribe_BlogUrlIsNotFeed_BadRequest()
-        {
-            //ARRANGE
-
-            //ACT
-
-            //ASSERT
-        }
-
         #endregion
 
         #region Unsubscribe

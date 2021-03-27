@@ -11,24 +11,6 @@ namespace RSSReader.Data
 {
     public class FeedService : IFeedService
     {
-        /// Returns content under url or null if url can't be reached
-        public virtual async Task<string> GetContent(string url)
-        {
-            string feed = null;
-
-            using (var client = new HttpClient())
-            {
-                try
-                {
-                    return await client.GetStringAsync(url);
-                }
-                catch 
-                {
-                    return null;
-                }
-            }
-        }
-
         /// Returns parsed collection of posts or null if can't parse
         public virtual IEnumerable<RssSchema> ParseFeed(string feed)
         {
@@ -114,7 +96,6 @@ namespace RSSReader.Data
 
     public interface IFeedService
     {
-        Task<string> GetContent(string url);
         IEnumerable<RssSchema> ParseFeed(string feed);
         Blog CreateBlogObject(string url, string feed, IEnumerable<RssSchema> parsedFeed);
     }

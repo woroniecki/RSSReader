@@ -25,20 +25,22 @@ namespace RSSReader.Controllers
     [Route("api/[controller]")]
     public class BlogController : Controller
     {
-        private readonly Data.Repositories.IReaderRepository _readerRepo;
+        private readonly IReaderRepository _readerRepo;
         private readonly IBlogRepository _blogRepo;
         private readonly IPostRepository _postRepo;
         private readonly IUserPostDataRepository _userPostDataRepo;
         private readonly IUserRepository _userRepo;
-        private readonly Data.IFeedService _feedService;
+        private readonly IFeedService _feedService;
+        private readonly IHttpService _httpService;
 
         public BlogController(
-            Data.Repositories.IReaderRepository readerRepo,
+            IReaderRepository readerRepo,
             IBlogRepository blogRepo,
             IPostRepository postRepo,
             IUserPostDataRepository userPostDataRepo,
             IUserRepository userRepo,
-            Data.IFeedService feedService)
+            IFeedService feedService,
+            IHttpService httpService)
         {
             _readerRepo = readerRepo;
             _blogRepo = blogRepo;
@@ -46,6 +48,7 @@ namespace RSSReader.Controllers
             _userPostDataRepo = userPostDataRepo;
             _userRepo = userRepo;
             _feedService = feedService;
+            _httpService = httpService;
         }
 
         [HttpGet("{blogId}/list")]
@@ -116,7 +119,7 @@ namespace RSSReader.Controllers
             if (blog == null)
                 return ErrEntityNotExists;
 
-            var feed = await _feedService.GetContent(blog.Url);
+            var feed = await _httpService.GetStringContent(blog.Url);
             if (feed == null)
                 return ErrExternalServerIssue;
 

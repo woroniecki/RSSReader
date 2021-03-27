@@ -29,19 +29,22 @@ namespace RSSReader.Controllers
         private readonly ISubscriptionRepository _subRepository;
         private readonly IBlogRepository _blogRepository;
         private readonly IFeedService _feedService;
+        private readonly IHttpService _httpService;
 
         public SubscriptionController(
             IUserRepository userRepository,
             IReaderRepository readerRepository,
             ISubscriptionRepository subRepository,
             IBlogRepository blogRepository,
-            IFeedService feedService)
+            IFeedService feedService,
+            IHttpService httpService)
         {
             _userRepository = userRepository;
             _readerRepository = readerRepository;
             _subRepository = subRepository;
             _blogRepository = blogRepository;
             _feedService = feedService;
+            _httpService = httpService;
         }
 
         [HttpGet("list")]
@@ -73,7 +76,7 @@ namespace RSSReader.Controllers
 
             if (blog == null)
             {
-                string feed_content = await _feedService.GetContent(subscriptionForAddDto.BlogUrl);
+                string feed_content = await _httpService.GetStringContent(subscriptionForAddDto.BlogUrl);
                 if(string.IsNullOrEmpty(feed_content))
                     return ErrInvalidFeedUrl;
 

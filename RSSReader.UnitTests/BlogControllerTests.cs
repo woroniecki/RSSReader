@@ -39,6 +39,7 @@ namespace RSSReader.UnitTests
         private Mock<IUserRepository> _userRepo;
         private Mock<IReaderRepository> _readerRepo;
         private Mock<FeedService> _feedService;
+        private Mock<IHttpService> _httpService;
         private List<UserPostData> _resultList;
         private ApiUser _user;
         private Blog _blog;
@@ -59,6 +60,7 @@ namespace RSSReader.UnitTests
             {
                 CallBase = true
             };
+            _httpService = new Mock<IHttpService>();
 
             //Data
             _resultList = Enumerable.Repeat(
@@ -96,7 +98,8 @@ namespace RSSReader.UnitTests
                 _postRepo.Object,
                 _userPostDataRepo.Object,
                 _userRepo.Object,
-                _feedService.Object);
+                _feedService.Object,
+                _httpService.Object);
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
                                     new Claim(ClaimTypes.NameIdentifier, _user.Id)
                                }, "TestAuthentication"));
@@ -172,9 +175,9 @@ namespace RSSReader.UnitTests
                             .Verifiable();
         }
 
-        private void Mock_FeedService_GetFeed(string url, string returnedValue)
+        private void Mock_HttpService_GetStringContent(string url, string returnedValue)
         {
-            _feedService.Setup(x => x.GetContent(url))
+            _httpService.Setup(x => x.GetStringContent(url))
                         .Returns(Task.FromResult(returnedValue))
                         .Verifiable();
         }
@@ -363,7 +366,7 @@ namespace RSSReader.UnitTests
             }
              
             Mock_BlogRepository_Get(_blog);
-            Mock_FeedService_GetFeed(_blog.Url, feed_data);
+            Mock_HttpService_GetStringContent(_blog.Url, feed_data);
 
             //ACT
             var result = await _blogController.Open(_blog.Id);
@@ -380,14 +383,14 @@ namespace RSSReader.UnitTests
         {
             //ARRANGE
             Mock_BlogRepository_Get(_blog);
-            Mock_FeedService_GetFeed(_blog.Url, null);
+            Mock_HttpService_GetStringContent(_blog.Url, null);
             //ACT
             var result = await _blogController.Open(_blog.Id);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status400BadRequest));
             Assert.That(result.Message, Is.EqualTo(MsgErrExternalServerIssue));
-            _feedService.Verify(x => x.GetContent(_blog.Url), Times.Once);
+            _httpService.Verify(x => x.GetStringContent(_blog.Url), Times.Once);
         }
 
         [Test]
@@ -396,7 +399,7 @@ namespace RSSReader.UnitTests
             //ARRANGE
             const string FAILING_FEED_DATA = "{ 123dsf234asd3454: 123}";
             Mock_BlogRepository_Get(_blog);
-            Mock_FeedService_GetFeed(_blog.Url, FAILING_FEED_DATA);
+            Mock_HttpService_GetStringContent(_blog.Url, FAILING_FEED_DATA);
 
             //ACT
             var result = await _blogController.Open(_blog.Id);
@@ -404,7 +407,7 @@ namespace RSSReader.UnitTests
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status400BadRequest));
             Assert.That(result.Message, Is.EqualTo(MsgErrParsing));
-            _feedService.Verify(x => x.GetContent(_blog.Url), Times.Once);
+            _httpService.Verify(x => x.GetStringContent(_blog.Url), Times.Once);
             _feedService.Verify(x => x.ParseFeed(FAILING_FEED_DATA), Times.Once);
         }
 

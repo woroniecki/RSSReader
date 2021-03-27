@@ -19,6 +19,7 @@ using static RSSReader.Data.Response;
 using UserPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.ApiUser, bool>>;
 using BlogPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.Blog, bool>>;
 using SubPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.Subscription, bool>>;
+using System.IO;
 
 namespace RSSReader.UnitTests
 {
@@ -30,6 +31,7 @@ namespace RSSReader.UnitTests
         private Mock<IBlogRepository> _blogRepositoryMock;
         private Mock<ISubscriptionRepository> _subRepositoryMock;
         private Mock<FeedService> _feedService;
+        private Mock<IHttpService> _httpService;
         private SubscriptionController _subscriptionController;
         private SubscriptionForAddDto _subForAddDto;
         private ApiUser _user;
@@ -50,6 +52,7 @@ namespace RSSReader.UnitTests
             {
                 CallBase = true
             };
+            _httpService = new Mock<IHttpService>();
 
             //Dto
             _subForAddDto = new Dtos.SubscriptionForAddDto()
@@ -79,7 +82,8 @@ namespace RSSReader.UnitTests
                 _readerRepository.Object,
                 _subRepositoryMock.Object,
                 _blogRepositoryMock.Object,
-                _feedService.Object
+                _feedService.Object,
+                _httpService.Object
                 );
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
@@ -170,9 +174,9 @@ namespace RSSReader.UnitTests
                             .Returns(Task.FromResult(returnedValue));
         }
 
-        private void Mock_FeedService_GetContent(string url, string returnedValue)
+        private void Mock_HttpService_GetStringContent(string url, string returnedValue)
         {
-            _feedService.Setup(x => x.GetContent(url))
+            _httpService.Setup(x => x.GetStringContent(url))
                             .Returns(Task.FromResult(returnedValue));
         }
         #endregion
@@ -189,7 +193,16 @@ namespace RSSReader.UnitTests
             Mock_BlogRepository_AddAsync(true);
 
             Mock_SubscriptionRepository_AddAsync(true);
-            
+
+            string feed_data = null;
+            using (StreamReader r = new StreamReader("../../../Data/feeddata.xml"))
+            {
+                feed_data = r.ReadToEnd();
+            }
+            Mock_HttpService_GetStringContent(_subForAddDto.BlogUrl,
+                feed_data
+                );
+
             //ACT
             var result = await _subscriptionController.Subscribe(_subForAddDto);
 
@@ -266,7 +279,7 @@ namespace RSSReader.UnitTests
             //ARRANGE
             Mock_UserRepository_Get(_user);
             _subForAddDto.BlogUrl = "http://wrongurl.com.pl";
-            Mock_FeedService_GetContent(_subForAddDto.BlogUrl, null);
+            Mock_HttpService_GetStringContent(_subForAddDto.BlogUrl, null);
 
             //ACT
             var result = await _subscriptionController.Subscribe(_subForAddDto);
@@ -281,6 +294,7 @@ namespace RSSReader.UnitTests
             //ARRANGE
             Mock_UserRepository_Get(_user);
             _subForAddDto.BlogUrl = "https://blogs.microsoft.com/";
+            Mock_HttpService_GetStringContent(_subForAddDto.BlogUrl, "Wrong feed data");
 
             //ACT
             var result = await _subscriptionController.Subscribe(_subForAddDto);

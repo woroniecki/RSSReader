@@ -1,4 +1,6 @@
-﻿using Microsoft.Toolkit.Parsers.Rss;
+﻿using AutoMapper;
+using Microsoft.Toolkit.Parsers.Rss;
+using RSSReader.Data.Repositories;
 using RSSReader.Models;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,14 @@ namespace RSSReader.Data
 {
     public class FeedService : IFeedService
     {
+        private IHttpService _httpService;
+        private readonly IMapper _mapper;
+
+        public FeedService(IHttpService httpService, IMapper mapper)
+        {
+            _httpService = httpService;
+            _mapper = mapper;
+        }
         /// Returns parsed collection of posts or null if can't parse
         public virtual IEnumerable<RssSchema> ParseFeed(string feed)
         {
@@ -92,11 +102,59 @@ namespace RSSReader.Data
 
             return new_blog;
         }
+
+        /// Run refresh method, but first get content under blog feed url
+        public async Task<IEnumerable<Post>> RefreshBlogPosts(Blog blog)
+        {
+            if (blog == null)
+                return null;
+
+            string content = await _httpService.GetStringContent(blog.Url);
+            IEnumerable<RssSchema> rss_schemas = ParseFeed(content);
+
+            if (rss_schemas == null)
+                return null;
+
+            return RefreshBlogPosts(blog, rss_schemas);
+        }
+
+        /// Refreshes posts:
+        /// If there are any new posts it will create them and add to db
+        /// It takes blog and compare posts of this blog with parsed feed list
+        /// Return all added posts list
+        public IEnumerable<Post> RefreshBlogPosts(Blog blog, IEnumerable<RssSchema> parsedFeed)
+        {
+            if (blog.Posts == null)
+                return null;
+
+            List<Post> new_posts = new List<Post>();
+
+            foreach(var rss_schema in parsedFeed)
+            {
+                if(blog.Posts.FirstOrDefault(x => x.Name == rss_schema.Title) == null)
+                {
+                    Post post = _mapper.Map<Post>(rss_schema);
+                    post.Blog = blog;
+                    blog.Posts.Add(post);
+                    new_posts.Add(post);
+                }
+            }
+
+            return new_posts;
+        }
+
+        public bool ShouldRefreshBlog(Blog blog)
+        {
+            return blog.LastPostsRefreshDate.AddMinutes(2) < DateTime.Now;
+        }
     }
 
     public interface IFeedService
     {
         IEnumerable<RssSchema> ParseFeed(string feed);
         Blog CreateBlogObject(string url, string feed, IEnumerable<RssSchema> parsedFeed);
+        Task<IEnumerable<Post>> RefreshBlogPosts(Blog blog);
+        IEnumerable<Post> RefreshBlogPosts(Blog blog, IEnumerable<RssSchema> parsedFeed);
+        bool ShouldRefreshBlog(Blog blog);
     }
 }

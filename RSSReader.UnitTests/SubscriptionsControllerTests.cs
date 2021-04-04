@@ -20,6 +20,8 @@ using UserPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models
 using BlogPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.Blog, bool>>;
 using SubPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.Subscription, bool>>;
 using System.IO;
+using AutoMapper;
+using RSSReader.Helpers;
 
 namespace RSSReader.UnitTests
 {
@@ -30,6 +32,7 @@ namespace RSSReader.UnitTests
         private Mock<IUserRepository> _userRepository;
         private Mock<IBlogRepository> _blogRepositoryMock;
         private Mock<ISubscriptionRepository> _subRepositoryMock;
+        private IMapper _mapper;
         private Mock<FeedService> _feedService;
         private Mock<IHttpService> _httpService;
         private SubscriptionController _subscriptionController;
@@ -48,11 +51,16 @@ namespace RSSReader.UnitTests
             _userRepository = new Mock<IUserRepository>();
             _subRepositoryMock = new Mock<ISubscriptionRepository>();
             _blogRepositoryMock = new Mock<IBlogRepository>();
-            _feedService = new Mock<FeedService>()
+            _httpService = new Mock<IHttpService>();
+            var mapper = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfiles());
+            });
+            _mapper = mapper.CreateMapper();
+            _feedService = new Mock<FeedService>(_httpService.Object, _mapper)
             {
                 CallBase = true
             };
-            _httpService = new Mock<IHttpService>();
 
             //Dto
             _subForAddDto = new Dtos.SubscriptionForAddDto()

@@ -24,6 +24,8 @@ using RSSReader.Data.Repositories;
 using Microsoft.Toolkit.Parsers.Rss;
 using AutoWrapper.Wrappers;
 using System.IO;
+using AutoMapper;
+using RSSReader.Helpers;
 
 namespace RSSReader.UnitTests
 {
@@ -38,6 +40,7 @@ namespace RSSReader.UnitTests
         private Mock<IUserPostDataRepository> _userPostDataRepo;
         private Mock<IUserRepository> _userRepo;
         private Mock<IReaderRepository> _readerRepo;
+        private IMapper _mapper;
         private Mock<FeedService> _feedService;
         private Mock<IHttpService> _httpService;
         private List<UserPostData> _resultList;
@@ -56,11 +59,16 @@ namespace RSSReader.UnitTests
             _userPostDataRepo = new Mock<IUserPostDataRepository>();
             _userRepo = new Mock<IUserRepository>();
             _readerRepo = new Mock<IReaderRepository>();
-            _feedService = new Mock<FeedService>()
+            _httpService = new Mock<IHttpService>();
+            var mapper = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfiles());
+            });
+            _mapper = mapper.CreateMapper();
+            _feedService = new Mock<FeedService>(_httpService.Object, _mapper)
             {
                 CallBase = true
             };
-            _httpService = new Mock<IHttpService>();
 
             //Data
             _resultList = Enumerable.Repeat(

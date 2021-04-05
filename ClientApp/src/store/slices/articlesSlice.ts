@@ -4,7 +4,7 @@ import {
   createSlice,
 } from '@reduxjs/toolkit'
 import * as blogApi from '../../api/blogApi'
-import { Post } from '../../api/api.types'
+import { Post, ReadPostRequest } from '../../api/api.types'
 import { RootState } from 'store/rootReducer'
 const ARTICLES = 'articles'
 
@@ -23,11 +23,25 @@ export const getArticles = createAsyncThunk<
 >(`${ARTICLES}/list`, async (blogid, { rejectWithValue }) => {
   try {
     const res = await blogApi.getPostsList(blogid)
-    let id = blogid * 1000 //To have unique ID, max amount of posts is 1000
     res.map(el => {
-      el.id = id++
       el.blogId = blogid
     })
+    return res
+  } catch (err) {
+    return rejectWithValue(err.response.data)
+  }
+})
+
+export const putReadArticle = createAsyncThunk<
+  Post,
+  ReadPostRequest,
+  {
+    rejectValue: string
+  }
+>(`${ARTICLES}/read`, async (params, { rejectWithValue }) => {
+  try {
+    const res = await blogApi.putReadPost(params.blogId, params.postId)
+    res.blogId = params.blogId
     return res
   } catch (err) {
     return rejectWithValue(err.response.data)
@@ -39,9 +53,14 @@ const articlesSlice = createSlice({
   initialState: articlesAdapter.getInitialState(),
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(getArticles.fulfilled, (state, { payload }) => {
-      articlesAdapter.setAll(state, payload)
-    })
+    builder
+      .addCase(getArticles.fulfilled, (state, { payload }) => {
+        articlesAdapter.setAll(state, payload)
+      })
+      .addCase(putReadArticle.fulfilled, (state, { payload }) => {
+        articlesAdapter.removeOne(state, payload.id)
+        articlesAdapter.addOne(state, payload)
+      })
   },
 })
 

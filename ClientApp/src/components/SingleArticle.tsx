@@ -5,6 +5,7 @@ import parse from 'html-react-parser'
 import { articlesSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 import { Button } from 'react-bootstrap'
+import { authSlice } from 'store/slices'
 
 export interface SingleArticleProps {}
 
@@ -14,6 +15,27 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
   const { id } = useParams<{ id: string }>()
   const { articleid } = useParams<{ articleid: string }>()
   const articlesList = useSelector(articlesSlice.selectAll)
+  const { token } = useSelector(authSlice.stateSelector)
+
+  const readPostRequest = async () => {
+    const promise = await dispatch(
+      articlesSlice.putReadArticle({
+        blogId: parseInt(id),
+        postId: parseInt(articleid),
+      })
+    )
+
+    if (articlesSlice.getArticles.fulfilled.match(promise)) {
+    } else {
+    }
+  }
+
+  React.useEffect(() => {
+    if (token) {
+      readPostRequest()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token])
 
   const renderArticle = () => {
     const numberArticleId = parseInt(articleid)

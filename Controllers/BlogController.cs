@@ -56,23 +56,8 @@ namespace RSSReader.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{blogId}/list")]
-        public async Task<ApiResponse> GetUserPostDataList(int blogId)
-        {
-            ApiUser user = await _userRepo.Get(BY_USERID(this.GetCurUserId()));
-
-            if (user == null)
-                return ErrUnauhtorized;
-
-            var result_list = await _userPostDataRepo.GetListWithPosts(
-                BY_BLOGIDANDUSERID(blogId, user.Id)
-                );
-            //TODO return DTO
-            return new ApiResponse(MsgSucceed, result_list, Status200OK);
-        }
-
-        [HttpPost("{blogId}/readpost")]
-        public async Task<ApiResponse> ReadPost(int blogId, [FromBody]DataForReadPostDto data)
+        [HttpPut("{blogId}/post/{postId}")]
+        public async Task<ApiResponse> ReadPost(int blogId, int postId)
         {
             ApiUser user = await _userRepo.Get(BY_USERID(this.GetCurUserId()));
             if (user == null)
@@ -82,77 +67,39 @@ namespace RSSReader.Controllers
             if (blog == null)
                 return ErrEntityNotExists;
 
-            UserPostData user_post_data = null;
-            var post = await _postRepo.Get(BY_POSTURL(data.PostUrl));
-            if(post == null)
-            {
-                post = new Post(data.Name, data.PostUrl, blog);
-                _readerRepo.Add(post);
-            }
-            else
-            {
-                user_post_data = await _userPostDataRepo.GetWithPost(
+            Post post = await _postRepo.Get(BY_POSTID(postId));
+            if (post == null)
+                return ErrEntityNotExists;
+
+            UserPostData user_post_data = await _userPostDataRepo.GetWithPost(
                     BY_USERANDPOST(user, post)
                     );
-            }
+
+            PostDataForReturnDto post_dto = _mapper.Map<Post, PostDataForReturnDto>(post);
 
             ApiResponse returned_response;
             if (user_post_data == null)
             {
                 user_post_data = new UserPostData(post, user);
                 _readerRepo.Add(user_post_data);
-                returned_response = new ApiResponse(MsgCreated, user_post_data, Status201Created);
+                returned_response = new ApiResponse(MsgCreated, post_dto, Status201Created);
             }
             else
             {
                 user_post_data.LastDateOpen = DateTime.UtcNow;
+                user_post_data.Readed = true;
                 _readerRepo.Update(user_post_data);
-                returned_response = new ApiResponse(MsgUpdated, user_post_data, Status200OK);
+                returned_response = new ApiResponse(MsgUpdated, post_dto, Status200OK);
             }
+
+            post_dto.Readed = user_post_data.Readed;
+            post_dto.Favourite = user_post_data.Favourite;
 
             if (!await _readerRepo.SaveAllAsync())
                 return ErrRequestFailed;
 
             //TODO return DTO
             return returned_response;
-        }
-
-        public async Task<ApiResponse> Open(int blogid, int page = 0)
-        {
-            var blog = await _blogRepo.Get(BY_BLOGID(blogid));
-            if (blog == null)
-                return ErrEntityNotExists;
-
-            var feed = await _httpService.GetStringContent(blog.Url);
-            if (feed == null)
-                return ErrExternalServerIssue;
-
-            var parsedFeed = _feedService.ParseFeed(feed);
-            if (parsedFeed == null)
-                return ErrParsing;
-
-            return new ApiResponse(MsgSucceed, parsedFeed, Status200OK);
-        }
-
-        public async Task<ApiResponse> x(int blogid, int page)
-        {
-            ApiUser user = await _userRepo.Get(BY_USERID(this.GetCurUserId()));
-
-            if (user == null)
-                return ErrUnauhtorized;
-
-            var blog = await _blogRepo.Get(BY_BLOGID(blogid));
-            if (blog == null)
-                return ErrEntityNotExists;
-
-            const int AMOUNT_PER_PAGE = 10;
-            var posts = await _postRepo.GetLatest(blog.Id, page * AMOUNT_PER_PAGE, AMOUNT_PER_PAGE);
-
-            var user_posts_data = await _userPostDataRepo.GetListWithPosts(
-                BY_BLOGIDANDUSERID(blog.Id, user.Id)
-                );
-
-            return null;
         }
 
         public const int POSTS_PER_CALL = 10;

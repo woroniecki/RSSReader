@@ -224,37 +224,6 @@ namespace RSSReader.UnitTests
         }
         #endregion
 
-        #region GetUserPostDataList
-        [Test]
-        public async Task GetUserPostDataList_CantFindUserFromClaim_Unauthorized()
-        {
-            //ARRANGE
-            Mock_UserRepository_Get(null);
-
-            //ACT
-            var result = await _blogController.GetUserPostDataList(BLOG_ID);
-
-            //ASSERT
-            Assert.That(result.StatusCode, Is.EqualTo(Status401Unauthorized));
-        }
-
-        [Test]
-        public async Task GetUserPostDataList_GetList_ListWithData()
-        {
-            //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_UserPostDataRepository_GetListWithPosts(_resultList);
-
-            //ACT
-            var result = await _blogController.GetUserPostDataList(BLOG_ID);
-
-            //ASSERT
-            Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
-            Assert.IsInstanceOf<IEnumerable<UserPostData>>(result.Result);
-            Assert.That(result.Result, Is.EquivalentTo(_resultList));
-        }
-        #endregion
-
         #region ReadPost
         [Test]
         public async Task ReadPost_CantFindUserFromClaim_Unauthorized()
@@ -263,7 +232,7 @@ namespace RSSReader.UnitTests
             Mock_UserRepository_Get(null);
 
             //ACT
-            var result = await _blogController.ReadPost(0, null);
+            var result = await _blogController.ReadPost(0, 0);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status401Unauthorized));
@@ -277,7 +246,22 @@ namespace RSSReader.UnitTests
             Mock_BlogRepository_Get(null);
 
             //ACT
-            var result = await _blogController.ReadPost(0, null);
+            var result = await _blogController.ReadPost(0, 0);
+
+            //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(ErrEntityNotExists.StatusCode));
+        }
+
+        [Test]
+        public async Task ReadPost_PostWithIdDoesntExist_ErrEntityNotExists()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(_user);
+            Mock_BlogRepository_Get(_blog);
+            Mock_PostRepository_Get(null);
+
+            //ACT
+            var result = await _blogController.ReadPost(0, 0);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(ErrEntityNotExists.StatusCode));
@@ -289,44 +273,15 @@ namespace RSSReader.UnitTests
             //ARRANGE
             Mock_UserRepository_Get(_user);
             Mock_BlogRepository_Get(_blog);
+            Mock_PostRepository_Get(_post);
             Mock_ReaderRepository_SaveAllAsync(false);
 
             //ACT
-            var result = await _blogController.ReadPost(_blog.Id, _readPostModel);
+            var result = await _blogController.ReadPost(_blog.Id, _post.Id);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(ErrRequestFailed.StatusCode));
             _readerRepo.Verify(x => x.SaveAllAsync());
-        }
-
-        [Test]
-        public async Task ReadPost_CreateNewPostAndUserPostData_NewUserPostData()
-        {
-            //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_BlogRepository_Get(_blog);
-            Mock_ReaderRepository_SaveAllAsync(true);
-            Mock_PostRepository_Get(null);
-
-            //ACT
-            var start_time = DateTime.UtcNow;
-            var result = await _blogController.ReadPost(_blog.Id, _readPostModel);
-
-            //ASSERT
-            Assert.That(result.StatusCode, Is.EqualTo(Status201Created));
-            Assert.IsInstanceOf<UserPostData>(result.Result);
-
-            var result_obj = result.Result as UserPostData;
-            Assert.That(result_obj.Post.Url, Is.EqualTo(_readPostModel.PostUrl));
-            Assert.That(result_obj.Post.Name, Is.EqualTo(_readPostModel.Name));
-            Assert.That(result_obj.Post.Blog.Id, Is.EqualTo(_blog.Id));
-            Assert.That(result_obj.User.Id, Is.EqualTo(_user.Id));
-            Assert.That(result_obj.FirstDateOpen, Is.GreaterThanOrEqualTo(start_time));
-            Assert.That(result_obj.LastDateOpen, Is.GreaterThanOrEqualTo(start_time));
-
-            _readerRepo.Verify(x => x.SaveAllAsync());
-            _readerRepo.Verify(x => x.Add(It.IsAny<Post>()));
-            _readerRepo.Verify(x => x.Add(It.IsAny<UserPostData>()));
         }
 
         [Test]
@@ -335,25 +290,22 @@ namespace RSSReader.UnitTests
             //ARRANGE
             Mock_UserRepository_Get(_user);
             Mock_BlogRepository_Get(_blog);
-            Mock_ReaderRepository_SaveAllAsync(true);
             Mock_PostRepository_Get(_post);
+            Mock_ReaderRepository_SaveAllAsync(true);
             Mock_UserPostDataRepository_GetWithPost(null);
 
             //ACT
             var start_time = DateTime.UtcNow;
-            var result = await _blogController.ReadPost(_blog.Id, _readPostModel);
+            var result = await _blogController.ReadPost(_blog.Id, _post.Id);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status201Created));
-            Assert.IsInstanceOf<UserPostData>(result.Result);
+            Assert.IsInstanceOf<PostDataForReturnDto>(result.Result);
 
-            var result_obj = result.Result as UserPostData;
-            Assert.That(result_obj.Post.Url, Is.EqualTo(_readPostModel.PostUrl));
-            Assert.That(result_obj.Post.Name, Is.EqualTo(_readPostModel.Name));
-            Assert.That(result_obj.Post.Blog.Id, Is.EqualTo(_blog.Id));
-            Assert.That(result_obj.User.Id, Is.EqualTo(_user.Id));
-            Assert.That(result_obj.FirstDateOpen, Is.GreaterThanOrEqualTo(start_time));
-            Assert.That(result_obj.LastDateOpen, Is.GreaterThanOrEqualTo(start_time));
+            var result_obj = result.Result as PostDataForReturnDto;
+            Assert.That(result_obj.Url, Is.EqualTo(_post.Url));
+            Assert.That(result_obj.Name, Is.EqualTo(_post.Name));
+            Assert.That(result_obj.Id, Is.EqualTo(_post.Id));
 
             _readerRepo.Verify(x => x.SaveAllAsync());
             _readerRepo.Verify(x => x.Add(It.IsAny<Post>()), Times.Never);
@@ -373,95 +325,21 @@ namespace RSSReader.UnitTests
 
             //ACT
             var start_time = DateTime.UtcNow;
-            var result = await _blogController.ReadPost(_blog.Id, _readPostModel);
+            var result = await _blogController.ReadPost(_blog.Id, _post.Id);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
-            Assert.IsInstanceOf<UserPostData>(result.Result);
+            Assert.IsInstanceOf<PostDataForReturnDto>(result.Result);
 
-            var result_obj = result.Result as UserPostData;
-            Assert.That(result_obj.Post.Url, Is.EqualTo(_readPostModel.PostUrl));
-            Assert.That(result_obj.Post.Name, Is.EqualTo(_readPostModel.Name));
-            Assert.That(result_obj.Post.Blog.Id, Is.EqualTo(_blog.Id));
-            Assert.That(result_obj.User.Id, Is.EqualTo(_user.Id));
-            Assert.That(result_obj.FirstDateOpen, Is.LessThanOrEqualTo(start_time));
-            Assert.That(result_obj.LastDateOpen, Is.GreaterThanOrEqualTo(start_time));
+            var result_obj = result.Result as PostDataForReturnDto;
+            Assert.That(result_obj.Url, Is.EqualTo(_post.Url));
+            Assert.That(result_obj.Name, Is.EqualTo(_post.Name));
+            Assert.That(result_obj.Id, Is.EqualTo(_post.Id));
 
             _readerRepo.Verify(x => x.SaveAllAsync());
             _readerRepo.Verify(x => x.Add(It.IsAny<Post>()), Times.Never);
             _readerRepo.Verify(x => x.Add(It.IsAny<UserPostData>()), Times.Never);
             _readerRepo.Verify(x => x.Update(It.IsAny<UserPostData>()));
-        }
-        #endregion
-
-        #region Open
-
-        [Test]
-        public async Task Open_HappyPath_ReturnsPostList()
-        {
-            //ARRANGE
-            string feed_data = null;
-            using (StreamReader r = new StreamReader("../../../Data/feeddata.xml"))
-            {
-                feed_data = r.ReadToEnd();
-            }
-
-            Mock_BlogRepository_Get(_blog);
-            Mock_HttpService_GetStringContent(_blog.Url, feed_data);
-
-            //ACT
-            var result = await _blogController.Open(_blog.Id);
-
-            //ASSERT
-            Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
-            Assert.IsInstanceOf<IEnumerable<RssSchema>>(result.Result);
-            var list = result.Result as IEnumerable<RssSchema>;
-            Assert.That(list.Count(), Is.GreaterThan(5));
-        }
-
-        [Test]
-        public async Task Open_CantGetFeed_ErrExternalServerError()
-        {
-            //ARRANGE
-            Mock_BlogRepository_Get(_blog);
-            Mock_HttpService_GetStringContent(_blog.Url, null);
-            //ACT
-            var result = await _blogController.Open(_blog.Id);
-
-            //ASSERT
-            Assert.That(result.StatusCode, Is.EqualTo(Status400BadRequest));
-            Assert.That(result.Message, Is.EqualTo(MsgErrExternalServerIssue));
-            _httpService.Verify(x => x.GetStringContent(_blog.Url), Times.Once);
-        }
-
-        [Test]
-        public async Task Open_CantParseFeed_ErrParsing()
-        {
-            //ARRANGE
-            const string FAILING_FEED_DATA = "{ 123dsf234asd3454: 123}";
-            Mock_BlogRepository_Get(_blog);
-            Mock_HttpService_GetStringContent(_blog.Url, FAILING_FEED_DATA);
-
-            //ACT
-            var result = await _blogController.Open(_blog.Id);
-
-            //ASSERT
-            Assert.That(result.StatusCode, Is.EqualTo(Status400BadRequest));
-            Assert.That(result.Message, Is.EqualTo(MsgErrParsing));
-            _httpService.Verify(x => x.GetStringContent(_blog.Url), Times.Once);
-            _feedService.Verify(x => x.ParseFeed(FAILING_FEED_DATA), Times.Once);
-        }
-
-        [Test]
-        public async Task Open_CantFindBlog_ErrEntityNotExists()
-        {
-            //ARRANGE
-            Mock_BlogRepository_Get(null);
-            //ACT
-            var result = await _blogController.Open(_blog.Id);
-
-            //ASSERT
-            Assert.That(result, Is.EqualTo(ErrEntityNotExists));
         }
         #endregion
 

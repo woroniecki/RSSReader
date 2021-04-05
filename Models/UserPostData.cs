@@ -11,6 +11,8 @@ namespace RSSReader.Models
         public UserPostData(Post post, ApiUser user) {
             this.Post = post;
             this.User = user;
+            Readed = true;
+            Favourite = false;
             FirstDateOpen = DateTime.UtcNow;
             LastDateOpen = DateTime.UtcNow;
         }

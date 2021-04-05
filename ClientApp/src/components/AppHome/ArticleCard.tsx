@@ -6,6 +6,7 @@ import { useAppDispatch } from 'store/store'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { faBook } from '@fortawesome/free-solid-svg-icons'
+import { faBookOpen } from '@fortawesome/free-solid-svg-icons'
 
 export interface ArticleCardProps {
   id: number
@@ -14,6 +15,9 @@ export interface ArticleCardProps {
   content: string
   url: string
   imageUrl: string
+  readed: boolean
+  favourite: boolean
+  publishDate: string
 }
 
 export const ArticleCard: React.FC<ArticleCardProps> = props => {
@@ -29,6 +33,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
             <div className="card-horizontal">
               <Card.Body>
                 <Card.Title>{props.title}</Card.Title>
+                <Card.Text>{props.publishDate}</Card.Text>
                 <Card.Text>{props.summary}</Card.Text>
                 <Button
                   onClick={() => push(`/blog/${id}/article/${props.id}`)}
@@ -37,10 +42,13 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
                   Read
                 </Button>
                 <Button>
-                  <FontAwesomeIcon icon={faStar} />
+                  <FontAwesomeIcon
+                    color={props.favourite ? 'yellow' : 'white'}
+                    icon={faStar}
+                  />
                 </Button>
                 <Button>
-                  <FontAwesomeIcon icon={faBook} />
+                  <FontAwesomeIcon icon={props.readed ? faBookOpen : faBook} />
                 </Button>
               </Card.Body>
               <div className="img-square-wrapper">

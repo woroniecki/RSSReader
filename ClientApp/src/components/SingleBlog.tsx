@@ -62,6 +62,11 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
 
     return articlesList
       .filter(el => el.blogId == blogid)
+      .sort((a, b) => {
+        return (
+          new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
+        )
+      })
       .map(el => (
         <ArticleCard
           key={el.id}
@@ -71,6 +76,9 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
           content={el.content}
           url={el.feedUrl}
           imageUrl={el.imageUrl}
+          readed={el.readed}
+          favourite={el.favourite}
+          publishDate={el.publishDate}
         />
       ))
   }

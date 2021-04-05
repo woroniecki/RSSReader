@@ -47,6 +47,11 @@ export interface AddSubscriptionRequest {
   blogUrl: string
 }
 
+export interface ReadPostRequest {
+  blogId: number
+  postId: number
+}
+
 export interface Post {
   id: number
   blogId: number
@@ -57,4 +62,6 @@ export interface Post {
   feedUrl: string
   author: string
   publishDate: string
+  readed: boolean
+  favourite: boolean
 }

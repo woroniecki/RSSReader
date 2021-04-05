@@ -37,3 +37,14 @@ export const getPostsList = async (blogId: number) => {
     throw error.response
   }
 }
+
+export const putReadPost = async (blogId: number, postId: number) => {
+  try {
+    const res = await axios.put(
+      `/api/blog/` + blogId.toString() + `/post/` + postId.toString()
+    )
+    return res.data.result as Post
+  } catch (error) {
+    throw error.response
+  }
+}

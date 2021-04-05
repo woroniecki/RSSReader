@@ -5,6 +5,8 @@ import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { subscriptionsSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 export interface BlogCardProps {
   title: string
@@ -58,7 +60,7 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
                   }}
                   variant="primary"
                 >
-                  U
+                  <FontAwesomeIcon icon={faTrashAlt} />
                 </Button>
               </div>
             </div>

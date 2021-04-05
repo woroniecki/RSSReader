@@ -3,6 +3,9 @@ import { Card, Button } from 'react-bootstrap'
 import Image from 'react-bootstrap/Image'
 import { useHistory, useParams } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStar } from '@fortawesome/free-solid-svg-icons'
+import { faBook } from '@fortawesome/free-solid-svg-icons'
 
 export interface ArticleCardProps {
   id: number
@@ -32,6 +35,12 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
                   variant="primary"
                 >
                   Read
+                </Button>
+                <Button>
+                  <FontAwesomeIcon icon={faStar} />
+                </Button>
+                <Button>
+                  <FontAwesomeIcon icon={faBook} />
                 </Button>
               </Card.Body>
               <div className="img-square-wrapper">

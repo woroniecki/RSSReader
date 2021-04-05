@@ -66,7 +66,7 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
         <ArticleCard
           key={el.id}
           id={el.id}
-          title={el.title}
+          title={el.name}
           summary={el.summary}
           content={el.content}
           url={el.feedUrl}

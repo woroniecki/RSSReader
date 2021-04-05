@@ -99,6 +99,7 @@ namespace RSSReader.UnitTests
             foreach (var tuple in feed_list.Zip(result, (rss_schema, post) => (rss_schema, post)))
             {
                 Assert.That(tuple.rss_schema.Title, Is.EqualTo(tuple.post.Name));
+                Assert.That(tuple.rss_schema.Summary, Is.EqualTo(tuple.post.Summary));
                 Assert.That(tuple.rss_schema.Content, Is.EqualTo(tuple.post.Content));
                 Assert.That(tuple.rss_schema.Author, Is.EqualTo(tuple.post.Author));
                 Assert.That(tuple.rss_schema.ImageUrl, Is.EqualTo(tuple.post.ImageUrl));
@@ -230,6 +231,7 @@ namespace RSSReader.UnitTests
             foreach (var tuple in feed_list.Zip(result, (rss_schema, post) => (rss_schema, post)))
             {
                 Assert.That(tuple.rss_schema.Title, Is.EqualTo(tuple.post.Name));
+                Assert.That(tuple.rss_schema.Summary, Is.EqualTo(tuple.post.Summary));
                 Assert.That(tuple.rss_schema.Content, Is.EqualTo(tuple.post.Content));
                 Assert.That(tuple.rss_schema.Author, Is.EqualTo(tuple.post.Author));
                 Assert.That(tuple.rss_schema.ImageUrl, Is.EqualTo(tuple.post.ImageUrl));

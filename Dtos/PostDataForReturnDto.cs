@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RSSReader.Models
+namespace RSSReader.Dtos
 {
-    public class Post
+    public class PostDataForReturnDto
     {
-        public Post() { }
-        public Post(string name, string url, Blog blog)
+        public PostDataForReturnDto()
         {
-            this.Name = name;
-            this.Url = url;
-            this.Blog = blog;
+            Readed = false;
+            Favourite = false;
         }
         public int Id { get; set; }
         public string Url { get; set; }
@@ -22,6 +20,9 @@ namespace RSSReader.Models
         public string Summary { get; set; }
         public string Content { get; set; }
         public DateTime PublishDate { get; set; }
-        public Blog Blog { get; set; }
+        
+        /// User Data
+        public bool Readed { get; set; }
+        public bool Favourite { get; set; }
     }
 }

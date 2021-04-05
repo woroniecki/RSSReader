@@ -20,9 +20,20 @@ namespace RSSReader.Data.Repositories
         {
             _context = context;
         }
+
+        public async Task<IEnumerable<Post>> GetLatest(int blogId, int skipAmount, int amount)
+        {
+            return await _context.Posts
+                .Where(x => x.Blog.Id == blogId)
+                .OrderByDescending(x => x.PublishDate)
+                .Skip(skipAmount)
+                .Take(amount)
+                .ToListAsync();
+        }
     }
 
     public interface IPostRepository : IBaseRepository<Post>
     {
+        Task<IEnumerable<Post>> GetLatest(int blogId, int skipAmount, int amount);
     }
 }

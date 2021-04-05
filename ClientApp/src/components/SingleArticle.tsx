@@ -27,7 +27,7 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
         <a rel="noreferrer" target="_blank" href={article.feedUrl}>
           <Button variant="primary">Visit page</Button>
         </a>
-        <h1>{article.title}</h1>
+        <h1>{article.name}</h1>
         <div>{parse(article.content)}</div>
       </div>
     )

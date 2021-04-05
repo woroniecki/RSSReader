@@ -26,10 +26,18 @@ namespace RSSReader.Data.Repositories
             await _context.Blogs.AddAsync(blog);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<Blog> GetWithPosts(Expression<Func<Blog, bool>> predicate)
+        {
+            return await _context.Blogs
+                .Include(x => x.Posts)
+                .FirstOrDefaultAsync(predicate);
+        }
     }
 
     public interface IBlogRepository : IBaseRepository<Blog>
     {
         Task<bool> AddAsync(Blog blog);
+        Task<Blog> GetWithPosts(Expression<Func<Blog, bool>> predicate);
     }
 }

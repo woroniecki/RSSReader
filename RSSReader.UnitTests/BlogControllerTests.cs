@@ -107,7 +107,8 @@ namespace RSSReader.UnitTests
                 _userPostDataRepo.Object,
                 _userRepo.Object,
                 _feedService.Object,
-                _httpService.Object);
+                _httpService.Object,
+                _mapper);
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
                                     new Claim(ClaimTypes.NameIdentifier, _user.Id)
                                }, "TestAuthentication"));
@@ -152,6 +153,18 @@ namespace RSSReader.UnitTests
             .Verifiable();
         }
 
+        private void Mock_BlogRepository_GetWithPosts(Blog returnedBlog)
+        {
+            Expression<Func<IBlogRepository, Task<Blog>>> expression =
+                returnedBlog != null ?
+                x => x.GetWithPosts(It.Is<BlogPred>(x => x.Compile().Invoke(returnedBlog))) :
+                x => x.GetWithPosts(It.IsAny<BlogPred>());
+
+            _blogRepo.Setup(expression)
+            .Returns(Task.FromResult(returnedBlog))
+            .Verifiable();
+        }
+
         private void Mock_PostRepository_Get(Post returnedPost)
         {
             Expression<Func<IPostRepository, Task<Post>>> expression =
@@ -164,6 +177,16 @@ namespace RSSReader.UnitTests
             .Verifiable();
         }
 
+        private void Mock_PostRepository_GetLatest(int blogId, int skipAmount, int amount, IEnumerable<Post> returnedPosts)
+        {
+            Expression<Func<IPostRepository, Task<IEnumerable<Post>>>> expression =
+                x => x.GetLatest(blogId, skipAmount, amount);
+
+            _postRepo.Setup(expression)
+            .Returns(Task.FromResult(returnedPosts))
+            .Verifiable();
+        }
+
         private void Mock_UserPostDataRepository_GetWithPost(UserPostData userPostData)
         {
             Expression<Func<IUserPostDataRepository, Task<UserPostData>>> expression =
@@ -173,6 +196,16 @@ namespace RSSReader.UnitTests
 
             _userPostDataRepo.Setup(expression)
             .Returns(Task.FromResult(userPostData))
+            .Verifiable();
+        }
+
+        private void Mock_UserPostDataRepository_GetLatest(int blogId, int skipAmount, int amount, IEnumerable<Post> returnedPosts)
+        {
+            Expression<Func<IPostRepository, Task<IEnumerable<Post>>>> expression =
+                x => x.GetLatest(blogId, skipAmount, amount);
+
+            _postRepo.Setup(expression)
+            .Returns(Task.FromResult(returnedPosts))
             .Verifiable();
         }
 
@@ -372,7 +405,7 @@ namespace RSSReader.UnitTests
             {
                 feed_data = r.ReadToEnd();
             }
-             
+
             Mock_BlogRepository_Get(_blog);
             Mock_HttpService_GetStringContent(_blog.Url, feed_data);
 
@@ -430,6 +463,102 @@ namespace RSSReader.UnitTests
             //ASSERT
             Assert.That(result, Is.EqualTo(ErrEntityNotExists));
         }
+        #endregion
+
+        #region GetPosts
+
+        [Test]
+        public async Task GetPosts_HappyPath_ListOfPostsWithUserData()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(_user);
+            Mock_BlogRepository_GetWithPosts(_blog);
+            List<Post> returned_posts = new List<Post>();
+            for (int i = 0; i < 10; i++)
+            {
+                Post new_post = new Post()
+                {
+                    Id = i,
+                    Name = i.ToString()
+                };
+
+                returned_posts.Add(new_post);
+            }
+            int page = 0;
+            Mock_PostRepository_GetLatest(
+                _blog.Id, 
+                page * BlogController.POSTS_PER_CALL,
+                BlogController.POSTS_PER_CALL, 
+                returned_posts);
+
+            List<UserPostData> returned_user_post_data = new List<UserPostData>();
+            for (int i = 0; i < 5; i++)
+            {
+                UserPostData user_post_data = new UserPostData()
+                {
+                    Readed = true,
+                    Favourite = true,
+                    Post = returned_posts[i]
+                };
+                returned_user_post_data.Add(user_post_data);
+            }
+            Mock_UserPostDataRepository_GetListWithPosts(returned_user_post_data);
+
+            //ACT
+            var result = await _blogController.GetPosts(_blog.Id, page);
+            IEnumerable<PostDataForReturnDto> result_list =
+                (IEnumerable<PostDataForReturnDto>)result.Result;
+
+            //ASSERT
+            Assert.IsInstanceOf<IEnumerable<PostDataForReturnDto>>(result.Result);
+            Assert.That(
+                ((IEnumerable<PostDataForReturnDto>)result.Result).Count(),
+                Is.GreaterThan(0)
+                );
+            foreach (var post in returned_posts)
+            {
+                Assert.That(
+                        result_list.Count(x => x.Name == post.Name),
+                        Is.EqualTo(1)
+                    );
+            }
+            Assert.That(
+                        result_list.Count(x => x.Readed),
+                        Is.EqualTo(returned_user_post_data.Count())
+                    );
+        }
+
+        [Test]
+        public async Task GetPosts_CantFindUser_ErrUnathorized()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(null);
+
+            //ACT
+            var result = await _blogController.GetPosts(_blog.Id, 0);
+
+            //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(Status401Unauthorized));
+        }
+
+        [Test]
+        public async Task GetPosts_CantFindBlog_ErrEntityNotExists()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(_user);
+            Mock_BlogRepository_Get(null);
+
+            //ACT
+            var result = await _blogController.GetPosts(_blog.Id, 0);
+
+            //ASSERT
+            Assert.That(result, Is.EqualTo(ErrEntityNotExists));
+        }
+
+        #endregion
+
+        #region Refresh
+
         #endregion
     }
 }

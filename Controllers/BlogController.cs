@@ -56,6 +56,43 @@ namespace RSSReader.Controllers
             _mapper = mapper;
         }
 
+        [HttpPut("{blogId}/post/{postId}/readed")]
+        public async Task<ApiResponse> MarkReaded(int blogId, int postId, [FromBody]bool value)
+        {
+            ApiUser user = await _userRepo.Get(BY_USERID(this.GetCurUserId()));
+            if (user == null)
+                return ErrUnauhtorized;
+
+            UserPostData user_post_data = await
+                GetUserPostDataWithPost(user, blogId, postId);
+
+            if (user_post_data == null)
+                return ErrEntityNotExists;
+
+            Post post = user_post_data.Post;
+            if (post == null)
+                return ErrEntityNotExists;
+
+            if (user_post_data.Readed == value)
+                return ErrNothingToUpdateInEntity;
+
+            user_post_data.Readed = value;
+
+            _readerRepo.Update(user_post_data);
+            PostDataForReturnDto post_dto = MergeUserPostDataAndPost(user_post_data, post);
+
+            if (!await _readerRepo.SaveAllAsync())
+                return ErrRequestFailed;
+
+            return new ApiResponse(MsgUpdated, post_dto, Status200OK);
+        }
+
+        [HttpPut("{blogId}/post/{postId}/favourite")]
+        public async Task<ApiResponse> MarkFavourite(int blogId, int postId, [FromBody] bool value)
+        {
+            return null;
+        }
+
         [HttpPut("{blogId}/post/{postId}")]
         public async Task<ApiResponse> ReadPost(int blogId, int postId)
         {
@@ -63,43 +100,53 @@ namespace RSSReader.Controllers
             if (user == null)
                 return ErrUnauhtorized;
 
-            Blog blog = await _blogRepo.Get(BY_BLOGID(blogId));
-            if (blog == null)
+            UserPostData user_post_data = await 
+                GetUserPostDataWithPost(
+                    user,
+                    blogId,
+                    postId
+                );
+
+            if (user_post_data == null)
                 return ErrEntityNotExists;
 
-            Post post = await _postRepo.Get(BY_POSTID(postId));
+            Post post = user_post_data.Post;
             if (post == null)
                 return ErrEntityNotExists;
 
-            UserPostData user_post_data = await _userPostDataRepo.GetWithPost(
-                    BY_USERANDPOST(user, post)
-                    );
+            user_post_data.LastDateOpen = DateTime.UtcNow;
+            user_post_data.Readed = true;
+            _readerRepo.Update(user_post_data);
 
-            PostDataForReturnDto post_dto = _mapper.Map<Post, PostDataForReturnDto>(post);
-
-            ApiResponse returned_response;
-            if (user_post_data == null)
-            {
-                user_post_data = new UserPostData(post, user);
-                _readerRepo.Add(user_post_data);
-                returned_response = new ApiResponse(MsgCreated, post_dto, Status201Created);
-            }
-            else
-            {
-                user_post_data.LastDateOpen = DateTime.UtcNow;
-                user_post_data.Readed = true;
-                _readerRepo.Update(user_post_data);
-                returned_response = new ApiResponse(MsgUpdated, post_dto, Status200OK);
-            }
-
-            post_dto.Readed = user_post_data.Readed;
-            post_dto.Favourite = user_post_data.Favourite;
+            PostDataForReturnDto post_dto = MergeUserPostDataAndPost(user_post_data, post);
 
             if (!await _readerRepo.SaveAllAsync())
                 return ErrRequestFailed;
 
-            //TODO return DTO
-            return returned_response;
+            return new ApiResponse(MsgUpdated, post_dto, Status200OK);
+        }
+
+        async Task<UserPostData> GetUserPostDataWithPost(ApiUser user, int blogId, int postId)
+        {
+            Blog blog = await _blogRepo.Get(BY_BLOGID(blogId));
+            if (blog == null)
+                return null;
+
+            Post post = await _postRepo.Get(BY_POSTID(postId));
+            if (post == null)
+                return null;
+
+            UserPostData user_post_data = await _userPostDataRepo.GetWithPost(
+                    BY_USERANDPOST(user, post)
+                    );
+            
+            if (user_post_data == null)
+            {
+                user_post_data = new UserPostData(post, user);
+                _readerRepo.Add(user_post_data);
+            }
+
+            return user_post_data;
         }
 
         public const int POSTS_PER_CALL = 10;
@@ -148,6 +195,14 @@ namespace RSSReader.Controllers
                     await _readerRepo.SaveAllAsync();
                 }
             }
+        }
+
+        private PostDataForReturnDto MergeUserPostDataAndPost(UserPostData user_post_data, Post post)
+        {
+            PostDataForReturnDto post_dto = _mapper.Map<Post, PostDataForReturnDto>(post);
+            post_dto.Readed = user_post_data.Readed;
+            post_dto.Favourite = user_post_data.Favourite;
+            return post_dto;
         }
     }
 }

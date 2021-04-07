@@ -299,7 +299,7 @@ namespace RSSReader.UnitTests
             var result = await _blogController.ReadPost(_blog.Id, _post.Id);
 
             //ASSERT
-            Assert.That(result.StatusCode, Is.EqualTo(Status201Created));
+            Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
             Assert.IsInstanceOf<PostDataForReturnDto>(result.Result);
 
             var result_obj = result.Result as PostDataForReturnDto;
@@ -435,7 +435,101 @@ namespace RSSReader.UnitTests
 
         #endregion
 
-        #region Refresh
+        #region MarkReaded
+
+        [Test]
+        public async Task MarkReaded_HappyPath_StatusOk()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(_user);
+            Mock_BlogRepository_Get(_blog);
+            Mock_PostRepository_Get(_post);
+            Mock_UserPostDataRepository_GetWithPost(_userPostData);
+            Mock_ReaderRepository_SaveAllAsync(true);
+
+            _userPostData.Readed = false;
+            _userPostData.Post = _post;
+
+            //ACT
+            var result = await _blogController.MarkReaded(_blog.Id, _post.Id, true);
+
+            //ASSERT
+            Assert.IsInstanceOf<PostDataForReturnDto>(result.Result);
+
+            var result_obj = result.Result as PostDataForReturnDto;
+
+            Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
+            Assert.That(_userPostData.Readed, Is.EqualTo(true));
+            Assert.That(result_obj.Readed, Is.EqualTo(true));
+            Assert.That(result_obj.Name, Is.EqualTo(_post.Name));
+            _readerRepo.Verify(x => x.SaveAllAsync());
+        }
+
+        [Test]
+        public async Task MarkReaded_SameValueOnReadFlag_StatusOk()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(_user);
+            Mock_BlogRepository_Get(_blog);
+            Mock_PostRepository_Get(_post);
+            Mock_UserPostDataRepository_GetWithPost(_userPostData);
+            Mock_ReaderRepository_SaveAllAsync(true);
+
+            _userPostData.Readed = true;
+            _userPostData.Post = _post;
+
+            //ACT
+            var result = await _blogController.MarkReaded(_blog.Id, _post.Id, true);
+
+            //ASSERT
+            Assert.That(result, Is.EqualTo(ErrNothingToUpdateInEntity));
+        }
+
+        [Test]
+        public async Task MarkReaded_CantFindBlog_ErrUnauhtorized()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(null);
+
+            //ACT
+            var result = await _blogController.MarkReaded(_blog.Id, _post.Id, true);
+
+            //ASSERT
+            Assert.That(result, Is.EqualTo(ErrUnauhtorized));
+        }
+
+        [Test]
+        public async Task MarkReaded_CantFindPost_ErrEntityNotExists()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(_user);
+            Mock_BlogRepository_Get(null);
+
+            //ACT
+            var result = await _blogController.MarkReaded(_blog.Id, _post.Id, true);
+
+            //ASSERT
+            Assert.That(result, Is.EqualTo(ErrEntityNotExists));
+        }
+
+        [Test]
+        public async Task MarkReaded_CantFindUserPost_ErrEntityNotExists()
+        {
+            //ARRANGE
+            Mock_UserRepository_Get(_user);
+            Mock_BlogRepository_Get(_blog);
+            Mock_PostRepository_Get(null);
+
+            //ACT
+            var result = await _blogController.MarkReaded(_blog.Id, _post.Id, true);
+
+            //ASSERT
+            Assert.That(result, Is.EqualTo(ErrEntityNotExists));
+        }
+
+        #endregion
+
+        #region MarkFavourite
 
         #endregion
     }

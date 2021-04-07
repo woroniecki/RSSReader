@@ -13,6 +13,7 @@ namespace RSSReader.Data
         public static string MsgErrUnauthorized = "Unauthorized user.";
         public static string MsgErrSubAlreadyDisabled = "Subscription is already disabled.";
         public static string MsgErrSubAlreadyEnabled = "Subscription is already enabled.";
+        public static string MsgErrNothingToUpdateInEntity = "Entity already ahs same values which you want to set.";
         public static string MsgErrEntityNotExists = "Entity doesn't exists.";
         public static string MsgErrParsing = "Parsing error.";
         public static string MsgErrExternalServerIssue = "Cant get content form external server.";
@@ -32,6 +33,7 @@ namespace RSSReader.Data
         public static ApiResponse ErrNoContentUnderFeedUrl = new ApiResponse(MsgErrNoContentUnderFeedUrl, null, Status400BadRequest);
         public static ApiResponse ErrSubAlreadyDisabled = new ApiResponse(MsgErrSubAlreadyDisabled, null, Status400BadRequest);
         public static ApiResponse ErrSubAlreadyEnabled = new ApiResponse(MsgErrSubAlreadyEnabled, null, Status400BadRequest);
+        public static ApiResponse ErrNothingToUpdateInEntity = new ApiResponse(MsgErrSubAlreadyEnabled, null, Status400BadRequest);
         public static ApiResponse ErrEntityNotExists = new ApiResponse(MsgErrEntityNotExists, null, Status404NotFound);
         public static ApiResponse ErrParsing = new ApiResponse(MsgErrParsing, null, Status400BadRequest);
         public static ApiResponse ErrExternalServerIssue = new ApiResponse(MsgErrExternalServerIssue, null, Status400BadRequest);

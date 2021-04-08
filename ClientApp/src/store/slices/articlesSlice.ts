@@ -4,7 +4,7 @@ import {
   createSlice,
 } from '@reduxjs/toolkit'
 import * as blogApi from '../../api/blogApi'
-import { Post, ReadPostRequest } from '../../api/api.types'
+import { PatchPostRequest, Post, ReadPostRequest } from '../../api/api.types'
 import { RootState } from 'store/rootReducer'
 const ARTICLES = 'articles'
 
@@ -48,6 +48,22 @@ export const putReadArticle = createAsyncThunk<
   }
 })
 
+export const patchPost = createAsyncThunk<
+  Post,
+  PatchPostRequest,
+  {
+    rejectValue: string
+  }
+>(`${ARTICLES}/markReadedFlag`, async (params, { rejectWithValue }) => {
+  try {
+    const res = await blogApi.patchPost(params)
+    res.blogId = params.blogId
+    return res
+  } catch (err) {
+    return rejectWithValue(err.response.data)
+  }
+})
+
 const articlesSlice = createSlice({
   name: 'articles',
   initialState: articlesAdapter.getInitialState(),
@@ -58,6 +74,10 @@ const articlesSlice = createSlice({
         articlesAdapter.setAll(state, payload)
       })
       .addCase(putReadArticle.fulfilled, (state, { payload }) => {
+        articlesAdapter.removeOne(state, payload.id)
+        articlesAdapter.addOne(state, payload)
+      })
+      .addCase(patchPost.fulfilled, (state, { payload }) => {
         articlesAdapter.removeOne(state, payload.id)
         articlesAdapter.addOne(state, payload)
       })

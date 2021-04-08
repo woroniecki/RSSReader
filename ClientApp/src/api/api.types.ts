@@ -52,6 +52,13 @@ export interface ReadPostRequest {
   postId: number
 }
 
+export interface PatchPostRequest {
+  blogId: number
+  postId: number
+  readed: boolean
+  favourite: boolean
+}
+
 export interface Post {
   id: number
   blogId: number

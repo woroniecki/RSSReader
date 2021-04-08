@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { faBook } from '@fortawesome/free-solid-svg-icons'
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons'
+import { articlesSlice } from 'store/slices'
 
 export interface ArticleCardProps {
   id: number
@@ -25,6 +26,26 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
   const { push } = useHistory()
   const { id } = useParams<{ id: string }>()
 
+  const patchPost = async (
+    blogId: string,
+    postId: number,
+    readed: boolean,
+    favourite: boolean
+  ) => {
+    const promise = await dispatch(
+      articlesSlice.patchPost({
+        blogId: parseInt(blogId),
+        postId: postId,
+        readed: readed,
+        favourite: favourite,
+      })
+    )
+
+    if (articlesSlice.patchPost.fulfilled.match(promise)) {
+    } else {
+    }
+  }
+
   return (
     <div className="container-fluid" style={{ marginTop: 5 }}>
       <div className="row">
@@ -41,13 +62,21 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
                 >
                   Read
                 </Button>
-                <Button>
+                <Button
+                  onClick={() => {
+                    patchPost(id, props.id, null, !props.favourite)
+                  }}
+                >
                   <FontAwesomeIcon
                     color={props.favourite ? 'yellow' : 'white'}
                     icon={faStar}
                   />
                 </Button>
-                <Button>
+                <Button
+                  onClick={() => {
+                    patchPost(id, props.id, !props.readed, null)
+                  }}
+                >
                   <FontAwesomeIcon icon={props.readed ? faBookOpen : faBook} />
                 </Button>
               </Card.Body>

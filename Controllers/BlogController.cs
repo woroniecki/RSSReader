@@ -56,14 +56,16 @@ namespace RSSReader.Controllers
             _mapper = mapper;
         }
 
-        [HttpPut("{blogId}/post/{postId}/readed")]
-        public async Task<ApiResponse> MarkReaded(int blogId, int postId, [FromBody]bool value)
+        const string READED_TOKEN = "readed";
+        const string UNREADED_TOKEN = "unreaded";
+        [HttpPatch("{blogId}/post/{postId}/update")]
+        public async Task<ApiResponse> UpdateUserPostData(int blogId, int postId, [FromBody] UpdateUserPostDataDto data)
         {
             ApiUser user = await _userRepo.Get(BY_USERID(this.GetCurUserId()));
             if (user == null)
                 return ErrUnauhtorized;
 
-            UserPostData user_post_data = await
+            var (user_post_data, was_created) = await
                 GetUserPostDataWithPost(user, blogId, postId);
 
             if (user_post_data == null)
@@ -73,24 +75,31 @@ namespace RSSReader.Controllers
             if (post == null)
                 return ErrEntityNotExists;
 
-            if (user_post_data.Readed == value)
-                return ErrNothingToUpdateInEntity;
+            if(data.Readed.HasValue)
+            {
+                if (!was_created && user_post_data.Readed == data.Readed)
+                    return ErrNothingToUpdateInEntity;
 
-            user_post_data.Readed = value;
+                user_post_data.Readed = data.Readed.Value;
+            }
 
-            _readerRepo.Update(user_post_data);
+            if (data.Favourite.HasValue)
+            {
+                if (!was_created && user_post_data.Favourite == data.Favourite)
+                    return ErrNothingToUpdateInEntity;
+
+                user_post_data.Favourite = data.Favourite.Value;
+            }
+
+            if (!was_created)
+                _readerRepo.Update(user_post_data);
+
             PostDataForReturnDto post_dto = MergeUserPostDataAndPost(user_post_data, post);
 
             if (!await _readerRepo.SaveAllAsync())
                 return ErrRequestFailed;
 
             return new ApiResponse(MsgUpdated, post_dto, Status200OK);
-        }
-
-        [HttpPut("{blogId}/post/{postId}/favourite")]
-        public async Task<ApiResponse> MarkFavourite(int blogId, int postId, [FromBody] bool value)
-        {
-            return null;
         }
 
         [HttpPut("{blogId}/post/{postId}")]
@@ -100,7 +109,7 @@ namespace RSSReader.Controllers
             if (user == null)
                 return ErrUnauhtorized;
 
-            UserPostData user_post_data = await 
+            var (user_post_data, was_created) = await 
                 GetUserPostDataWithPost(
                     user,
                     blogId,
@@ -116,7 +125,9 @@ namespace RSSReader.Controllers
 
             user_post_data.LastDateOpen = DateTime.UtcNow;
             user_post_data.Readed = true;
-            _readerRepo.Update(user_post_data);
+            
+            if(!was_created)
+                _readerRepo.Update(user_post_data);
 
             PostDataForReturnDto post_dto = MergeUserPostDataAndPost(user_post_data, post);
 
@@ -126,27 +137,30 @@ namespace RSSReader.Controllers
             return new ApiResponse(MsgUpdated, post_dto, Status200OK);
         }
 
-        async Task<UserPostData> GetUserPostDataWithPost(ApiUser user, int blogId, int postId)
+        async Task<(UserPostData, bool)> GetUserPostDataWithPost(ApiUser user, int blogId, int postId)
         {
             Blog blog = await _blogRepo.Get(BY_BLOGID(blogId));
             if (blog == null)
-                return null;
+                return (null, false);
 
             Post post = await _postRepo.Get(BY_POSTID(postId));
             if (post == null)
-                return null;
+                return (null, false);
 
             UserPostData user_post_data = await _userPostDataRepo.GetWithPost(
                     BY_USERANDPOST(user, post)
                     );
-            
+
+            bool created = false;
+
             if (user_post_data == null)
             {
+                created = true;
                 user_post_data = new UserPostData(post, user);
                 _readerRepo.Add(user_post_data);
             }
 
-            return user_post_data;
+            return (user_post_data, created);
         }
 
         public const int POSTS_PER_CALL = 10;

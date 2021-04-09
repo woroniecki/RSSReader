@@ -46,12 +46,16 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
     }
   }
 
+  function getClassNames(transparent: boolean): string {
+    return 'card-horizontal' + (transparent ? ' transparent' : '')
+  }
+
   return (
     <div className="container-fluid" style={{ marginTop: 5 }}>
       <div className="row">
         <div className="col-12 mt-3">
           <Card>
-            <div className="card-horizontal">
+            <div className={getClassNames(props.readed)}>
               <Card.Body>
                 <Card.Title>{props.title}</Card.Title>
                 <Card.Text>{props.publishDate}</Card.Text>

@@ -14,6 +14,9 @@ namespace RSSReader.Data.Repositories
         public static Expression<Func<Subscription, bool>> BY_USERANDBLOG(ApiUser user, Blog blog) 
             => q => q.User == user && q.Blog == blog;
 
+        public static Expression<Func<Subscription, bool>> BY_USER(ApiUser user)
+            => q => q.User == user;
+
         private readonly DataContext _context;
 
         public SubscriptionRepository(DataContext context)

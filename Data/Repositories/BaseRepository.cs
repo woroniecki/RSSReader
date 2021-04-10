@@ -20,10 +20,17 @@ namespace RSSReader.Data.Repositories
         {
             return await _dbSet.FirstOrDefaultAsync(predicate);
         }
+
+        public async Task<List<T>> GetList(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.Where(predicate).ToListAsync();
+        }
     }
 
     public interface IBaseRepository<T>
     {
         Task<T> Get(Expression<Func<T, bool>> predicate);
+
+        Task<List<T>> GetList(Expression<Func<T, bool>> predicate);
     }
 }

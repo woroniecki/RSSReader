@@ -3,10 +3,10 @@ import { Card, Button } from 'react-bootstrap'
 import Image from 'react-bootstrap/Image'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
-import { subscriptionsSlice } from 'store/slices'
+import { subscriptionsSlice, articlesSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 
 export interface BlogCardProps {
   title: string
@@ -19,6 +19,7 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
   const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
+  const articlesList = useSelector(articlesSlice.selectAll)
 
   const unsubcribeBlog = async (id: number) => {
     const promise = await dispatch(subscriptionsSlice.putUnsubscribeBlog(id))
@@ -26,6 +27,34 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
     if (subscriptionsSlice.putUnsubscribeBlog.fulfilled.match(promise)) {
     } else {
     }
+  }
+
+  const updateArticlesList = async () => {
+    const list_already_taken = articlesList.find(el => el.blogId == props.id)
+    if (list_already_taken != null) return
+
+    const promise = await dispatch(articlesSlice.getArticles(props.id))
+
+    if (articlesSlice.getArticles.fulfilled.match(promise)) {
+    } else {
+    }
+  }
+
+  function getUnreadedAmount() {
+    updateArticlesList()
+
+    const amount = articlesList.filter(
+      el => el.blogId == props.id && !el.readed
+    ).length
+
+    if (amount <= 0) return
+
+    return (
+      <React.Fragment>
+        <FontAwesomeIcon icon={faPlus} />
+        <b>{amount}</b>
+      </React.Fragment>
+    )
   }
 
   const no_blog_img_url =
@@ -54,6 +83,7 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
                 </Button>
               </Card.Body>
               <div className="img-square-wrapper">
+                {getUnreadedAmount()}
                 <Button
                   onClick={() => {
                     unsubcribeBlog(props.id)

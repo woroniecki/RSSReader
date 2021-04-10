@@ -71,7 +71,7 @@ const articlesSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(getArticles.fulfilled, (state, { payload }) => {
-        articlesAdapter.setAll(state, payload)
+        articlesAdapter.addMany(state, payload)
       })
       .addCase(putReadArticle.fulfilled, (state, { payload }) => {
         articlesAdapter.removeOne(state, payload.id)

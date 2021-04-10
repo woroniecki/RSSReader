@@ -8,6 +8,7 @@ import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { faBook } from '@fortawesome/free-solid-svg-icons'
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons'
 import { articlesSlice } from 'store/slices'
+import ArticlePatchButtons from '../ArticlesComp/ArticlePatchButtons'
 
 export interface ArticleCardProps {
   id: number
@@ -26,25 +27,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
   const { push } = useHistory()
   const { id } = useParams<{ id: string }>()
 
-  const patchPost = async (
-    blogId: string,
-    postId: number,
-    readed: boolean,
-    favourite: boolean
-  ) => {
-    const promise = await dispatch(
-      articlesSlice.patchPost({
-        blogId: parseInt(blogId),
-        postId: postId,
-        readed: readed,
-        favourite: favourite,
-      })
-    )
-
-    if (articlesSlice.patchPost.fulfilled.match(promise)) {
-    } else {
-    }
-  }
+  const blogIdNumber = parseInt(id)
 
   function getClassNames(transparent: boolean): string {
     return 'card-horizontal' + (transparent ? ' transparent' : '')
@@ -66,23 +49,12 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
                 >
                   Read
                 </Button>
-                <Button
-                  onClick={() => {
-                    patchPost(id, props.id, null, !props.favourite)
-                  }}
-                >
-                  <FontAwesomeIcon
-                    color={props.favourite ? 'yellow' : 'white'}
-                    icon={faStar}
-                  />
-                </Button>
-                <Button
-                  onClick={() => {
-                    patchPost(id, props.id, !props.readed, null)
-                  }}
-                >
-                  <FontAwesomeIcon icon={props.readed ? faBookOpen : faBook} />
-                </Button>
+                <ArticlePatchButtons
+                  blogId={blogIdNumber}
+                  postId={props.id}
+                  readed={props.readed}
+                  favourite={props.favourite}
+                />
               </Card.Body>
               <div className="img-square-wrapper">
                 <Image src={props.imageUrl} className="const-img-150" />

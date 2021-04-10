@@ -6,6 +6,7 @@ import { articlesSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 import { Button } from 'react-bootstrap'
 import { authSlice } from 'store/slices'
+import ArticlePatchButtons from './ArticlesComp/ArticlePatchButtons'
 
 export interface SingleArticleProps {}
 
@@ -46,9 +47,18 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
 
     return (
       <div>
+        <Button onClick={() => push(`/blog/${id}`)} variant="primary">
+          Return
+        </Button>
         <a rel="noreferrer" target="_blank" href={article.feedUrl}>
           <Button variant="primary">Visit page</Button>
         </a>
+        <ArticlePatchButtons
+          blogId={article.blogId}
+          postId={article.id}
+          readed={article.readed}
+          favourite={article.favourite}
+        />
         <h1>{article.name}</h1>
         <div>{parse(article.content)}</div>
       </div>
@@ -57,9 +67,6 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
 
   return (
     <div style={{ marginTop: 15 }} className="container">
-      <Button onClick={() => push(`/blog/${id}`)} variant="primary">
-        Return
-      </Button>
       {renderArticle()}
     </div>
   )

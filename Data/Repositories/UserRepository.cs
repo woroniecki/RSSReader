@@ -37,6 +37,7 @@ namespace RSSReader.Data.Repositories
             return await _context.Users
                 .Include(x => x.Subscriptions)
                 .ThenInclude(x => x.Blog)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(predicate);
         }
     }

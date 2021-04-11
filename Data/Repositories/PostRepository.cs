@@ -28,6 +28,7 @@ namespace RSSReader.Data.Repositories
                 .OrderByDescending(x => x.PublishDate)
                 .Skip(skipAmount)
                 .Take(amount)
+                .AsNoTracking()
                 .ToListAsync();
         }
     }

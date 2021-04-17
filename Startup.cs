@@ -78,6 +78,7 @@ namespace RSSReader
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IFeedService, FeedService>();
             services.AddScoped<IHttpService, HttpService>();
+            services.AddScoped<IGroupRepository, GroupRepository>();
             
             services.AddControllers().AddNewtonsoftJson(opt =>
             {

@@ -1,37 +1,30 @@
 import React from 'react'
-import { InputGroup, Button, FormControl, Form } from 'react-bootstrap'
+import { Button, Form, FormControl, InputGroup } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
+import { groupsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
-import { subscriptionsSlice } from 'store/slices'
 import { applyValidationErrors } from 'utils/utils'
-import { useSelector } from 'react-redux'
-import { authSlice } from 'store/slices'
+import { useFormik } from 'formik'
 
-export interface AddSubProps {}
+export interface AddGroupNavFormProps {}
 
-export const AddSub: React.FC<AddSubProps> = props => {
+export const AddGroupNavForm: React.FC<AddGroupNavFormProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
-  const { userName } = useSelector(authSlice.stateSelector)
 
   const formik = useFormik({
     initialValues: {
       global: '',
-      url: '',
+      name: '',
     },
-    //validationSchema: Yup.object().shape({
-    //  url: Yup.string().required('Required'),
-    //}),
     onSubmit: async values => {
       const promise = await dispatch(
-        subscriptionsSlice.postAddSubscription({
-          blogUrl: values.url,
+        groupsSlice.postAdd({
+          name: values.name,
         })
       )
 
-      if (subscriptionsSlice.postAddSubscription.fulfilled.match(promise)) {
+      if (groupsSlice.postAdd.fulfilled.match(promise)) {
       } else {
         applyValidationErrors(formik, promise.error)
       }
@@ -57,22 +50,24 @@ export const AddSub: React.FC<AddSubProps> = props => {
           placeholder="https://exampleblog.com/feed/"
           id="url"
           name="url"
-          onChange={formik.handleChange}
+          onChange={event => {
+            formik.values.name = event.target.value
+            formik.handleChange
+          }}
           onBlur={formik.handleBlur}
-          value={formik.values.url}
           isInvalid={
-            !!formik.touched.url &&
-            (!!formik.errors.url || !!formik.errors.global)
+            !!formik.touched.name &&
+            (!!formik.errors.name || !!formik.errors.global)
           }
           required
         />
         <Form.Control.Feedback type="invalid">
           {formik.errors.global}
-          {formik.errors.url}
+          {formik.errors.name}
         </Form.Control.Feedback>
       </InputGroup>
     </Form>
   )
 }
 
-export default AddSub
+export default AddGroupNavForm

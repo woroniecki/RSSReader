@@ -25,6 +25,7 @@ namespace RSSReader.Models
         public DateTime LastSubscribeDate { get; set; }
         public DateTime LastUnsubscribeDate { get; set; }
         public virtual Blog Blog { get; set; }
+        public virtual Group Group { get; set; }
 
         [JsonIgnore]
         public virtual ApiUser User { get; set; }

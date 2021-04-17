@@ -22,6 +22,8 @@ namespace RSSReader.Helpers
                 .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
                 .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => src.PublishDate));
             CreateMap<Post, PostDataForReturnDto>();
+            CreateMap<Group, GroupForReturnDto>();
+            CreateMap<GroupAddDto, Group>();
         }
     }
 }

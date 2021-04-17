@@ -5,6 +5,8 @@ import {
   AddSubscriptionRequest,
   Post,
   PatchPostRequest,
+  Group,
+  AddGroupRequest,
 } from './api.types'
 
 export const getSubscribtionsList = async () => {
@@ -65,6 +67,33 @@ export const patchPost = async (data: PatchPostRequest) => {
       data
     )
     return res.data.result as Post
+  } catch (error) {
+    throw error.response
+  }
+}
+
+export const getGroupsList = async () => {
+  try {
+    const res = await axios.get(`/api/group/list`)
+    return res.data.result as Group[]
+  } catch (error) {
+    throw error.response
+  }
+}
+
+export const postAddGroup = async (data: AddGroupRequest) => {
+  try {
+    const res = await axios.post(`/api/group/add`, data)
+    return res.data.result as Group
+  } catch (error) {
+    throw error.response
+  }
+}
+
+export const removeGroup = async (id: number) => {
+  try {
+    const res = await axios.delete(`/api/group/remove/` + id.toString())
+    return res.data.result as Group
   } catch (error) {
     throw error.response
   }

@@ -72,3 +72,12 @@ export interface Post {
   readed: boolean
   favourite: boolean
 }
+
+export interface Group {
+  id: number
+  name: string
+}
+
+export interface AddGroupRequest {
+  name: string
+}

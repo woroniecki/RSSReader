@@ -15,5 +15,6 @@ namespace RSSReader.Data
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<UserPostData> UserPostDatas { get; set; }
+        public DbSet<Group> Groups { get; set; }
     }
 }

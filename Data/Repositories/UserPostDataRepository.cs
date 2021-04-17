@@ -18,7 +18,7 @@ namespace RSSReader.Data.Repositories
         private readonly DataContext _context;
 
         public UserPostDataRepository(DataContext context)
-            : base(context.UserPostDatas)
+            : base(context.UserPostDatas, context)
         {
             _context = context;
         }

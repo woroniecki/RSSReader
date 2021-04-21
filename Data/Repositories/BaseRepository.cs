@@ -9,18 +9,13 @@ namespace RSSReader.Data.Repositories
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        private DbSet<T> _dbSet;
-        private DataContext _context;
+        protected DbSet<T> _dbSet;
+        protected DataContext _context;
 
         public BaseRepository(DbSet<T> dbSet, DataContext context)
         {
             _dbSet = dbSet;
             _context = context;
-        }
-
-        public async Task<T> Get(Expression<Func<T, bool>> predicate)
-        {
-            return await _dbSet.FirstOrDefaultAsync(predicate);
         }
 
         public async Task<T> GetByID(int id)
@@ -30,21 +25,32 @@ namespace RSSReader.Data.Repositories
 
         public async Task<bool> Remove(T entity)
         {
+            RemoveNoSave(entity);
+            return await _context.SaveChangesAsync() > 0;
+        }
+        public void RemoveNoSave(T entity)
+        {
             _dbSet.Remove(entity);
+        }
+
+        public async Task<bool> Add(T entity)
+        {
+            AddNoSave(entity);
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<T>> GetList(Expression<Func<T, bool>> predicate)
+        public void AddNoSave(T entity)
         {
-            return await _dbSet.Where(predicate).ToListAsync();
+            _dbSet.Add(entity);
         }
     }
 
     public interface IBaseRepository<T>
     {
-        Task<T> Get(Expression<Func<T, bool>> predicate);
         Task<T> GetByID(int id);
-        Task<List<T>> GetList(Expression<Func<T, bool>> predicate);
         Task<bool> Remove(T entity);
+        void RemoveNoSave(T entity);
+        Task<bool> Add(T entity);
+        void AddNoSave(T entity);
     }
 }

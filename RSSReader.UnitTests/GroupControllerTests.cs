@@ -3,47 +3,31 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using RSSReader.Controllers;
-using RSSReader.Data;
 using RSSReader.Models;
-using RSSReader.UnitTests.Helpers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Http.StatusCodes;
-using static RSSReader.Data.Response;
-using static RSSReader.Data.Repositories.UserRepository;
-using UserPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.ApiUser, bool>>;
-using GroupPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.Group, bool>>;
-using BlogPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.Blog, bool>>;
-using PostPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.Post, bool>>;
-using UserPostDataPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.UserPostData, bool>>;
 using RSSReader.Dtos;
-using RSSReader.Data.Repositories;
-using Microsoft.Toolkit.Parsers.Rss;
-using AutoWrapper.Wrappers;
-using System.IO;
 using AutoMapper;
 using RSSReader.Helpers;
+using RSSReader.UnitTests.Wrappers.Repositories;
 
 namespace RSSReader.UnitTests
 {
     [TestFixture]
     class GroupControllerTests
     {
-        private Mock<IUserRepository> _userRepo;
-        private Mock<IGroupRepository> _groupRepo;
+        private MockUOW _mockUOW;
         private ApiUser _user;
         private IMapper _mapper;
-        GroupController _groupController;
+        private GroupController _groupController;
 
         [SetUp]
         public void SetUp()
         {
-            _userRepo = new Mock<IUserRepository>();
-            _groupRepo = new Mock<IGroupRepository>();
+            _mockUOW = new MockUOW();
 
             _user = new ApiUser()
             {
@@ -59,8 +43,7 @@ namespace RSSReader.UnitTests
             _mapper = mapper.CreateMapper();
 
             _groupController = new GroupController(
-                _userRepo.Object,
-                _groupRepo.Object,
+                _mockUOW.Object,
                 _mapper
                 );
 
@@ -71,36 +54,13 @@ namespace RSSReader.UnitTests
             _groupController.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
         }
 
-        #region Mock
-        private void Mock_UserRepository_Get(ApiUser returnedUser)
-        {
-            Expression<Func<IUserRepository, Task<ApiUser>>> expression =
-                returnedUser != null ?
-                x => x.Get(It.Is<UserPred>(x => x.Compile().Invoke(returnedUser))) :
-                x => x.Get(It.IsAny<UserPred>());
-
-            _userRepo.Setup(expression)
-            .Returns(Task.FromResult(returnedUser))
-            .Verifiable();
-        }
-
-        private void Mock_GroupRepository_GetAll(IEnumerable<Group> returnedGroups)
-        {
-            Expression<Func<IGroupRepository, Task<IEnumerable<Group>>>> expression =
-                x => x.GetAll(It.IsAny<GroupPred>());
-
-            _groupRepo.Setup(expression)
-            .Returns(Task.FromResult(returnedGroups))
-            .Verifiable();
-        }
-        #endregion
-
         #region GetList
         [Test]
         public async Task GetList_Ok_ListOfGroups()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+
             List<Group> list_group = new List<Group>();
             for (int i = 0; i < 5; i++)
             {
@@ -110,7 +70,7 @@ namespace RSSReader.UnitTests
                 });
             }
 
-            Mock_GroupRepository_GetAll(list_group);
+            _mockUOW.GroupRepo.SetGetListByUser(_user, list_group);
 
             //ACT
             var result = await _groupController.GetList();
@@ -132,7 +92,7 @@ namespace RSSReader.UnitTests
         public async Task GetList_CantFindUser_Unauthorized()
         {
             //ARRANGE
-            Mock_UserRepository_Get(null);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, null);
 
             //ACT
             var result = await _groupController.GetList();
@@ -148,15 +108,14 @@ namespace RSSReader.UnitTests
         public async Task Add_HappyPath_Ok()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
 
             GroupAddDto added_group = new GroupAddDto()
             {
                 Name = "name"
             };
 
-            _groupRepo.Setup(x => x.AddAsync(It.IsAny<Group>()))
-                .Returns(Task.FromResult(true));
+            _mockUOW.GroupRepo.SetAdd(It.IsAny<Group>(), true);
 
             //ACT
             var result = await _groupController.Add(added_group);
@@ -175,18 +134,16 @@ namespace RSSReader.UnitTests
         public async Task Delete_HappyPath_Ok()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
 
             GroupAddDto added_group = new GroupAddDto()
             {
                 Name = "name"
             };
 
-            _groupRepo.Setup(x => x.GetByID(0))
-                .Returns(Task.FromResult(new Group() {Id=0, Name="name", User=_user }));
+            _mockUOW.GroupRepo.SetGetByID(0, new Group() { Id = 0, Name = "name", User = _user });
 
-            _groupRepo.Setup(x => x.Remove(It.IsAny<Group>()))
-                .Returns(Task.FromResult(true));
+            _mockUOW.GroupRepo.SetRemove(It.IsAny<Group>(), true);
 
             //ACT
             var result = await _groupController.Remove (0);

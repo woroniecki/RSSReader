@@ -11,28 +11,19 @@ namespace RSSReader.Data.Repositories
 {
     public class SubscriptionRepository : BaseRepository<Subscription>, ISubscriptionRepository
     {
-        public static Expression<Func<Subscription, bool>> BY_USERANDBLOG(ApiUser user, Blog blog) 
-            => q => q.User == user && q.Blog == blog;
-
-        public static Expression<Func<Subscription, bool>> BY_USER(ApiUser user)
-            => q => q.User == user;
-
-        private readonly DataContext _context;
-
         public SubscriptionRepository(DataContext context)
             : base(context.Subscriptions, context)
         {
-            _context = context;
         }
-        public async Task<bool> AddAsync(Subscription blogSub)
+
+        public async Task<Subscription> GetByUserAndBlog(ApiUser user, Blog blog)
         {
-            await _context.Subscriptions.AddAsync(blogSub);
-            return await _context.SaveChangesAsync() > 0;
+            return await _dbSet.FirstOrDefaultAsync(x => x.User == user && x.Blog == blog);
         }
     }
 
     public interface ISubscriptionRepository : IBaseRepository<Subscription>
     {
-        Task<bool> AddAsync(Subscription blogSub);
+        Task<Subscription> GetByUserAndBlog(ApiUser user, Blog blog);
     }
 }

@@ -10,15 +10,9 @@ namespace RSSReader.Data.Repositories
 {
     public class PostRepository : BaseRepository<Post>, IPostRepository
     {
-        public static Expression<Func<Post, bool>> BY_POSTID(int id) => q => q.Id == id;
-        public static Expression<Func<Post, bool>> BY_POSTURL(string url) => q => q.Url == url;
-
-        private readonly DataContext _context;
-
         public PostRepository(DataContext context)
             : base(context.Posts, context)
         {
-            _context = context;
         }
 
         public async Task<IEnumerable<Post>> GetLatest(int blogId, int skipAmount, int amount)

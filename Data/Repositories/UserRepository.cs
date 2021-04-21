@@ -13,16 +13,23 @@ namespace RSSReader.Data.Repositories
 {
     public class UserRepository : BaseRepository<ApiUser>, IUserRepository
     {
-        public static Expression<Func<ApiUser, bool>> BY_USERID(string id) => q => q.Id == id;
-        public static Expression<Func<ApiUser, bool>> BY_USEREMAIL(string email) => q => q.Email == email;
-        public static Expression<Func<ApiUser, bool>> BY_USERNAME(string username) => q => q.UserName == username;
-
-        private readonly DataContext _context;
-
         public UserRepository(DataContext context)
             : base(context.Users, context)
         {
-            _context = context;
+        }
+
+        public async Task<ApiUser> GetByID(string id)
+        {
+            return await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
+        }
+        public async Task<ApiUser> GetByUsername(string username)
+        {
+            return await _dbSet.FirstOrDefaultAsync(x => x.UserName == username);
+        }
+
+        public async Task<ApiUser> GetByEmail(string email)
+        {
+            return await _dbSet.FirstOrDefaultAsync(x => x.Email == email);
         }
 
         public async Task<ApiUser> GetWithRefreshTokens(Expression<Func<ApiUser, bool>> predicate)
@@ -44,6 +51,9 @@ namespace RSSReader.Data.Repositories
 
     public interface IUserRepository : IBaseRepository<ApiUser>
     {
+        Task<ApiUser> GetByID(string id);
+        Task<ApiUser> GetByUsername(string username);
+        Task<ApiUser> GetByEmail(string email);
         Task<ApiUser> GetWithRefreshTokens(Expression<Func<ApiUser, bool>> predicate);
         Task<ApiUser> GetWithSubscriptions(Expression<Func<ApiUser, bool>> predicate);
     }

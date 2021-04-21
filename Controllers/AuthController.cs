@@ -21,20 +21,20 @@ namespace RSSReader.Controllers
     public class AuthController : Controller
     {
         private UserManager<ApiUser> _userManager;
-        private readonly IUserRepository _userRepo;
+        private readonly IUnitOfWork _UOW;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
         //private readonly IEmailSender _emailSender; UnComment if you want to add Email Verification also.
 
         public AuthController(
-            UserManager<ApiUser> userManager, 
-            IUserRepository userRepository,
+            UserManager<ApiUser> userManager,
+            IUnitOfWork unitOfWork,
             IAuthService authService, 
             IMapper mapper)
         {
             _userManager = userManager;
-            _userRepo = userRepository;
+            _UOW = unitOfWork;
             _authService = authService;
             _mapper = mapper;
         }
@@ -43,10 +43,10 @@ namespace RSSReader.Controllers
         [Route("register")]
         public async Task<ApiResponse> Register([FromBody] UserForRegisterDto model)
         {
-            if (await _userRepo.Get(BY_USERNAME(model.Username)) != null)
+            if (await _UOW.UserRepo.GetByUsername(model.Username) != null)
                 ModelState.AddModelError(nameof(UserForRegisterDto.Username), MsgErrUsernameTaken);
 
-            if (await _userRepo.Get(BY_USEREMAIL(model.Email)) != null)
+            if (await _UOW.UserRepo.GetByEmail(model.Email) != null)
                 ModelState.AddModelError(nameof(UserForRegisterDto.Email), MsgErrEmailTaken);
 
             if (!ModelState.IsValid)
@@ -72,12 +72,12 @@ namespace RSSReader.Controllers
         [Route("login")]
         public async Task<ApiResponse> Login([FromBody] UserForLoginDto model)
         {
-            var user = await _userRepo
-                .GetWithRefreshTokens(BY_USERNAME(model.Username));
+            var user = await _UOW.UserRepo
+                .GetWithRefreshTokens(x => x.UserName == model.Username);
 
             if (user == null)
-                user = await _userRepo
-                    .GetWithRefreshTokens(BY_USEREMAIL(model.Username));
+                user = await _UOW.UserRepo
+                    .GetWithRefreshTokens(x => x.Email == model.Username);
 
             if (user == null)
                 return ErrWrongCredentials;
@@ -96,7 +96,9 @@ namespace RSSReader.Controllers
             if (string.IsNullOrEmpty(user_id))
                 return ErrUnauhtorized;
 
-            var user = await _userRepo.GetWithRefreshTokens(BY_USERID(user_id));
+            var user = await _UOW.UserRepo
+                    .GetWithRefreshTokens(x => x.Id == user_id);
+
             if (user == null)
                 return ErrUnauhtorized;
 

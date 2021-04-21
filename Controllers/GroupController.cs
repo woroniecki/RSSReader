@@ -21,29 +21,26 @@ namespace RSSReader.Controllers
     [Route("api/[controller]")]
     public class GroupController : Controller
     {
-        private IUserRepository _userRepo;
-        private IGroupRepository _groupRepo;
+        private IUnitOfWork _UOW;
         private IMapper _mapper;
 
         public GroupController(
-            IUserRepository userRepo,
-            IGroupRepository groupRepo,
+            IUnitOfWork unitOfWork,
             IMapper mapper
             )
         {
-            _userRepo = userRepo;
-            _groupRepo = groupRepo;
+            _UOW = unitOfWork;
             _mapper = mapper;
         }
 
         [HttpGet("list")]
         public async Task<ApiResponse> GetList()
         {
-            ApiUser user = await _userRepo.Get(BY_USERID(this.GetCurUserId()));
+            ApiUser user = await _UOW.UserRepo.GetByID(this.GetCurUserId());
             if (user == null)
                 return ErrUnauhtorized;
 
-            var all_groups = await _groupRepo.GetAll(BY_USER(user));
+            var all_groups = await _UOW.GroupRepo.GetListByUser(user);
 
             IEnumerable<GroupForReturnDto> groups_dtos =
                 _mapper.Map<IEnumerable<Group>, IEnumerable<GroupForReturnDto>>(all_groups);
@@ -54,7 +51,7 @@ namespace RSSReader.Controllers
         [HttpPost("add")]
         public async Task<ApiResponse> Add([FromBody]GroupAddDto data)
         {
-            ApiUser user = await _userRepo.Get(BY_USERID(this.GetCurUserId()));
+            ApiUser user = await _UOW.UserRepo.GetByID(this.GetCurUserId());
             if (user == null)
                 return ErrUnauhtorized;
 
@@ -64,7 +61,7 @@ namespace RSSReader.Controllers
             Group group = _mapper.Map<GroupAddDto, Group>(data);
             group.User = user;
 
-            if (!await _groupRepo.AddAsync(group))
+            if (!await _UOW.GroupRepo.Add(group))
                 return ErrRequestFailed;
 
             GroupForReturnDto group_return_dto = _mapper.Map<Group, GroupForReturnDto>(group);
@@ -75,16 +72,16 @@ namespace RSSReader.Controllers
         [HttpDelete("remove/{id}")]
         public async Task<ApiResponse> Remove(int id)
         {
-            ApiUser user = await _userRepo.Get(BY_USERID(this.GetCurUserId()));
+            ApiUser user = await _UOW.UserRepo.GetByID(this.GetCurUserId());
             if (user == null)
                 return ErrUnauhtorized;
 
-            Group group = await _groupRepo.GetByID(id);
+            Group group = await _UOW.GroupRepo.GetByID(id);
 
             if (group == null)
                 return ErrEntityNotExists;
 
-            if (!await _groupRepo.Remove(group))
+            if (!await _UOW.GroupRepo.Remove(group))
                 return ErrRequestFailed;
 
             return new ApiResponse(MsgSucceed, null, Status204NoContent);

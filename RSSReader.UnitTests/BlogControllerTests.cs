@@ -14,11 +14,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
-using static RSSReader.Data.Repositories.UserRepository;
-using UserPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.ApiUser, bool>>;
-using BlogPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.Blog, bool>>;
-using PostPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.Post, bool>>;
-using UserPostDataPred = System.Linq.Expressions.Expression<System.Func<RSSReader.Models.UserPostData, bool>>;
 using RSSReader.Dtos;
 using RSSReader.Data.Repositories;
 using Microsoft.Toolkit.Parsers.Rss;
@@ -26,6 +21,7 @@ using AutoWrapper.Wrappers;
 using System.IO;
 using AutoMapper;
 using RSSReader.Helpers;
+using RSSReader.UnitTests.Wrappers.Repositories;
 
 namespace RSSReader.UnitTests
 {
@@ -35,11 +31,7 @@ namespace RSSReader.UnitTests
         const int BLOG_ID = 1;
 
         private BlogController _blogController;
-        private Mock<IBlogRepository> _blogRepo;
-        private Mock<IPostRepository> _postRepo;
-        private Mock<IUserPostDataRepository> _userPostDataRepo;
-        private Mock<IUserRepository> _userRepo;
-        private Mock<IReaderRepository> _readerRepo;
+        private MockUOW _mockUOW;
         private IMapper _mapper;
         private Mock<FeedService> _feedService;
         private Mock<IHttpService> _httpService;
@@ -54,11 +46,6 @@ namespace RSSReader.UnitTests
         public void SetUp()
         {
             //Mock
-            _blogRepo = new Mock<IBlogRepository>();
-            _postRepo = new Mock<IPostRepository>();
-            _userPostDataRepo = new Mock<IUserPostDataRepository>();
-            _userRepo = new Mock<IUserRepository>();
-            _readerRepo = new Mock<IReaderRepository>();
             _httpService = new Mock<IHttpService>();
             var mapper = new MapperConfiguration(cfg =>
             {
@@ -99,13 +86,11 @@ namespace RSSReader.UnitTests
             };
             _userPostData = new UserPostData(_post, _user);
 
+            _mockUOW = new MockUOW();
+
             //Controller
             _blogController = new BlogController(
-                _readerRepo.Object,
-                _blogRepo.Object,
-                _postRepo.Object,
-                _userPostDataRepo.Object,
-                _userRepo.Object,
+                _mockUOW.Object,
                 _feedService.Object,
                 _httpService.Object,
                 _mapper);
@@ -117,105 +102,6 @@ namespace RSSReader.UnitTests
         }
 
         #region Mock
-
-        private void Mock_UserPostDataRepository_GetListWithPosts(
-            IEnumerable<UserPostData> returnedList)
-        {
-            Expression<Func<IUserPostDataRepository, Task<IEnumerable<UserPostData>>>> expression =
-                x => x.GetListWithPosts(It.IsAny<UserPostDataPred>());
-
-            _userPostDataRepo.Setup(expression)
-            .Returns(Task.FromResult(returnedList))
-            .Verifiable();
-        }
-
-        private void Mock_UserRepository_Get(ApiUser returnedUser)
-        {
-            Expression<Func<IUserRepository, Task<ApiUser>>> expression =
-                returnedUser != null ?
-                x => x.Get(It.Is<UserPred>(x => x.Compile().Invoke(returnedUser))) :
-                x => x.Get(It.IsAny<UserPred>());
-
-            _userRepo.Setup(expression)
-            .Returns(Task.FromResult(returnedUser))
-            .Verifiable();
-        }
-
-        private void Mock_BlogRepository_Get(Blog returnedBlog)
-        {
-            Expression<Func<IBlogRepository, Task<Blog>>> expression =
-                returnedBlog != null ?
-                x => x.Get(It.Is<BlogPred>(x => x.Compile().Invoke(returnedBlog))) :
-                x => x.Get(It.IsAny<BlogPred>());
-
-            _blogRepo.Setup(expression)
-            .Returns(Task.FromResult(returnedBlog))
-            .Verifiable();
-        }
-
-        private void Mock_BlogRepository_GetWithPosts(Blog returnedBlog)
-        {
-            Expression<Func<IBlogRepository, Task<Blog>>> expression =
-                returnedBlog != null ?
-                x => x.GetWithPosts(It.Is<BlogPred>(x => x.Compile().Invoke(returnedBlog))) :
-                x => x.GetWithPosts(It.IsAny<BlogPred>());
-
-            _blogRepo.Setup(expression)
-            .Returns(Task.FromResult(returnedBlog))
-            .Verifiable();
-        }
-
-        private void Mock_PostRepository_Get(Post returnedPost)
-        {
-            Expression<Func<IPostRepository, Task<Post>>> expression =
-                returnedPost != null ?
-                x => x.Get(It.Is<PostPred>(x => x.Compile().Invoke(returnedPost))) :
-                x => x.Get(It.IsAny<PostPred>());
-
-            _postRepo.Setup(expression)
-            .Returns(Task.FromResult(returnedPost))
-            .Verifiable();
-        }
-
-        private void Mock_PostRepository_GetLatest(int blogId, int skipAmount, int amount, IEnumerable<Post> returnedPosts)
-        {
-            Expression<Func<IPostRepository, Task<IEnumerable<Post>>>> expression =
-                x => x.GetLatest(blogId, skipAmount, amount);
-
-            _postRepo.Setup(expression)
-            .Returns(Task.FromResult(returnedPosts))
-            .Verifiable();
-        }
-
-        private void Mock_UserPostDataRepository_GetWithPost(UserPostData userPostData)
-        {
-            Expression<Func<IUserPostDataRepository, Task<UserPostData>>> expression =
-                userPostData != null ?
-                x => x.GetWithPost(It.Is<UserPostDataPred>(x => x.Compile().Invoke(userPostData))) :
-                x => x.GetWithPost(It.IsAny<UserPostDataPred>());
-
-            _userPostDataRepo.Setup(expression)
-            .Returns(Task.FromResult(userPostData))
-            .Verifiable();
-        }
-
-        private void Mock_UserPostDataRepository_GetLatest(int blogId, int skipAmount, int amount, IEnumerable<Post> returnedPosts)
-        {
-            Expression<Func<IPostRepository, Task<IEnumerable<Post>>>> expression =
-                x => x.GetLatest(blogId, skipAmount, amount);
-
-            _postRepo.Setup(expression)
-            .Returns(Task.FromResult(returnedPosts))
-            .Verifiable();
-        }
-
-        private void Mock_ReaderRepository_SaveAllAsync(bool returnedValue)
-        {
-            _readerRepo.Setup(x => x.SaveAllAsync())
-                            .Returns(Task.FromResult(returnedValue))
-                            .Verifiable();
-        }
-
         private void Mock_HttpService_GetStringContent(string url, string returnedValue)
         {
             _httpService.Setup(x => x.GetStringContent(url))
@@ -229,7 +115,7 @@ namespace RSSReader.UnitTests
         public async Task ReadPost_CantFindUserFromClaim_Unauthorized()
         {
             //ARRANGE
-            Mock_UserRepository_Get(null);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, null);
 
             //ACT
             var result = await _blogController.ReadPost(0, 0);
@@ -242,8 +128,8 @@ namespace RSSReader.UnitTests
         public async Task ReadPost_BlogWithIdDoesntExist_ErrEntityNotExists()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_BlogRepository_Get(null);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.BlogRepo.SetGetByID(0, null);
 
             //ACT
             var result = await _blogController.ReadPost(0, 0);
@@ -256,9 +142,9 @@ namespace RSSReader.UnitTests
         public async Task ReadPost_PostWithIdDoesntExist_ErrEntityNotExists()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_BlogRepository_Get(_blog);
-            Mock_PostRepository_Get(null);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.BlogRepo.SetGetByID(0, _blog);
+            _mockUOW.PostRepo.SetGetByID(0, null);
 
             //ACT
             var result = await _blogController.ReadPost(0, 0);
@@ -271,28 +157,28 @@ namespace RSSReader.UnitTests
         public async Task ReadPost_SaveAllAsyncFailder_ErrRequestFailed()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_BlogRepository_Get(_blog);
-            Mock_PostRepository_Get(_post);
-            Mock_ReaderRepository_SaveAllAsync(false);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.BlogRepo.SetGetByID(_blog.Id, _blog);
+            _mockUOW.PostRepo.SetGetByID(_post.Id, _post);
+            _mockUOW.ReaderRepo.SetSaveAllAsync(false);
 
             //ACT
             var result = await _blogController.ReadPost(_blog.Id, _post.Id);
 
             //ASSERT
             Assert.That(result.StatusCode, Is.EqualTo(ErrRequestFailed.StatusCode));
-            _readerRepo.Verify(x => x.SaveAllAsync());
+            _mockUOW.ReaderRepo.Verify(x => x.SaveAllAsync());
         }
 
         [Test]
         public async Task ReadPost_GetPostAndCreateUserPostData_NewUserPostData()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_BlogRepository_Get(_blog);
-            Mock_PostRepository_Get(_post);
-            Mock_ReaderRepository_SaveAllAsync(true);
-            Mock_UserPostDataRepository_GetWithPost(null);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.BlogRepo.SetGetByID(_blog.Id, _blog);
+            _mockUOW.PostRepo.SetGetByID(_post.Id, _post);
+            _mockUOW.ReaderRepo.SetSaveAllAsync(true);
+            _mockUOW.UserPostDataRepo.SetGetWithPost(null);
 
             //ACT
             var start_time = DateTime.UtcNow;
@@ -307,21 +193,20 @@ namespace RSSReader.UnitTests
             Assert.That(result_obj.Name, Is.EqualTo(_post.Name));
             Assert.That(result_obj.Id, Is.EqualTo(_post.Id));
 
-            _readerRepo.Verify(x => x.SaveAllAsync());
-            _readerRepo.Verify(x => x.Add(It.IsAny<Post>()), Times.Never);
-            _readerRepo.Verify(x => x.Add(It.IsAny<UserPostData>()));
+            _mockUOW.ReaderRepo.Verify(x => x.SaveAllAsync());
+            _mockUOW.ReaderRepo.Verify(x => x.Add(It.IsAny<Post>()), Times.Never);
+            _mockUOW.ReaderRepo.Verify(x => x.Add(It.IsAny<UserPostData>()));
         }
 
         [Test]
         public async Task ReadPost_GetPostAndUpdateUserPostData_UpdatedUserPostData()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_BlogRepository_Get(_blog);
-            Mock_ReaderRepository_SaveAllAsync(true);
-            Mock_PostRepository_Get(_post);
-            Mock_PostRepository_Get(_post);
-            Mock_UserPostDataRepository_GetWithPost(_userPostData);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.BlogRepo.SetGetByID(_blog.Id, _blog);
+            _mockUOW.PostRepo.SetGetByID(_post.Id, _post);
+            _mockUOW.ReaderRepo.SetSaveAllAsync(true);
+            _mockUOW.UserPostDataRepo.SetGetWithPost(_userPostData);
 
             //ACT
             var start_time = DateTime.UtcNow;
@@ -336,10 +221,10 @@ namespace RSSReader.UnitTests
             Assert.That(result_obj.Name, Is.EqualTo(_post.Name));
             Assert.That(result_obj.Id, Is.EqualTo(_post.Id));
 
-            _readerRepo.Verify(x => x.SaveAllAsync());
-            _readerRepo.Verify(x => x.Add(It.IsAny<Post>()), Times.Never);
-            _readerRepo.Verify(x => x.Add(It.IsAny<UserPostData>()), Times.Never);
-            _readerRepo.Verify(x => x.Update(It.IsAny<UserPostData>()));
+            _mockUOW.ReaderRepo.Verify(x => x.SaveAllAsync());
+            _mockUOW.ReaderRepo.Verify(x => x.Add(It.IsAny<Post>()), Times.Never);
+            _mockUOW.ReaderRepo.Verify(x => x.Add(It.IsAny<UserPostData>()), Times.Never);
+            _mockUOW.ReaderRepo.Verify(x => x.Update(It.IsAny<UserPostData>()));
         }
         #endregion
 
@@ -349,8 +234,8 @@ namespace RSSReader.UnitTests
         public async Task GetPosts_HappyPath_ListOfPostsWithUserData()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_BlogRepository_GetWithPosts(_blog);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.BlogRepo.SetGetWithPosts(_blog);
             List<Post> returned_posts = new List<Post>();
             for (int i = 0; i < 10; i++)
             {
@@ -363,11 +248,12 @@ namespace RSSReader.UnitTests
                 returned_posts.Add(new_post);
             }
             int page = 0;
-            Mock_PostRepository_GetLatest(
+            _mockUOW.PostRepo.SetGetLatest(
                 _blog.Id, 
                 page * BlogController.POSTS_PER_CALL,
                 BlogController.POSTS_PER_CALL, 
-                returned_posts);
+                returned_posts
+                );
 
             List<UserPostData> returned_user_post_data = new List<UserPostData>();
             for (int i = 0; i < 5; i++)
@@ -380,7 +266,7 @@ namespace RSSReader.UnitTests
                 };
                 returned_user_post_data.Add(user_post_data);
             }
-            Mock_UserPostDataRepository_GetListWithPosts(returned_user_post_data);
+            _mockUOW.UserPostDataRepo.SetGetListWithPosts(returned_user_post_data);
 
             //ACT
             var result = await _blogController.GetPosts(_blog.Id, page);
@@ -410,7 +296,7 @@ namespace RSSReader.UnitTests
         public async Task GetPosts_CantFindUser_ErrUnathorized()
         {
             //ARRANGE
-            Mock_UserRepository_Get(null);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, null);
 
             //ACT
             var result = await _blogController.GetPosts(_blog.Id, 0);
@@ -423,8 +309,8 @@ namespace RSSReader.UnitTests
         public async Task GetPosts_CantFindBlog_ErrEntityNotExists()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_BlogRepository_Get(null);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.BlogRepo.SetGetByID(_blog.Id, null);
 
             //ACT
             var result = await _blogController.GetPosts(_blog.Id, 0);
@@ -441,11 +327,11 @@ namespace RSSReader.UnitTests
         public async Task UpdateUserPostData_HappyPathUpdateReaded_StatusOk()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_BlogRepository_Get(_blog);
-            Mock_PostRepository_Get(_post);
-            Mock_UserPostDataRepository_GetWithPost(_userPostData);
-            Mock_ReaderRepository_SaveAllAsync(true);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.BlogRepo.SetGetByID(_blog.Id, _blog);
+            _mockUOW.PostRepo.SetGetByID(_post.Id, _post);
+            _mockUOW.UserPostDataRepo.SetGetWithPost(_userPostData);
+            _mockUOW.ReaderRepo.SetSaveAllAsync(true);
 
             _userPostData.Readed = false;
             _userPostData.Post = _post;
@@ -467,18 +353,18 @@ namespace RSSReader.UnitTests
             Assert.That(_userPostData.Readed, Is.EqualTo(true));
             Assert.That(result_obj.Readed, Is.EqualTo(true));
             Assert.That(result_obj.Name, Is.EqualTo(_post.Name));
-            _readerRepo.Verify(x => x.SaveAllAsync());
+            _mockUOW.ReaderRepo.Verify(x => x.SaveAllAsync());
         }
 
         [Test]
         public async Task UpdateUserPostData_SameValueOnReadFlag_ErrNothingToUpdateInEntity()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_BlogRepository_Get(_blog);
-            Mock_PostRepository_Get(_post);
-            Mock_UserPostDataRepository_GetWithPost(_userPostData);
-            Mock_ReaderRepository_SaveAllAsync(true);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.BlogRepo.SetGetByID(_blog.Id, _blog);
+            _mockUOW.PostRepo.SetGetByID(_post.Id, _post);
+            _mockUOW.UserPostDataRepo.SetGetWithPost(_userPostData);
+            _mockUOW.ReaderRepo.SetSaveAllAsync(true);
 
             _userPostData.Readed = true;
             _userPostData.Post = _post;
@@ -498,11 +384,11 @@ namespace RSSReader.UnitTests
         public async Task UpdateUserPostData_HappyPathUpdateErrNothingToUpdateInEntity_StatusOk()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_BlogRepository_Get(_blog);
-            Mock_PostRepository_Get(_post);
-            Mock_UserPostDataRepository_GetWithPost(_userPostData);
-            Mock_ReaderRepository_SaveAllAsync(true);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.BlogRepo.SetGetByID(_blog.Id, _blog);
+            _mockUOW.PostRepo.SetGetByID(_post.Id, _post);
+            _mockUOW.UserPostDataRepo.SetGetWithPost(_userPostData);
+            _mockUOW.ReaderRepo.SetSaveAllAsync(true);
 
             _userPostData.Favourite = false;
             _userPostData.Post = _post;
@@ -524,18 +410,18 @@ namespace RSSReader.UnitTests
             Assert.That(_userPostData.Favourite, Is.EqualTo(true));
             Assert.That(result_obj.Favourite, Is.EqualTo(true));
             Assert.That(result_obj.Name, Is.EqualTo(_post.Name));
-            _readerRepo.Verify(x => x.SaveAllAsync());
+            _mockUOW.ReaderRepo.Verify(x => x.SaveAllAsync());
         }
 
         [Test]
         public async Task UpdateUserPostData_SameValueOnFavouriteFlag_ErrNothingToUpdateInEntity()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_BlogRepository_Get(_blog);
-            Mock_PostRepository_Get(_post);
-            Mock_UserPostDataRepository_GetWithPost(_userPostData);
-            Mock_ReaderRepository_SaveAllAsync(true);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.BlogRepo.SetGetByID(_blog.Id, _blog);
+            _mockUOW.PostRepo.SetGetByID(_post.Id, _post);
+            _mockUOW.UserPostDataRepo.SetGetWithPost(_userPostData);
+            _mockUOW.ReaderRepo.SetSaveAllAsync(true);
 
             _userPostData.Favourite = true;
             _userPostData.Post = _post;
@@ -555,7 +441,7 @@ namespace RSSReader.UnitTests
         public async Task UpdateUserPostData_CantFindBlog_ErrUnauhtorized()
         {
             //ARRANGE
-            Mock_UserRepository_Get(null);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, null);
             UpdateUserPostDataDto data = new UpdateUserPostDataDto();
 
             //ACT
@@ -569,8 +455,8 @@ namespace RSSReader.UnitTests
         public async Task UpdateUserPostData_CantFindPost_ErrEntityNotExists()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_BlogRepository_Get(null);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.BlogRepo.SetGetByID(_blog.Id, null);
             UpdateUserPostDataDto data = new UpdateUserPostDataDto();
 
             //ACT
@@ -584,9 +470,10 @@ namespace RSSReader.UnitTests
         public async Task UpdateUserPostData_CantFindUserPost_ErrEntityNotExists()
         {
             //ARRANGE
-            Mock_UserRepository_Get(_user);
-            Mock_BlogRepository_Get(_blog);
-            Mock_PostRepository_Get(null);
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.BlogRepo.SetGetByID(_blog.Id, _blog);
+            _mockUOW.PostRepo.SetGetByID(_post.Id, null);
+
             UpdateUserPostDataDto data = new UpdateUserPostDataDto();
 
             //ACT

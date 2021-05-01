@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 import { subscriptionsSlice, articlesSlice, authSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
-import * as blogApi from '../api/blogApi'
-import ArticleCard from './AppHome/ArticleCard'
+import * as blogApi from '../../api/blogApi'
+import ArticleCard from '../Article/ArticleCard'
 import { layoutSlice } from 'store/slices'
 
 export interface SingleBlogProps {}

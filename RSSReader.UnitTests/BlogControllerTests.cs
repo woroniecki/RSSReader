@@ -485,8 +485,5 @@ namespace RSSReader.UnitTests
 
         #endregion
 
-        #region MarkFavourite
-
-        #endregion
-    }
+        }
 }

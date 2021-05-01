@@ -1,8 +1,8 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
-import { AddSub } from './AppHome/AddSub'
-import { BlogCard } from './AppHome/BlogCard'
+import { AddSub } from './Blog/AddSub'
+import { BlogCard } from './Blog/BlogCard'
 import { getSubscribtionsList } from '../api/blogApi'
 import { authSlice, subscriptionsSlice } from 'store/slices'
 import { subscriptionsAdapter } from 'store/slices/subscriptionsSlice'
@@ -15,6 +15,7 @@ export const AppHome: React.FC<AppHomeProps> = props => {
   const { push } = useHistory()
   const { token } = useSelector(authSlice.stateSelector)
   const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
+  const { groupId } = useParams<{ groupId: string }>()
 
   const fetchList = async () => {
     const promise = await dispatch(subscriptionsSlice.getList())
@@ -30,16 +31,21 @@ export const AppHome: React.FC<AppHomeProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token])
 
-  const renderBlogList = () =>
-    subscriptionsList.map(el => (
-      <BlogCard
-        key={el.id}
-        id={el.id}
-        title={el.blog.name}
-        description={el.blog.description}
-        imageUrl={el.blog.imageUrl}
-      />
-    ))
+  const renderBlogList = () => {
+    const noGroupId = parseInt(groupId)
+
+    return subscriptionsList
+      .filter(x => Number.isNaN(noGroupId) || x.groupId == noGroupId)
+      .map(el => (
+        <BlogCard
+          key={el.id}
+          id={el.id}
+          title={el.blog.name}
+          description={el.blog.description}
+          imageUrl={el.blog.imageUrl}
+        />
+      ))
+  }
 
   return (
     <div style={{ marginTop: 15 }} className="container">

@@ -5,7 +5,11 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit'
 import * as blogApi from '../../api/blogApi'
-import { Subscription, AddSubscriptionRequest } from '../../api/api.types'
+import {
+  Subscription,
+  AddSubscriptionRequest,
+  PatchSubGroupRequest,
+} from '../../api/api.types'
 import { RootState } from 'store/rootReducer'
 const SUBSCRIPTIONS = 'subscriptions'
 
@@ -64,6 +68,26 @@ export const putUnsubscribeBlog = createAsyncThunk<
   }
 })
 
+export const patchGroup = createAsyncThunk<
+  // Return type of the payload creator
+  Subscription,
+  // First argument to the payload creator
+  PatchSubGroupRequest,
+  {
+    rejectValue: string
+  }
+>(`${SUBSCRIPTIONS}/patchGroup`, async (params, { rejectWithValue }) => {
+  try {
+    const res = await blogApi.patchSubscriptionGroup(
+      params.subId,
+      params.groupId
+    )
+    return res
+  } catch (err) {
+    throw err.data
+  }
+})
+
 const subscriptionsSlice = createSlice({
   name: 'subscriptions',
   initialState: subscriptionsAdapter.getInitialState(),
@@ -81,6 +105,9 @@ const subscriptionsSlice = createSlice({
       })
       .addCase(putUnsubscribeBlog.fulfilled, (state, { payload }) => {
         subscriptionsAdapter.removeOne(state, payload.id)
+      })
+      .addCase(patchGroup.fulfilled, (state, { payload }) => {
+        state.entities[payload.id].groupId = payload.groupId
       })
   },
 })

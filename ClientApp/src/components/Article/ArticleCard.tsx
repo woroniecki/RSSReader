@@ -8,7 +8,7 @@ import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { faBook } from '@fortawesome/free-solid-svg-icons'
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons'
 import { articlesSlice } from 'store/slices'
-import ArticlePatchButtons from '../ArticlesComp/ArticlePatchButtons'
+import ArticlePatchButtons from './ArticlePatchButtons'
 
 export interface ArticleCardProps {
   id: number

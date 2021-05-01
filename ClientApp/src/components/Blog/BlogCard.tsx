@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 
+import { BlogGroup } from './BlogGroup'
+
 export interface BlogCardProps {
   title: string
   description: string
@@ -41,6 +43,7 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
   }
 
   function getUnreadedAmount() {
+    return
     updateArticlesList()
 
     const amount = articlesList.filter(
@@ -55,6 +58,12 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
         <b>{amount}</b>
       </React.Fragment>
     )
+  }
+
+  function getGroupId() {
+    const sub = subscriptionsList.find(el => el.id == props.id)
+
+    return sub != null ? sub.groupId : -1
   }
 
   const no_blog_img_url =
@@ -81,6 +90,7 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
                 >
                   Read
                 </Button>
+                <BlogGroup subId={props.id} activeGroupId={getGroupId()} />
               </Card.Body>
               <div className="img-square-wrapper">
                 {getUnreadedAmount()}

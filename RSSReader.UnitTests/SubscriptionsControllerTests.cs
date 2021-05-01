@@ -34,6 +34,7 @@ namespace RSSReader.UnitTests
         private ApiUser _user;
         private Blog _blog;
         private Subscription _subscription;
+        private Group _group;
         private MockUOW _mockUOW;
 
         [SetUp]
@@ -72,6 +73,7 @@ namespace RSSReader.UnitTests
                 Name = "https://blogs.microsoft.com/feed/"
             };
             _subscription = new Subscription(_user, _blog);
+            _group = new Group() { Id = 1, Name = "name", User = _user };
 
             _mockUOW = new MockUOW();
             _mockUOW.ReaderRepo.SetSaveAllAsync(true);
@@ -80,7 +82,8 @@ namespace RSSReader.UnitTests
             _subscriptionController = new SubscriptionController(
                 _mockUOW.Object,
                 _feedService.Object,
-                _httpService.Object
+                _httpService.Object,
+                _mapper
                 );
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
@@ -304,7 +307,108 @@ namespace RSSReader.UnitTests
             Assert.That(result, Is.EqualTo(ErrEntityNotExists));
         }
 
-        
+
+
+        #endregion
+
+        #region SetGroup
+
+        [Test]
+        public async Task SetGroup_HappyPath_UpdatedSubscription()
+        {
+            //ARRANGE
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _subscription.User = _user;
+            _mockUOW.SubscriptionRepo.SetGetByIdWithUserAndGroup(_subscription.Id, _subscription);
+            _mockUOW.GroupRepo.SetGetByID(_group.Id, _group);
+
+            //ACT
+            var result = await _subscriptionController.SetGroup(_subscription.Id, _group.Id);
+
+            //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
+            Assert.That(result.Message, Is.EqualTo(MsgUpdated));
+            var result_obj = result.Result as SubscriptionForReturnDto;
+            Assert.That(_subscription.Group, Is.EqualTo(_group));
+            Assert.That(result_obj.GroupId, Is.EqualTo(_group.Id));
+        }
+
+        [Test]
+        public async Task SetGroup_MinusOneParam_SetGroupToNull()
+        {
+            //ARRANGE
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _subscription.User = _user;
+            _mockUOW.SubscriptionRepo.SetGetByIdWithUserAndGroup(_subscription.Id, _subscription);
+            _subscription.Group = _group;
+
+            //ACT
+            var result = await _subscriptionController.SetGroup(_subscription.Id, -1);
+
+            //ASSERT
+            Assert.That(result.StatusCode, Is.EqualTo(Status200OK));
+            Assert.That(result.Message, Is.EqualTo(MsgUpdated));
+            var result_obj = result.Result as SubscriptionForReturnDto;
+            Assert.IsNull(_subscription.Group);
+            Assert.That(result_obj.GroupId, Is.EqualTo(-1));
+        }
+
+        [Test]
+        public async Task SetGroup_CantFindTargetGroup_ErrEntityNotExists()
+        {
+            //ARRANGE
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.SubscriptionRepo.SetGetByIdWithUserAndGroup(_subscription.Id, _subscription);
+            _mockUOW.GroupRepo.SetGetByID(_group.Id, null);
+
+            //ACT
+            var result = await _subscriptionController.SetGroup(_subscription.Id, _group.Id);
+
+            //ASSERT
+            Assert.That(result, Is.EqualTo(ErrEntityNotExists));
+        }
+
+        [Test]
+        public async Task SetGroup_SubBelongsToOtherUser_Unauthorized()
+        {
+            //ARRANGE
+            _subscription.User = new ApiUser() { Id = "11111" };
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.SubscriptionRepo.SetGetByIdWithUserAndGroup(_subscription.Id, _subscription);
+
+            //ACT
+            var result = await _subscriptionController.SetGroup(_subscription.Id, _group.Id);
+
+            //ASSERT
+            Assert.That(result, Is.EqualTo(ErrUnauhtorized));
+        }
+
+        [Test]
+        public async Task SetGroup_CantFindSub_ErrEntityNotExists()
+        {
+            //ARRANGE
+            _mockUOW.UserRepo.SetGetByID(_user.Id, _user);
+            _mockUOW.SubscriptionRepo.SetGetByIdWithUserAndGroup(_subscription.Id, null);
+
+            //ACT
+            var result = await _subscriptionController.SetGroup(_subscription.Id, _group.Id);
+
+            //ASSERT
+            Assert.That(result, Is.EqualTo(ErrEntityNotExists));
+        }
+
+        [Test]
+        public async Task SetGroup_CantFindUser_Unauthorized()
+        {
+            //ARRANGE
+            _mockUOW.UserRepo.SetGetByID(_user.Id, null);
+
+            //ACT
+            var result = await _subscriptionController.SetGroup(_subscription.Id, _group.Id);
+
+            //ASSERT
+            Assert.That(result, Is.EqualTo(ErrUnauhtorized));
+        }
 
         #endregion
     }

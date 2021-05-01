@@ -16,6 +16,7 @@ using static RSSReader.Data.Repositories.SubscriptionRepository;
 using RSSReader.Data;
 using System.Collections.Generic;
 using Microsoft.Toolkit.Parsers.Rss;
+using AutoMapper;
 
 namespace RSSReader.Controllers
 {
@@ -27,28 +28,34 @@ namespace RSSReader.Controllers
         private readonly IUnitOfWork _UOW;
         private readonly IFeedService _feedService;
         private readonly IHttpService _httpService;
+        private readonly IMapper _mapper;
 
         public SubscriptionController(
             IUnitOfWork unitOfWork,
             IFeedService feedService,
-            IHttpService httpService)
+            IHttpService httpService,
+            IMapper mapper)
         {
             _UOW = unitOfWork;
             _feedService = feedService;
             _httpService = httpService;
+            _mapper = mapper;
         }
 
         [HttpGet("list")]
         public async Task<ApiResponse> GetList()
         {
-            ApiUser user = await _UOW.UserRepo.GetByID(this.GetCurUserId());
+            ApiUser user = await _UOW.UserRepo.GetWithSubscriptions(x => x.Id == this.GetCurUserId());
             if (user == null)
                 return ErrUnauhtorized;
 
             //TODO async and move to repo, needs tests
             var subs = user.Subscriptions.Where(x => x.Active);
 
-            return new ApiResponse(MsgSucceed, subs, Status200OK);
+            IEnumerable<SubscriptionForReturnDto> subs_to_return =
+                _mapper.Map<IEnumerable<Subscription>, IEnumerable<SubscriptionForReturnDto>>(subs);
+
+            return new ApiResponse(MsgSucceed, subs_to_return, Status200OK);
         }
 
         [HttpPost("subscribe")]
@@ -130,6 +137,41 @@ namespace RSSReader.Controllers
                 return ErrRequestFailed;
 
             return new ApiResponse(MsgSucceed, sub, Status200OK);
+        }
+
+        [HttpPatch("{subid}/set_group/{groupid}")]
+        public async Task<ApiResponse> SetGroup(int subid, int groupid)
+        {
+            ApiUser user = await _UOW.UserRepo.GetByID(this.GetCurUserId());
+            if (user == null)
+                return ErrUnauhtorized;
+
+            Subscription sub = await _UOW.SubscriptionRepo.GetByIdWithUserAndGroup(subid);
+            if (sub == null)
+                return ErrEntityNotExists;
+
+            if (sub.User.Id != user.Id)
+                return ErrUnauhtorized;
+
+            Group group = null;
+
+            //If -1 set group to none
+            if (groupid != -1)
+            {
+                group = await _UOW.GroupRepo.GetByID(groupid);
+                if (group == null)
+                    return ErrEntityNotExists;
+            }
+
+            sub.Group = group;
+
+            if (!await _UOW.ReaderRepo.SaveAllAsync())
+                return ErrRequestFailed;
+
+            SubscriptionForReturnDto sub_to_return =
+                _mapper.Map<Subscription, SubscriptionForReturnDto>(sub);
+
+            return new ApiResponse(MsgUpdated, sub_to_return, Status200OK);
         }
     }
 }

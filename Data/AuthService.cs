@@ -21,12 +21,12 @@ namespace RSSReader.Data
     {
         private readonly IConfiguration _config;
         private readonly DataContext _context;
-        private readonly Repositories.IReaderRepository _readerRepo;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AuthService(IConfiguration config, Repositories.IReaderRepository readerRepo)
+        public AuthService(IConfiguration config, IUnitOfWork unitOfWork)
         {
             this._config = config;
-            this._readerRepo = readerRepo;
+            this._unitOfWork = unitOfWork;
         }
         public string CreateAuthToken(string id, string name, out DateTime expiresTime)
         {
@@ -70,7 +70,7 @@ namespace RSSReader.Data
 
                 user.RefreshTokens.Add(refreshToken);
                 
-                if (await _readerRepo.SaveAllAsync())
+                if (await _unitOfWork.ReaderRepo.SaveAllAsync())
                     return refreshToken;
             }
             return null;

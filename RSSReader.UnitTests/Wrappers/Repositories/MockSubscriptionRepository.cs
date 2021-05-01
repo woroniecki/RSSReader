@@ -16,5 +16,11 @@ namespace RSSReader.UnitTests.Wrappers.Repositories
             Setup(x => x.GetByUserAndBlog(user, blog))
                 .Returns(Task.FromResult(returned));
         }
+        
+        public void SetGetByIdWithUserAndGroup(int id, Subscription returned)
+        {
+            Setup(x => x.GetByIdWithUserAndGroup(id))
+                .Returns(Task.FromResult(returned));
+        }
     }
 }

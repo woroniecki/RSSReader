@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { layoutSlice } from 'store/slices'
 import * as Yup from 'yup'
-import { register } from '../api/authApi'
+import { register } from '../../api/authApi'
 import { applyValidationErrors } from 'utils/utils'
 
 export interface RegisterProps {}

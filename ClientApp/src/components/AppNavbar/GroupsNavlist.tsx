@@ -11,8 +11,9 @@ import { Link, useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { LinkContainer } from 'react-router-bootstrap'
 
-import { authSlice, groupsSlice } from 'store/slices'
+import { authSlice, groupsSlice, subscriptionsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import AddGroupNavForm from './AddGroupNavForm'
 
@@ -23,6 +24,7 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
   const { push } = useHistory()
   const { token } = useSelector(authSlice.stateSelector)
   const groupsList = useSelector(groupsSlice.selectAll)
+  const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
 
   const fetchList = async () => {
     const promise = await dispatch(groupsSlice.getList())
@@ -46,25 +48,42 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
     }
   }, [token])
 
+  const renderNoneGroup = () => {
+    if (subscriptionsList.filter(x => x.groupId == -1).length > 0) {
+      return (
+        <LinkContainer to={'/-1'}>
+          <NavDropdown.Item>None</NavDropdown.Item>
+        </LinkContainer>
+      )
+    }
+  }
+
   const renderGroupsList = () =>
-    groupsList.map(el => (
-      <NavDropdown.Item key={el.id}>
-        {el.name}
-        <Button
-          onClick={() => {
-            removeGroup(el.id)
-          }}
-          variant="primary"
-        >
-          <FontAwesomeIcon icon={faTrashAlt} />
-        </Button>
-      </NavDropdown.Item>
-    ))
+    groupsList
+      .filter(el => el.id != -1)
+      .map(el => (
+        <LinkContainer to={'/' + el.id.toString()} key={el.id}>
+          <NavDropdown.Item>
+            {el.name}
+            <Button
+              onClick={() => {
+                removeGroup(el.id)
+              }}
+              variant="primary"
+            >
+              <FontAwesomeIcon icon={faTrashAlt} />
+            </Button>
+          </NavDropdown.Item>
+        </LinkContainer>
+      ))
 
   return (
     <Nav>
       <NavDropdown title="Groups" id="collasible-nav-dropdown" alignRight>
-        <NavDropdown.Item href="">All</NavDropdown.Item>
+        <LinkContainer to={'/'}>
+          <NavDropdown.Item>All</NavDropdown.Item>
+        </LinkContainer>
+        {renderNoneGroup()}
         <NavDropdown.Divider />
         {renderGroupsList()}
         <NavDropdown.Divider />

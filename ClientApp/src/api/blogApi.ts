@@ -75,7 +75,11 @@ export const patchPost = async (data: PatchPostRequest) => {
 export const getGroupsList = async () => {
   try {
     const res = await axios.get(`/api/group/list`)
-    return res.data.result as Group[]
+    const group_none: Group = {
+      id: -1,
+      name: 'None',
+    }
+    return [group_none].concat(res.data.result)
   } catch (error) {
     throw error.response
   }
@@ -94,6 +98,23 @@ export const removeGroup = async (id: number) => {
   try {
     const res = await axios.delete(`/api/group/remove/` + id.toString())
     return res.data.result as Group
+  } catch (error) {
+    throw error.response
+  }
+}
+
+export const patchSubscriptionGroup = async (
+  subId: number,
+  newGroupId: number
+) => {
+  try {
+    const res = await axios.patch(
+      `/api/subscription/` +
+        subId.toString() +
+        `/set_group/` +
+        newGroupId.toString()
+    )
+    return res.data.result as Subscription
   } catch (error) {
     throw error.response
   }

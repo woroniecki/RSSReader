@@ -24,6 +24,11 @@ namespace RSSReader.Helpers
             CreateMap<Post, PostDataForReturnDto>();
             CreateMap<Group, GroupForReturnDto>();
             CreateMap<GroupAddDto, Group>();
+            CreateMap<Subscription, SubscriptionForReturnDto>()
+                .ForMember(
+                    dest => dest.GroupId,
+                    opt => opt.MapFrom(src => src.Group != null ? src.Group.Id : -1)
+                    );
         }
     }
 }

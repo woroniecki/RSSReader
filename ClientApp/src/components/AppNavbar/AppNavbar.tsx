@@ -1,7 +1,7 @@
 import React from 'react'
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { Link, useHistory } from 'react-router-dom'
-import UserNavbar from './AppNavbar/UserNavbar'
+import UserNavbar from './UserNavbar'
 
 export interface AppNavbarProps {}
 

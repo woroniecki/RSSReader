@@ -20,10 +20,19 @@ namespace RSSReader.Data.Repositories
         {
             return await _dbSet.FirstOrDefaultAsync(x => x.User == user && x.Blog == blog);
         }
+
+        public async Task<Subscription> GetByIdWithUserAndGroup(int id)
+        {
+            return await _dbSet
+                .Include(x => x.User)
+                .Include(x => x.Group)
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 
     public interface ISubscriptionRepository : IBaseRepository<Subscription>
     {
         Task<Subscription> GetByUserAndBlog(ApiUser user, Blog blog);
+        Task<Subscription> GetByIdWithUserAndGroup(int id);
     }
 }

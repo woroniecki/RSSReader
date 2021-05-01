@@ -37,6 +37,7 @@ export interface Subscription {
   firstSubscribeDate: string
   lastSubscribeDate: string
   lastUnsubscribeDate: string
+  groupId: number
 }
 
 export interface SubscriptionsListResponse {
@@ -80,4 +81,9 @@ export interface Group {
 
 export interface AddGroupRequest {
   name: string
+}
+
+export interface PatchSubGroupRequest {
+  subId: number
+  groupId: number
 }

@@ -6,7 +6,7 @@ import { articlesSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 import { Button } from 'react-bootstrap'
 import { authSlice } from 'store/slices'
-import ArticlePatchButtons from './ArticlesComp/ArticlePatchButtons'
+import ArticlePatchButtons from './ArticlePatchButtons'
 
 export interface SingleArticleProps {}
 

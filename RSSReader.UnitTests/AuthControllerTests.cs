@@ -54,18 +54,15 @@ namespace RSSReader.UnitTests
             configuration.Setup(x => x.GetSection("AppSettings:Token"))
                 .Returns(configSectionMock.Object);
 
-            _readerRepo = new Mock<Data.Repositories.IReaderRepository>();
-            Mock_ReaderRepository_SaveAllAsync(true);
+            _mockUOW = new MockUOW();
 
-            _authservice = new AuthService(configuration.Object, _readerRepo.Object);
+            _authservice = new AuthService(configuration.Object, _mockUOW.Object);
 
             var mockMapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new AutoMapperProfiles());
             });
             _mapper = mockMapper.CreateMapper();
-
-            _mockUOW = new MockUOW();
 
             //Dto
             _registerModel = new Dtos.UserForRegisterDto()
@@ -227,6 +224,7 @@ namespace RSSReader.UnitTests
             Mock_UserManager_CheckPasswordAsync(
                 _userToLogin, _loginUsernameModel.Password, true
                 );
+            _mockUOW.ReaderRepo.SetSaveAllAsync(true);
 
             //ACT
             var result = await _authController.Login(_loginUsernameModel);
@@ -245,6 +243,7 @@ namespace RSSReader.UnitTests
             Mock_UserManager_CheckPasswordAsync(
                 _userToLogin, _loginUsernameModel.Password, true
                 );
+            _mockUOW.ReaderRepo.SetSaveAllAsync(true);
 
             //ACT
             var result = await _authController.Login(_loginEmailModel);
@@ -399,6 +398,7 @@ namespace RSSReader.UnitTests
                 Expires = DateTime.UtcNow.AddMinutes(10)
             };
             _userToLogin.RefreshTokens = Enumerable.Repeat(token, 1).ToList();
+            _mockUOW.ReaderRepo.SetSaveAllAsync(true);
 
             //ACT
             var result = await _authController.Refresh(_dataForRefreshTokenDto);

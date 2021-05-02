@@ -48,6 +48,14 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
     }
   }, [token])
 
+  const renderAllGroup = () => {
+    return (
+      <LinkContainer exact to={'/'}>
+        <NavDropdown.Item>All</NavDropdown.Item>
+      </LinkContainer>
+    )
+  }
+
   const renderNoneGroup = () => {
     if (subscriptionsList.filter(x => x.groupId == -1).length > 0) {
       return (
@@ -80,13 +88,9 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
   return (
     <Nav>
       <NavDropdown title="Groups" id="collasible-nav-dropdown" alignRight>
-        <LinkContainer to={'/'}>
-          <NavDropdown.Item>All</NavDropdown.Item>
-        </LinkContainer>
+        {renderAllGroup()}
         {renderNoneGroup()}
-        <NavDropdown.Divider />
         {renderGroupsList()}
-        <NavDropdown.Divider />
         <AddGroupNavForm />
       </NavDropdown>
     </Nav>

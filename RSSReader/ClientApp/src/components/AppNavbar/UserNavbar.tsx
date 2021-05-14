@@ -10,6 +10,7 @@ import {
 import { Link, useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { authSlice } from 'store/slices'
+import { subscriptionsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import GroupsNavlist from './GroupsNavlist'
 
@@ -24,6 +25,7 @@ export const UserNavbar: React.FC<UserNavbarProps> = props => {
 
   function OnLogout() {
     dispatch(authSlice.actions.logout())
+    dispatch(subscriptionsSlice.actions.clear())
   }
 
   if (!userName) {

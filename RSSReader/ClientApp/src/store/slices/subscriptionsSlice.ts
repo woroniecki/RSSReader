@@ -91,7 +91,11 @@ export const patchGroup = createAsyncThunk<
 const subscriptionsSlice = createSlice({
   name: 'subscriptions',
   initialState: subscriptionsAdapter.getInitialState(),
-  reducers: {},
+  reducers: {
+    clear: state => {
+      subscriptionsAdapter.removeAll(state)
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(getList.fulfilled, (state, { payload }) => {

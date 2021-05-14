@@ -1,18 +1,14 @@
-﻿using AutoMapper;
-using AutoWrapper.Wrappers;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using RSSReader.Data;
-using RSSReader.Dtos;
-using RSSReader.Models;
-using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using AutoWrapper.Wrappers;
+using Dtos.Auth.Login;
+using Dtos.Auth.Refresh;
+using Dtos.Auth.Register;
+using Microsoft.AspNetCore.Mvc;
+using RSSReader.Helpers;
+using ServiceLayer.AuthServices;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
-using static RSSReader.Data.Repositories.UserRepository;
-using RSSReader.Data.Repositories;
-using RSSReader.Helpers;
 
 namespace RSSReader.Controllers
 {
@@ -20,131 +16,55 @@ namespace RSSReader.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        private UserManager<ApiUser> _userManager;
-        private readonly IUnitOfWork _UOW;
-        private readonly IAuthService _authService;
-        private readonly IMapper _mapper;
-
-        //private readonly IEmailSender _emailSender; UnComment if you want to add Email Verification also.
-
-        public AuthController(
-            UserManager<ApiUser> userManager,
-            IUnitOfWork unitOfWork,
-            IAuthService authService, 
-            IMapper mapper)
-        {
-            _userManager = userManager;
-            _UOW = unitOfWork;
-            _authService = authService;
-            _mapper = mapper;
-        }
-
         [HttpPost]
         [Route("register")]
-        public async Task<ApiResponse> Register([FromBody] UserForRegisterDto model)
+        public async Task<ApiResponse> Register([FromBody] RegisterNewUserRequestDto model, [FromServices] IAuthRegisterService service)
         {
-            if (await _UOW.UserRepo.GetByUsername(model.Username) != null)
-                ModelState.AddModelError(nameof(UserForRegisterDto.Username), MsgErrUsernameTaken);
+            var response = await service.RegisterNewUser(model);
 
-            if (await _UOW.UserRepo.GetByEmail(model.Email) != null)
-                ModelState.AddModelError(nameof(UserForRegisterDto.Email), MsgErrEmailTaken);
+            if (service.Errors.Any())
+                return new ApiResponse
+                    (
+                        "Error",
+                        ModelErrors.ConvertResponse(service.Errors),
+                        Status400BadRequest
+                    );
 
-            if (!ModelState.IsValid)
-                throw new ApiProblemDetailsException(ModelState);
-
-            var new_user = new ApiUser
-            {
-                UserName = model.Username,
-                Email = model.Email,
-                EmailConfirmed = true,
-            };
-
-            var result = await _userManager.CreateAsync(new_user, model.Password);
-            var userToReturn = _mapper.Map<UserForReturnDto>(new_user);
-
-            if (result.Succeeded)
-                return new ApiResponse(MsgCreatedRecord, userToReturn, Status201Created);
-
-            return ErrRequestFailed;
+            return new ApiResponse(MsgCreatedRecord, response, Status201Created);
         }
 
         [HttpPost]
         [Route("login")]
-        public async Task<ApiResponse> Login([FromBody] UserForLoginDto model)
+        public async Task<ApiResponse> Login([FromBody] LoginRequestDto model, [FromServices] IAuthLoginService service)
         {
-            var user = await _UOW.UserRepo
-                .GetWithRefreshTokens(x => x.UserName == model.Username);
+            var response = await service.Login(model);
 
-            if (user == null)
-                user = await _UOW.UserRepo
-                    .GetWithRefreshTokens(x => x.Email == model.Username);
+            if (service.Errors.Any())
+                return new ApiResponse
+                    (
+                        "Error",
+                        ModelErrors.ConvertResponse(service.Errors),
+                        Status400BadRequest
+                    );
 
-            if (user == null)
-                return ErrWrongCredentials;
-
-            if (!await _userManager.CheckPasswordAsync(user, model.Password))
-                return ErrWrongCredentials;
-
-            return await GenerateTokens(user);
+            return new ApiResponse(MsgSucceed, response, Status200OK);
         }
 
         [HttpPost]
         [Route("refresh")]
-        public async Task<ApiResponse> Refresh([FromBody] DataForRefreshTokenDto refreshTokenDto)
+        public async Task<ApiResponse> Refresh([FromBody] TokensRequestDto data, [FromServices] IAuthRefreshTokensService service)
         {
-            string user_id = _authService.GetUserIdFromToken(refreshTokenDto.AuthToken);
-            if (string.IsNullOrEmpty(user_id))
-                return ErrUnauhtorized;
+            var response = await service.RefreshTokens(data);
 
-            var user = await _UOW.UserRepo
-                    .GetWithRefreshTokens(x => x.Id == user_id);
+            if (service.Errors.Any())
+                return new ApiResponse
+                    (
+                        "Error",
+                        ModelErrors.ConvertResponse(service.Errors),
+                        Status400BadRequest
+                    );
 
-            if (user == null)
-                return ErrUnauhtorized;
-
-            var refresh_token = user.RefreshTokens
-                .Where(x => x.Token == refreshTokenDto.RefreshToken)
-                .FirstOrDefault();
-
-            if (refresh_token == null)
-                return ErrEntityNotExists;
-
-            if (refresh_token.AuthToken != refreshTokenDto.AuthToken)
-                return ErrUnauhtorized;
-
-            if (!refresh_token.IsActive)
-                return ErrBadRequest;
-
-            refresh_token.Revoked = DateTime.UtcNow;
-            return await GenerateTokens(user);
-        }
-
-        private async Task<ApiResponse> GenerateTokens(ApiUser user)
-        {
-            var token = _authService.CreateAuthToken(user.Id, user.UserName,
-                            out DateTime expiresTime);
-
-            var refreshToken = await _authService.CreateRefreshToken(user, token);
-            if (refreshToken == null)
-                return ErrRequestFailed;
-
-            var refreshTokenToReturn = _mapper.Map<TokenForReturnDto>(refreshToken);
-            var authTokenToReturn = new TokenForReturnDto()
-            {
-                Token = token,
-                Expires = expiresTime.From1970()
-            };
-            var userToReturn = _mapper.Map<UserForReturnDto>(user);
-
-            return new ApiResponse(
-                MsgSucceed,
-                new
-                {
-                    authToken = authTokenToReturn,
-                    refreshToken = refreshTokenToReturn,
-                    user = userToReturn
-                },
-                Status200OK);
+            return new ApiResponse(MsgSucceed, response, Status200OK);
         }
     }
 }

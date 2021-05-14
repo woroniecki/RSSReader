@@ -1,7 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.Toolkit.Parsers.Rss;
-using RSSReader.Dtos;
-using RSSReader.Models;
+
+using Dtos.Auth;
+using DataLayer.Models;
+using Dtos.Groups;
+using Dtos.Subscriptions;
+using Dtos.Blogs;
+using Dtos.Posts;
 
 namespace RSSReader.Helpers
 {
@@ -9,10 +14,16 @@ namespace RSSReader.Helpers
     {
         public AutoMapperProfiles()
         {
-            CreateMap<ApiUser, UserForReturnDto>();
-            CreateMap<RefreshToken, TokenForReturnDto>()
-                .ForMember(dest => dest.Expires, opt => 
-                opt.MapFrom(src => src.Expires.From1970()));
+            CreateMap<ApiUser, UserResponseDto>();
+            CreateMap<Group, GroupResponseDto>();
+            CreateMap<AddGroupRequestDto, Group>();
+            CreateMap<Blog, BlogResponseDto>();
+            CreateMap<Subscription, SubscriptionResponseDto>()
+                .ForMember(
+                    dest => dest.GroupId,
+                    opt => opt.MapFrom(src => src.Group != null ? src.Group.Id : (int?)null)
+                    );
+            CreateMap<Post, PostResponseDto>();
             CreateMap<RssSchema, Post>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Title))
                 .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.FeedUrl))
@@ -21,14 +32,6 @@ namespace RSSReader.Helpers
                 .ForMember(dest => dest.Summary, opt => opt.MapFrom(src => src.Summary))
                 .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
                 .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => src.PublishDate));
-            CreateMap<Post, PostDataForReturnDto>();
-            CreateMap<Group, GroupForReturnDto>();
-            CreateMap<GroupAddDto, Group>();
-            CreateMap<Subscription, SubscriptionForReturnDto>()
-                .ForMember(
-                    dest => dest.GroupId,
-                    opt => opt.MapFrom(src => src.Group != null ? src.Group.Id : -1)
-                    );
         }
     }
 }

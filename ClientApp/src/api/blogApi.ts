@@ -38,7 +38,9 @@ export const putUnsubscribeBlog = async (id: number) => {
 
 export const getPostsList = async (blogId: number) => {
   try {
-    const res = await axios.get(`/api/blog/` + blogId.toString() + `/posts/0`)
+    const res = await axios.get(
+      `/api/blog/` + blogId.toString() + `/post/list/0`
+    )
     return res.data.result as Post[]
   } catch (error) {
     throw error.response

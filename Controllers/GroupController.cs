@@ -1,18 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using AutoWrapper.Wrappers;
-using static Microsoft.AspNetCore.Http.StatusCodes;
-
-using RSSReader.Models;
-using RSSReader.Data.Repositories;
-using static RSSReader.Data.Repositories.UserRepository;
-using static RSSReader.Data.Repositories.GroupRepository;
-using static RSSReader.Data.Response;
+using Dtos.Groups;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RSSReader.Helpers;
-using RSSReader.Dtos;
-using System.Collections.Generic;
-using AutoMapper;
+using ServiceLayer.GroupServices;
+using static Microsoft.AspNetCore.Http.StatusCodes;
+using static RSSReader.Data.Response;
 
 namespace RSSReader.Controllers
 {
@@ -21,68 +16,35 @@ namespace RSSReader.Controllers
     [Route("api/[controller]")]
     public class GroupController : Controller
     {
-        private IUnitOfWork _UOW;
-        private IMapper _mapper;
-
-        public GroupController(
-            IUnitOfWork unitOfWork,
-            IMapper mapper
-            )
-        {
-            _UOW = unitOfWork;
-            _mapper = mapper;
-        }
-
         [HttpGet("list")]
-        public async Task<ApiResponse> GetList()
+        public async Task<ApiResponse> GetList([FromServices] IGroupListService service)
         {
-            ApiUser user = await _UOW.UserRepo.GetByID(this.GetCurUserId());
-            if (user == null)
-                return ErrUnauhtorized;
+            var result = await service.GetList(this.GetCurUserId());
 
-            var all_groups = await _UOW.GroupRepo.GetListByUser(user);
+            if (service.Errors.Any())
+                return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);
 
-            IEnumerable<GroupForReturnDto> groups_dtos =
-                _mapper.Map<IEnumerable<Group>, IEnumerable<GroupForReturnDto>>(all_groups);
-
-            return new ApiResponse(MsgSucceed, groups_dtos, Status200OK);
+            return new ApiResponse(MsgSucceed, result, Status200OK);
         }
 
         [HttpPost("add")]
-        public async Task<ApiResponse> Add([FromBody]GroupAddDto data)
+        public async Task<ApiResponse> Add([FromBody] AddGroupRequestDto data, [FromServices] IGroupAddService service)
         {
-            ApiUser user = await _UOW.UserRepo.GetByID(this.GetCurUserId());
-            if (user == null)
-                return ErrUnauhtorized;
+            var result = await service.AddNewGroup(data, this.GetCurUserId());
 
-            if (string.IsNullOrWhiteSpace(data.Name))
-                return ErrBadRequest;
+            if (service.Errors.Any())
+                return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);
 
-            Group group = _mapper.Map<GroupAddDto, Group>(data);
-            group.User = user;
-
-            if (!await _UOW.GroupRepo.Add(group))
-                return ErrRequestFailed;
-
-            GroupForReturnDto group_return_dto = _mapper.Map<Group, GroupForReturnDto>(group);
-
-            return new ApiResponse(MsgSucceed, group_return_dto, Status201Created);
+            return new ApiResponse(MsgSucceed, result, Status201Created);
         }
 
         [HttpDelete("remove/{id}")]
-        public async Task<ApiResponse> Remove(int id)
+        public async Task<ApiResponse> Remove(int id, [FromServices] IGroupRemoveService service)
         {
-            ApiUser user = await _UOW.UserRepo.GetByID(this.GetCurUserId());
-            if (user == null)
-                return ErrUnauhtorized;
+            await service.Remove(id, this.GetCurUserId());
 
-            Group group = await _UOW.GroupRepo.GetByID(id);
-
-            if (group == null)
-                return ErrEntityNotExists;
-
-            if (!await _UOW.GroupRepo.Remove(group))
-                return ErrRequestFailed;
+            if (service.Errors.Any())
+                return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);
 
             return new ApiResponse(MsgSucceed, null, Status204NoContent);
         }

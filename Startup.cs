@@ -2,21 +2,25 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using RSSReader.Data;
-using RSSReader.Models;
 using System.Text;
 using AutoMapper;
 using AutoWrapper;
 using Microsoft.AspNetCore.Mvc;
 using AutoWrapper.Wrappers;
-using RSSReader.Data.Repositories;
+using System.Reflection;
+using ServiceLayer.AuthServices;
+using NetCore.AutoRegisterDi;
+using LogicLayer.Helpers;
+using DbAccess.Core;
+using RSSReader.Helpers;
+using DataLayer.Code;
+using DataLayer.Models;
 
 namespace RSSReader
 {
@@ -33,7 +37,10 @@ namespace RSSReader
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(options => options
-                .UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                .UseSqlite(
+                    Configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly("DataLayer"))
+                );
             services.AddDefaultIdentity<ApiUser>()
                 .AddEntityFrameworkStores<DataContext>();
 
@@ -70,19 +77,22 @@ namespace RSSReader
 
             services.AddCors();
             
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddHttpContextAccessor();
 
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IFeedService, FeedService>();
-            services.AddScoped<IHttpService, HttpService>();
-            
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IHttpHelperService, HttpHelperService>();
+
+            services.RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(AuthLoginService)))
+                .Where(c => c.Name.EndsWith("Service"))
+                .AsPublicImplementedInterfaces();
+
             services.AddControllers().AddNewtonsoftJson(opt =>
             {
                 opt.SerializerSettings.ReferenceLoopHandling =
                 Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
-            services.AddAutoMapper(typeof(ReaderRepository).Assembly);
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

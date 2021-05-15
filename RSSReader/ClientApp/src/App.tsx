@@ -11,12 +11,15 @@ import AppSpinner from './components/AppSpinner'
 import { useSelector } from 'react-redux'
 import { layoutSlice } from 'store/slices'
 import useRefreshToken from 'components/Auth/useRefreshToken'
+import useResetTokens from 'components/Auth/useResetTokens'
 import SingleBlog from 'components/Blog/SingleBlog'
 import SingleArticle from 'components/Article/SingleArticle'
 
 function App() {
   const { loader } = useSelector(layoutSlice.stateSelector)
   useRefreshToken()
+  useResetTokens()
+
   return (
     <>
       <AppNavbar />

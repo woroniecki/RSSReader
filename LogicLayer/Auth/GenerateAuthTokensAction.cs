@@ -55,13 +55,16 @@ namespace LogicLayer.Auth
             };
         }
 
+        static double AUTH_TOKEN_EXPIRES_TIME_S = new TimeSpan(0, 0, 10, 0).TotalSeconds;
+        static double REFRESH_TOKEN_EXPIRES_TIME_S = AUTH_TOKEN_EXPIRES_TIME_S + new TimeSpan(0, 0, 10, 0).TotalSeconds;
+
         public static string CreateAuthToken(string id, string name, string key, out DateTime expiresTime)
         {
             var creds = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)), 
                 SecurityAlgorithms.HmacSha512Signature);
 
-            expiresTime = DateTime.UtcNow.AddHours(3);
+            expiresTime = DateTime.UtcNow.AddSeconds(AUTH_TOKEN_EXPIRES_TIME_S);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(
@@ -91,7 +94,7 @@ namespace LogicLayer.Auth
                 {
                     Token = Convert.ToBase64String(randomBytes),
                     AuthToken = authToken,
-                    Expires = DateTime.UtcNow.AddMinutes(20),
+                    Expires = DateTime.UtcNow.AddSeconds(REFRESH_TOKEN_EXPIRES_TIME_S),
                     Created = DateTime.UtcNow
                 };
                 

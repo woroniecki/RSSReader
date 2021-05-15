@@ -78,6 +78,7 @@ const authSlice = createSlice({
         setAuthHeader(payload.authToken.token)
         saveTokenDataToStorage(
           payload.authToken.token,
+          payload.authToken.expires,
           payload.refreshToken.token,
           payload.refreshToken.expires
         )
@@ -91,6 +92,7 @@ const authSlice = createSlice({
         setAuthHeader(payload.authToken.token)
         saveTokenDataToStorage(
           payload.authToken.token,
+          payload.authToken.expires,
           payload.refreshToken.token,
           payload.refreshToken.expires
         )

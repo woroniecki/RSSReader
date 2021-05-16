@@ -38,6 +38,7 @@ export interface Subscription {
   lastSubscribeDate: string
   lastUnsubscribeDate: string
   groupId: number
+  unreadedCount: number
 }
 
 export interface SubscriptionsListResponse {

@@ -23,7 +23,7 @@ namespace LogicLayer.Helpers
                 {
                     return await client.GetStringAsync(url);
                 }
-                catch
+                catch (Exception ex)
                 {
                     return null;
                 }

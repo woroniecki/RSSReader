@@ -33,19 +33,41 @@ namespace DbAccess.Repositories
         /// <returns>Return list of actie subscription with included blog and group  related to user</returns>
         public async Task<IEnumerable<Subscription>> GetListByUserId(string userId)
         {
-            var list = await _dbSet
-                .Include(x => x.Blog)
-                .ThenInclude(x => x.Posts)
-                .Include(x => x.Group)
-                .Include(x => x.UserPostDatas)
-                .Where(x => x.UserId == userId && x.Active)
-                .ToListAsync();
+            var query = (from s in _context.Subscriptions
+                                           .Include(x => x.Blog)
+                                           .Include(x => x.Group)
+                         where s.UserId == userId && s.Active
+                         select new
+                         {
+                             Subscription = s,
+                             Posts = s.Blog.Posts
+                                      .OrderByDescending(x => x.PublishDate)
+                                      .Take(10),
+                             UserPostDatas = s.UserPostDatas
+                                              .OrderByDescending(x => x.Post.PublishDate)
+                                              .Take(10)
+                         });
 
-            list.ForEach(x => {
-                x.UnreadedCount = x.Blog.Posts.Count() - x.UserPostDatas.Where(x => x.Readed).Count();
-            });
+            var result = await query.ToListAsync();
 
-            return list;
+            foreach (var data in result)
+            {
+                int unreaded_amount = 0;
+                //Go only thru already readed posts
+                var filtered_user_post_datas = data.UserPostDatas.Where(x => x.Readed);
+
+                foreach (var post in data.Posts)
+                {
+                    //If post weren't readed increment counter
+                    if (filtered_user_post_datas.FirstOrDefault(x => x.Id == post.Id) == null)
+                    {
+                        unreaded_amount++;
+                    }
+                }
+                data.Subscription.UnreadedCount = unreaded_amount;
+            }
+
+            return result.Select(x => x.Subscription);
         }
 
         public async Task<Subscription> GetByIdWithUser(int id)

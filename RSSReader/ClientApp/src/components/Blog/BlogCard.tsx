@@ -43,12 +43,16 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
   }
 
   function getUnreadedAmount() {
-    return
-    updateArticlesList()
+    const sub = subscriptionsList.find(el => el.id == props.id)
 
-    const amount = articlesList.filter(
-      el => el.blogId == props.id && !el.readed
-    ).length
+    if (sub == null) return
+
+    let amount = articlesList.filter(el => el.blogId == props.id && !el.readed)
+      .length
+
+    if (amount <= 0 && sub.unreadedCount != null) {
+      amount = sub.unreadedCount
+    }
 
     if (amount <= 0) return
 

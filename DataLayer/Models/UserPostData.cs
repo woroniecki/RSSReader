@@ -19,6 +19,8 @@ namespace DataLayer.Models
         public DateTime LastDateOpen { get; set; }
         public bool Readed { get; set; }
         public bool Favourite { get; set; }
+        // <-- RELATIONS -->
+        public int PostId { get; set; }
         public Post Post { get; set; }
         public ApiUser User { get; set; }
         public int SubscriptionId { get; set; }

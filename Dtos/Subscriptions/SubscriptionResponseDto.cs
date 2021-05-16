@@ -15,6 +15,7 @@ namespace Dtos.Subscriptions
         public DateTime LastSubscribeDate { get; set; }
         public DateTime LastUnsubscribeDate { get; set; }
         public BlogResponseDto Blog { get; set; }
+        public int? UnreadedCount { get; set; }
         public int? GroupId { get; set; }
     }
 }

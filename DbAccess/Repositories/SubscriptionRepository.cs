@@ -21,6 +21,11 @@ namespace DbAccess.Repositories
             return await _dbSet.FirstOrDefaultAsync(x => x.UserId == userId && x.Blog == blog);
         }
 
+        public async Task<Subscription> GetByUserIdAndBlogId(string userId, int blogId)
+        {
+            return await _dbSet.FirstOrDefaultAsync(x => x.UserId == userId && x.BlogId == blogId);
+        }
+
         /// <summary>
         /// Return list of actie subscription with included blog and group related to user
         /// </summary>
@@ -28,11 +33,19 @@ namespace DbAccess.Repositories
         /// <returns>Return list of actie subscription with included blog and group  related to user</returns>
         public async Task<IEnumerable<Subscription>> GetListByUserId(string userId)
         {
-            return await _dbSet
+            var list = await _dbSet
                 .Include(x => x.Blog)
+                .ThenInclude(x => x.Posts)
                 .Include(x => x.Group)
+                .Include(x => x.UserPostDatas)
                 .Where(x => x.UserId == userId && x.Active)
                 .ToListAsync();
+
+            list.ForEach(x => {
+                x.UnreadedCount = x.Blog.Posts.Count() - x.UserPostDatas.Where(x => x.Readed).Count();
+            });
+
+            return list;
         }
 
         public async Task<Subscription> GetByIdWithUser(int id)
@@ -47,6 +60,7 @@ namespace DbAccess.Repositories
     public interface ISubscriptionRepository : IBaseRepository<Subscription>
     {
         Task<Subscription> GetByUserIdAndBlog(string user, Blog blog);
+        Task<Subscription> GetByUserIdAndBlogId(string userId, int blogId);
         Task<IEnumerable<Subscription>> GetListByUserId(string userId);
         Task<Subscription> GetByIdWithUser(int id);
     }

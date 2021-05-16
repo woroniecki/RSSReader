@@ -32,7 +32,14 @@ namespace LogicLayer.UserPostDatas
             Post post = await _unitOfWork.PostRepo.GetByID(postId);
             if (post == null)
             {
-                AddError("Can't find entity.");
+                AddError("Can't find post entity.");
+                return null;
+            }
+
+            Subscription sub = await _unitOfWork.SubscriptionRepo.GetByUserIdAndBlogId(_userId, post.BlogId);
+            if (sub == null)
+            {
+                AddError("Can't find sub entity.");
                 return null;
             }
 
@@ -42,7 +49,7 @@ namespace LogicLayer.UserPostDatas
 
             if (user_post_data == null)
             {
-                user_post_data = new UserPostData(post, user);
+                user_post_data = new UserPostData(post, user, sub);
                 _unitOfWork.UserPostDataRepo.AddNoSave(user_post_data);
             }
 

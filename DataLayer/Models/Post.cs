@@ -19,6 +19,7 @@ namespace DataLayer.Models
         public string Summary { get; set; }
         public string Content { get; set; }
         public DateTime PublishDate { get; set; }
+        public int BlogId { get; set; }
         public Blog Blog { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataLayer.Code;
@@ -70,6 +71,43 @@ namespace Tests.Services.SubscriptionServices
             Assert.That(result.First().Id, Is.EqualTo(sub0_user0.Id));
             Assert.That(result.First().GroupId, Is.EqualTo(group.Id));
             Assert.That(result.First().Blog.Id, Is.EqualTo(blog0.Id));
+        }
+
+        [Test]
+        public async Task GetListAsync_GetsSubsAndCountUnreaded_ListOfActiveSubs()
+        {
+            //ARRANGE
+            var user = new ApiUser();
+            _context.Add(user);
+
+            var group = new Group();
+            _context.Add(group);
+
+            var blog = new Blog();
+            var post1 = new Post();
+            var post2 = new Post();
+            var post3 = new Post();
+            blog.Posts = new List<Post>();
+            blog.Posts.Add(post1);
+            blog.Posts.Add(post2);
+            blog.Posts.Add(post3);
+            _context.Add(blog);
+
+            var sub = new Subscription() { Active = true, Blog = blog, UserId = user.Id, GroupId = group.Id };
+            _context.Add(sub);
+
+            var userpostdata = new UserPostData(post2, user, sub) { Readed = true };
+            _context.Add(userpostdata);
+
+            _context.SaveChanges();
+
+            var service = new SubscriptionListService(MapperHelper.GetNewInstance(), _unitOfWork);
+
+            //ACT
+            var result = await service.GetListAsync(user.Id);
+
+            //ASSERT
+            Assert.That(result.First().UnreadedCount, Is.EqualTo(2));
         }
     }
 }

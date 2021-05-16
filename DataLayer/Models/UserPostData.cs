@@ -5,9 +5,10 @@ namespace DataLayer.Models
     public class UserPostData
     {
         public UserPostData() { }
-        public UserPostData(Post post, ApiUser user) {
+        public UserPostData(Post post, ApiUser user, Subscription sub) {
             this.Post = post;
             this.User = user;
+            this.Subscription = sub;
             Readed = true;
             Favourite = false;
             FirstDateOpen = DateTime.UtcNow;
@@ -20,5 +21,7 @@ namespace DataLayer.Models
         public bool Favourite { get; set; }
         public Post Post { get; set; }
         public ApiUser User { get; set; }
+        public int SubscriptionId { get; set; }
+        public Subscription Subscription { get; set; }
     }
 }

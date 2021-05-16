@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace DataLayer.Models
@@ -28,5 +30,9 @@ namespace DataLayer.Models
         public Group Group { get; set; }
         public string UserId { get; set; }
         public ApiUser User { get; private set; }
+        public ICollection<UserPostData> UserPostDatas { get; set; }
+        // <-- NOT MAPPED -->
+        [NotMapped]
+        public int? UnreadedCount { get; set; }
     }
 }

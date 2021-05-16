@@ -39,8 +39,14 @@ namespace Tests.Services.PostServices
             var user = new ApiUser() { };
             _context.Add(user);
 
-            var post = new Post() { };
+            var blog = new Blog() { };
+            _context.Add(blog);
+
+            var post = new Post() { Blog = blog };
             _context.Add(post);
+
+            var sub = new Subscription(user.Id, blog);
+            _context.Add(sub);
 
             _context.SaveChanges();
 
@@ -67,10 +73,23 @@ namespace Tests.Services.PostServices
             var user = new ApiUser() { };
             _context.Add(user);
 
-            var post = new Post() { };
+            var blog = new Blog() { };
+            _context.Add(blog);
+
+            var post = new Post() { Blog = blog };
             _context.Add(post);
 
-            var user_post_data = new UserPostData() { User = user, Post = post, Readed = true, Favourite = false };
+            var sub = new Subscription(user.Id, blog);
+            _context.Add(sub);
+
+            var user_post_data = new UserPostData()
+            {
+                User = user,
+                Post = post,
+                Subscription = sub,
+                Readed = true, 
+                Favourite = false 
+            };
             _context.Add(user_post_data);
 
             _context.SaveChanges();
@@ -99,10 +118,22 @@ namespace Tests.Services.PostServices
             var user = new ApiUser() { };
             _context.Add(user);
 
-            var post = new Post() { };
+            var blog = new Blog() { };
+            _context.Add(blog);
+
+            var post = new Post() { Blog = blog };
             _context.Add(post);
 
-            var user_post_data = new UserPostData() { User = user, Post = post, Readed = true, Favourite = true };
+            var sub = new Subscription(user.Id, blog);
+            _context.Add(sub);
+
+            var user_post_data = new UserPostData() { 
+                User = user, 
+                Post = post,
+                Subscription = sub,
+                Readed = true, 
+                Favourite = true 
+            };
             _context.Add(user_post_data);
 
             _context.SaveChanges();
@@ -160,6 +191,33 @@ namespace Tests.Services.PostServices
 
             //ACT
             var result = await service.Update(inData, 0, user.Id);
+
+            //ASSERT
+            Assert.IsNull(result);
+            Assert.That(service.Errors.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task Update_CantFindSub_Null()
+        {
+            //ARRANGE
+            var user = new ApiUser() { };
+            _context.Add(user);
+
+            var blog = new Blog() { };
+            _context.Add(blog);
+
+            var post = new Post() { Blog = blog };
+            _context.Add(post);
+
+            _context.SaveChanges();
+
+            var inData = new UpdateUserPostDataRequestDto();
+
+            var service = new UpdateUserPostDataService(MapperHelper.GetNewInstance(), _unitOfWork);
+
+            //ACT
+            var result = await service.Update(inData, post.Id, user.Id);
 
             //ASSERT
             Assert.IsNull(result);

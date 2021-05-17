@@ -5,7 +5,7 @@ using DataLayer.Code;
 using DataLayer.Models;
 using DbAccess.Core;
 using Dtos.Subscriptions;
-using DbAccess._const;
+using LogicLayer._const;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;

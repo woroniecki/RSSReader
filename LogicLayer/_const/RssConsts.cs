@@ -3,7 +3,7 @@
 using DataLayer.Models;
 using DbAccess.Core;
 
-namespace DbAccess._const
+namespace LogicLayer._const
 {
     public static class RssConsts
     {

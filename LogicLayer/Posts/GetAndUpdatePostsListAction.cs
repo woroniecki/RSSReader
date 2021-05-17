@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using DataLayer.Models;
 using DbAccess.Core;
-using DbAccess._const;
+using LogicLayer._const;
 using LogicLayer._GenericActions;
 
 namespace LogicLayer.Groups

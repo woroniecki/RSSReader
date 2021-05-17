@@ -39,7 +39,10 @@ namespace Tests.Services.SubscriptionServices
             var user = new ApiUser() { };
             _context.Add(user);
 
-            var sub_to_unsubscribe = new Subscription(user.Id, null);
+            var blog = new Blog() { };
+            _context.Add(blog);
+
+            var sub_to_unsubscribe = new Subscription(user.Id, blog);
             _context.Add(sub_to_unsubscribe);
 
             _context.SaveChanges();
@@ -88,7 +91,10 @@ namespace Tests.Services.SubscriptionServices
             _context.Add(user);
             _context.Add(user2);
 
-            var sub_to_unsubscribe = new Subscription(user2.Id, null);
+            var blog = new Blog() { };
+            _context.Add(blog);
+
+            var sub_to_unsubscribe = new Subscription(user2.Id, blog);
             _context.Add(sub_to_unsubscribe);
 
             _context.SaveChanges();

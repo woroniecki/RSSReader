@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using DataLayer.Code;
 using DataLayer.Models;
 using System.Linq;
-using DbAccess._const;
 
 namespace DbAccess.Repositories
 {
@@ -16,7 +15,13 @@ namespace DbAccess.Repositories
         {
         }
 
-        public async Task<Blog> GetByUrl(string url)
+        /// <summary>
+        /// Return blog as notracking with posts up to posts_amount
+        /// </summary>
+        /// <param name="url">url of blog to get</param>
+        /// <param name="posts_amount">posts amount to attach to untruck blog</param>
+        /// <returns>return untrack blog, which never should be tracked</returns>
+        public async Task<Blog> GetByUrl(string url, int posts_amount)
         {
             var query = (from b in _context.Blogs
                          where b.Url == url
@@ -25,7 +30,7 @@ namespace DbAccess.Repositories
                              Blog = b,
                              Posts = b.Posts
                                       .OrderByDescending(x => x.PublishDate)
-                                      .Take(RssConsts.POSTS_PER_CALL)
+                                      .Take(posts_amount)
                          }).AsNoTracking();
 
             var result = await query.FirstOrDefaultAsync();
@@ -49,7 +54,7 @@ namespace DbAccess.Repositories
 
     public interface IBlogRepository : IBaseRepository<Blog>
     {
-        Task<Blog> GetByUrl(string url);
+        Task<Blog> GetByUrl(string url, int posts_amount);
         Task<Blog> GetWithPosts(Expression<Func<Blog, bool>> predicate);
     }
 }

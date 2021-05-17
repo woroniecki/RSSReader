@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DataLayer.Models;
 using DbAccess.Core;
-
+using LogicLayer._const;
 using LogicLayer._GenericActions;
 using LogicLayer.Helpers;
 using Microsoft.Toolkit.Parsers.Rss;
@@ -27,7 +27,7 @@ namespace LogicLayer.Blogs
 
         public async Task<Blog> ActionAsync(string url)
         {
-            Blog blog = await _unitOfWork.BlogRepo.GetByUrl(url);
+            Blog blog = await _unitOfWork.BlogRepo.GetByUrl(url, RssConsts.POSTS_PER_CALL);
             
             if (blog == null)
             {

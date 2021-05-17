@@ -6,6 +6,7 @@ using AutoMapper;
 using DataLayer.Models;
 using DbAccess.Core;
 using Dtos.Subscriptions;
+using LogicLayer._const;
 using ServiceLayer._Commons;
 
 namespace ServiceLayer.SubscriptionServices
@@ -23,7 +24,8 @@ namespace ServiceLayer.SubscriptionServices
 
         public async Task<IEnumerable<SubscriptionResponseDto>> GetListAsync(string userId)
         {
-            var result_list = await _unitOfWork.SubscriptionRepo.GetListByUserId(userId);
+            var result_list = await _unitOfWork.SubscriptionRepo
+                                               .GetListByUserId(userId, RssConsts.POSTS_PER_CALL);
 
             var returned_list = _mapper.Map<IEnumerable<Subscription>, IEnumerable<SubscriptionResponseDto>>(result_list);
 

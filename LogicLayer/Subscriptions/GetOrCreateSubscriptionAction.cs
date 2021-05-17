@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using DataLayer.Models;
 using DbAccess.Core;
-using DbAccess._const;
+using LogicLayer._const;
 using LogicLayer._GenericActions;
 
 namespace LogicLayer.Subscriptions
@@ -26,7 +26,9 @@ namespace LogicLayer.Subscriptions
 
         public async Task<Subscription> ActionAsync(Blog blog)
         {
-            var subscription = await _unitOfWork.SubscriptionRepo.GetAndCountUnreaded(_userId, blog);
+            var subscription = await _unitOfWork
+                                        .SubscriptionRepo
+                                        .GetAndCountUnreaded(_userId, blog, RssConsts.POSTS_PER_CALL);
 
             if (subscription == null)
             {

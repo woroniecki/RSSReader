@@ -6,7 +6,6 @@ using DataLayer.Code;
 using DataLayer.Models;
 using System.Collections.Generic;
 using System.Linq;
-using DbAccess._const;
 
 namespace DbAccess.Repositories
 {
@@ -23,7 +22,7 @@ namespace DbAccess.Repositories
         /// <param name="userId"></param>
         /// <param name="blog">Should has joined posts, as it will count unreaded</param>
         /// <returns>Subscription with counted unreaded</returns>
-        public async Task<Subscription> GetAndCountUnreaded(string userId, Blog blog)
+        public async Task<Subscription> GetAndCountUnreaded(string userId, Blog blog, int posts_amount)
         {
             var query = (from s in _context.Subscriptions
                                            .Include(x => x.Blog)
@@ -34,7 +33,7 @@ namespace DbAccess.Repositories
                              Subscription = s,
                              UserPostDatas = s.UserPostDatas
                                               .OrderByDescending(x => x.Post.PublishDate)
-                                              .Take(RssConsts.POSTS_PER_CALL)
+                                              .Take(posts_amount)
                          });
 
             var result = await query.FirstOrDefaultAsync();
@@ -65,7 +64,7 @@ namespace DbAccess.Repositories
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>Return list of actie subscription with included blog and group  related to user</returns>
-        public async Task<IEnumerable<Subscription>> GetListByUserId(string userId)
+        public async Task<IEnumerable<Subscription>> GetListByUserId(string userId, int posts_amount)
         {
             var query = (from s in _context.Subscriptions
                                            .Include(x => x.Blog)
@@ -76,10 +75,10 @@ namespace DbAccess.Repositories
                              Subscription = s,
                              Posts = s.Blog.Posts
                                       .OrderByDescending(x => x.PublishDate)
-                                      .Take(RssConsts.POSTS_PER_CALL),
+                                      .Take(posts_amount),
                              UserPostDatas = s.UserPostDatas
                                               .OrderByDescending(x => x.Post.PublishDate)
-                                              .Take(RssConsts.POSTS_PER_CALL)
+                                              .Take(posts_amount)
                          });
 
             var result = await query.ToListAsync();
@@ -120,9 +119,9 @@ namespace DbAccess.Repositories
 
     public interface ISubscriptionRepository : IBaseRepository<Subscription>
     {
-        Task<Subscription> GetAndCountUnreaded(string user, Blog blog);
+        Task<Subscription> GetAndCountUnreaded(string user, Blog blog, int posts_amount);
         Task<Subscription> GetByUserIdAndBlogId(string userId, int blogId);
-        Task<IEnumerable<Subscription>> GetListByUserId(string userId);
+        Task<IEnumerable<Subscription>> GetListByUserId(string userId, int posts_amount);
         Task<Subscription> GetByIdWithUser(int id);
     }
 }

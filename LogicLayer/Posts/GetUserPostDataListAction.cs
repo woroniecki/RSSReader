@@ -12,8 +12,6 @@ namespace LogicLayer.Posts
         ActionErrors,
         IActionAsync<int, IEnumerable<UserPostData>>
     {
-        const int POSTS_PER_CALL = 10;
-
         private string _userId;
         private IUnitOfWork _unitOfWork;
 

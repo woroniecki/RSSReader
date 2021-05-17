@@ -5,6 +5,7 @@ using DataLayer.Code;
 using DataLayer.Models;
 using DbAccess.Core;
 using Dtos.Subscriptions;
+using DbAccess._const;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
@@ -58,24 +59,30 @@ namespace Tests.Services.SubscriptionServices
                     _unitOfWork,
                     httpHelperService.Object
                 );
-
+            var start_time = DateTime.UtcNow;
             //ACT
             var result = await service.Subscribe(dto, user.Id);
 
             //ASSERT
-            var created_sub_with_blog = _context
+            var created_sub = _context
                 .Subscriptions
                 .Include(x => x.Blog)
+                .ThenInclude(x => x.Posts)
                 .Include(x => x.User)
                 .Where(x => x.User.Id == user.Id && x.Blog.Url == dto.BlogUrl)
                 .First();
-            Assert.IsNotNull(created_sub_with_blog);
-            Assert.That(created_sub_with_blog.User.Id, Is.EqualTo(user.Id));
-            Assert.That(created_sub_with_blog.FirstSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
-            Assert.That(created_sub_with_blog.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
+            Assert.IsNotNull(created_sub);
+            Assert.That(created_sub.User.Id, Is.EqualTo(user.Id));
+            Assert.That(created_sub.FirstSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
+            Assert.That(created_sub.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
             Assert.That(result.Blog.Url, Is.EqualTo(dto.BlogUrl));
             Assert.IsNull(result.GroupId);
             httpHelperService.Verify();
+
+            //<--verify if posts updated-->
+            Assert.That(result.UnreadedCount, Is.EqualTo(RssConsts.POSTS_PER_CALL));
+            Assert.That(created_sub.Blog.Posts.Count, Is.EqualTo(result.UnreadedCount));
+            Assert.That(created_sub.Blog.LastPostsRefreshDate, Is.GreaterThanOrEqualTo(start_time));
         }
 
         [Test]
@@ -91,15 +98,21 @@ namespace Tests.Services.SubscriptionServices
             {
                 Id = "0"
             };
+            _context.Add(user);
 
             var blog = new Blog()
             {
                 Id = 0,
                 Url = dto.BlogUrl
             };
-
-            _context.Add(user);
             _context.Add(blog);
+
+            for (int i = 0; i < 12; i++)
+            {
+                var post = new Post() { BlogId = blog.Id };
+                _context.Add(post);
+            }
+
             _context.SaveChanges();
 
             var httpHelperService = new FakeHttpHelperService();
@@ -114,19 +127,23 @@ namespace Tests.Services.SubscriptionServices
             var result = await service.Subscribe(dto, user.Id);
 
             //ASSERT
-            var created_sub_with_blog = _context
+            var created_sub = _context
                 .Subscriptions
                 .Include(x => x.Blog)
                 .Include(x => x.User)
                 .Where(x => x.User.Id == user.Id && x.Blog.Url == dto.BlogUrl)
                 .First();
-            Assert.IsNotNull(created_sub_with_blog);
-            Assert.That(created_sub_with_blog.User.Id, Is.EqualTo(user.Id));
-            Assert.That(created_sub_with_blog.Blog.Id, Is.EqualTo(blog.Id));
-            Assert.That(created_sub_with_blog.FirstSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
-            Assert.That(created_sub_with_blog.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
+            Assert.IsNotNull(created_sub);
+            Assert.That(created_sub.User.Id, Is.EqualTo(user.Id));
+            Assert.That(created_sub.Blog.Id, Is.EqualTo(blog.Id));
+            Assert.That(created_sub.FirstSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
+            Assert.That(created_sub.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
             Assert.That(result.Blog.Url, Is.EqualTo(dto.BlogUrl));
             Assert.IsNull(result.GroupId);
+
+            //<--count unreaded posts-->
+            Assert.That(result.UnreadedCount, Is.EqualTo(RssConsts.POSTS_PER_CALL));//Max amount is RssConsts.POSTS_PER_CALL
+            Assert.That(created_sub.Blog.Posts.Count, Is.GreaterThanOrEqualTo(RssConsts.POSTS_PER_CALL));
         }
 
         [Test]
@@ -142,21 +159,29 @@ namespace Tests.Services.SubscriptionServices
             {
                 Id = "0"
             };
+            _context.Add(user);
 
             var blog = new Blog()
             {
                 Id = 0,
                 Url = dto.BlogUrl
             };
+            _context.Add(blog);
+
+            var post1 = new Post() { BlogId = blog.Id };
+            var post2 = new Post() { BlogId = blog.Id };
+            _context.Add(post1);
+            _context.Add(post2);
 
             var sub = new Subscription(user.Id, blog)
             {
                 Active = false
             };
-
-            _context.Add(user);
-            _context.Add(blog);
             _context.Add(sub);
+
+            var user_post_data = new UserPostData(post1, user, sub) { Readed = true };
+            _context.Add(user_post_data);
+
             _context.SaveChanges();
 
             var httpHelperService = new FakeHttpHelperService();
@@ -171,18 +196,21 @@ namespace Tests.Services.SubscriptionServices
             var result = await service.Subscribe(dto, user.Id);
 
             //ASSERT
-            var created_sub_with_blog = _context
+            var created_sub = _context
                 .Subscriptions
                 .Include(x => x.Blog)
                 .Include(x => x.User)
                 .Where(x => x.User.Id == user.Id && x.Blog.Url == dto.BlogUrl)
                 .First();
-            Assert.IsNotNull(created_sub_with_blog);
-            Assert.That(created_sub_with_blog.User.Id, Is.EqualTo(user.Id));
-            Assert.That(created_sub_with_blog.Blog.Id, Is.EqualTo(blog.Id));
-            Assert.That(created_sub_with_blog.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
+            Assert.IsNotNull(created_sub);
+            Assert.That(created_sub.User.Id, Is.EqualTo(user.Id));
+            Assert.That(created_sub.Blog.Id, Is.EqualTo(blog.Id));
+            Assert.That(created_sub.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
             Assert.That(result.Blog.Url, Is.EqualTo(dto.BlogUrl));
             Assert.IsNull(result.GroupId);
+
+            //<--count unreaded posts-->
+            Assert.That(result.UnreadedCount, Is.EqualTo(1));
         }
 
         [Test]

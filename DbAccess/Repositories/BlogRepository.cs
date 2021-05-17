@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using DataLayer.Code;
 using DataLayer.Models;
+using System.Linq;
+using DbAccess._const;
 
 namespace DbAccess.Repositories
 {
@@ -16,7 +18,25 @@ namespace DbAccess.Repositories
 
         public async Task<Blog> GetByUrl(string url)
         {
-            return await _dbSet.FirstOrDefaultAsync(x => x.Url == url);
+            var query = (from b in _context.Blogs
+                         where b.Url == url
+                         select new
+                         {
+                             Blog = b,
+                             Posts = b.Posts
+                                      .OrderByDescending(x => x.PublishDate)
+                                      .Take(RssConsts.POSTS_PER_CALL)
+                         }).AsNoTracking();
+
+            var result = await query.FirstOrDefaultAsync();
+
+            if (result != null)
+            {
+                result.Blog.Posts = result.Posts.ToList();
+                return result.Blog;
+            }
+
+            return null;
         }
 
         public async Task<Blog> GetWithPosts(Expression<Func<Blog, bool>> predicate)

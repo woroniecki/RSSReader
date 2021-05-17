@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using DataLayer.Models;
 using DbAccess.Core;
-
+using DbAccess._const;
 using LogicLayer._GenericActions;
 
 namespace LogicLayer.Groups
@@ -12,8 +12,6 @@ namespace LogicLayer.Groups
         ActionErrors,
         IActionAsync<int, IEnumerable<Post>>
     {
-        const int POSTS_PER_CALL = 10;
-
         private string _userId;
         private int _blogId;
         private IUnitOfWork _unitOfWork;
@@ -35,7 +33,7 @@ namespace LogicLayer.Groups
             }
 
             IEnumerable<Post> posts = await _unitOfWork.PostRepo
-                .GetLatest(_blogId, page * POSTS_PER_CALL, POSTS_PER_CALL);
+                .GetLatest(_blogId, page * RssConsts.POSTS_PER_CALL, RssConsts.POSTS_PER_CALL);
 
             return posts;
         }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using AutoMapper;
 using DataLayer.Models;
 using DbAccess.Core;
 
@@ -16,11 +16,13 @@ namespace LogicLayer.Blogs
     {
         private readonly IHttpHelperService _httpService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public GetOrCreateBlogAction(IHttpHelperService httpService, IUnitOfWork unitOfWork)
+        public GetOrCreateBlogAction(IHttpHelperService httpService, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _httpService = httpService;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<Blog> ActionAsync(string url)
@@ -47,6 +49,8 @@ namespace LogicLayer.Blogs
                     url,
                     feed_content,
                     parsed_feed);
+
+                FeedMethods.UpdateBlogPosts(blog, parsed_feed, _mapper);
 
                 _unitOfWork.BlogRepo.AddNoSave(blog);
             }

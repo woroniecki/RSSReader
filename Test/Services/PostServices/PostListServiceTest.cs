@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DataLayer.Code;
 using DataLayer.Models;
+using DbAccess._const;
 using DbAccess.Core;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -56,11 +57,11 @@ namespace Tests.Services.PostServices
             var result = await service.GetList(user1.Id, blog.Id, 0);
 
             //ASSERT
-            Assert.That(result.Count, Is.EqualTo(10));
-            Assert.That(result.Where(x => !x.Favourite).Count, Is.EqualTo(10));
-            Assert.That(result.Where(x => !x.Readed).Count, Is.EqualTo(10));
+            Assert.That(result.Count, Is.EqualTo(RssConsts.POSTS_PER_CALL));
+            Assert.That(result.Where(x => !x.Favourite).Count, Is.EqualTo(RssConsts.POSTS_PER_CALL));
+            Assert.That(result.Where(x => !x.Readed).Count, Is.EqualTo(RssConsts.POSTS_PER_CALL));
             var updated_blog = _context.Blogs.Include(x => x.Posts).Where(x => x.Id == blog.Id).FirstOrDefault();
-            Assert.That(updated_blog.Posts.Count, Is.EqualTo(10));
+            Assert.That(updated_blog.Posts.Count, Is.EqualTo(RssConsts.POSTS_PER_CALL));
             Assert.That(updated_blog.LastPostsRefreshDate, Is.GreaterThanOrEqualTo(start_time));
             httpHelperService.Verify();
         }

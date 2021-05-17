@@ -57,7 +57,7 @@ namespace ServiceLayer.SubscriptionServices
 
         public async Task<SubscriptionResponseDto> Subscribe(SubscribeRequestDto inData, string userId)
         {
-            _getOrCreateBlogAction = new GetOrCreateBlogAction(_httpService, _unitOfWork);
+            _getOrCreateBlogAction = new GetOrCreateBlogAction(_httpService, _unitOfWork, _mapper);
 
             Blog blog = await _getOrCreateBlogAction.ActionAsync(inData.BlogUrl);
 

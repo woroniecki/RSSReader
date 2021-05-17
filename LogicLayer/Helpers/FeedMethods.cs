@@ -27,7 +27,7 @@ namespace LogicLayer.Helpers
 
         public static Blog CreateBlogObject(string url, string feed, IEnumerable<RssSchema> parsedFeed)
         {
-            Blog new_blog = new Blog() { Url = url };
+            Blog new_blog = new Blog() { Url = url, Posts = new List<Post>() };
 
             string title = "";
             string description = "";
@@ -125,7 +125,7 @@ namespace LogicLayer.Helpers
             return blog.LastPostsRefreshDate.AddMinutes(5) < DateTime.UtcNow;
         }
 
-        private static IEnumerable<Post> UpdateBlogPosts(Blog blog, IEnumerable<RssSchema> parsedFeed, IMapper mapper)
+        public static IEnumerable<Post> UpdateBlogPosts(Blog blog, IEnumerable<RssSchema> parsedFeed, IMapper mapper)
         {
             if (blog.Posts == null)
                 return null;

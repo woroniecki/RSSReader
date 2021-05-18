@@ -1,18 +1,13 @@
-import { Post } from 'api/api.types'
 import React, { useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 import { subscriptionsSlice, articlesSlice, authSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
-import * as blogApi from '../../api/blogApi'
 import ArticleCard from '../Article/ArticleCard'
 import { layoutSlice } from 'store/slices'
 
 export interface SingleBlogProps {}
-
-type CustomFeed = { foo: string }
-type CustomItem = { bar: number }
 
 export const SingleBlog: React.FC<SingleBlogProps> = props => {
   const dispatch = useAppDispatch()
@@ -21,6 +16,7 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
   const { token } = useSelector(authSlice.stateSelector)
   const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
   const articlesList = useSelector(articlesSlice.selectAll)
+  const [isFiltering, setFiltering] = useState(false)
 
   const getCurrentBlogId = () => {
     const subId = parseInt(id)
@@ -56,12 +52,19 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token])
 
+  const enableFilterUnreaded = async () => {
+    setFiltering(!isFiltering)
+  }
+  function getFilterButton(enabled: boolean): string {
+    return !enabled ? 'transparent' : ''
+  }
+
   const renderArticles = () => {
     const blogid = getCurrentBlogId()
     if (blogid < 0) return
 
     return articlesList
-      .filter(el => el.blogId == blogid)
+      .filter(el => el.blogId == blogid && (isFiltering ? !el.readed : true))
       .sort((a, b) => {
         return (
           new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
@@ -87,6 +90,14 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
     <div style={{ marginTop: 15 }} className="container">
       <Button onClick={() => push('/')} variant="primary">
         Return
+      </Button>
+      <Button
+        className={getFilterButton(isFiltering)}
+        onClick={() => {
+          enableFilterUnreaded()
+        }}
+      >
+        Filtr readed
       </Button>
       {renderArticles()}
     </div>

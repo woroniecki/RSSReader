@@ -3,7 +3,7 @@ import { useAppDispatch } from 'store/store'
 import { authSlice, subscriptionsSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 
-export const useGetSubscriptions = () => {
+export const useGetBlogsAndSubs = () => {
   const dispatch = useAppDispatch()
 
   const { token } = useSelector(authSlice.stateSelector)
@@ -26,4 +26,4 @@ export const useGetSubscriptions = () => {
   return
 }
 
-export default useGetSubscriptions
+export default useGetBlogsAndSubs

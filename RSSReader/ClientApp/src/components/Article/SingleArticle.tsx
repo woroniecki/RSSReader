@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { Button } from 'react-bootstrap'
 import { authSlice } from 'store/slices'
 import ArticlePatchButtons from './ArticlePatchButtons'
+import useGetArticles from './useGetArticles'
 
 export interface SingleArticleProps {}
 
@@ -17,6 +18,8 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
   const { articleid } = useParams<{ articleid: string }>()
   const articlesList = useSelector(articlesSlice.selectAll)
   const { token } = useSelector(authSlice.stateSelector)
+
+  useGetArticles()
 
   const readPostRequest = async () => {
     const promise = await dispatch(
@@ -32,11 +35,9 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
   }
 
   React.useEffect(() => {
-    if (token) {
-      readPostRequest()
-    }
+    readPostRequest()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token])
+  }, [articlesList])
 
   const renderArticle = () => {
     const numberArticleId = parseInt(articleid)

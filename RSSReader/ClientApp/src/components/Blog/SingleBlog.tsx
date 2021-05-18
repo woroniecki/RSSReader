@@ -6,6 +6,7 @@ import { subscriptionsSlice, articlesSlice, authSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import ArticleCard from '../Article/ArticleCard'
 import { layoutSlice } from 'store/slices'
+import useGetArticles from './../Article/useGetArticles'
 
 export interface SingleBlogProps {}
 
@@ -18,6 +19,8 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
   const articlesList = useSelector(articlesSlice.selectAll)
   const [isFiltering, setFiltering] = useState(false)
 
+  useGetArticles()
+
   const getCurrentBlogId = () => {
     const subId = parseInt(id)
     if (subId == NaN) return -1
@@ -27,30 +30,6 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
 
     return sub.blog.id
   }
-
-  const fetchList = async () => {
-    const blogid = getCurrentBlogId()
-    if (blogid < 0) return
-
-    const list_already_taken = articlesList.find(el => el.blogId == blogid)
-    if (list_already_taken != null) return
-
-    dispatch(layoutSlice.actions.setLoader(true))
-
-    const promise = await dispatch(articlesSlice.getArticles(blogid))
-
-    if (articlesSlice.getArticles.fulfilled.match(promise)) {
-    } else {
-    }
-
-    dispatch(layoutSlice.actions.setLoader(false))
-  }
-  React.useEffect(() => {
-    if (token) {
-      fetchList()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subscriptionsList])
 
   const enableFilterUnreaded = async () => {
     setFiltering(!isFiltering)

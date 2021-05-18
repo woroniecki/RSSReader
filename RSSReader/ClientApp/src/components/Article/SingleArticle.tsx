@@ -35,9 +35,13 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
   }
 
   React.useEffect(() => {
+    const article = articlesList.find(el => el.id == parseInt(articleid))
+
+    if (article == null) return
+
     readPostRequest()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [articlesList])
+  }, [token])
 
   const renderArticle = () => {
     const numberArticleId = parseInt(articleid)

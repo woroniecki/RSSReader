@@ -17,20 +17,6 @@ export const AppHome: React.FC<AppHomeProps> = props => {
   const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
   const { groupId } = useParams<{ groupId: string }>()
 
-  const fetchList = async () => {
-    const promise = await dispatch(subscriptionsSlice.getList())
-
-    if (subscriptionsSlice.getList.fulfilled.match(promise)) {
-    } else {
-    }
-  }
-  React.useEffect(() => {
-    if (token) {
-      fetchList()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token])
-
   const renderBlogList = () => {
     const noGroupId = parseInt(groupId)
 

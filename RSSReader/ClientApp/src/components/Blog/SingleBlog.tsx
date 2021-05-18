@@ -50,7 +50,7 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
       fetchList()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token])
+  }, [subscriptionsList])
 
   const enableFilterUnreaded = async () => {
     setFiltering(!isFiltering)

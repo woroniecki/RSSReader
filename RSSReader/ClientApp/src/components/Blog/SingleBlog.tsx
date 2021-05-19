@@ -17,33 +17,40 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
   const { token } = useSelector(authSlice.stateSelector)
   const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
   const articlesList = useSelector(articlesSlice.selectAll)
-  const [isFiltering, setFiltering] = useState(false)
 
   useGetArticles()
 
-  const getCurrentBlogId = () => {
+  const patchSubscription = async (subId: number, filterReaded: boolean) => {
+    const promise = await dispatch(
+      subscriptionsSlice.patchSubscription({
+        subId: subId,
+        filterReaded: filterReaded,
+      })
+    )
+
+    if (articlesSlice.patchPost.fulfilled.match(promise)) {
+    } else {
+    }
+  }
+
+  const getCurrentSub = () => {
     const subId = parseInt(id)
-    if (subId == NaN) return -1
+    if (subId == NaN) return null
 
     const sub = subscriptionsList.find(el => el.id == subId)
-    if (sub == null) return -1
-
-    return sub.blog.id
-  }
-
-  const enableFilterUnreaded = async () => {
-    setFiltering(!isFiltering)
-  }
-  function getFilterButton(enabled: boolean): string {
-    return !enabled ? 'transparent' : ''
+    return sub
   }
 
   const renderArticles = () => {
-    const blogid = getCurrentBlogId()
-    if (blogid < 0) return
+    const sub = getCurrentSub()
+    if (sub == null) return
+
+    const blogid = sub.blog.id
 
     return articlesList
-      .filter(el => el.blogId == blogid && (isFiltering ? !el.readed : true))
+      .filter(
+        el => el.blogId == blogid && (sub.filterReaded ? !el.readed : true)
+      )
       .sort((a, b) => {
         return (
           new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
@@ -65,19 +72,32 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
       ))
   }
 
+  function getFilterButtonClass(enabled: boolean): string {
+    return !enabled ? 'transparent' : ''
+  }
+
+  const renderSubData = () => {
+    const sub = getCurrentSub()
+    if (sub == null) return
+
+    return (
+      <Button
+        className={getFilterButtonClass(sub.filterReaded)}
+        onClick={() => {
+          patchSubscription(sub.id, !sub.filterReaded)
+        }}
+      >
+        Filtr readed
+      </Button>
+    )
+  }
+
   return (
     <div style={{ marginTop: 15 }} className="container">
       <Button onClick={() => push('/')} variant="primary">
         Return
       </Button>
-      <Button
-        className={getFilterButton(isFiltering)}
-        onClick={() => {
-          enableFilterUnreaded()
-        }}
-      >
-        Filtr readed
-      </Button>
+      {renderSubData()}
       {renderArticles()}
     </div>
   )

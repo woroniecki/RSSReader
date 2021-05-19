@@ -17,5 +17,6 @@ namespace Dtos.Subscriptions
         public BlogResponseDto Blog { get; set; }
         public int? UnreadedCount { get; set; }
         public int? GroupId { get; set; }
+        public bool FilterReaded { get; set; }
     }
 }

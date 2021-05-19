@@ -39,6 +39,7 @@ export interface Subscription {
   lastUnsubscribeDate: string
   groupId: number
   unreadedCount: number
+  filterReaded: boolean
 }
 
 export interface SubscriptionsListResponse {
@@ -87,4 +88,9 @@ export interface AddGroupRequest {
 export interface PatchSubGroupRequest {
   subId: number
   groupId: number
+}
+
+export interface PatchSubscriptionRequest {
+  subId: number
+  filterReaded: boolean
 }

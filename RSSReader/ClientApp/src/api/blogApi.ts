@@ -7,6 +7,7 @@ import {
   PatchPostRequest,
   Group,
   AddGroupRequest,
+  PatchSubscriptionRequest,
 } from './api.types'
 
 export const getSubscribtionsList = async () => {
@@ -115,6 +116,18 @@ export const patchSubscriptionGroup = async (
         subId.toString() +
         `/set_group/` +
         newGroupId.toString()
+    )
+    return res.data.result as Subscription
+  } catch (error) {
+    throw error.response
+  }
+}
+
+export const patchSubscription = async (data: PatchSubscriptionRequest) => {
+  try {
+    const res = await axios.patch(
+      `/api/subscription/` + data.subId.toString() + `/update`,
+      data
     )
     return res.data.result as Subscription
   } catch (error) {

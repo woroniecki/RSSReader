@@ -55,5 +55,18 @@ namespace RSSReader.Controllers
 
             return new ApiResponse(MsgSucceed, result, Status200OK);
         }
+
+        [HttpPatch("{subid}/update")]
+        public async Task<ApiResponse> Update(int subId, [FromBody]UpdateSubscriptionRequestDto updateDto, [FromServices] IUpdateSubscriptionService service)
+        {
+            var result = await service.Update(subId, this.GetCurUserId(), updateDto);
+
+            if (service.Errors.Any())
+                return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);
+
+            return new ApiResponse(MsgSucceed, result, Status200OK);
+        }
+
+
     }
 }

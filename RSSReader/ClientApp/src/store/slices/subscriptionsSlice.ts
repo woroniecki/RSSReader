@@ -9,6 +9,7 @@ import {
   Subscription,
   AddSubscriptionRequest,
   PatchSubGroupRequest,
+  PatchSubscriptionRequest,
 } from '../../api/api.types'
 import { RootState } from 'store/rootReducer'
 const SUBSCRIPTIONS = 'subscriptions'
@@ -88,6 +89,21 @@ export const patchGroup = createAsyncThunk<
   }
 })
 
+export const patchSubscription = createAsyncThunk<
+  Subscription,
+  PatchSubscriptionRequest,
+  {
+    rejectValue: string
+  }
+>(`${SUBSCRIPTIONS}/patchSubscription`, async (params, { rejectWithValue }) => {
+  try {
+    const res = await blogApi.patchSubscription(params)
+    return res
+  } catch (err) {
+    return rejectWithValue(err.response.data)
+  }
+})
+
 const subscriptionsSlice = createSlice({
   name: 'subscriptions',
   initialState: subscriptionsAdapter.getInitialState(),
@@ -100,7 +116,7 @@ const subscriptionsSlice = createSlice({
     builder
       .addCase(getList.fulfilled, (state, { payload }) => {
         subscriptionsAdapter.setAll(state, payload)
-        //state.entities[payload.id] = payload
+        // state.entities[payload.id] = payload
         // both `state` and `action` are now correctly typed
         // based on the slice state and the `pending` action creator
       })
@@ -112,6 +128,9 @@ const subscriptionsSlice = createSlice({
       })
       .addCase(patchGroup.fulfilled, (state, { payload }) => {
         state.entities[payload.id].groupId = payload.groupId
+      })
+      .addCase(patchSubscription.fulfilled, (state, { payload }) => {
+        state.entities[payload.id].filterReaded = payload.filterReaded
       })
   },
 })

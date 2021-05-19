@@ -16,12 +16,14 @@ namespace DataLayer.Models
             LastUnsubscribeDate = DateTime.MinValue;
             BlogId = blog.Id;
             UserId = userId;
+            FilterReaded = false;
         }
         public int Id { get; set; }
         public bool Active { get; set; }
         public DateTime FirstSubscribeDate { get; set; }
         public DateTime LastSubscribeDate { get; set; }
         public DateTime LastUnsubscribeDate { get; set; }
+        public bool FilterReaded { get; set; }
 
         // <-- RELATIONS -->
         public int BlogId { get; set; }

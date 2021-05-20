@@ -28,9 +28,11 @@ namespace ServiceLayer.SubscriptionServices
 
         public async Task<SubscriptionResponseDto> SetGroup(int subId, int groupId, string userId)
         {
-            _action = new SetGroupOfSubscriptionAction(subId, userId, _unitOfWork);
+            var sub = await _unitOfWork.SubscriptionRepo.GetByIdWithUser(subId);
 
-            var runner = new RunnerWriteDbAsync<int, Subscription>(_action, _unitOfWork.Context);
+            _action = new SetGroupOfSubscriptionAction(sub, userId, _unitOfWork);
+
+            var runner = new RunnerWriteDbAsync<int?, Subscription>(_action, _unitOfWork.Context);
 
             var result = await runner.RunActionAsync(groupId);
             if (result == null || runner.HasErrors)

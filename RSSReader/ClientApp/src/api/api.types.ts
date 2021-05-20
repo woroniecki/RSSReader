@@ -48,6 +48,7 @@ export interface SubscriptionsListResponse {
 
 export interface AddSubscriptionRequest {
   blogUrl: string
+  GroupId: number
 }
 
 export interface ReadPostRequest {

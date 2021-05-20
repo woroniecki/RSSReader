@@ -35,7 +35,7 @@ export const AppHome: React.FC<AppHomeProps> = props => {
 
   return (
     <div style={{ marginTop: 15 }} className="container">
-      <AddSub />
+      <AddSub activeGroupId={groupId} />
       {renderBlogList()}
     </div>
   )

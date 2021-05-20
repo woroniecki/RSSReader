@@ -11,5 +11,6 @@ namespace Dtos.Subscriptions
     {
         [Required]
         public string BlogUrl { get; set; }
+        public int? GroupId { get; set; }
     }
 }

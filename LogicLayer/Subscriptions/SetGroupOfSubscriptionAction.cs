@@ -9,43 +9,43 @@ namespace LogicLayer.Subscriptions
 {
     public class SetGroupOfSubscriptionAction :
         ActionErrors,
-        IActionAsync<int, Subscription>
+        IActionAsync<int?, Subscription>
     {
         private int _subId;
+        private Subscription _sub;
         private string _userId;
         private IUnitOfWork _unitOfWork;
 
-        public SetGroupOfSubscriptionAction(int subId, string userId, IUnitOfWork unitOfWork)
+        public SetGroupOfSubscriptionAction(Subscription sub, string userId, IUnitOfWork unitOfWork)
         {
-            _subId = subId;
+            _sub = sub;
             _userId = userId;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Subscription> ActionAsync(int groupId)
+        public async Task<Subscription> ActionAsync(int? groupId)
         {
-            var sub = await _unitOfWork.SubscriptionRepo.GetByIdWithUser(_subId);
-            if (sub == null)
+            if (_sub == null)
             {
                 AddError("Can't find subscription entity.");
                 return null;
             }
 
-            if (sub.UserId != _userId)
+            if (_sub.UserId != _userId)
             {
                 AddError("Unauthorized.");
                 return null;
             }
 
             //-1 is resetting group to null, so it's treaded as none group
-            if (groupId == -1)
+            if (!groupId.HasValue || groupId == -1)
             {
-                sub.GroupId = null;
-                sub.Group = null;
+                _sub.GroupId = null;
+                _sub.Group = null;
             }
             else
             {
-                var group = await _unitOfWork.GroupRepo.GetByIdWithUser(groupId);
+                var group = await _unitOfWork.GroupRepo.GetByIdWithUser(groupId.Value);
                 if (group == null)
                 {
                     AddError("Cant find group entity.");
@@ -58,11 +58,11 @@ namespace LogicLayer.Subscriptions
                     return null;
                 }
 
-                sub.GroupId = groupId;
-                sub.Group = group;
+                _sub.GroupId = groupId;
+                _sub.Group = group;
             }
 
-            return sub;
+            return _sub;
         }
     }
 }

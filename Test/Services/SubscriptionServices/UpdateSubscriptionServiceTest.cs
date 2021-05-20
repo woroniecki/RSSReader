@@ -117,7 +117,7 @@ namespace Tests.Services.SubscriptionServices
         }
 
         [Test]
-        public async Task Update_CantFindUser_SubDto()
+        public async Task Update_CantFindUser_Null()
         {
             //ARRANGE
             var dto = new UpdateSubscriptionRequestDto() { FilterReaded = true };
@@ -137,6 +137,30 @@ namespace Tests.Services.SubscriptionServices
             //ACT
 
             var result = await service.Update(sub.Id, "0", dto);
+
+            //ASSERT
+            Assert.IsNull(result);
+            Assert.That(service.Errors.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task Update_CantFindSub_Null()
+        {
+            //ARRANGE
+            var dto = new UpdateSubscriptionRequestDto() { FilterReaded = true };
+
+            var blog = new Blog();
+            _context.Add(blog);
+
+            var user = new ApiUser();
+            _context.Add(user);
+
+            _context.SaveChanges();
+
+            var service = new UpdateSubscriptionService(MapperHelper.GetNewInstance(), _unitOfWork);
+            //ACT
+
+            var result = await service.Update(0, user.Id, dto);
 
             //ASSERT
             Assert.IsNull(result);

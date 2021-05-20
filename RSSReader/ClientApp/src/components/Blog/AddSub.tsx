@@ -9,7 +9,9 @@ import { applyValidationErrors } from 'utils/utils'
 import { useSelector } from 'react-redux'
 import { authSlice } from 'store/slices'
 
-export interface AddSubProps {}
+export interface AddSubProps {
+  activeGroupId: string
+}
 
 export const AddSub: React.FC<AddSubProps> = props => {
   const dispatch = useAppDispatch()
@@ -28,6 +30,7 @@ export const AddSub: React.FC<AddSubProps> = props => {
       const promise = await dispatch(
         subscriptionsSlice.postAddSubscription({
           blogUrl: values.url,
+          GroupId: parseInt(props.activeGroupId),
         })
       )
 

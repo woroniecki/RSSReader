@@ -19,6 +19,7 @@ namespace ServiceLayer.SubscriptionServices
         private GetOrCreateBlogAction _getOrCreateBlogAction;
         private GetOrCreateSubscriptionAction _getOrCreateSubscriptionAction;
         private EnableSubscriptionAction _enableSubscriptionAction;
+        private SetGroupOfSubscriptionAction _setGroupOfSubscriptionAction;
         private IMapper _mapper;
         private IUnitOfWork _unitOfWork;
         private IHttpHelperService _httpService;
@@ -35,6 +36,9 @@ namespace ServiceLayer.SubscriptionServices
                 if (_enableSubscriptionAction != null && _enableSubscriptionAction.HasErrors)
                     return _enableSubscriptionAction.Errors;
 
+                if (_setGroupOfSubscriptionAction != null && _setGroupOfSubscriptionAction.HasErrors)
+                    return _setGroupOfSubscriptionAction.Errors;
+
                 if (_getOrCreateBlogAction != null)
                     return _getOrCreateBlogAction.Errors;
 
@@ -43,6 +47,9 @@ namespace ServiceLayer.SubscriptionServices
 
                 if (_enableSubscriptionAction != null)
                     return _enableSubscriptionAction.Errors;
+
+                if (_setGroupOfSubscriptionAction != null)
+                    return _setGroupOfSubscriptionAction.Errors;
 
                 return null;
             }
@@ -69,6 +76,13 @@ namespace ServiceLayer.SubscriptionServices
             Subscription subscription = await _getOrCreateSubscriptionAction.ActionAsync(blog);
 
             if (subscription == null || _getOrCreateSubscriptionAction.HasErrors)
+                return null;
+
+            _setGroupOfSubscriptionAction = new SetGroupOfSubscriptionAction(subscription, userId, _unitOfWork);
+
+            subscription = await _setGroupOfSubscriptionAction.ActionAsync(inData.GroupId);
+
+            if (subscription == null || _setGroupOfSubscriptionAction.HasErrors)
                 return null;
 
             _enableSubscriptionAction = new EnableSubscriptionAction(_unitOfWork);

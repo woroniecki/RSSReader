@@ -33,10 +33,26 @@ export const AppHome: React.FC<AppHomeProps> = props => {
       ))
   }
 
+  const renderMainPage = () => {
+    if (token) {
+      return (
+        <div style={{ marginTop: 15 }} className="container">
+          <AddSub activeGroupId={groupId} />
+          {renderBlogList()}
+        </div>
+      )
+    } else {
+      return (
+        <div style={{ marginTop: 15 }} className="container">
+          MAIN PAGE
+        </div>
+      )
+    }
+  }
+
   return (
     <div style={{ marginTop: 15 }} className="container">
-      <AddSub activeGroupId={groupId} />
-      {renderBlogList()}
+      {renderMainPage()}
     </div>
   )
 }

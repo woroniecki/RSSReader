@@ -70,7 +70,7 @@ export interface Post {
   summary: string
   content: string
   imageUrl: string
-  feedUrl: string
+  url: string
   author: string
   publishDate: string
   readed: boolean

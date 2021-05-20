@@ -63,7 +63,7 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
           title={el.name}
           summary={el.summary}
           content={el.content}
-          url={el.feedUrl}
+          url={el.url}
           imageUrl={el.imageUrl}
           readed={el.readed}
           favourite={el.favourite}

@@ -43,6 +43,15 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token])
 
+  const renderVisitPageButton = (url: string) => {
+    if (!url || url.length === 0) return
+    return (
+      <a rel="noreferrer" target="_blank" href={url}>
+        <Button variant="primary">Visit page</Button>
+      </a>
+    )
+  }
+
   const renderArticle = () => {
     const numberArticleId = parseInt(articleid)
     if (numberArticleId == NaN) return
@@ -55,9 +64,7 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
         <Button onClick={() => push(`/blog/${id}`)} variant="primary">
           Return
         </Button>
-        <a rel="noreferrer" target="_blank" href={article.feedUrl}>
-          <Button variant="primary">Visit page</Button>
-        </a>
+        {renderVisitPageButton(article.url)}
         <ArticlePatchButtons
           blogId={article.blogId}
           postId={article.id}

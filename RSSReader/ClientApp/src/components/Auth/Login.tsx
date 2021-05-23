@@ -27,14 +27,14 @@ export const Login: React.FC<LoginProps> = props => {
       password: Yup.string().required('Required'),
     }),
     onSubmit: async values => {
-      dispatch(layoutSlice.actions.setLoader(true))
+      dispatch(layoutSlice.actions.setLoader(layoutSlice.type.partial))
       const promise = await dispatch(
         authSlice.login({
           username: values.username,
           password: values.password,
         })
       )
-      dispatch(layoutSlice.actions.setLoader(false))
+      dispatch(layoutSlice.actions.setLoader(layoutSlice.type.none))
 
       if (authSlice.login.fulfilled.match(promise)) {
         push('/')

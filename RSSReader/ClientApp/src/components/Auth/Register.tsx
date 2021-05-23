@@ -35,14 +35,14 @@ export const Register: React.FC<RegisterProps> = props => {
         .required('Required'),
     }),
     onSubmit: async values => {
-      dispatch(layoutSlice.actions.setLoader(true))
+      dispatch(layoutSlice.actions.setLoader(layoutSlice.type.partial))
       try {
         await register(values)
         push('/login')
       } catch (err) {
         applyValidationErrors(formik, err.data)
       }
-      dispatch(layoutSlice.actions.setLoader(false))
+      dispatch(layoutSlice.actions.setLoader(layoutSlice.type.none))
     },
   })
 

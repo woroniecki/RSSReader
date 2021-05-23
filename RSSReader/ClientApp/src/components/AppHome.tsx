@@ -4,7 +4,7 @@ import { useAppDispatch } from 'store/store'
 import { AddSub } from './Blog/AddSub'
 import { BlogCard } from './Blog/BlogCard'
 import { getSubscribtionsList } from '../api/blogApi'
-import { authSlice, subscriptionsSlice } from 'store/slices'
+import { authSlice, subscriptionsSlice, layoutSlice } from 'store/slices'
 import { subscriptionsAdapter } from 'store/slices/subscriptionsSlice'
 import { useSelector } from 'react-redux'
 
@@ -16,6 +16,7 @@ export const AppHome: React.FC<AppHomeProps> = props => {
   const { token } = useSelector(authSlice.stateSelector)
   const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
   const { groupId } = useParams<{ groupId: string }>()
+  const { loader } = useSelector(layoutSlice.stateSelector)
 
   const renderBlogList = () => {
     const noGroupId = parseInt(groupId)
@@ -41,7 +42,7 @@ export const AppHome: React.FC<AppHomeProps> = props => {
           {renderBlogList()}
         </div>
       )
-    } else {
+    } else if (loader == layoutSlice.type.none) {
       return (
         <div style={{ marginTop: 15 }} className="container">
           MAIN PAGE

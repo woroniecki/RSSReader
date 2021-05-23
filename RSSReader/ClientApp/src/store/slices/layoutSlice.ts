@@ -1,19 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from 'store/rootReducer'
 const AUTH = 'auth'
+
+export enum type {
+  none,
+  partial,
+  fullScreen,
+}
+
 interface LayoutState {
-  loader?: boolean
+  loader?: type
 }
 
 const initialState: LayoutState = {
-  loader: null,
+  loader: type.none,
 }
 
 const layoutSlice = createSlice({
   name: 'layout',
   initialState,
   reducers: {
-    setLoader: (state, action: PayloadAction<boolean>) => {
+    setLoader: (state, action: PayloadAction<type>) => {
       state.loader = action.payload
     },
   },

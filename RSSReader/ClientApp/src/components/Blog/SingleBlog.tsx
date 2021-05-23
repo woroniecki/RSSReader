@@ -5,7 +5,6 @@ import { useHistory, useParams } from 'react-router-dom'
 import { subscriptionsSlice, articlesSlice, authSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import ArticleCard from '../Article/ArticleCard'
-import { layoutSlice } from 'store/slices'
 import useGetArticles from './../Article/useGetArticles'
 
 export interface SingleBlogProps {}

@@ -32,7 +32,7 @@ export const useGetArticles = () => {
     const list_already_taken = articlesList.find(el => el.blogId == blogid)
     if (list_already_taken != null) return
 
-    dispatch(layoutSlice.actions.setLoader(true))
+    dispatch(layoutSlice.actions.setLoader(layoutSlice.type.partial))
 
     const promise = await dispatch(articlesSlice.getArticles(blogid))
 
@@ -40,7 +40,7 @@ export const useGetArticles = () => {
     } else {
     }
 
-    dispatch(layoutSlice.actions.setLoader(false))
+    dispatch(layoutSlice.actions.setLoader(layoutSlice.type.none))
   }
   React.useEffect(() => {
     if (token) {

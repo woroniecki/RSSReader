@@ -33,7 +33,7 @@ function App() {
         <Route exact path={['/', '/:groupId']} component={AppHome} />
         <Route>404</Route>
       </Switch>
-      {loader && <AppSpinner />}
+      {loader != layoutSlice.type.none && <AppSpinner />}
     </>
   )
 }

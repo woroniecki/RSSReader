@@ -2,8 +2,11 @@ import { LoginResponse, Token } from 'api/api.types'
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
-import { authSlice } from 'store/slices'
-import { getTokenDataFromStorage } from 'utils/appLocalStorage'
+import { authSlice, layoutSlice } from 'store/slices'
+import {
+  getTokenDataFromStorage,
+  saveTokenDataToStorage,
+} from 'utils/appLocalStorage'
 
 export interface useRefreshTokenProps {}
 
@@ -11,6 +14,19 @@ export const useRefreshToken = () => {
   const dispatch = useAppDispatch()
 
   React.useEffect(() => {
+    const refreshToken = async () => {
+      dispatch(layoutSlice.actions.setLoader(layoutSlice.type.fullScreen))
+
+      await dispatch(
+        authSlice.refresh({
+          refreshToken: tokenData.refreshToken,
+          authToken: tokenData.authToken,
+        })
+      )
+
+      dispatch(layoutSlice.actions.setLoader(layoutSlice.type.none))
+    }
+
     const tokenData = getTokenDataFromStorage()
 
     if (tokenData == null) {
@@ -18,12 +34,8 @@ export const useRefreshToken = () => {
     }
 
     if (tokenData.refreshExpires > Date.now()) {
-      const promise = dispatch(
-        authSlice.refresh({
-          refreshToken: tokenData.refreshToken,
-          authToken: tokenData.authToken,
-        })
-      )
+      saveTokenDataToStorage('', -1, '', -1)
+      refreshToken()
     }
   }, [])
 

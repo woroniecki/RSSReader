@@ -104,7 +104,6 @@ namespace Tests.Services.SubscriptionServices
 
             var blog = new Blog()
             {
-                Id = 0,
                 Url = dto.BlogUrl
             };
             _context.Add(blog);

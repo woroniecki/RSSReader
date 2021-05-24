@@ -38,10 +38,10 @@ namespace RSSReader.Controllers
             return new ApiResponse(MsgSucceed, result, Status201Created);
         }
 
-        [HttpDelete("remove/{id}")]
-        public async Task<ApiResponse> Remove(int id, [FromServices] IGroupRemoveService service)
+        [HttpDelete("remove")]
+        public async Task<ApiResponse> Remove([FromBody] RemoveGroupRequestDto data, [FromServices] IGroupRemoveService service)
         {
-            await service.Remove(id, this.GetCurUserId());
+            await service.Remove(data, this.GetCurUserId());
 
             if (service.Errors.Any())
                 return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);

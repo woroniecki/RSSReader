@@ -38,6 +38,12 @@ namespace DbAccess.Repositories
 
         public void AddNoSave(T entity)
         {
+            foreach(var entry in _context.ChangeTracker.Entries())
+            {
+                string log = $"{entry.Entity.GetType().Name} {entry.ToString()}  {entry.State.ToString()}";
+                log += "";
+            }
+
             _dbSet.Add(entity);
         }
     }

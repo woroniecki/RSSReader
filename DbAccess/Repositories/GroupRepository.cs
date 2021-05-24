@@ -24,7 +24,10 @@ namespace DbAccess.Repositories
 
         public async Task<Group> GetByIdAndUserId(int id, string userId)
         {
-            return await _context.Groups.Where(x => x.Id == id && x.User.Id == userId).FirstOrDefaultAsync();
+            return await _context.Groups
+                .Include(x => x.Subscriptions)
+                .Where(x => x.Id == id && x.User.Id == userId)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Group> GetUserIdAndByName(string userId, string name)

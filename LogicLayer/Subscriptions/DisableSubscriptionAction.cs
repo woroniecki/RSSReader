@@ -14,39 +14,41 @@ namespace LogicLayer.Subscriptions
     {
         private string _userId;
         private IUnitOfWork _unitOfWork;
+        private Subscription _sub;
 
-        public DisableSubscriptionAction(string userId, IUnitOfWork unitOfWork)
+        public DisableSubscriptionAction(string userId, IUnitOfWork unitOfWork, Subscription sub = null)
         {
             _userId = userId;
             _unitOfWork = unitOfWork;
+            _sub = sub;
         }
 
         public async Task<Subscription> ActionAsync(int subscriptionId)
         {
-            var sub = await _unitOfWork.SubscriptionRepo.GetByID(subscriptionId);
+            _sub ??= await _unitOfWork.SubscriptionRepo.GetByID(subscriptionId);
 
-            if (sub == null)
+            if (_sub == null)
             {
                 AddError("Entity doesn't exist.");
                 return null;
             }
 
-            if(sub.UserId != _userId)
+            if(_sub.UserId != _userId)
             {
                 AddError("Unauthorized.");
                 return null;
             }
             
-            if (!sub.Active)
+            if (!_sub.Active)
             {
                 AddError("Entity is already disabled.");
                 return null;
             }
 
-            sub.Active = false;
-            sub.LastUnsubscribeDate = DateTime.UtcNow;
+            _sub.Active = false;
+            _sub.LastUnsubscribeDate = DateTime.UtcNow;
 
-            return sub;
+            return _sub;
         }
     }
 }

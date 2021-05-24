@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using DbAccess.Core;
+using Dtos.Groups;
 using LogicLayer.Groups;
 using ServiceLayer._Commons;
 using ServiceLayer._Runners;
@@ -21,16 +22,16 @@ namespace ServiceLayer.GroupServices
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Remove(int groupId, string userId)
+        public async Task Remove(RemoveGroupRequestDto data, string userId)
         {
             _action = new RemoveGroupAction(userId, _unitOfWork);
 
-            var runner = new RunnerWriteDbAsync<int, bool>(
+            var runner = new RunnerWriteDbAsync<RemoveGroupRequestDto, bool>(
                 _action,
                 _unitOfWork.Context
                 );
 
-            var result = await runner.RunActionAsync(groupId);
+            var result = await runner.RunActionAsync(data);
 
             return;
         }
@@ -38,6 +39,6 @@ namespace ServiceLayer.GroupServices
 
     public interface IGroupRemoveService : IValidatedService
     {
-        Task Remove(int groupId, string userId);
+        Task Remove(RemoveGroupRequestDto data, string userId);
     }
 }

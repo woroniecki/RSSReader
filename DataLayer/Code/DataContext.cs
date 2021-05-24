@@ -12,5 +12,10 @@ namespace DataLayer.Code
         public DbSet<Post> Posts { get; set; }
         public DbSet<UserPostData> UserPostDatas { get; set; }
         public DbSet<Group> Groups { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
     }
 }

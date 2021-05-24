@@ -5,7 +5,7 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit'
 import * as blogApi from '../../api/blogApi'
-import { AddGroupRequest, Group } from '../../api/api.types'
+import { AddGroupRequest, Group, RemoveGroupRequest } from '../../api/api.types'
 import { RootState } from 'store/rootReducer'
 import { NumberSchema } from 'yup'
 const GROUPS = 'groups'
@@ -52,14 +52,14 @@ export const remove = createAsyncThunk<
   // Return type of the payload creator
   number,
   // First argument to the payload creator
-  number,
+  RemoveGroupRequest,
   {
     rejectValue: string
   }
->(`${GROUPS}/remove`, async (id, { rejectWithValue }) => {
+>(`${GROUPS}/remove`, async (params, { rejectWithValue }) => {
   try {
-    const res = await blogApi.removeGroup(id)
-    return id
+    const res = await blogApi.removeGroup(params)
+    return params.groupId
   } catch (err) {
     throw err.data
   }

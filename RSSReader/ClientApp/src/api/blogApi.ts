@@ -8,6 +8,7 @@ import {
   Group,
   AddGroupRequest,
   PatchSubscriptionRequest,
+  RemoveGroupRequest,
 } from './api.types'
 
 export const getSubscribtionsList = async () => {
@@ -97,9 +98,11 @@ export const postAddGroup = async (data: AddGroupRequest) => {
   }
 }
 
-export const removeGroup = async (id: number) => {
+export const removeGroup = async (data: RemoveGroupRequest) => {
   try {
-    const res = await axios.delete(`/api/group/remove/` + id.toString())
+    const res = await axios.delete(`/api/group/remove`, {
+      data: data,
+    })
     return res.data.result as Group
   } catch (error) {
     throw error.response

@@ -86,6 +86,11 @@ export interface AddGroupRequest {
   name: string
 }
 
+export interface RemoveGroupRequest {
+  groupId: number
+  unsubscribeSubscriptions: boolean
+}
+
 export interface PatchSubGroupRequest {
   subId: number
   groupId: number

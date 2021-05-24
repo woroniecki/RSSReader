@@ -35,7 +35,12 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
   }
 
   const removeGroup = async (id: number) => {
-    const promise = await dispatch(groupsSlice.remove(id))
+    const promise = await dispatch(
+      groupsSlice.remove({
+        groupId: id,
+        unsubscribeSubscriptions: false,
+      })
+    )
 
     if (groupsSlice.remove.fulfilled.match(promise)) {
     } else {

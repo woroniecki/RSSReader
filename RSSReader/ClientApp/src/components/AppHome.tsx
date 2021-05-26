@@ -22,7 +22,12 @@ export const AppHome: React.FC<AppHomeProps> = props => {
     const noGroupId = parseInt(groupId)
 
     return subscriptionsList
-      .filter(x => Number.isNaN(noGroupId) || x.groupId == noGroupId)
+      .filter(
+        x =>
+          Number.isNaN(noGroupId) ||
+          x.groupId == noGroupId ||
+          (noGroupId == -1 && x.groupId == null)
+      )
       .map(el => (
         <BlogCard
           key={el.id}

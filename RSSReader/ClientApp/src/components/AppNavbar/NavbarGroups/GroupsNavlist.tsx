@@ -42,7 +42,10 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
   }
 
   const renderNoneGroup = () => {
-    if (subscriptionsList.filter(x => x.groupId == -1).length > 0) {
+    if (
+      subscriptionsList.filter(x => x.groupId == -1 || x.groupId == null)
+        .length > 0
+    ) {
       return (
         <LinkContainer to={'/-1'}>
           <NavDropdown.Item>None</NavDropdown.Item>

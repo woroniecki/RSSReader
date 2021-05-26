@@ -1,10 +1,9 @@
 import React from 'react'
-import { Nav, Navbar, NavDropdown } from 'react-bootstrap'
-import { Link, useHistory } from 'react-router-dom'
+import { Nav, Navbar } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 import { layoutSlice } from 'store/slices'
 import UserNavbar from './UserNavbar'
 import { useSelector } from 'react-redux'
-import { ReactComponent } from '*.svg'
 
 export interface AppNavbarProps {}
 

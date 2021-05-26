@@ -1,21 +1,14 @@
 import React from 'react'
-import {
-  Button,
-  Form,
-  FormControl,
-  InputGroup,
-  Nav,
-  NavDropdown,
-} from 'react-bootstrap'
-import { Link, useHistory } from 'react-router-dom'
+import { Nav, NavDropdown } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { LinkContainer } from 'react-router-bootstrap'
 
 import { authSlice, groupsSlice, subscriptionsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import AddGroupNavForm from './AddGroupNavForm'
+import Prompt from 'components/Utils/Prompt'
+import RemoveGroupBtn from './RemoveGroupBtn'
 
 export interface GroupsNavlistProps {}
 
@@ -30,19 +23,6 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
     const promise = await dispatch(groupsSlice.getList())
 
     if (groupsSlice.getList.fulfilled.match(promise)) {
-    } else {
-    }
-  }
-
-  const removeGroup = async (id: number) => {
-    const promise = await dispatch(
-      groupsSlice.remove({
-        groupId: id,
-        unsubscribeSubscriptions: false,
-      })
-    )
-
-    if (groupsSlice.remove.fulfilled.match(promise)) {
     } else {
     }
   }
@@ -78,14 +58,7 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
         <LinkContainer to={'/' + el.id.toString()} key={el.id}>
           <NavDropdown.Item>
             {el.name}
-            <Button
-              onClick={() => {
-                removeGroup(el.id)
-              }}
-              variant="primary"
-            >
-              <FontAwesomeIcon icon={faTrashAlt} />
-            </Button>
+            <RemoveGroupBtn id={el.id} />
           </NavDropdown.Item>
         </LinkContainer>
       ))

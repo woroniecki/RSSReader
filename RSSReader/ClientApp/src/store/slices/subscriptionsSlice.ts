@@ -111,6 +111,12 @@ const subscriptionsSlice = createSlice({
     clear: state => {
       subscriptionsAdapter.removeAll(state)
     },
+    resetGroup: (state, action: PayloadAction<number>) => {
+      state.entities[action.payload].groupId = -1
+    },
+    remove: (state, action: PayloadAction<number>) => {
+      subscriptionsAdapter.removeOne(state, action.payload)
+    },
   },
   extraReducers: builder => {
     builder

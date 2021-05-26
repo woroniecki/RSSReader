@@ -1,18 +1,11 @@
 import React from 'react'
-import {
-  Button,
-  Form,
-  FormControl,
-  InputGroup,
-  Nav,
-  NavDropdown,
-} from 'react-bootstrap'
+import { Button, Nav, NavDropdown } from 'react-bootstrap'
 import { Link, useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { authSlice } from 'store/slices'
 import { subscriptionsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
-import GroupsNavlist from './GroupsNavlist'
+import GroupsNavlist from './NavbarGroups/GroupsNavlist'
 
 export interface UserNavbarProps {}
 

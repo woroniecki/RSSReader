@@ -108,7 +108,7 @@ namespace DbAccess.Repositories
             foreach (var post in posts)
             {
                 //If post weren't readed increment counter
-                if (filtered_user_post_datas.FirstOrDefault(x => x.Id == post.Id) == null)
+                if (filtered_user_post_datas.FirstOrDefault(x => x.PostId == post.Id) == null)
                 {
                     unreaded_amount++;
                 }

@@ -96,7 +96,7 @@ namespace Tests.Services.SubscriptionServices
             var sub = new Subscription() { Active = true, Blog = blog, UserId = user.Id, GroupId = group.Id };
             _context.Add(sub);
 
-            var userpostdata = new UserPostData(post2, user, sub) { Readed = true };
+            var userpostdata = new UserPostData(post2, user, sub) {Id = 10, Readed = true };
             _context.Add(userpostdata);
 
             _context.SaveChanges();

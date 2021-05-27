@@ -27,10 +27,13 @@ export const AddSub: React.FC<AddSubProps> = props => {
     //  url: Yup.string().required('Required'),
     //}),
     onSubmit: async values => {
+      let groupIdToSend = parseInt(props.activeGroupId)
+      groupIdToSend = groupIdToSend == -1 ? null : groupIdToSend
+
       const promise = await dispatch(
         subscriptionsSlice.postAddSubscription({
           blogUrl: values.url,
-          GroupId: parseInt(props.activeGroupId),
+          GroupId: groupIdToSend,
         })
       )
 

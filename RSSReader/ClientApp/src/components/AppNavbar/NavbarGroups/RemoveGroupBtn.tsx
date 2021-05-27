@@ -52,6 +52,7 @@ export const RemoveGroupBtn: React.FC<RemoveGroupBtnProps> = props => {
           dispatch(subscriptionsSlice.actions.remove(sub.id))
         }
       }
+      push('/')
     } else {
     }
   }

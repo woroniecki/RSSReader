@@ -31,7 +31,7 @@ namespace DbAccess.Repositories
                              Posts = b.Posts
                                       .OrderByDescending(x => x.PublishDate)
                                       .Take(posts_amount)
-                         }).AsNoTracking();
+                         });
 
             var result = await query.FirstOrDefaultAsync();
 

@@ -15,6 +15,7 @@ namespace DataLayer.Models
             LastSubscribeDate = DateTime.UtcNow;
             LastUnsubscribeDate = DateTime.MinValue;
             BlogId = blog.Id;
+            Blog = blog;
             UserId = userId;
             FilterReaded = false;
         }

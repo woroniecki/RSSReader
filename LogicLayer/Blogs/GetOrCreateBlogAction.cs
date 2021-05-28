@@ -50,6 +50,8 @@ namespace LogicLayer.Blogs
                     feed_content,
                     parsed_feed);
 
+                blog.ImageUrl = await BlogIconMethods.GetHigherIconResolution(blog.ImageUrl, _httpService);
+
                 FeedMethods.UpdateBlogPosts(blog, parsed_feed, _mapper);
 
                 _unitOfWork.BlogRepo.AddNoSave(blog);

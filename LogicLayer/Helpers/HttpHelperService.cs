@@ -46,7 +46,7 @@ namespace LogicLayer.Helpers
                     var memoryStream = new MemoryStream();
                     await st.CopyToAsync(memoryStream);
                     memoryStream.Position = 0;
-                    Image img = Image.FromStream(st);
+                    Image img = Image.FromStream(memoryStream);
                     return img;
                 }
                 catch

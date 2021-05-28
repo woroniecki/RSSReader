@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Drawing;
+using System.IO;
 using System.Threading.Tasks;
 using LogicLayer.Helpers;
 using Moq;
@@ -10,6 +11,15 @@ namespace Tests.Helpers
         public FakeHttpHelperService GetStringContentReturnValue(string param, string value)
         {
             Setup(x => x.GetStringContent(param))
+                .Returns(Task.FromResult(value))
+                .Verifiable();
+
+            return this;
+        }
+        
+        public FakeHttpHelperService GetImageContent(string param, Image value)
+        {
+            Setup(x => x.GetImageContent(param))
                 .Returns(Task.FromResult(value))
                 .Verifiable();
 

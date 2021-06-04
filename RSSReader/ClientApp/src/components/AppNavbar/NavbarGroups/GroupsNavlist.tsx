@@ -38,7 +38,9 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
   const renderAllGroup = () => {
     return (
       <LinkContainer exact to={'/'}>
-        <NavDropdown.Item>All</NavDropdown.Item>
+        <NavDropdown.Item active={props.curGroupId == NaN}>
+          All
+        </NavDropdown.Item>
       </LinkContainer>
     )
   }
@@ -50,7 +52,9 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
     ) {
       return (
         <LinkContainer to={'/-1'}>
-          <NavDropdown.Item>None</NavDropdown.Item>
+          <NavDropdown.Item active={props.curGroupId == -1}>
+            None
+          </NavDropdown.Item>
         </LinkContainer>
       )
     }
@@ -61,7 +65,7 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
       .filter(el => el.id != -1)
       .map(el => (
         <LinkContainer to={'/' + el.id.toString()} key={el.id}>
-          <NavDropdown.Item>
+          <NavDropdown.Item active={props.curGroupId == el.id}>
             {el.name}
             <RemoveGroupBtn id={el.id} curGroupId={props.curGroupId} />
           </NavDropdown.Item>

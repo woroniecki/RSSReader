@@ -353,6 +353,52 @@ namespace Tests.Services.SubscriptionServices
         }
 
         [Test]
+        public async Task Subscribe_TryToEnableExistingSubscriptionWhichIsActive_Null()
+        {
+            //ARRANGE
+            var dto = new SubscribeRequestDto()
+            {
+                BlogUrl = "www.exampleblog.com/feed"
+            };
+
+            var user = new ApiUser()
+            {
+                Id = "0"
+            };
+            _context.Add(user);
+
+            var blog = new Blog()
+            {
+                Id = 0,
+                Url = dto.BlogUrl
+            };
+            _context.Add(blog);
+
+            var sub = new Subscription(user.Id, blog)
+            {
+                Active = true
+            };
+            _context.Add(sub);
+
+            _context.SaveChanges();
+
+            var httpHelperService = new FakeHttpHelperService();
+            var startTime = DateTime.UtcNow;
+            var service = new SubscribeService(
+                    MapperHelper.GetNewInstance(),
+                    _unitOfWork,
+                    httpHelperService.Object
+                );
+
+            //ACT
+            var result = await service.Subscribe(dto, user.Id);
+
+            //ASSERT
+            Assert.IsNull(result);
+            Assert.That(service.Errors.Count, Is.EqualTo(1));
+        }
+
+        [Test]
         public async Task Subscribe_CantGetGroup_Null()
         {
             //ARRANGE

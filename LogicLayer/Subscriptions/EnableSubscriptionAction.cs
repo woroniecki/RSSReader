@@ -21,9 +21,13 @@ namespace LogicLayer.Subscriptions
 
         public bool Action(Subscription subscription)
         {
-            if (subscription.Active)
+            if (_unitOfWork.Context.Entry(subscription).State != Microsoft.EntityFrameworkCore.EntityState.Added)
             {
-                return false;
+                if (subscription.Active)
+                {
+                    AddError("Subscription is already added.");
+                    return false;
+                }
             }
             
             subscription.Active = true;

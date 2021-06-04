@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { InputGroup, Button, FormControl, Form } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
@@ -8,6 +8,7 @@ import { subscriptionsSlice } from 'store/slices'
 import { applyValidationErrors } from 'utils/utils'
 import { useSelector } from 'react-redux'
 import { authSlice } from 'store/slices'
+import SpinnerElement from 'components/Spinner/SpinnerElement'
 
 export interface AddSubProps {
   activeGroupId: string
@@ -17,6 +18,7 @@ export const AddSub: React.FC<AddSubProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
   const { userName } = useSelector(authSlice.stateSelector)
+  const [isInAction, setIsInAction] = useState(false)
 
   const formik = useFormik({
     initialValues: {
@@ -27,6 +29,9 @@ export const AddSub: React.FC<AddSubProps> = props => {
     //  url: Yup.string().required('Required'),
     //}),
     onSubmit: async values => {
+      if (isInAction) return
+      setIsInAction(true)
+
       let groupIdToSend = parseInt(props.activeGroupId)
       groupIdToSend = groupIdToSend == -1 ? null : groupIdToSend
 
@@ -41,8 +46,14 @@ export const AddSub: React.FC<AddSubProps> = props => {
       } else {
         applyValidationErrors(formik, promise.error)
       }
+      setIsInAction(false)
     },
   })
+
+  function getSubmitBtnBody() {
+    if (!isInAction) return '+'
+    return <SpinnerElement variant="primary" size={12} />
+  }
 
   return (
     <Form id="AddSub" onSubmit={formik.handleSubmit}>
@@ -54,7 +65,7 @@ export const AddSub: React.FC<AddSubProps> = props => {
             variant="outline-primary"
             type="submit"
           >
-            +
+            {getSubmitBtnBody()}
           </Button>
         </InputGroup.Prepend>
         <FormControl

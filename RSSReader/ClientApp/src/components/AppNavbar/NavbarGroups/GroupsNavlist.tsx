@@ -10,7 +10,9 @@ import AddGroupBtn from './AddGroupBtn'
 import DeleteGroupPrompt from 'components/AppNavbar/NavbarGroups/DeleteGroupPrompt'
 import RemoveGroupBtn from './RemoveGroupBtn'
 
-export interface GroupsNavlistProps {}
+export interface GroupsNavlistProps {
+  curGroupId: number
+}
 
 export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
   const dispatch = useAppDispatch()
@@ -61,7 +63,7 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
         <LinkContainer to={'/' + el.id.toString()} key={el.id}>
           <NavDropdown.Item>
             {el.name}
-            <RemoveGroupBtn id={el.id} />
+            <RemoveGroupBtn id={el.id} curGroupId={props.curGroupId} />
           </NavDropdown.Item>
         </LinkContainer>
       ))

@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import DeleteGroupPrompt from 'components/AppNavbar/NavbarGroups/DeleteGroupPrompt'
 import React, { useState } from 'react'
 import { Button } from 'react-bootstrap'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { groupsSlice, subscriptionsSlice } from 'store/slices'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
@@ -12,6 +12,7 @@ import { Subscription } from 'api/api.types'
 
 export interface RemoveGroupBtnProps {
   id: number
+  curGroupId: number
 }
 
 export const RemoveGroupBtn: React.FC<RemoveGroupBtnProps> = props => {
@@ -52,7 +53,8 @@ export const RemoveGroupBtn: React.FC<RemoveGroupBtnProps> = props => {
           dispatch(subscriptionsSlice.actions.remove(sub.id))
         }
       }
-      push('/')
+
+      if (props.curGroupId == id) push('/')
     } else {
     }
   }

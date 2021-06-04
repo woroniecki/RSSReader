@@ -29,7 +29,12 @@ function App() {
 
   return (
     <>
-      <AppNavbar />
+      <Switch>
+        <Route exact path={['/', '/:groupId']} component={AppNavbar} />
+        <Route>
+          <AppNavbar />
+        </Route>
+      </Switch>
       <Switch>
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />

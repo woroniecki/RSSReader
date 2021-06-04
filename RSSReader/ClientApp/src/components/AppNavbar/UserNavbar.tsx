@@ -7,7 +7,9 @@ import { subscriptionsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import GroupsNavlist from './NavbarGroups/GroupsNavlist'
 
-export interface UserNavbarProps {}
+export interface UserNavbarProps {
+  curGroupId: number
+}
 
 export const UserNavbar: React.FC<UserNavbarProps> = props => {
   const { push } = useHistory()
@@ -35,7 +37,7 @@ export const UserNavbar: React.FC<UserNavbarProps> = props => {
   } else {
     returnValue = (
       <React.Fragment>
-        <GroupsNavlist />
+        <GroupsNavlist curGroupId={props.curGroupId} />
         <Nav>
           <NavDropdown title={userName} id="collasible-nav-dropdown" alignRight>
             <NavDropdown.Item href="">Panel</NavDropdown.Item>

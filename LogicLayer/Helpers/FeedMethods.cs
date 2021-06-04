@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataLayer.Models;
+using LogicLayer._const;
 using Microsoft.Toolkit.Parsers.Rss;
 using System;
 using System.Collections.Generic;
@@ -122,7 +123,7 @@ namespace LogicLayer.Helpers
 
         private static bool ShouldRefreshBlog(Blog blog)
         {
-            return blog.LastPostsRefreshDate.AddMinutes(5) < DateTime.UtcNow;
+            return blog.LastPostsRefreshDate.AddSeconds(RssConsts.UPDATE_BLOG_DELAY_S) < DateTime.UtcNow;
         }
 
         public static IEnumerable<Post> UpdateBlogPosts(Blog blog, IEnumerable<RssSchema> parsedFeed, IMapper mapper)

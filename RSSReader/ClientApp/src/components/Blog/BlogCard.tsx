@@ -6,9 +6,10 @@ import { useAppDispatch } from 'store/store'
 import { subscriptionsSlice, articlesSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import { BlogGroup } from './BlogGroup'
+import UnsubscribeBlogBtn from './UnsubscribeBlogBtn'
 
 export interface BlogCardProps {
   title: string
@@ -22,14 +23,6 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
   const { push } = useHistory()
   const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
   const articlesList = useSelector(articlesSlice.selectAll)
-
-  const unsubcribeBlog = async (id: number) => {
-    const promise = await dispatch(subscriptionsSlice.putUnsubscribeBlog(id))
-
-    if (subscriptionsSlice.putUnsubscribeBlog.fulfilled.match(promise)) {
-    } else {
-    }
-  }
 
   const updateArticlesList = async () => {
     const list_already_taken = articlesList.find(el => el.blogId == props.id)
@@ -98,14 +91,7 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
               </Card.Body>
               <div className="img-square-wrapper">
                 {getUnreadedAmount()}
-                <Button
-                  onClick={() => {
-                    unsubcribeBlog(props.id)
-                  }}
-                  variant="primary"
-                >
-                  <FontAwesomeIcon icon={faTrashAlt} />
-                </Button>
+                <UnsubscribeBlogBtn id={props.id} />
               </div>
             </div>
           </Card>

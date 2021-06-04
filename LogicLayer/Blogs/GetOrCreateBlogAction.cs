@@ -27,18 +27,26 @@ namespace LogicLayer.Blogs
 
         public async Task<Blog> ActionAsync(string url)
         {
-            Blog blog = await _unitOfWork.BlogRepo.GetByUrl(url, RssConsts.POSTS_PER_CALL);
-            
+            Blog blog = await GetBlog(url);
+
             if (blog == null)
             {
-                string feed_content = await _httpService.GetStringContent(url);
-                if (string.IsNullOrEmpty(feed_content))
+                var http_response = await _httpService.GetRssHttpResponse(url);
+                if (http_response == null)
                 {
                     AddError("Can't get content under url.");
                     return null;
                 }
 
-                IEnumerable<RssSchema> parsed_feed = FeedMethods.Parse(feed_content);
+                //Maybe url was written diffrently, try once again to get blog based on response request uri
+                if (url != http_response.RequestUrl)
+                {
+                    blog = await GetBlog(http_response.RequestUrl);
+                    if (blog != null)
+                        return blog;
+                }
+
+                IEnumerable<RssSchema> parsed_feed = FeedMethods.Parse(http_response.Content);
                 if (parsed_feed == null)
                 {
                     AddError("Content under url is not rss format.");
@@ -46,8 +54,8 @@ namespace LogicLayer.Blogs
                 }
 
                 blog = FeedMethods.CreateBlogObject(
-                    url,
-                    feed_content,
+                    http_response.RequestUrl,//to avaid duplicated blogs use url from response
+                    http_response.Content,
                     parsed_feed);
 
                 blog.ImageUrl = await BlogIconMethods.GetHigherIconResolution(blog.ImageUrl, _httpService);
@@ -58,6 +66,11 @@ namespace LogicLayer.Blogs
             }
 
             return blog;
+        }
+
+        private async Task<Blog> GetBlog(string url)
+        {
+            return await _unitOfWork.BlogRepo.GetByUrl(url, RssConsts.POSTS_PER_CALL);
         }
     }
 }

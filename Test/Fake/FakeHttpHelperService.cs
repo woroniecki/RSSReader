@@ -40,5 +40,33 @@ namespace Tests.Helpers
 
             return this;
         }
+
+        public FakeHttpHelperService GetRssHttpResponse(string param, HttpHelperService.RssHttpResponse value)
+        {
+            Setup(x => x.GetRssHttpResponse(param))
+                .Returns(Task.FromResult(value))
+                .Verifiable();
+
+            return this;
+        }
+
+        public FakeHttpHelperService GetRssHttpResponseFromFile(string param, string requestUri, string contentPath)
+        {
+            string feed_data = null;
+            using (StreamReader r = new StreamReader(contentPath))
+            {
+                feed_data = r.ReadToEnd();
+            }
+
+            var result = new HttpHelperService.RssHttpResponse();
+            result.Content = feed_data;
+            result.RequestUrl = requestUri;
+
+            Setup(x => x.GetRssHttpResponse(param))
+                .Returns(Task.FromResult(result))
+                .Verifiable();
+
+            return this;
+        }
     }
 }

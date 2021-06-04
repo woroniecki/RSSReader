@@ -6,6 +6,7 @@ using DataLayer.Models;
 using DbAccess.Core;
 using Dtos.Subscriptions;
 using LogicLayer._const;
+using LogicLayer.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
@@ -38,9 +39,11 @@ namespace Tests.Services.SubscriptionServices
         public async Task Subscribe_CreatesNewSubscriptionAndBlog_SubscriptionResponseDto()
         {
             //ARRANGE
+            string url_from_data = "http://blogprogramisty.net/feed/";
+
             var dto = new SubscribeRequestDto() 
             {
-                BlogUrl = "www.exampleblog.com/feed"
+                BlogUrl = url_from_data + "///////"//to verify normalization of url
             };
 
             var user = new ApiUser()
@@ -52,7 +55,7 @@ namespace Tests.Services.SubscriptionServices
             _context.SaveChanges();
 
             var httpHelperService = new FakeHttpHelperService()
-                .GetStringContentFromFile(dto.BlogUrl, "../../../Data/feeddata.xml");
+                .GetRssHttpResponseFromFile(dto.BlogUrl, url_from_data, "../../../Data/feeddata.xml");
             var startTime = DateTime.UtcNow;
             var service = new SubscribeService(
                     MapperHelper.GetNewInstance(),
@@ -69,13 +72,13 @@ namespace Tests.Services.SubscriptionServices
                 .Include(x => x.Blog)
                 .ThenInclude(x => x.Posts)
                 .Include(x => x.User)
-                .Where(x => x.User.Id == user.Id && x.Blog.Url == dto.BlogUrl)
+                .Where(x => x.User.Id == user.Id && x.Blog.Url == url_from_data)
                 .First();
             Assert.IsNotNull(created_sub);
             Assert.That(created_sub.User.Id, Is.EqualTo(user.Id));
             Assert.That(created_sub.FirstSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
             Assert.That(created_sub.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
-            Assert.That(result.Blog.Url, Is.EqualTo(dto.BlogUrl));
+            Assert.That(result.Blog.Url, Is.EqualTo(url_from_data));
             Assert.IsNull(result.GroupId);
             httpHelperService.Verify();
 
@@ -146,6 +149,65 @@ namespace Tests.Services.SubscriptionServices
             Assert.That(result.UnreadedCount, Is.EqualTo(RssConsts.POSTS_PER_CALL));//Max amount is RssConsts.POSTS_PER_CALL
             Assert.That(created_sub.Blog.Posts.Count, Is.GreaterThanOrEqualTo(RssConsts.POSTS_PER_CALL));
             Assert.That(created_sub.GroupId, Is.EqualTo(dto.GroupId));
+        }
+
+        [Test]
+        public async Task Subscribe_CreatesNewSubscriptionForExistingBlogWithDiffrentUrl_SubscriptionResponseDto()
+        {
+            //ARRANGE
+            string url_from_data = "http://blogprogramisty.net/feed/";
+
+            var user = new ApiUser();
+            _context.Add(user);
+
+            var dto = new SubscribeRequestDto()
+            {
+                BlogUrl = url_from_data + "////////"
+            };
+
+            var blog = new Blog()
+            {
+                Url = url_from_data 
+            };
+            _context.Add(blog);
+
+            for (int i = 0; i < 12; i++)
+            {
+                var post = new Post() { BlogId = blog.Id };
+                _context.Add(post);
+            }
+
+            _context.SaveChanges();
+
+            var httpHelperService = new FakeHttpHelperService()
+                .GetRssHttpResponseFromFile(dto.BlogUrl, url_from_data, "../../../Data/feeddata.xml");
+            var startTime = DateTime.UtcNow;
+            var service = new SubscribeService(
+                    MapperHelper.GetNewInstance(),
+                    _unitOfWork,
+                    httpHelperService.Object
+                );
+
+            //ACT
+            var result = await service.Subscribe(dto, user.Id);
+
+            //ASSERT
+            var created_sub = _context
+                .Subscriptions
+                .Include(x => x.Blog)
+                .Include(x => x.User)
+                .Where(x => x.User.Id == user.Id && x.Blog.Url == url_from_data)
+                .First();
+            Assert.IsNotNull(created_sub);
+            Assert.That(created_sub.User.Id, Is.EqualTo(user.Id));
+            Assert.That(created_sub.Blog.Id, Is.EqualTo(blog.Id));
+            Assert.That(created_sub.FirstSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
+            Assert.That(created_sub.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
+            Assert.That(result.Blog.Url, Is.EqualTo(url_from_data));
+
+            //<--count unreaded posts-->
+            Assert.That(result.UnreadedCount, Is.EqualTo(RssConsts.POSTS_PER_CALL));//Max amount is RssConsts.POSTS_PER_CALL
+            Assert.That(created_sub.Blog.Posts.Count, Is.GreaterThanOrEqualTo(RssConsts.POSTS_PER_CALL));
         }
 
         [Test]
@@ -343,7 +405,7 @@ namespace Tests.Services.SubscriptionServices
             _context.SaveChanges();
 
             var httpHelperService = new FakeHttpHelperService()
-                .GetStringContentReturnValue(dto.BlogUrl, null);
+                .GetRssHttpResponse(dto.BlogUrl, null);
             var startTime = DateTime.UtcNow;
             var service = new SubscribeService(
                 MapperHelper.GetNewInstance(),
@@ -378,7 +440,12 @@ namespace Tests.Services.SubscriptionServices
             _context.SaveChanges();
 
             var httpHelperService = new FakeHttpHelperService()
-                .GetStringContentReturnValue(dto.BlogUrl, "This is wrong feed data");
+                .GetRssHttpResponse(
+                dto.BlogUrl, 
+                new HttpHelperService.RssHttpResponse() {
+                    RequestUrl = dto.BlogUrl,
+                    Content = "This is wrong feed data"
+                });
             var startTime = DateTime.UtcNow;
             var service = new SubscribeService(
                 MapperHelper.GetNewInstance(),

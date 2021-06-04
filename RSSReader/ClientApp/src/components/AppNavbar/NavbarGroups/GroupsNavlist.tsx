@@ -1,13 +1,13 @@
-import React from 'react'
-import { Nav, NavDropdown } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Button, Nav, NavDropdown } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
 
 import { authSlice, groupsSlice, subscriptionsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
-import AddGroupNavForm from './AddGroupNavForm'
-import Prompt from 'components/Utils/Prompt'
+import AddGroupBtn from './AddGroupBtn'
+import DeleteGroupPrompt from 'components/AppNavbar/NavbarGroups/DeleteGroupPrompt'
 import RemoveGroupBtn from './RemoveGroupBtn'
 
 export interface GroupsNavlistProps {}
@@ -72,7 +72,7 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
         {renderAllGroup()}
         {renderNoneGroup()}
         {renderGroupsList()}
-        <AddGroupNavForm />
+        <AddGroupBtn />
       </NavDropdown>
     </Nav>
   )

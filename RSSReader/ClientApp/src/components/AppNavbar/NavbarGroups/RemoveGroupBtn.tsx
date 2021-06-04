@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Prompt from 'components/Utils/Prompt'
+import DeleteGroupPrompt from 'components/AppNavbar/NavbarGroups/DeleteGroupPrompt'
 import React, { useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
@@ -60,7 +60,7 @@ export const RemoveGroupBtn: React.FC<RemoveGroupBtnProps> = props => {
   const renderDeletePrompt = () => {
     if (showPrompt) {
       return (
-        <Prompt
+        <DeleteGroupPrompt
           onMove={() => removeGroup(props.id, true)}
           onDelete={() => removeGroup(props.id, false)}
           onClose={() => setShowPrompt(false)}

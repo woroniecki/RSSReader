@@ -1,16 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Form, FormControl, InputGroup } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import { groupsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import { applyValidationErrors } from 'utils/utils'
 import { useFormik } from 'formik'
+import AddGroupFormPrompt from './AddGroupFormPrompt'
 
-export interface AddGroupNavFormProps {}
+export interface AddGroupBtnProps {}
 
-export const AddGroupNavForm: React.FC<AddGroupNavFormProps> = props => {
+export const AddGroupBtn: React.FC<AddGroupBtnProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
+  const [showPrompt, setShowPrompt] = useState(false)
 
   const formik = useFormik({
     initialValues: {
@@ -30,6 +32,26 @@ export const AddGroupNavForm: React.FC<AddGroupNavFormProps> = props => {
       }
     },
   })
+
+  const renderAddPrompt = () => {
+    if (showPrompt) {
+      return <AddGroupFormPrompt onClose={() => setShowPrompt(false)} />
+    }
+  }
+
+  return (
+    <>
+      <Button
+        onClick={() => {
+          setShowPrompt(true)
+        }}
+        variant="primary"
+      >
+        Add group
+      </Button>
+      {renderAddPrompt()}
+    </>
+  )
 
   return (
     <Form id="AddSub" onSubmit={formik.handleSubmit}>
@@ -70,4 +92,4 @@ export const AddGroupNavForm: React.FC<AddGroupNavFormProps> = props => {
   )
 }
 
-export default AddGroupNavForm
+export default AddGroupBtn

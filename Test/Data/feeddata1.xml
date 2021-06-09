@@ -1,0 +1,1681 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+  <channel>
+    <title>Blog Programisty.NET</title>
+    <atom:link href="https://blogprogramisty.net/feed/" rel="self" type="application/rss+xml" />
+    <link>https://blogprogramisty.net</link>
+    <description>Opisuje nie tylko framework .NET.NET Core C# i ASP.NET  ale również narzędzia programistyczne przydatne na co dzień. Programista: Przemysław Walkowski</description>
+    <lastBuildDate>Fri, 22 Jan 2021 14:20:55 +0000</lastBuildDate>
+    <language>pl-PL</language>
+    <sy:updatePeriod>
+      hourly
+    </sy:updatePeriod>
+    <sy:updateFrequency>
+      1
+    </sy:updateFrequency>
+    <generator>https://wordpress.org/?v=5.6</generator>
+
+    <image>
+      <url>https://blogprogramisty.net/wp-content/uploads/2019/04/favi-150x150.png</url>
+      <title>Blog Programisty.NET</title>
+      <link>https://blogprogramisty.net</link>
+      <width>32</width>
+      <height>32</height>
+    </image>
+    <item>
+      <title>Skrypty &#8211; przydatne i użyteczne.</title>
+      <link>https://blogprogramisty.net/powershell-skrypty/?utm_source=rss&#038;utm_medium=rss&#038;utm_campaign=powershell-skrypty</link>
+
+      <dc:creator><![CDATA[Przemysław Walkowski]]></dc:creator>
+      <pubDate>Wed, 13 Jan 2021 13:55:03 +0000</pubDate>
+      <category><![CDATA[Narzędzia progamistyczne]]></category>
+      <category><![CDATA[czekanie]]></category>
+      <category><![CDATA[połączeniua]]></category>
+      <category><![CDATA[postresql]]></category>
+      <category><![CDATA[Powershell]]></category>
+      <category><![CDATA[wait]]></category>
+      <guid isPermaLink="false">https://blogprogramisty.net/?p=2035</guid>
+
+      <description>
+        <![CDATA[<p>Nie lubię takich skryptowych języków ale takie języki często się wykorzystuje w jakiś większych narzędziach typu TeamCity. Najczęściej potrzebujemy jakiś konkretnych rzeczy aby te skrypty zrobiły i czasem szkoda czasu się uczyć wszystkiego tylko skorzystać z gotowego. Poniżej lista potrzebnych mi skryptów, które zostały przesterowane z uwagami, które miałem (teraz jest jeden ale będę to &#8230; <a href="https://blogprogramisty.net/powershell-skrypty/" class="more-link">Czytaj dalej <span class="screen-reader-text">Skrypty &#8211; przydatne i użyteczne.</span> <span class="meta-nav">&#8594;</span></a></p>
+The post <a href="https://blogprogramisty.net/powershell-skrypty/">Skrypty – przydatne i użyteczne.</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </description>
+      <content:encoded>
+        <![CDATA[<p>Nie lubię takich skryptowych języków ale takie języki często się wykorzystuje w jakiś większych narzędziach typu TeamCity. Najczęściej potrzebujemy jakiś konkretnych rzeczy aby te skrypty zrobiły i czasem szkoda czasu się uczyć wszystkiego tylko skorzystać z gotowego. Poniżej lista potrzebnych mi skryptów, które zostały przesterowane z uwagami, które miałem (teraz jest jeden ale będę to rozszerzał)</p>
+
+
+
+<p><strong>Edycja 1 stycznia 2021</strong></p>
+
+
+
+<p>Okazało się, że jednak tych skryptów już mam więcej i nie tylko do Powershell-a. Postanowiłem zmienić wpis na ogólny dotyczący skryptów i trzymać tutaj wszystkie, które są użyteczne i chce je zapamiętać.</p>
+
+
+
+<span id="more-2035"></span>
+
+
+
+<h2>Skrypt do zamiany zawartości pliku (jednolinijkowy)</h2>
+
+
+
+<pre class="wp-block-code"><code>((Get-Content -path d:\app.config -Raw) -replace 'poprzednia_wartosc','następna_wartość') | Set-Content -Path d:\app.config</code></pre>
+
+
+
+<p>Skrypt zamienia w pliku <strong>d:\app.config</strong> wszystkie wartości <strong>poprzednia_wartosc </strong> na <strong>następna_wartość</strong>. Jest jednolinijkowy więc da się go wcisnąć praktycznie wszędzie.</p>
+
+
+
+<h2>Skrypt do wywoływania API</h2>
+
+
+
+<p>Szczegóły są tutaj: <a href="https://blogprogramisty.net/powershell-i-wywolania-api/">https://blogprogramisty.net/powershell-i-wywolania-api/</a></p>
+
+
+
+<h2>Skrypt do usunięcia wszystkich połączeń do bazy danych PostgreSQL (jednolinijkowy)</h2>
+
+
+
+<pre class="wp-block-code"><code>psql -U postgres -c "do $$ DECLARE   r pg_stat_activity%rowtype;						begin   IF (   SELECT exists(SELECT datname FROM pg_catalog.pg_database WHERE lower(datname) = lower('nazwa_bazy_danych'))) THEN  REVOKE CONNECT ON DATABASE nazwa_bazy_danych FROM public;  FOR r IN SELECT  * FROM pg_stat_activity WHERE pg_stat_activity.datname = 'nazwa_bazy_danych'    LOOP 	PERFORM pg_terminate_backend(r.pid);    END LOOP;END IF;end $$"</code></pre>
+
+
+
+<p>Działa cały czas i się sprawdzą. Jedna linijka skryptu i możemy mieć pewność, że baza danych się po wykonaniu tego polecenia usunie się na pewno. </p>
+
+
+
+<h2>Skrypt WAIT w bash windows</h2>
+
+
+
+<p>Najprostszy sposób na zrobienie czekania w linii poleceń w Windows.</p>
+
+
+
+<pre class="wp-block-code"><code>ping -n 120 127.0.0.1 &gt; nul</code></pre>
+
+
+
+<p>120 to ilość sekund &#8211; można dość dowolnie to edytować. Czyli ten skrypt wykonuje się dokładnie 2 minuty potem się zakończy.</p>
+
+
+
+<h2>Zatrzymanie i uruchomianie puli w IIS-sie</h2>
+
+
+
+<pre class="wp-block-code"><code>%windir%\system32\inetsrv\appcmd stop apppool "nazwa_puli"</code></pre>
+
+
+
+<pre class="wp-block-code"><code>%windir%\system32\inetsrv\appcmd start apppool "nazwa_puli"</code></pre>
+
+
+
+<h2>Zatrzymanie i uruchomianie aplikacji w IIS-sie</h2>
+
+
+
+<pre class="wp-block-code"><code>%windir%\system32\inetsrv\appcmd stop site "nazwa_aplikacji"</code></pre>
+
+
+
+<pre class="wp-block-code"><code>%windir%\system32\inetsrv\appcmd start site "nazwa_aplikacji"</code></pre>
+
+
+
+<h2>Kasowanie WSZYSTKICH plików i WSZYSTKICH folderów i pod folderów i ich plików w PowerShell</h2>
+
+
+
+<pre class="wp-block-code"><code>Remove-Item d:\temp2\* -Recurse -Force</code></pre>
+
+
+
+<p></p>The post <a href="https://blogprogramisty.net/powershell-skrypty/">Skrypty – przydatne i użyteczne.</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </content:encoded>
+
+
+
+    </item>
+    <item>
+      <title>Newsy programistyczne 04.01.2020</title>
+      <link>https://blogprogramisty.net/newsy-programistyczne-01-04-2020/?utm_source=rss&#038;utm_medium=rss&#038;utm_campaign=newsy-programistyczne-01-04-2020</link>
+
+      <dc:creator><![CDATA[Przemysław Walkowski]]></dc:creator>
+      <pubDate>Mon, 04 Jan 2021 09:51:40 +0000</pubDate>
+      <category><![CDATA[News]]></category>
+      <category><![CDATA[CLR]]></category>
+      <category><![CDATA[drużynowa]]></category>
+      <category><![CDATA[jvm]]></category>
+      <category><![CDATA[narzędzia]]></category>
+      <category><![CDATA[programowanie]]></category>
+      <category><![CDATA[sport]]></category>
+      <category><![CDATA[technologia]]></category>
+      <guid isPermaLink="false">https://blogprogramisty.net/?p=2031</guid>
+
+      <description>
+        <![CDATA[<p>Rany nowy rok. Co roku to samo. Choć ten rok będzie ciekawy, bo dużo się ostatnio zmieniło dla programistów. Mówię tu o pracy zdalnej. Jeszcze chyba tylu programistów nie pracowało zdalnie w tylu firmach tak długo : ). No nic, w tym roku nie dałem dużej ilość podsumowań więc zapraszam na mocno wyselekcjonowane newsy z &#8230; <a href="https://blogprogramisty.net/newsy-programistyczne-01-04-2020/" class="more-link">Czytaj dalej <span class="screen-reader-text">Newsy programistyczne 04.01.2020</span> <span class="meta-nav">&#8594;</span></a></p>
+The post <a href="https://blogprogramisty.net/newsy-programistyczne-01-04-2020/">Newsy programistyczne 04.01.2020</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </description>
+      <content:encoded>
+        <![CDATA[<p>Rany nowy rok. Co roku to samo. Choć ten rok będzie ciekawy, bo dużo się ostatnio zmieniło dla programistów. Mówię tu o pracy zdalnej. Jeszcze chyba tylu programistów nie pracowało zdalnie w tylu firmach tak długo : ). No nic, w tym roku nie dałem dużej ilość podsumowań więc zapraszam na mocno wyselekcjonowane newsy z branży deweloperskiej.</p>
+
+
+
+<h2>Pozycja obowiązkowa od Scotta &#8211; narzędzia dla programistów na 2021</h2>
+
+
+
+<span id="more-2031"></span>
+
+
+
+<blockquote class="wp-block-quote"><p><a href="https://www.hanselman.com/blog/scott-hanselmans-2021-ultimate-developer-and-power-users-tool-list-for-windows">https://www.hanselman.com/blog/scott-hanselmans-2021-ultimate-developer-and-power-users-tool-list-for-windows</a></p></blockquote>
+
+
+
+<h2>CLR vs JVM</h2>
+
+
+
+<blockquote class="wp-block-quote"><p> <a href="https://jaxenter.com/java-net-clr-jvm-173213.html">https://jaxenter.com/java-net-clr-jvm-173213.html</a></p></blockquote>
+
+
+
+<h2>5 technologii do obserwowania od Microsoft</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://www.zdnet.com/article/five-microsoft-technologies-to-watch-in-2021/"> https://www.zdnet.com/article/five-microsoft-technologies-to-watch-in-2021/</a></p></blockquote>
+
+
+
+<h2>Dlaczego programowanie jest trudne?</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" http://jeremymikkola.com/posts/2021_01_01_why_software_development_is_hard.html">http://jeremymikkola.com/posts/2021_01_01_why_software_development_is_hard.html</a></p></blockquote>
+
+
+
+<h2>Tworzenie oprogramowania jak sport drużynowy</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://aaronstannard.com/software-team-sport/"> https://aaronstannard.com/software-team-sport/</a></p></blockquote>
+
+
+
+<p></p>The post <a href="https://blogprogramisty.net/newsy-programistyczne-01-04-2020/">Newsy programistyczne 04.01.2020</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </content:encoded>
+
+
+
+    </item>
+    <item>
+      <title>Newsy programistyczne 03.12.2020</title>
+      <link>https://blogprogramisty.net/newsy-programistyczne-03-12-2020/?utm_source=rss&#038;utm_medium=rss&#038;utm_campaign=newsy-programistyczne-03-12-2020</link>
+
+      <dc:creator><![CDATA[Przemysław Walkowski]]></dc:creator>
+      <pubDate>Thu, 03 Dec 2020 21:56:50 +0000</pubDate>
+      <category><![CDATA[News]]></category>
+      <category><![CDATA[.net 5]]></category>
+      <category><![CDATA[.net conf 2020]]></category>
+      <category><![CDATA[angular 11]]></category>
+      <category><![CDATA[breaking changes]]></category>
+      <category><![CDATA[cheat sheet]]></category>
+      <category><![CDATA[freelancer]]></category>
+      <guid isPermaLink="false">https://blogprogramisty.net/?p=2028</guid>
+
+      <description>
+        <![CDATA[<p>Rany ile pracy. Pandemia jest nie odczuwalna. Nie wiem jak u Was ale chyba na pracę programistów ona raczej nie ma znaczenia. Pracy tyle samo albo więcej. Smart Testing na razie jest spoko &#8211; ale robię dalej. A teraz zapraszam na mocno wyselekcjonowane newsy z branży deweloperskiej .NET Conf 2020 &#8211; wszystkie materiały w jednym &#8230; <a href="https://blogprogramisty.net/newsy-programistyczne-03-12-2020/" class="more-link">Czytaj dalej <span class="screen-reader-text">Newsy programistyczne 03.12.2020</span> <span class="meta-nav">&#8594;</span></a></p>
+The post <a href="https://blogprogramisty.net/newsy-programistyczne-03-12-2020/">Newsy programistyczne 03.12.2020</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </description>
+      <content:encoded>
+        <![CDATA[<p>Rany ile pracy. Pandemia jest nie odczuwalna. Nie wiem jak u Was ale chyba na pracę programistów ona raczej nie ma znaczenia. Pracy tyle samo albo więcej. Smart Testing na razie jest spoko &#8211; ale robię dalej.  A teraz zapraszam na mocno wyselekcjonowane newsy z branży deweloperskiej</p>
+
+
+
+<h2>.NET Conf 2020 &#8211; wszystkie materiały w jednym miejscu</h2>
+
+
+
+<span id="more-2028"></span>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://devblogs.microsoft.com/dotnet/dotnetconf-2020-recap/"> https://devblogs.microsoft.com/dotnet/dotnetconf-2020-recap/</a></p></blockquote>
+
+
+
+<h2>Microsoft  i Linux &#8211; krótki opis objaśniający</h2>
+
+
+
+<blockquote class="wp-block-quote"><p> <a href="https://www.techrepublic.com/article/what-is-microsoft-doing-with-linux-everything-you-need-to-know-about-its-plans-for-open-source/">https://www.techrepublic.com/article/what-is-microsoft-doing-with-linux-everything-you-need-to-know-about-its-plans-for-open-source/</a></p></blockquote>
+
+
+
+<h2>Freelance-erzy pracują więcej niż pracownicy etatowi</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://pulseblueprint.com/news/flexjobs-study-freelancers-like-work-more-than-emp"> https://pulseblueprint.com/news/flexjobs-study-freelancers-like-work-more-than-emp</a>loyees/</p></blockquote>
+
+
+
+<h2>Frustracje deweloperów &#8211; polecam!</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://jaxenter.com/developer-frustrations-173082.html"> https://jaxenter.com/developer-frustrations-173082.html</a></p></blockquote>
+
+
+
+<h2>.NET 5  &#8211; Cheat sheet</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://github.com/alugili/CSharp-9-CheatSheet">https://github.com/alugili/CSharp-9-CheatSheet</a></p></blockquote>
+
+
+
+<h2>Co nowego w Angular 11?</h2>
+
+
+
+<blockquote class="wp-block-quote"><p> <a href="https://www.telerik.com/blogs/whats-new-angular-11">https://www.telerik.com/blogs/whats-new-angular-11</a></p></blockquote>
+
+
+
+<h2>.NET Breaking Changes</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href="https://www.infoq.com/news/2020/12/net-5-breaking-changes-2/">https://www.infoq.com/news/2020/12/net-5-breaking-changes-2/</a></p></blockquote>
+
+
+
+<p></p>The post <a href="https://blogprogramisty.net/newsy-programistyczne-03-12-2020/">Newsy programistyczne 03.12.2020</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </content:encoded>
+
+
+
+    </item>
+    <item>
+      <title>Komendy GIT-a, które należy znać</title>
+      <link>https://blogprogramisty.net/komendy-git-a-ktore-nalezy-znac/?utm_source=rss&#038;utm_medium=rss&#038;utm_campaign=komendy-git-a-ktore-nalezy-znac</link>
+      <comments>https://blogprogramisty.net/komendy-git-a-ktore-nalezy-znac/#comments</comments>
+
+      <dc:creator><![CDATA[Przemysław Walkowski]]></dc:creator>
+      <pubDate>Wed, 28 Oct 2020 09:30:24 +0000</pubDate>
+      <category><![CDATA[Narzędzia progamistyczne]]></category>
+      <category><![CDATA[git]]></category>
+      <category><![CDATA[komendy]]></category>
+      <category><![CDATA[pomoc]]></category>
+      <category><![CDATA[skróty]]></category>
+      <guid isPermaLink="false">https://blogprogramisty.net/?p=1761</guid>
+
+      <description>
+        <![CDATA[<p>Każdy szanujący swój czas deweloper powinien znać git-a oraz umieć go obsługiwać. Poniżej lista komend, które każdy użytkownik git-a powinien znać i używać. Komend wyszło 97. Niektóre są bardzo proste, nie których rzadko się używa ale znać je trzeba. Listę też można potraktować jak szybkie przypomnienie co i jak. Zapraszam na 97 komend git-a, które &#8230; <a href="https://blogprogramisty.net/komendy-git-a-ktore-nalezy-znac/" class="more-link">Czytaj dalej <span class="screen-reader-text">Komendy GIT-a, które należy znać</span> <span class="meta-nav">&#8594;</span></a></p>
+The post <a href="https://blogprogramisty.net/komendy-git-a-ktore-nalezy-znac/">Komendy GIT-a, które należy znać</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </description>
+      <content:encoded>
+        <![CDATA[<p>Każdy szanujący swój czas deweloper powinien znać git-a oraz umieć go obsługiwać. Poniżej lista komend, które każdy użytkownik git-a powinien znać i używać. Komend wyszło 97. Niektóre są bardzo proste, nie których rzadko się używa ale znać je trzeba. Listę też można potraktować jak szybkie przypomnienie co i jak. Zapraszam na 97 komend git-a, które musisz znać aby go dobrze używać. </p>
+
+
+
+<p>PS</p>
+
+
+
+<p>Są jeszcze te komendy, których nie mogę zapamiętać a też się często przydają. <a href="https://blogprogramisty.net/komendy-git-a-ktorych-nie-moge-zapamietac/">https://blogprogramisty.net/komendy-git-a-ktorych-nie-moge-zapamietac/</a></p>
+
+
+
+<span id="more-1761"></span>
+
+
+
+<p>Aktualizacja 5 listopada 2020</p>
+
+
+
+<h4>git shortlog -sne &#8211;since=&#8221;<em>2020-11-01T00:00:00</em>&#8220;</h4>
+
+
+
+<p>Ta komenda też się przydaje, pozwala wyświetlić ile comiitów kto zrobił w danym przedziale czasu.  Format daty też warto zapamiętać, bo ten działa ISO8601 i przydaje się też w innych komandach. Więcej tutaj:<a href=" https://stackoverflow.com/a/21743961/5816153"> https://stackoverflow.com/a/21743961/5816153</a></p>
+
+
+
+<p></p>
+
+
+
+<h4>git config user.name <em>Przemek</em></h4>
+
+
+
+<p>Od czegoś trzeba zacząć. Skonfigurowanie nazwy użytkownika wydaje się dobre na początek. Można skonfigurować nazwę globalną dla wszystkich repozytoriów na użytkowniku lub na komputerze. <strong>Przełącznik &#8211;global</strong></p>
+
+
+
+<h4>git config user.email Przemek@test.pl</h4>
+
+
+
+<p>Konfiguracja maila. Podobnie jak wyżej. Dlaczego od tego zaczynam, bo zawsze po jakiś czasie się okazywało, że mam albo nie prawidłowy (nie firmowy) mail i gdzieś tam w systemach się potem wyświetlało, że jest jakiś inny Przemek. Często jak commituje z domu to mam domowego maila podłączonego</p>
+
+
+
+<h4>git config core.editor</h4>
+
+
+
+<p>Komenda, która wyświetla lub ustawia podstawowy edytor do commit-ów innych operacji.</p>
+
+
+
+<h4>git add .</h4>
+
+
+
+<p>Dodaje wszystkie zmiany do indeksu (stage). Zmiany w plikach jak i nowe pliki.</p>
+
+
+
+<h4>git add -p</h4>
+
+
+
+<p>Dodaje zmiany do indeksu z możliwością wybierania konkretnych zmian w plikach. Dzięki temu możemy z jednego pliku, gdzie było kilka zmian dodać tylko pojedyncze zmiany a nie cały plik. Od momentu jak to poznałem, używam regularnie. Jest to bardzo dobra komenda choć nie jest doskonała i czasem nie da się rozdzielić zmian tak jak byśmy chcieli.</p>
+
+
+
+<h4>git commit -m &#8220;<em>komentarz</em>&#8220;</h4>
+
+
+
+<p>Komenda, która wszystkie zmiany z indeksu (stage) zbiera razem i robi z nich pojedynczy commit. Parametr -m  służy do pisania komentarza do commit-a. Pierwsze 170 znaków wyświetla się z pojedynczej linii.</p>
+
+
+
+<h4>git init</h4>
+
+
+
+<p>Komenda do uruchomienia w katalogu z projektem aby zainicjować repozytorium git. </p>
+
+
+
+<h4>git help</h4>
+
+
+
+<p>Jak sama nazwa pomoc dla git-a. Jak się zapomni co i jak to można sobie pamięć odświeżyć. Jak by nie było internetu.</p>
+
+
+
+<h4>git status</h4>
+
+
+
+<p>Bardzo ważna komenda. Należy ją używać często i gęsto. Szczególnie przed każdą poważniejszą zmianą. Pokazuje aktualny status repozytorium, ile commit-ów jesteśmy do tyłu w porównaniu ze zdalnym repozytorium, jakie pliki są śledzone a jakie nie itd. </p>
+
+
+
+<h4>git diff</h4>
+
+
+
+<p>Pokazuje zmiany na poszczególnych plikach. Bez parametrów pokazuje po kolei wszystkie pliki. Z parametrem nazwa_pliku pokaże zmiany na danym pliku.</p>
+
+
+
+<h4>git difftool</h4>
+
+
+
+<p>Komenda, która odpala domyślne narzędzie do przeglądania różnic w plikach. Każdy może wybrać swoje narzędzie. </p>
+
+
+
+<h4>gitk</h4>
+
+
+
+<p>Przydatne narzędzie do gita posiadające GUI. Dzięki temu czasem możemy sobie ładnie zwizualizować co i jak wygląda. Głownie przydaje się, gdy na szybko chcemy coś sprawdzić a na komputerze nie ma zainstalowanego innego narzędzia np: <a href="https://sourceforge.net/projects/gitextensions/">GitExtension</a>. Możemy być pewni, że gitk zawsze będzie dostępne. Warto o tym pamiętać</p>
+
+
+
+<h4>git tag n<em>azwa_taga</em> <em>commit_hash</em></h4>
+
+
+
+<p>Tagi są bardzo przydatne jak chcemy wersjonować swoje zmiany. Dzięki nimi możemy łatwo odnaleźć commit, które wskazuje na dany punkt w historii. Ta komenda wstawia tag na danych commit. Rekomenduje się, aby takie tagi tworzyć na własnych gałęziach a nie publicznych. </p>
+
+
+
+<h4>git tag <em>nazwa_taga</em> <em>commit_hash</em> -a -m &#8211; &#8220;<em>komentarz</em>&#8220;</h4>
+
+
+
+<p>Tzw: ciężki tag, czyli tag, który zawiera nazwę, autora, komentarz. Takie duże tagi pozwalają lepiej określić na co ten tag wskazuje. Używam go w narzędziach CI aby wbijać wersję na kolejne wdrożenie. </p>
+
+
+
+<h4>git tag -d  <em>nazwa_taga</em></h4>
+
+
+
+<p>Tak można usunąć tag  z repozytorium.</p>
+
+
+
+<h4>git show master~1</h4>
+
+
+
+<p>Pokazuje commit i zmiany. Jeśli chodzi o<strong> ~</strong> to tylda oznacza ile comitów wstecz mamy pokazać . <strong>~1</strong> to jeden commit wstecz, <strong>~2</strong> to dwa commity wstecz. <strong>~</strong> i<strong> ^</strong> można używać w innych komendach, gdy te odnoszą się do commitów.</p>
+
+
+
+<h4>git show master^^</h4>
+
+
+
+<p>Komenda robi to samo co wyżej, z tą różnicą, że pokazuje zmiany w poprzednim commicie i w jeszcze poprzednim. <strong>Daszek</strong> oznacza 1 commit wstecz. Czyli <strong>~2</strong> to to samo to<strong> ^^</strong>. </p>
+
+
+
+<h4>git checkout <em>nazwa_gałęzi</em></h4>
+
+
+
+<p>Komenda ta daje możliwość przełączenia się na inna gałąź.  Ciekawostka o przełączaniu <a href="https://blogprogramisty.net/czego-nauczylem-w-14-tygodniu-pracy/">tutaj</a>  <a href="https://blogprogramisty.net/czego-nauczylem-w-14-tygodniu-pracy/">https://blogprogramisty.net/czego-nauczylem-w-14-tygodniu-pracy/</a>  -&gt; &#8220;GIT – dlaczego czasem można przenosić zmiany pomiędzy gałęziami a czasem nie&#8221;</p>
+
+
+
+<h4>git checkout <em>nazwa_taga</em></h4>
+
+
+
+<p>Komenda ta daje możliwość przełączenia się do konkretnego tagu. Czasem jest to przydatne jak chcemy się przełączyć na daną wersję kodu, która jest otagowana. Tak łatwiej zapamiętać niż hash.</p>
+
+
+
+<h4>git checkout <em>commit_hash</em></h4>
+
+
+
+<p>Komenda ta daje możliwość przełączenia się kodu do dowolnego commit-a. Uwaga gdy to zrobimy będziemy w trybie &#8220;Detach HEAD&#8221;. </p>
+
+
+
+<h4>git checkout &#8211;</h4>
+
+
+
+<p>Komenda dla geek-ów. &#8211; (kreska) oznacza, że przełączymy się do ostatnio używanej gałęzi. Przydatne jak robimy scalenia, wtedy często musimy zmieniać gałąź z jednej na drugą.</p>
+
+
+
+<h4>git checkout <em>ścieżka_do_pliku</em></h4>
+
+
+
+<p>Komenda ta daje możliwość cofnięcia zmian do ostatniego commita dla pojedynczego pliku. </p>
+
+
+
+<h4>git  checkout  -b <em>nazwa_gałęzi</em></h4>
+
+
+
+<p>Komenda ta umożliwia stworzenie nowej gałęzi o nazwie nazwa_gałęzi. Po jej utworzeniu git automatycznie się na nią przełączy.</p>
+
+
+
+<h4>git checkout  &#8212; <em>ścieżka_do_pliku</em></h4>
+
+
+
+<p>Ta komenda pozwala na przywrócenie stanu pliku do ostatniego commit-a. Coś robimy, nie podoba nam się i chcemy szybko cofnąć zmiany. </p>
+
+
+
+<h4>git checkout &#8212; <em>wzorzec_do_wyszukania</em></h4>
+
+
+
+<p>To samo co wyżej ale pozwala przesłać jakiś konkretny wzorzec do wyszukiwania plików typu wildcards (czyli *.txt itd.)</p>
+
+
+
+<h4>git branch -d <em>nazwa_gałęzi</em></h4>
+
+
+
+<p>Komenda ta daje możliwość skasowania lokalnej gałęzi tylko gdy zmiany na lokalnej gałęzi są scalone z master-em.</p>
+
+
+
+<h4>git branch -D <em>nazwa_gałęzi</em></h4>
+
+
+
+<p>Komenda robi to co wyżej z tą różnicą, że nie sprawdza czy zmiany są scalone z gałęzią master.</p>
+
+
+
+<h4>git branch -a</h4>
+
+
+
+<p>Wyświetla listę wszystkich gałęzi, w tym tych ze zdalnego repozytorium.</p>
+
+
+
+<h4>git cherry-pick <em>commit_hash</em></h4>
+
+
+
+<p>Bardzo przydatna komenda. Pozwala na zastosowanie zmian w całości z jednego commit-a (commit_hash) do aktualnej gałęzi. Jest to takie wybieranie pojedynczych commitów z dowolnych(czyli innych gałęzi) innych miejsc w repozytorium. </p>
+
+
+
+<h4>git merge <em>nazwa_gałęzi</em></h4>
+
+
+
+<p>Komenda podstawowa, która pozwala scalić zmiany z innej gałęzi na tą na, której jesteśmy. </p>
+
+
+
+<h4>git merge <em>nazwa_gałęzi</em> &#8211;squash</h4>
+
+
+
+<p>Robi to co wyżej ale z przełącznikiem &#8211;squash powala wszystkie zmiany z innej gałęzi połączyć w jeden commit. Bardzo przydatne jeśli chce się zachować ładną i czytelną historię. Często używam i polecam. </p>
+
+
+
+<h4>git merge <em></em><em>nazwa_gałęzi</em> &#8211;no-ff</h4>
+
+
+
+<p>Przełącznik &#8211;no-ff zapewnia nas, że nawet gdy nie ma konfliktów pomiędzy scalanymi gałęziami, historia nie zostanie spłaszczona do jednej linii i powstanie nowy commit. Przydatne, gdy np. wprowadzamy nowy feature i chcemy jednak zachować historię commitów utworzonych w trakcie pracy.</p>
+
+
+
+<h4>git diff &#8211;word-diff</h4>
+
+
+
+<p>Pokazuje wprowadzone zmiany z dokładnością do słów w linii kodu. Czasem czytelniejsze od zwykłego git diff.</p>
+
+
+
+<h4>git log &#8211;graph &#8211;oneline</h4>
+
+
+
+<p>Wyświetla historię commitów w formie skróconego grafu i ładniej oprawie razem z tagami.</p>
+
+
+
+<h4>git clone <em>adres_do_repozytorium</em></h4>
+
+
+
+<p>Podstawowa komenda, która pozwala pobrać repozytorium na dysk lokalny. Uwaga! komenda ta nie pobiera gałęzi zdalnych</p>
+
+
+
+<h4>git branch -vv</h4>
+
+
+
+<p>Komenda ta pokazuje gałęzie, która mamy w repozytorium. -v oznacza <strong>verbose </strong>czyli pokazuje nie tylko nazwy gałęzi ale również ostatni hash i opis commita. dodatkowe v czyli <strong>very verbose </strong>oznacza, że do tych wszystkich informacji będzie jeszcze dodana nazwa gałęzi zdalnej.</p>
+
+
+
+<h4>git remote show lub git remote </h4>
+
+
+
+<p>Komanda ta pokazuje nazwy zdalnych repozytoriów. Domyślnie powinien być <strong>origin </strong>ale mogą też być inne.  </p>
+
+
+
+<h4>git init &#8211;bare</h4>
+
+
+
+<p>Bardzo przydatna komenda, pozwalająca stworzyć zdalne repozytorium, do którego możemy robić komendy push i pull. Takie zdalne repozytoria trzymamy na dysku, spełniają świetną role backupu. Wystarczy zrobić poniższą komendę wtedy url naszego zdalnego repozytorium będzie po prostu ścieżką do tego folderu.  Następnie dodajemy sobie do repozytorium nowy remote (2 komenda poniżej) i już możemy do niej wysyłać wszystko (komanda poniżej)</p>
+
+
+
+<h4>git push  <em>nazwa_repozytorium</em> &#8211;mirror</h4>
+
+
+
+<p>Pozwala wysłać do repozytorium(nazwa_repozytorium) wszystko to co mamy u siebie lokalnie. Wszystkie gałęzie, wszystkie zmiany, wszystkie tagi. Zrobić takie lustro tego co mamy u siebie. To się przydaje do lokalnych backupów opisanych wyżej. </p>
+
+
+
+<h4>git remote add <em>nazwa_repozytorium</em> <em>url_do_repozytorium</em></h4>
+
+
+
+<p>Komenda pozwalająca dodać zdalne repozytorium do którego będziemy mogli robić komendy push i pull. </p>
+
+
+
+<p>Przykład: git remote add orgin2 https://github.com/przemekwa/LiczbyNaSlowaNetCore.git</p>
+
+
+
+<h4>git push</h4>
+
+
+
+<p>Co tu dużo pisać. Git push and go home : ) Komenda wysyła commity do zdalnego repozytorium.</p>
+
+
+
+<h4>git push origin -u <em>nazwa_gałęzi_lokalnej:nazwa_gałęzi_zdalnej</em></h4>
+
+
+
+<p>Poza wysłaniem zmian, tworzy gałąź(<em>nazwa_gałęzi_zdalnej</em>) na zdalnym repozytorium. Dopisując dwukropek za nazwą <em>nazwa_gałęzi_lokalnej</em>, możemy nadać inną nazwę gałęzi w zdalnym repo. Gdy nadamy zdalnej gałęzi inną nazwę, musimy pamiętać przy następnych pushach, aby podawać jej pełną nazwę(<em>nazwa_gałęzi_zdalnej</em>). Może to być niewygodne, dlatego możemy użyć komendy&#8230;</p>
+
+
+
+<h4>git config push.default upstream </h4>
+
+
+
+<p>&#8230;która powie gitowi, że ma wysyłać zmiany na gałąź, nawet gdy ta ma inną nazwę, pod warunkiem że jest ona skonfigurowana jako &#8220;upstream branch&#8221;. </p>
+
+
+
+<h4>git push &#8211;delete origin <em></em><em>nazwa_gałęzi</em></h4>
+
+
+
+<p>Usuwa gałąź ze zdalnego repozytorium origin.</p>
+
+
+
+<h4>git remote rename</h4>
+
+
+
+<p>Możemy zmienić nazwę domyślnego adresu zdalnego. Z origin na origin2 : )</p>
+
+
+
+<h4>git remote update &#8211;prune</h4>
+
+
+
+<p>Usuwa gałęzie skasowane w zdalnym repozytorium. Jedna komenda a od razu robi się większy porządek. </p>
+
+
+
+<h4>git fetch</h4>
+
+
+
+<p>Aktualizuje historię commitów na obecnej gałęzi. Po tej komendzie nasz kod nie jest aktualizowany. To znaczy, że nic się nie zmieni w naszym lokalnym repozytorium ale będziemy mieć aktualną wiedzę na temat tego co jest w zdalnym repozytorium. </p>
+
+
+
+<h4>git pull</h4>
+
+
+
+<p>Najprościej mówiąc, wykonuje git fetch a potem git merge. Aktualizuje historię oraz nasz kod do ostatniego wysłanego do zdalnego repozytorium commita. Zanim zaczniemy prace w repozytorium to komanda ta sprawi, że będziemy mieć aktualne lokalne repozytorium.</p>
+
+
+
+<h4>git pull &#8211;rebase</h4>
+
+
+
+<p>Alternatywa normalnego pulla. Zamiast wykonywać fetch + merge, wykona się fetch + rebase. Zachowamy dzięki temu ładną liniową historię commitów. Czyli nasze commity na chwilę znikną, następnie pobierzemy zdalne repozytorium i następnie zastosujemy nasze commity. Wtedy wszystkie nasze zmiany znajdą się na początku. </p>
+
+
+
+<h4>git push &#8211;tags</h4>
+
+
+
+<p>Wysyła wszystkie tagi na zdalne repozytorium. Trzeba uważać, żeby nie zaśmiecić repozytorium swoimi tagami.</p>
+
+
+
+<h4>git push &#8211;follow-tags</h4>
+
+
+
+<p>Wysyła tylko &#8220;ciężkie&#8221; tagi. Zalecane, gdy chcemy wysyłać tagi, którymi chcemy się dzielić, do zdalnego repozytorium.</p>
+
+
+
+<h4>git config push.followTags true</h4>
+
+
+
+<p>Automatyzuje wysyłanie &#8220;ciężkich&#8221; tagów. Konfigurujemy git tak aby wszystkie ciężkie tagi wysyłał podczas push-a.</p>
+
+
+
+<h4>git fetch &#8211;prune &#8211;prune-tags</h4>
+
+
+
+<p>Usuwa lokalne tagi, które zostały usunięte zdalnie.</p>
+
+
+
+<h4>git fetch &#8211;no-tags</h4>
+
+
+
+<p>Aktualizuje historię zmian pomijając tagi.</p>
+
+
+
+<h4>git add -i</h4>
+
+
+
+<p>Włącza tryb interactive komendy git add.  Polecam sprawdzić możliwości tego trybu w tym trybie możemy też użyć opcji patch, która pozwala rozdzielić jeden plik na kilka zmian.</p>
+
+
+
+<h4>git clean -n</h4>
+
+
+
+<p>Komanda do kasowania nowych plików, która pokazuje co by zostało skasowane. Jest to bezpieczna komanda do zorientowania się w sytuacji. Nie kasuje plików.</p>
+
+
+
+<h4>git clean -f</h4>
+
+
+
+<p>Komanda ta po prostu kasuje nowe pliki, które powstały. Które pliki się skasuje, można zobaczyć przy pomocy komendy wyżej czyli z przełącznikiem -n. Najczęściej jej używam gdy kasuje pliki z końcówką .orig, które powstają po komandach merge i rebase.</p>
+
+
+
+<h4>git clean -d </h4>
+
+
+
+<p>Komenda ta kasuje też katalogi</p>
+
+
+
+<h4>git clean -i</h4>
+
+
+
+<p>Komenda ta daje możliwość usuwania plików poprzez wejście do rozbudowanego menu, podobnie jak komenda git add -i czy git rebase -i</p>
+
+
+
+<h4>git clean -fdx</h4>
+
+
+
+<p>Usuwa wszystkie pliki, które nie są dodane do gita. Czy krótko mówiąc, wyczyści wszystko tak jak by repozytorium było ściągnięte komendą git clone &#8230; . Przydaje się to gdy chcemy się upewnić, że nasz kod się kompiluje i plik .gitigonre nie zabiera za dużo plików. Usuwa też katalogi.</p>
+
+
+
+<h4>git reset &#8211;hard</h4>
+
+
+
+<p>Komenda ta usuwa wszystko co robiliśmy i co dodawaliśmy (pliki, zmiany, pliki do indeksu itd.) a co nie było w commicie i przywraca stan do ostatniego commita. Taki jak by restart pracy. Komanda jest niebezpieczna, bo usuwa trwale to czego nie było w commicie więc można stracić pracę swoją. Używam w sumie dość często, bo łatwo dzięki temu wrócić na początek wszystkiego : )</p>
+
+
+
+<h4>git reset &#8211;soft <em>commit_hash</em></h4>
+
+
+
+<p>Komenda ta sprawa, że wszystkie zmiany trafią do indeksu (stage). Wszystkie czyli każdy commit od tego aktualnego do tego commit_hash. Jest to bezpiecznie o tyle, że nie tracimy zmian na zawsze. </p>
+
+
+
+<h4>git stash</h4>
+
+
+
+<p>Zapisuje zmiany w postaci ukrytego commita. Dość przydatne. To taki schowek aktualnej pracy ale tylko plików, które są śledzone. Aby dodać wszystkie pliki wtedy&#8230;</p>
+
+
+
+<h4>git stash -u</h4>
+
+
+
+<p>Zapisuje zmiany do schowa jak wyżej ale zapisuje wszystkie jakie te śledzone zmiany jaki i te nie śledzone. Wszystko wszystko zapisze.</p>
+
+
+
+<h4>git reset @^</h4>
+
+
+
+<p>Przywraca nasz kod do stanu z poprzedniego commita.</p>
+
+
+
+<h4>git config</h4>
+
+
+
+<p>Wyświetla możliwości komendy git config.</p>
+
+
+
+<h4>git config &#8211;list</h4>
+
+
+
+<p>Komanda ta wyświetla wszystkie ustawienia w gicie.</p>
+
+
+
+<h4>git clone &#8211;depth &lt;liczba&gt;</h4>
+
+
+
+<p>Klonuje zdalne repozytorium, przełącznik &#8211;depth pozwala nam na wybranie ilości ostatnich commitów, które chcemy pobrać.</p>
+
+
+
+<h4>git reset &#8211;hard ORIG_HEAD</h4>
+
+
+
+<p>Przywraca zmiany do stanu przed jakimiś poważnymi zmianami (np. merge lub rebase), gdy już je commitowaliśmy.</p>
+
+
+
+<h4>git merge &#8211;abort / git rebase &#8211;abort / git cheerry-pick &#8211;abort</h4>
+
+
+
+<p>Przywraca zmiany do stanu przed użyciem Git merge (gdy mamy jeszcze nierozwiązane konflikty). </p>
+
+
+
+<h4>git mergetool</h4>
+
+
+
+<p>Włącza domyślne narzędzie do mergowania. Jeśli go nie ustawiliśmy, git poleci nam narzędzie vimdiff. Korzystać z vimdiff do rozwiązywania konfliktów to tak jakby jeść zupę widelcem. By się z niego ewakuować, trzeba wpisać &#8220;:qa&#8221;. Warto skonfigurować lepszy mergetool za pomocą poniższych dwóch komend&#8230;</p>
+
+
+
+<h4>git mergetool &#8211;tool-help</h4>
+
+
+
+<p>Wyświetla listę narzędzi, które Git potrafi stosować do rozwiązywania konfliktów. Pokazuje takie, które mamy i takie, które możemy zastosować</p>
+
+
+
+<h4>git config merge.tool <em>tool</em></h4>
+
+
+
+<p>Ustawia domyślne narzędzie do rozwiązywania konfliktów.</p>
+
+
+
+<h4>git config rerere.enabled true</h4>
+
+
+
+<p>Kolejna bardzo przydatna konfiguracja gita. Włącza tryb RERERE &#8211; REuse REcorded REsolutions of conflicted merges.  To oznacza, że Git zapamięta sposób rozwiązania konfliktu i jeśli wystąpi on ponownie, wykona go za nas. Skraca to proces mergowania do minimum. Polecam!</p>
+
+
+
+<h4>git revert <em>commit_hash</em></h4>
+
+
+
+<p>Odwraca zmiany z podanego commita. Jego działania jest takie, że bierze dany commit,  cofa zmiany i ponownie commituje. Więc po tej komendzie w repozytorium będzie kolejny commit. Używam tego, gdy w kodzie są jakieś specyficzne ustawienia tylko dla mojej maszyny(connections_string) a, których nie chciał bym commitować. Gdy mam już wszystko gotowe to zanim zrobię PR to robię tego reverta na commicie z ustawieniami i dzięki temu nie wysyłam moich ustawień do repozytorium. </p>
+
+
+
+<h4>git commit &#8211;amend</h4>
+
+
+
+<p>Pozwala zmienić nazwę ostatniego commita. Jest to chyba najprostszy sposób aby to zrobić. Dzięki temu też nie musimy tworzyć nowego commita i po prostu edytujemy jego teskt.</p>
+
+
+
+<h4>git rebase -i commit_hash</h4>
+
+
+
+<p>Uruchamia rebase w trybie interactive, dzięki któremu możemy dowolnie edytować commity. Tu polecam wgłębić się w możliwe opcje tego trybu, gdyż jest ich całkiem sporo. Używam tego do scalania commitów w jeden. Wymaga trochę wprawy ale daje spore możliwości.</p>
+
+
+
+<h4>git push &#8211;force</h4>
+
+
+
+<p>Niebezpieczne, polecam zawsze używać tego niżej. Komenda ta pozwala wysłać zmiany lokalne do zdalnego repozytorium z pominięciem sprawdzenia czy jesteśmy zaktualiziwani z tą zdalną aby nie nadpisać czegoś. To tak jak by powiedzieć, że chcę od teraz aby to co lokalnie u mnie było zdalnie. Używam tego na swoich gałęziach, gdy wiem, że tylko ja ją używam głownie wtedy gdy robię reabase z masterem. Wtedy historia mi się zmiania i git push nie pozwoli mi wysłać żadnych zmian. </p>
+
+
+
+<h4>git push &#8211;force-with-lease</h4>
+
+
+
+<p>To jest trochę mniej inwazyjne, bo sprawdza czy ktoś w między czasie nie dodał czegoś do gałęzi i nasz push miał by to usunąć na zawsze.  Gdyby to wystąpiło to zobaczmy komunikat i push się nie uda.</p>
+
+
+
+<h4>git blame ścieżka_do_pliku</h4>
+
+
+
+<p>Pokazuje autora każdej linii kodu w podanym pliku.</p>
+
+
+
+<h4>git gui blame</h4>
+
+
+
+<p>Wyświetla to ładniej niż komenda wyżej :)</p>
+
+
+
+<h4>git log -S &#8220;tekst&#8221;</h4>
+
+
+
+<p>Bardzo dobra komenda, wyszukuje w treści commitów (czyli w różnicach na danych plikach), konkretnej frazy w tym przypadku słowa tekst. Da się dzięki temu odnaleźć dość konkretnie commit, który zawiera taką frazę. </p>
+
+
+
+<h4>git log -S &#8220;tekst&#8221; -p</h4>
+
+
+
+<p>Komenda robi to co powyżej ale przełącznik -p pokazuje nie tylko sam commit ale też dokładnie zmiany w plikach gdzie poszukiwana fraza została znaleziona. Power +1 : )</p>
+
+
+
+<h4>git log &#8211;format=%h</h4>
+
+
+
+<p>Komanda robi oczywiście log z commitów ale używa też przełącznika format, który daje możliwość formatowanie tego jak taki pojedynczy commit się wyświetli. %h to skrócony hash commita. </p>
+
+
+
+<p>Generalnie używam tego:</p>
+
+
+
+<p>git log &#8211;graph &#8211;pretty=format:&#8221;%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset&#8221; &#8211;abbrev-commit</p>
+
+
+
+<p>ale polecam poszukać czegoś co będzie wam odpowiadać.</p>
+
+
+
+<h4>git bisect start</h4>
+
+
+
+<p>Włącza tryb Bisecting, czyli rozpoczyna wyszukiwanie commita, który wywołał według nas jakiś błąd.</p>
+
+
+
+<h4>git bisect good</h4>
+
+
+
+<p>Oznacza commit jako dobry, czyli nie posiadający szukanego błędu.</p>
+
+
+
+<h4>git bisect bad</h4>
+
+
+
+<p>Oznacza commit jako zły. Po użyciu tych trzech komend, git automatycznie rozpocznie proces szukania błędnego commita. Zadanie jakie teraz do nas należy, to określanie gitowi, czy commit, który on &#8220;scheckoutował&#8221;, jest dobry czy zły. Po kilku krokach git wyświetli nam pierwszy zły commit, zawierający szukany błąd.</p>
+
+
+
+<h4>git archive &#8211;format zip &#8211;output nazwa_pliku.zip master</h4>
+
+
+
+<p>Bardzo przydatna komenda, bo pozwala cały kod wrzucić do ZIP-a. Często klienci chcą mieć kod źródłowy i dzięki temu szybko można im wysłać aktualną wersję. </p>
+
+
+
+<p></p>
+
+
+
+<h2>Podsumowanie</h2>
+
+
+
+<p>Dużo tych komend ale większość z nich trzeba znać aby używać git-a sensownie i mieć z niego pożytek. Często spotykam niestety programistów, którzy ograniczają się do commit-a, push i tyle. Potem nie umiejąc docenić jak dobrze pracuje się z git-em chodzą i narzekają. Git to narzędzie, które może bardzo przyspieszyć pracę ale trzeba umieć z tego skorzystać. Polecam używać i ćwiczyć. Jeśli macie jakiś komendy, które należało by dopisać to śmiało dopisze i będziecie mieli to w jednym miejscu.</p>The post <a href="https://blogprogramisty.net/komendy-git-a-ktore-nalezy-znac/">Komendy GIT-a, które należy znać</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </content:encoded>
+
+      <wfw:commentRss>https://blogprogramisty.net/komendy-git-a-ktore-nalezy-znac/feed/</wfw:commentRss>
+      <slash:comments>2</slash:comments>
+
+
+    </item>
+    <item>
+      <title>Newsy programistyczne 26.10.2020</title>
+      <link>https://blogprogramisty.net/newsy-programistyczne-26-10-2020/?utm_source=rss&#038;utm_medium=rss&#038;utm_campaign=newsy-programistyczne-26-10-2020</link>
+
+      <dc:creator><![CDATA[Przemysław Walkowski]]></dc:creator>
+      <pubDate>Mon, 26 Oct 2020 14:19:38 +0000</pubDate>
+      <category><![CDATA[News]]></category>
+      <category><![CDATA[5 języków]]></category>
+      <category><![CDATA[blazor]]></category>
+      <category><![CDATA[c#]]></category>
+      <category><![CDATA[dnc]]></category>
+      <category><![CDATA[joh skeet]]></category>
+      <category><![CDATA[ranking]]></category>
+      <guid isPermaLink="false">https://blogprogramisty.net/?p=2008</guid>
+
+      <description>
+        <![CDATA[<p>Pandemia znowu uderza i Smart Testing też (to akurat pozytyw). Kolejne tygodnie będą więc mocno potestowane. Jak skończę to zapraszam na recenzję. A teraz zapraszam na mocno wyselekcjonowane newsy z branży deweloperskiej Jak bym chciał coś robić w Blazorze na produkcji! Jakie są z tym problemy? https://www.telerik.com/blogs/is-blazor-safe-enterprise-bet 5 języków, które NIE zrobią kariery w następnej &#8230; <a href="https://blogprogramisty.net/newsy-programistyczne-26-10-2020/" class="more-link">Czytaj dalej <span class="screen-reader-text">Newsy programistyczne 26.10.2020</span> <span class="meta-nav">&#8594;</span></a></p>
+The post <a href="https://blogprogramisty.net/newsy-programistyczne-26-10-2020/">Newsy programistyczne 26.10.2020</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </description>
+      <content:encoded>
+        <![CDATA[<p>Pandemia znowu uderza i Smart Testing też (to akurat pozytyw). Kolejne tygodnie będą więc mocno potestowane. Jak skończę to zapraszam na recenzję. A teraz zapraszam na mocno wyselekcjonowane newsy z branży deweloperskiej</p>
+
+
+
+<h2>Jak bym chciał coś robić w Blazorze na produkcji!  Jakie są z tym problemy?</h2>
+
+
+
+<span id="more-2008"></span>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://www.telerik.com/blogs/is-blazor-safe-enterprise-bet"> https://www.telerik.com/blogs/is-blazor-safe-enterprise-bet</a></p></blockquote>
+
+
+
+<h2>5 języków, które NIE zrobią kariery w następnej dekadzie</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://insights.dice.com/2020/10/20/5-programming-languages-doomed-over-the-next-10-years/"> https://insights.dice.com/2020/10/20/5-programming-languages-doomed-over-the-next-10-years/</a></p></blockquote>
+
+
+
+<h2>Nowy numer DNC Magazine</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://dncmagazine.blob.core.windows.net/edition48/DNCMag-Issue48.pdf">https://dncmagazine.blob.core.windows.net/edition48/DNCMag-Issue48.pdf</a></p></blockquote>
+
+
+
+<h2>Przewodnik po FUNCTIONS FRAMEWORK w .NET (John Skeet)</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://codeblog.jonskeet.uk/2020/10/23/a-tour-of-the-net-functions-framework/"> https://codeblog.jonskeet.uk/2020/10/23/a-tour-of-the-net-functions-framework/</a></p><cite>Cokolwiek pisze ten gość warto to czytać. Polecam!</cite></blockquote>
+
+
+
+<h2>C# traci w rankingach</h2>
+
+
+
+<p><a href=" https://www.theregister.com/2020/10/21/developer_survey_c_losing_ground/"> https://www.theregister.com/2020/10/21/developer_survey_c_losing_ground/</a></p>The post <a href="https://blogprogramisty.net/newsy-programistyczne-26-10-2020/">Newsy programistyczne 26.10.2020</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </content:encoded>
+
+
+
+    </item>
+    <item>
+      <title>Newsy programistyczne 06.10.2020</title>
+      <link>https://blogprogramisty.net/newsy-programistyczne-06-10-2020/?utm_source=rss&#038;utm_medium=rss&#038;utm_campaign=newsy-programistyczne-06-10-2020</link>
+
+      <dc:creator><![CDATA[Przemysław Walkowski]]></dc:creator>
+      <pubDate>Tue, 06 Oct 2020 09:49:15 +0000</pubDate>
+      <category><![CDATA[News]]></category>
+      <category><![CDATA[.net 5]]></category>
+      <category><![CDATA[c# 9.0]]></category>
+      <category><![CDATA[kosmos]]></category>
+      <category><![CDATA[no code]]></category>
+      <category><![CDATA[os]]></category>
+      <category><![CDATA[programista]]></category>
+      <category><![CDATA[testowanie]]></category>
+      <guid isPermaLink="false">https://blogprogramisty.net/?p=2002</guid>
+
+      <description>
+        <![CDATA[<p>Robi się zimno w końcu. W biurach nie włączają grzejników, bo dużo pracowników jest zdalnie więc Ci, którzy nie są marzną. Nie przedłużając zapraszam na mocno wyselekcjonowane newsy z branży deweloperskiej .NET 5 i publish do jednego pliku https://nicksnettravels.builttoroam.com/single-file-apps/ Ilu testerów jest potrzebnych w zespole? https://www.functionize.com/blog/how-many-developers-does-it-take-to-test-a-product/ Programiści, programiści, programiści https://thenewstack.io/developers-are-in-charge-again/ not, or, and nowe słowa &#8230; <a href="https://blogprogramisty.net/newsy-programistyczne-06-10-2020/" class="more-link">Czytaj dalej <span class="screen-reader-text">Newsy programistyczne 06.10.2020</span> <span class="meta-nav">&#8594;</span></a></p>
+The post <a href="https://blogprogramisty.net/newsy-programistyczne-06-10-2020/">Newsy programistyczne 06.10.2020</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </description>
+      <content:encoded>
+        <![CDATA[<p>Robi się zimno w końcu. W biurach nie włączają grzejników, bo dużo pracowników jest zdalnie więc Ci, którzy nie są marzną. Nie przedłużając zapraszam na mocno wyselekcjonowane newsy z branży deweloperskiej</p>
+
+
+
+<h2>.NET 5 i publish do jednego pliku</h2>
+
+
+
+<span id="more-2002"></span>
+
+
+
+<blockquote class="wp-block-quote"><p><a href="https://nicksnettravels.builttoroam.com/single-file-apps/">https://nicksnettravels.builttoroam.com/single-file-apps/</a></p></blockquote>
+
+
+
+<h2>Ilu testerów jest potrzebnych w zespole?</h2>
+
+
+
+<blockquote class="wp-block-quote"><p> <a href="https://www.functionize.com/blog/how-many-developers-does-it-take-to-test-a-product/">https://www.functionize.com/blog/how-many-developers-does-it-take-to-test-a-product/</a></p></blockquote>
+
+
+
+<h2>Programiści, programiści, programiści</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://thenewstack.io/developers-are-in-charge-again/"> https://thenewstack.io/developers-are-in-charge-again/</a></p></blockquote>
+
+
+
+<h2><span class="has-inline-color has-red-color">not, or, and</span> nowe słowa kluczone w C# 9.0 i wiele więcej</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://blog.ndepend.com/csharp9-new-keywords-for-pattern-matching-and-or-not/"> https://blog.ndepend.com/csharp9-new-keywords-for-pattern-matching-and-or-not/</a></p></blockquote>
+
+
+
+<h2>System operacyjny w kosmosie</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://arstechnica.com/features/2020/10/the-space-operating-systems-booting-up-where-no-one-has-gone-before/"> https://arstechnica.com/features/2020/10/the-space-operating-systems-booting-up-where-no-one-has-gone-before/</a></p></blockquote>
+
+
+
+<h2>Idea &#8220;No Code&#8221; &#8211; co nam grozi </h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://www.telerik.com/blogs/what-no-code-movement-means-for-software-developers"> https://www.telerik.com/blogs/what-no-code-movement-means-for-software-developers</a></p></blockquote>The post <a href="https://blogprogramisty.net/newsy-programistyczne-06-10-2020/">Newsy programistyczne 06.10.2020</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </content:encoded>
+
+
+
+    </item>
+    <item>
+      <title>Newsy programistyczne 25.09.2020</title>
+      <link>https://blogprogramisty.net/newsy-programistyczne-25-09-2020/?utm_source=rss&#038;utm_medium=rss&#038;utm_campaign=newsy-programistyczne-25-09-2020</link>
+
+      <dc:creator><![CDATA[Przemysław Walkowski]]></dc:creator>
+      <pubDate>Fri, 25 Sep 2020 07:19:33 +0000</pubDate>
+      <category><![CDATA[News]]></category>
+      <category><![CDATA[.net 5]]></category>
+      <category><![CDATA[api]]></category>
+      <category><![CDATA[github]]></category>
+      <category><![CDATA[machine learning]]></category>
+      <guid isPermaLink="false">https://blogprogramisty.net/?p=1999</guid>
+
+      <description>
+        <![CDATA[<p>Nic dodać, nic ująć. Pandemia nie za bardzo się zbliża do końca ale branża IT chyba tego nie odczuwa i nowości i nowych wersji nie brakuje. Nie przedłużając zapraszam na mocno wyselekcjonowane newsy z branży deweloperskiej. Co trzeba wiedzieć o .NET 5 https://www.dotnetcurry.com/dotnetcore/dotnet-5-new-features Wyjaśnienie Machine Learning https://www.dotnetcurry.com/machinelearning-ai/machine-learning-tutorial 10 nowych API do .NET 5 https://blog.ndepend.com/top-10-net-5-0-new-apis/ Wolny &#8230; <a href="https://blogprogramisty.net/newsy-programistyczne-25-09-2020/" class="more-link">Czytaj dalej <span class="screen-reader-text">Newsy programistyczne 25.09.2020</span> <span class="meta-nav">&#8594;</span></a></p>
+The post <a href="https://blogprogramisty.net/newsy-programistyczne-25-09-2020/">Newsy programistyczne 25.09.2020</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </description>
+      <content:encoded>
+        <![CDATA[<p>Nic dodać, nic ująć. Pandemia nie za bardzo się zbliża do końca ale branża IT chyba tego nie odczuwa i nowości i nowych wersji nie brakuje. Nie przedłużając zapraszam na mocno wyselekcjonowane newsy z branży deweloperskiej.</p>
+
+
+
+<h2>Co trzeba wiedzieć o .NET 5</h2>
+
+
+
+<span id="more-1999"></span>
+
+
+
+<blockquote class="wp-block-quote"><p> <a href="https://www.dotnetcurry.com/dotnetcore/dotnet-5-new-features">https://www.dotnetcurry.com/dotnetcore/dotnet-5-new-features</a></p></blockquote>
+
+
+
+<h2>Wyjaśnienie Machine Learning</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://www.dotnetcurry.com/machinelearning-ai/machine-learning-tutorial">https://www.dotnetcurry.com/machinelearning-ai/machine-learning-tutorial</a></p></blockquote>
+
+
+
+<h2>10 nowych API do .NET 5</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href="https://blog.ndepend.com/top-10-net-5-0-new-apis/">https://blog.ndepend.com/top-10-net-5-0-new-apis/</a></p></blockquote>
+
+
+
+<h2>Wolny czas spędzasz na nauce nowych umiejętność &#8211; jak większość</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href="https://www.itproportal.com/news/most-it-staff-spend-free-time-upskilling-in-cybersecurity/">https://www.itproportal.com/news/most-it-staff-spend-free-time-upskilling-in-cybersecurity/</a></p></blockquote>
+
+
+
+<h2>Github CLI </h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href=" https://www.techrepublic.com/article/github-officially-releases-github-cli-1-0/#ftag=RSS-03-10aaa0b">https://www.techrepublic.com/article/github-officially-releases-github-cli-1-0/#ftag=RSS-03-10aaa0b</a></p></blockquote>
+
+
+
+<p>Bitbucket CLI też jest ale płatny &#8211;<a href=" https://marketplace.atlassian.com/apps/1211193/bitbucket-command-line-interface-cli?hosting=server&amp;tab=installation"> https://marketplace.atlassian.com/apps/1211193/bitbucket-command-line-interface-cli?hosting=server&amp;tab=installation</a></p>
+
+
+
+<h2>Nowości w ECMAScript 2021</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href="https://2ality.com/2020/09/ecmascript-2021.html?utm_source=feedburner&amp;utm_medium=feed&amp;utm_campaign=Feed%3A+2ality+%282ality+%E2%80%93+JavaScript+and+more%29">https://2ality.com/2020/09/ecmascript-2021.html?utm_source=feedburner&amp;utm_medium=feed&amp;utm_campaign=Feed%3A+2ality+%282ality+%E2%80%93+JavaScript+and+more%29</a></p></blockquote>The post <a href="https://blogprogramisty.net/newsy-programistyczne-25-09-2020/">Newsy programistyczne 25.09.2020</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </content:encoded>
+
+
+
+    </item>
+    <item>
+      <title>Newsy programistyczne 01.09.2020</title>
+      <link>https://blogprogramisty.net/newsy-programistyczne-01-09-2020/?utm_source=rss&#038;utm_medium=rss&#038;utm_campaign=newsy-programistyczne-01-09-2020</link>
+
+      <dc:creator><![CDATA[Przemysław Walkowski]]></dc:creator>
+      <pubDate>Tue, 01 Sep 2020 10:38:12 +0000</pubDate>
+      <category><![CDATA[News]]></category>
+      <category><![CDATA[.net 5]]></category>
+      <category><![CDATA[ef]]></category>
+      <category><![CDATA[half]]></category>
+      <category><![CDATA[nadgarstek]]></category>
+      <category><![CDATA[pół typy]]></category>
+      <category><![CDATA[windows terminal]]></category>
+      <category><![CDATA[zdrowie]]></category>
+      <guid isPermaLink="false">https://blogprogramisty.net/?p=1996</guid>
+
+      <description>
+        <![CDATA[<p>Wakacje, wakacje i po wakacjach. Wirus nas nie zabił, praca zdalna nas rozpieszcza więc czas wrócić do nowej normalności i napisać co się dzieje w świecie dev-ów. Zapraszam na mocno wyselekcjonowane newsy z branży deweloperskiej. Problemy z nadgarstkiem podczas kodowania https://www.swyx.io/writing/rsi-tips/ Pół typy w .NET 5 https://devblogs.microsoft.com/dotnet/introducing-the-half-type/ Automatycznie szukanie błędów w .NET 5 i nowe &#8230; <a href="https://blogprogramisty.net/newsy-programistyczne-01-09-2020/" class="more-link">Czytaj dalej <span class="screen-reader-text">Newsy programistyczne 01.09.2020</span> <span class="meta-nav">&#8594;</span></a></p>
+The post <a href="https://blogprogramisty.net/newsy-programistyczne-01-09-2020/">Newsy programistyczne 01.09.2020</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </description>
+      <content:encoded>
+        <![CDATA[<p>Wakacje, wakacje i po wakacjach. Wirus nas nie zabił, praca zdalna nas rozpieszcza więc czas wrócić do nowej normalności i napisać co się dzieje w świecie dev-ów. Zapraszam na mocno wyselekcjonowane newsy z branży deweloperskiej.</p>
+
+
+
+<h2>Problemy z nadgarstkiem podczas kodowania</h2>
+
+
+
+<span id="more-1996"></span>
+
+
+
+<blockquote class="wp-block-quote"><p><a href="https://www.swyx.io/writing/rsi-tips/">https://www.swyx.io/writing/rsi-tips/</a></p></blockquote>
+
+
+
+<h2>Pół typy w .NET 5</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href="https://devblogs.microsoft.com/dotnet/introducing-the-half-type/">https://devblogs.microsoft.com/dotnet/introducing-the-half-type/</a></p></blockquote>
+
+
+
+<h2>Automatycznie szukanie błędów w .NET 5 i nowe ostrzeżenia</h2>
+
+
+
+<blockquote class="wp-block-quote"><p> <a href="https://devblogs.microsoft.com/dotnet/automatically-find-latent-bugs-in-your-code-with-net-5/">https://devblogs.microsoft.com/dotnet/automatically-find-latent-bugs-in-your-code-with-net-5/</a></p></blockquote>
+
+
+
+<h2>Windows Terminal </h2>
+
+
+
+<blockquote class="wp-block-quote"><p> <a href="https://devblogs.microsoft.com/commandline/windows-terminal-preview-1-3-release/">https://devblogs.microsoft.com/commandline/windows-terminal-preview-1-3-release/</a></p></blockquote>
+
+
+
+<h2>EF Core 5 &#8211; preview 8</h2>
+
+
+
+<blockquote class="wp-block-quote"><p> <a href="https://devblogs.microsoft.com/dotnet/announcing-entity-framework-core-ef-core-5-0-preview-8/">https://devblogs.microsoft.com/dotnet/announcing-entity-framework-core-ef-core-5-0-preview-8/</a></p></blockquote>The post <a href="https://blogprogramisty.net/newsy-programistyczne-01-09-2020/">Newsy programistyczne 01.09.2020</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </content:encoded>
+
+
+
+    </item>
+    <item>
+      <title>Newsy programistyczne 10.07.2020</title>
+      <link>https://blogprogramisty.net/newsy-programistyczne-10-07-2020/?utm_source=rss&#038;utm_medium=rss&#038;utm_campaign=newsy-programistyczne-10-07-2020</link>
+
+      <dc:creator><![CDATA[Przemysław Walkowski]]></dc:creator>
+      <pubDate>Fri, 10 Jul 2020 11:40:10 +0000</pubDate>
+      <category><![CDATA[News]]></category>
+      <category><![CDATA[2020]]></category>
+      <category><![CDATA[build]]></category>
+      <category><![CDATA[c# 9.0]]></category>
+      <category><![CDATA[git]]></category>
+      <category><![CDATA[przyszłość]]></category>
+      <category><![CDATA[records]]></category>
+      <category><![CDATA[testowanie]]></category>
+      <guid isPermaLink="false">https://blogprogramisty.net/?p=1986</guid>
+
+      <description>
+        <![CDATA[<p>Rany! Jak długo nie pisałem. W czasie wirusa robiłem kurs DNA, potem wakacje i tak czas ucieka. A cały czas w świecie IT dzieje się dużo. Konferencja Build 2020, nowe wersję każdej biblioteki i dużo więcej. Zapraszam na mocno wyselekcjonowane newsy z branży deweloperskiej. Konferencja Build 2020 &#8211; wszystkie panele na YouTube https://www.youtube.com/playlist?list=PLFPUGjQjckXEiPiW868RGBYYHXhBCGLng Przyszłość programowania &#8230; <a href="https://blogprogramisty.net/newsy-programistyczne-10-07-2020/" class="more-link">Czytaj dalej <span class="screen-reader-text">Newsy programistyczne 10.07.2020</span> <span class="meta-nav">&#8594;</span></a></p>
+The post <a href="https://blogprogramisty.net/newsy-programistyczne-10-07-2020/">Newsy programistyczne 10.07.2020</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </description>
+      <content:encoded>
+        <![CDATA[<p>Rany! Jak długo nie pisałem. W czasie wirusa robiłem kurs DNA, potem wakacje i tak czas ucieka. A cały czas w świecie IT dzieje się dużo. Konferencja <a href="https://www.youtube.com/playlist?list=PLFPUGjQjckXEiPiW868RGBYYHXhBCGLng" title="https://www.youtube.com/playlist?list=PLFPUGjQjckXEiPiW868RGBYYHXhBCGLng">Build 2020</a>, nowe wersję każdej biblioteki i dużo więcej. Zapraszam na mocno wyselekcjonowane newsy z branży deweloperskiej.</p>
+
+
+
+<h2>Konferencja Build 2020 &#8211; wszystkie panele na YouTube</h2>
+
+
+
+<span id="more-1986"></span>
+
+
+
+<blockquote class="wp-block-quote"><p><a href="https://www.youtube.com/playlist?list=PLFPUGjQjckXEiPiW868RGBYYHXhBCGLng">https://www.youtube.com/playlist?list=PLFPUGjQjckXEiPiW868RGBYYHXhBCGLng</a></p></blockquote>
+
+
+
+<h2>Przyszłość programowania &#8211; czy ktoś Nas zastąpi?</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href="https://www.oreilly.com/radar/automated-coding-and-the-future-of-programming/">https://www.oreilly.com/radar/automated-coding-and-the-future-of-programming/</a></p></blockquote>
+
+
+
+<h2>Lepsza obsługa git-a w VS 2019</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href="https://devblogs.microsoft.com/visualstudio/exciting-new-updates-to-the-git-experience-in-visual-studio/">https://devblogs.microsoft.com/visualstudio/exciting-new-updates-to-the-git-experience-in-visual-studio/</a></p></blockquote>
+
+
+
+<h2>Przeszłość  programowania i testowania</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href="https://readwrite.com/2020/07/06/machine-learning-software-testing/">https://readwrite.com/2020/07/06/machine-learning-software-testing/</a></p></blockquote>
+
+
+
+<h2>C# 9  &#8211; rekordy</h2>
+
+
+
+<blockquote class="wp-block-quote"><p><a href="https://daveabrock.com/2020/07/06/c-sharp-9-deep-dive-records">https://daveabrock.com/2020/07/06/c-sharp-9-deep-dive-records</a></p></blockquote>
+
+
+
+<h2>Dobry przykład GitFlow</h2>
+
+
+
+<blockquote class="wp-block-quote"><p> <a href="https://www.red-gate.com/simple-talk/sysadmin/devops/getting-started-with-gitflow/">https://www.red-gate.com/simple-talk/sysadmin/devops/getting-started-with-gitflow/</a></p></blockquote>The post <a href="https://blogprogramisty.net/newsy-programistyczne-10-07-2020/">Newsy programistyczne 10.07.2020</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </content:encoded>
+
+
+
+    </item>
+    <item>
+      <title>Recenzja kursu DB-Master</title>
+      <link>https://blogprogramisty.net/recenzja-kursu-db-master/?utm_source=rss&#038;utm_medium=rss&#038;utm_campaign=recenzja-kursu-db-master</link>
+      <comments>https://blogprogramisty.net/recenzja-kursu-db-master/#comments</comments>
+
+      <dc:creator><![CDATA[Przemysław Walkowski]]></dc:creator>
+      <pubDate>Fri, 15 May 2020 11:20:41 +0000</pubDate>
+      <category><![CDATA[Ciekawostki]]></category>
+      <category><![CDATA[damian widera]]></category>
+      <category><![CDATA[dbmaster]]></category>
+      <category><![CDATA[recenzja]]></category>
+      <guid isPermaLink="false">https://blogprogramisty.net/?p=1977</guid>
+
+      <description>
+        <![CDATA[<p>No i stało się. Skończyłem kurs. 12 tygodni, co tydzień nowe lekcje i dużo wiedzy. Poniżej zamieszczam moją recenzję. Kurs kupiłem za 800zł i od początku zgodnie z terminami robiłem to co było wymagane. Głownie zadania domowe. Kurs jest dostępny https://dbmaster.pl/. Kurs prowadził w całości Damian Widera. Zapraszam do recenzji. TLTR; Kurs jest bardzo ale &#8230; <a href="https://blogprogramisty.net/recenzja-kursu-db-master/" class="more-link">Czytaj dalej <span class="screen-reader-text">Recenzja kursu DB-Master</span> <span class="meta-nav">&#8594;</span></a></p>
+The post <a href="https://blogprogramisty.net/recenzja-kursu-db-master/">Recenzja kursu DB-Master</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </description>
+      <content:encoded>
+        <![CDATA[<p>No i stało się. Skończyłem kurs. 12 tygodni, co tydzień nowe lekcje i dużo wiedzy. Poniżej zamieszczam moją recenzję. Kurs kupiłem za 800zł i od początku zgodnie z terminami robiłem to co było wymagane. Głownie zadania domowe. Kurs jest dostępny <a href="https://dbmaster.pl/">https://dbmaster.pl/</a>. Kurs prowadził w całości <a href="https://www.google.com/search?q=Damian+Widera&amp;rlz=1C1GCEU_plPL894PL894&amp;oq=Damian+Widera&amp;aqs=chrome..69i57.273j0j4&amp;sourceid=chrome&amp;ie=UTF-8\" class="aioseop-link">Damian Widera</a>. Zapraszam do recenzji.</p>
+
+
+
+<span id="more-1977"></span>
+
+
+
+<h2>TLTR;</h2>
+
+
+
+<p>Kurs jest bardzo ale to bardzo nie równy. Brak stałego poziomu prowadzi do tego, że czasem byłem bardzo zainteresowany daną lekcją a czasem kompletnie była to dla mnie strata czasu. Po 12 tygodniach, nie wiem dokładnie dla kogo jest ten kurs. Za 800zł wydaje mi się, że jest to dość spora cena za taki poziom. I jest za duża jak na ilość szczegółów, które w nim są.  Na plus mogę powiedzieć, że jest to inwestycja nie tylko w wiedzę ale też w dostęp do grupy facebook, która jest dużym wsparciem jeśli chodzi o zdobywanie wiedzy. Podsumowując ogólnie był wycenił ten kurs na 250zł 300zł- myślę, że wtedy była by to bardzo dobra cena.</p>
+
+
+
+<h2>Wstęp</h2>
+
+
+
+<p>Kurs trwa 12 tygodni. W każdym tygodniu jest od 1h do 2,5h materiałów.  Długość materiałów jest dość różna. Na początku wydaje się, że jest mało, przy końcu są już dłuższe więc kurs się rozkręca w miarę czasu.  Tematyka wygląda następująco, poniżej zrzut z tego jak to wygląda logując się do portalu. </p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="1024" height="758" src="https://blogprogramisty.net/wp-content/uploads/2020/05/image-1024x758.png" alt="" class="wp-image-1978" srcset="https://blogprogramisty.net/wp-content/uploads/2020/05/image-1024x758.png 1024w, https://blogprogramisty.net/wp-content/uploads/2020/05/image-300x222.png 300w, https://blogprogramisty.net/wp-content/uploads/2020/05/image-768x568.png 768w, https://blogprogramisty.net/wp-content/uploads/2020/05/image.png 1154w" sizes="(max-width: 1024px) 100vw, 1024px" /><figcaption>Źródło: <a href="https://edu.devstyle.pl/bazy-danych/" class="aioseop-link">https://edu.devstyle.pl/bazy-danych/</a></figcaption></figure>
+
+
+
+<p>Pierwsza połowa materiałów zawiera na koniec tygodnia zawsze jakieś zadanie domowe, które potem można dać do oceny na grupie facebook. Ciekawy pomysł &#8211; choć rozwiązań jest zawsze kilka więc mały chaos się zrobił w pewnym momencie. Tak wygląda odtwarzanie:</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="1024" height="912" src="https://blogprogramisty.net/wp-content/uploads/2020/05/image-1-1024x912.png" alt="" class="wp-image-1979" srcset="https://blogprogramisty.net/wp-content/uploads/2020/05/image-1-1024x912.png 1024w, https://blogprogramisty.net/wp-content/uploads/2020/05/image-1-300x267.png 300w, https://blogprogramisty.net/wp-content/uploads/2020/05/image-1-768x684.png 768w, https://blogprogramisty.net/wp-content/uploads/2020/05/image-1.png 1039w" sizes="(max-width: 1024px) 100vw, 1024px" /><figcaption><em>Źródło: </em><a href="https://edu.devstyle.pl/bazy-danych/">https://edu.devstyle.pl/bazy-danych/</a></figcaption></figure>
+
+
+
+<p>Specjalnie pokazałem razem z możliwością przyspieszania i tego, że jest sporo progów więc można to dobrze dostosować. Ja słuchałem na 1.7 (potem powiem dlaczego). Jak widać materiały są też dostępne w postaci mp3. Choć jest to chyba zbędne, bo lekcje zawierają dużo mięsa (kodu) i raczej sobie nie skorzystamy wtedy z tego. Do każdego materiału są skrypty, które są wykorzystywane podczas lekcji dla każdego języka (MS SQL, MySQL, Oracle, postgresql). Skrypty działają i są dobre i dzięki temu łatwo śledzić lekcję zgodnie z tym co mówi Damian.</p>
+
+
+
+<h2>Dodatkowe informacje</h2>
+
+
+
+<p>W komentarzach pojawiły się cenne pytania, dlatego zamiast odpowiadać w komentarzach dołączę osobną sekcję z odpowiedziami. Może się to innym czytelnikom przyda.</p>
+
+
+
+<p><strong>Czy treści które były w kursie widziałeś w innych miejscach?</strong></p>
+
+
+
+<p>Nie nie widziałem. Trzeba jednak przyznać, że w czasie pracy(13 lat) zdarzało mi się szukać odpowiedzi na pytania, na które kurs odpowiadał, więc na pewno jest praktyczny.</p>
+
+
+
+<p><strong>Jest jakaś innowacyjność w tym kursie czy na spokojnie doszukam się jej w innych miejsc udemy/plurarsight/blogi?</strong></p>
+
+
+
+<p>Myślę, że większość rzeczy można znaleźć w sieci.  Są jednak w kursie takie miejsca, gdzie Damian mówi, że z jego doświadczenia coś tam coś tam. W takie deklarację bym mu wierzył, bo oglądałem tez inne jego konferencje i wiem na pewno, że gość wie co mówi. Z kursami na portalach, ciężko w takie zapewnienia wierzyć, bo nie wiemy czy gość wie co mówi. Za Damianem stoi Pan Aniserowicz a to marka sama w sobie więc myślę, że ten kurs jest lepszy niż jakiś na udemy/plurarsight/blogi</p>
+
+
+
+<p><strong>Jest coś co wyróżnia na tle innych kursów/ zasobów z wiedzą?</strong></p>
+
+
+
+<p>Mimo, że nie robiłem kursów z baz danych to robiąc inne kursy mogę powiedzieć, że po pierwsze otoczka kursu jest bardzo ok, czyli dostęp do materiałów, zgrabny interfejs, skrypty do każdej bazy danych, materiały w mp3, wparcie na facebook. Możliwy kontakt z autorem i szybko reakcja na pytania oraz rozpiętość kursu. To są na pewno ogromne plusy, które myślę będą procentować w przyszłości. i to jest to co mocno ten kurs wyróżnia od innych.</p>
+
+
+
+<p><strong>Kurs był z gwarancją zwrotu na 30 dni?</strong></p>
+
+
+
+<p>Nie wiem ale znając model biznesowy Macieja z DNA myślę, że gdy Ci nie przypadnie do gustu na pewno Ci zwrócić kasę. Podobna sytuacja była z kursem gita i wiem, że kilka osób dostało zwrot kosztów.  Po drugie zaczynając kurs nie miałem dostępu do całość. Kurs jak by powstawał w tracie  jego trwania. Raz w tygodniu były nowe materiały.</p>
+
+
+
+<p><strong>Czy miałeś dostęp do całej treści kursu zaraz po zakupie?</strong></p>
+
+
+
+<p>Nie. Kupiłem go zaraz na początku i w sumie lekcje pojawiały się raz w tygodniu. Jak teraz ktoś kupi to będą wszystkie od razu. </p>
+
+
+
+<h2>Plusy</h2>
+
+
+
+<p><strong>Ogromnym plusem kursu jest rozpiętość</strong>. Porusza chyba każdy temat związany z bazami danymi. Programuje od 13 lat i bazy danych zawsze po prostu były gdzieś jako miejsce, gdzie można zapisywać dane. Nigdy specjalnie nie starałem się być specjalistą od baz ale wszystko to czego uczyłem się sam było na tym kursie. Indeksy, Procedury, Funkcje i kilka choć nie wszystkie istotnie funkcje SQL( czyli funkcje okienkowe itd), Administracja, Hurtownia danych, nawet ORM-y i NoSQL. Super. Fajnie poruszyć te tematy i się z nimi zaznajomić. </p>
+
+
+
+<p>W pewnych momentach <strong>kurs jest mocno szczegółowy co daje mocne fundamenty pod prawidłowe nawyki </strong>(zakładanie indeksów na odpowiednie pola, modelowanie baz, hurtownie danych) i daje cenną wiedzę idealnie pod pytania na rozmowach kwalifikacyjnych. </p>
+
+
+
+<p>Kolejnym plusem są<strong> skrypty(dostarczone do każdej lekcji), które pomagają śledzić to co się dzieje na ekranie</strong>. Kolejnym plusem to <strong>wsparcie i szybkość odpowiedzi na facebook</strong>. Miałem kilka pytań i Damiana dosłownie w godzinę był dostępny i rozwiewał wątpliwości. <strong>To pełen szacun dla Niego, że nie było wrażenia, że kupiłeś kurs więc nie zawracaj mi teraz głowy</strong>, bo wydaję Twoją kasę na gadżety. </p>
+
+
+
+<p>Najlepsze tygodnie to hurtowania danych (co mi się wydaje, że to konik dla Damiana), oraz optymalizację 3 i 4 tydzień. </p>
+
+
+
+<p><strong>Jest dobrze, że kurs dotyczy 4 baz danych(MS SQL, mySQL, Oracle, postgresql)</strong>. Fajnie zobaczyć co i jak w innych bazach. Czasem przykłady są te same na każdym silniku a czasem na każdym silniku są inne materiały. Ogólnie robi to dobre wrażenie, choć nie wiedziałem czy zapamiętywać te małe różnice pomiędzy silnikami czy też nie. Moim głównym silnikiem na dziś to MS SQL i jest sporo przykładów w nim było więc byłem zadowolony.</p>
+
+
+
+<h2>Minusy</h2>
+
+
+
+<p>Kurs jest nie równy. Nie wiem czy początkujący się odnajdzie, jeśli pierwsza lekcja jest o indexach. Z drugiej strony jak już coś wiesz to czasem z jednego tygodnia dowiedziałem się tylko jednej drobnej rzeczy, z której nie zdawałem sobie sprawy (CTE, nie zakładać konta &#8216;sa&#8217; na produkcji). </p>
+
+
+
+<p>Nie lubię teorii spiskowych ale mam wrażenie i mam nawet mały dowód, że filmy są mocno spowalniane, czyli, że są dłuższe niż miały być.  Mogę się oczywiście mylić, Damian mówi raczej powoli i może dlatego mam takie wrażenie, ale oglądałem na 1.7 i była to prędkość normalna dla mnie, co wydaje mi się mocno za dużo. W YT oglądam na 1.25 i jest ok.</p>
+
+
+
+<p>Mam klika uwag do pewnych tygodni. Temat administracji był bardzo pobieżny. Fakt, że był konkretny do bólu(ustaw ten parametr na true, bo tak należy robić). Spodziewałem się czegoś bardziej wszechstronnego. Jak ustawić replikację? Jak robić backupy? itd. no nie było tego a raczej jak bazę parametryzować. To w sumie dla MS SQL było 5 parametrów.  Wydaje mi się, że mogło być tego więcej. </p>
+
+
+
+<p>ORM-y to jest sama podstawa(choć nie jest to główny temat szkolenia).) Damian skupia się omawiając ORM-a na tym jakie zapytanie wysyła do bazy, jest kilka ważnych informacji(nie materializuj wyników zbyt wcześnie) ale nie jest ani tutorial do ORM-u ani depp dive do silników ORM-ów. Miałem też wrażenie, że to nie jest jego mocna strona, bo raczej ktoś mu przygotował ten materiał. Było widać jak czyta z kartki. </p>
+
+
+
+<p>Bazy w chmurach &#8211; tutaj się mocno rozczarowałem, bo fakt, że jak raz z tym miałem do czynienia, to samo odtworzenie bazy z backupu zajęło mi kilka godzin, i miałem ochotę się czegoś nauczyć. A okazało się, że kurs to raczej wyjaśnienie jakiś podstaw konfiguracyjnych typu, jeśli dasz więcej cpu to zapłacisz więcej ale będzie szybciej działało. Choć jak masz bazę tylko do odczytu to możesz mieć mniej cpu i zapłacisz mniej. Szkoda. Duże szkoda. Przydało by się więcej informacji praktycznych(jak skonfigurować konta, jak się połączyć do bazy)</p>
+
+
+
+<blockquote class="wp-block-quote"><p>W zaawansowanych funkcjach  SQL zabrakło mi przykładów do robienia <a href="https://docs.microsoft.com/en-us/sql/t-sql/queries/from-using-pivot-and-unpivot?view=sql-server-ver15" class="aioseop-link">pivot-a</a>. A uważam, że to bardzo ważna i praktyczna funkcja, bo często się zdarza, że pozwala osiągnąć cele znaczenie szybciej.</p></blockquote>
+
+
+
+<p>Czasem też były takie nie domówienia typu: Damian mówi nie rób takich zapytań z like &#8216;%aaa%&#8217;, gdzie procent jest z przodu i z tyłu. Ale nie było powiedziane co robić jak jednak tego potrzebujesz. Co prawda zapytałem na facebook i była odpowiedź, że Damian robi to poprzez CLR-a ale w materiałach też by to mogło być.</p>
+
+
+
+<h2>Podsumowanie</h2>
+
+
+
+<p>Kurs jest wart swojej ceny do tygodnia 7 włącznie. Jest to porządna robota. Treści są ok, poziom informacji jest całkiem przyzwoity i dokładnie wszystko jest omówione. Tutaj perełka to hurtownia danych. Potem jest już tylko gorzej. Materiały są pobieżne i czuć, że tematy nie zostały wyczerpane na takim podstawowym poziomie. Co może prowadzić to błędnego założenia, że taka wiedza mi starczy i już coś wiem o bazach i mogę o nich coś powiedzieć. Kurs jest krótki tak naprawdę, bo czasem przykłady są ten same na każdym silniku więc wielkiej wartości nie ma oglądając to. Brakuje mi dodatkowych materiałów gdzie mógł bym pogłębić wiedzę, może linków do filmów albo tekstów. Za 800zł już bym tego kursu nie kupił.  Nie wiem czy jest taka opcja abym się podzielić kosztami, to wtedy jak cena spadnie do tych 300zł to polecam serdecznie. </p>
+
+
+
+<p>A Tobie jak się podobał kurs?</p>
+
+
+
+<p>PS</p>
+
+
+
+<p>Za jakiś czas zapraszam na recenzję kursu gita. TLTR; jest wyśmienity! </p>The post <a href="https://blogprogramisty.net/recenzja-kursu-db-master/">Recenzja kursu DB-Master</a> first appeared on <a href="https://blogprogramisty.net">Blog Programisty.NET</a>.]]>
+      </content:encoded>
+
+      <wfw:commentRss>https://blogprogramisty.net/recenzja-kursu-db-master/feed/</wfw:commentRss>
+      <slash:comments>4</slash:comments>
+
+
+    </item>
+  </channel>
+</rss>
+
+<!--
+Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/
+
+Object Caching 22/179 objects using memcached
+Page Caching using memcached (Page is feed) 
+
+Served from: blogprogramisty.net @ 2021-01-23 23:21:54 by W3 Total Cache
+-->

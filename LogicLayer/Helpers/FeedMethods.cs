@@ -100,14 +100,18 @@ namespace LogicLayer.Helpers
         /// <param name="blog"></param>
         /// <param name="httpProvider">Provider to take content from blog url</param>
         /// <param name="mapper">Required to map rssfeed to post model in db</param>
-        /// <returns>IEnumerable of added posts, null if failed</returns>
-        public static async Task<IEnumerable<Post>> UpdateBlogPostsIfRequired(Blog blog, IHttpHelperService httpProvider, IMapper mapper)
+        /// <returns>
+        /// -1 - FAILED
+        /// 0 - NO UPDATE
+        /// > 0 - AMOUNT OF ADDED POSTS
+        /// </returns>
+        public static async Task<int> UpdateBlogPostsIfRequired(Blog blog, IHttpHelperService httpProvider, IMapper mapper)
         {
             if (blog == null)
-                return null;
+                return -1;
 
             if (!ShouldRefreshBlog(blog))
-                return null;
+                return 0;
 
             string content = await httpProvider.GetStringContent(blog.Url);
             IEnumerable<RssSchema> rss_schemas = Parse(content);
@@ -115,7 +119,7 @@ namespace LogicLayer.Helpers
             if (rss_schemas == null)
             {
                 //TODO some log that it failed
-                return null;
+                return -1;
             }
 
             return UpdateBlogPosts(blog, rss_schemas, mapper);
@@ -126,10 +130,21 @@ namespace LogicLayer.Helpers
             return blog.LastPostsRefreshDate.AddSeconds(RssConsts.UPDATE_BLOG_DELAY_S) < DateTime.UtcNow;
         }
 
-        public static IEnumerable<Post> UpdateBlogPosts(Blog blog, IEnumerable<RssSchema> parsedFeed, IMapper mapper)
+        /// <summary>
+        /// Update blog posts if required - time to next update is expired
+        /// </summary>
+        /// <param name="blog"></param>
+        /// <param name="httpProvider">Provider to take content from blog url</param>
+        /// <param name="mapper">Required to map rssfeed to post model in db</param>
+        /// <returns>
+        /// -1 - FAILED
+        /// 0 - NO UPDATE
+        /// > 0 - AMOUNT OF ADDED POSTS
+        /// </returns>
+        public static int UpdateBlogPosts(Blog blog, IEnumerable<RssSchema> parsedFeed, IMapper mapper)
         {
             if (blog.Posts == null)
-                return null;
+                return -1;
 
             blog.LastPostsRefreshDate = DateTime.UtcNow;
 
@@ -146,7 +161,7 @@ namespace LogicLayer.Helpers
                 }
             }
 
-            return new_posts;
+            return new_posts.Count();
         }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using DataLayer.Code;
 using DataLayer.Models;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace DbAccess.Repositories
 {
@@ -50,11 +51,20 @@ namespace DbAccess.Repositories
                 .Include(x => x.Posts)
                 .FirstOrDefaultAsync(predicate);
         }
+
+        public async Task<List<Blog>> GetListWithPosts(int skip, int take)
+        {
+            return await _context.Blogs
+                .Include(x => x.Posts)
+                .Skip(skip).Take(take)
+                .ToListAsync();
+        }
     }
 
     public interface IBlogRepository : IBaseRepository<Blog>
     {
         Task<Blog> GetByUrl(string url, int posts_amount);
         Task<Blog> GetWithPosts(Expression<Func<Blog, bool>> predicate);
+        Task<List<Blog>> GetListWithPosts(int skip, int take);
     }
 }

@@ -60,7 +60,11 @@ namespace LogicLayer.Blogs
 
                 blog.ImageUrl = await BlogIconMethods.GetHigherIconResolution(blog.ImageUrl, _httpService);
 
-                FeedMethods.UpdateBlogPosts(blog, parsed_feed, _mapper);
+                if (FeedMethods.UpdateBlogPosts(blog, parsed_feed, _mapper) < 0)
+                {
+                    AddError("Update blog failed");
+                    return null;
+                }
 
                 _unitOfWork.BlogRepo.AddNoSave(blog);
             }

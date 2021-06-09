@@ -1,0 +1,2142 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	xmlns:georss="http://www.georss.org/georss" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:media="http://search.yahoo.com/mrss/"
+	>
+
+	<channel>
+		<title>csharp.christiannagel.com</title>
+		<atom:link href="https://csharp.christiannagel.com/feed/" rel="self" type="application/rss+xml" />
+		<link>https://csharp.christiannagel.com</link>
+		<description>Christian Nagel about C#, ASP.NET Core, UWP, Xamarin, Azure, and more</description>
+		<lastBuildDate>Sun, 04 Oct 2020 08:51:25 +0000</lastBuildDate>
+		<language>en</language>
+		<sy:updatePeriod>
+			hourly
+		</sy:updatePeriod>
+		<sy:updateFrequency>
+			1
+		</sy:updateFrequency>
+		<generator>http://wordpress.com/</generator>
+
+		<image>
+			<url>https://csharpdotchristiannageldotcom.files.wordpress.com/2018/08/cropped-professionalcsharp7cover.jpg?w=32</url>
+			<title>csharp.christiannagel.com</title>
+			<link>https://csharp.christiannagel.com</link>
+			<width>32</width>
+			<height>32</height>
+		</image>
+		<cloud domain='csharp.christiannagel.com' port='80' path='/?rsscloud=notify' registerProcedure='' protocol='http-post' />
+		<atom:link rel="search" type="application/opensearchdescription+xml" href="https://csharp.christiannagel.com/osd.xml" title="csharp.christiannagel.com" />
+		<atom:link rel='hub' href='https://csharp.christiannagel.com/?pushpress=hub'/>
+		<item>
+			<title>C# 8 Updates</title>
+			<link>https://csharp.christiannagel.com/2020/09/02/csharp8updates/</link>
+			<comments>https://csharp.christiannagel.com/2020/09/02/csharp8updates/#comments</comments>
+
+			<dc:creator><![CDATA[Christian Nagel]]></dc:creator>
+			<pubDate>Wed, 02 Sep 2020 14:53:12 +0000</pubDate>
+			<category><![CDATA[CSharp]]></category>
+			<category><![CDATA[Professional C#]]></category>
+			<category><![CDATA[CSharp8]]></category>
+			<guid isPermaLink="false">http://csharp.christiannagel.com/?p=2399</guid>
+
+			<description><![CDATA[Bonus chapter for Professional C# 7 and .NET Core 2 with updates for C# 8: nullable reference types, using declaration, readonly members, default interface members, async streams, switch expressions, pattern matching enhancements, indices and ranges, and more!]]></description>
+			<content:encoded>
+				<![CDATA[
+<div class="wp-block-jetpack-markdown"><p>For all my readers of <strong>Professional C# 7 and .NET Core 2</strong> I&#8217;ve uploaded the new <em>bonus chapter 6</em> with <strong>C# 8 updates</strong>! This bonus chapter covers these C# 8 features:</p>
+<ul>
+<li>Nullable reference types</li>
+<li>Using declaration</li>
+<li>Readonly members</li>
+<li>Default interface members</li>
+<li>Async streams</li>
+<li>Switch expressions and pattern matching enhancements</li>
+<li>Indices and ranges</li>
+</ul>
+<p>If you bought a copy of <em>Professional C# 7 and .NET Core 2</em>, you are free to download the new bonus chapter. If you didn&#8217;t buy the book yet it would be nice if you either buy the book or support me by buying one or more coffees &#8211; thanks!</p>
+</div>
+
+
+
+<a href="https://www.buymeacoffee.com/christiannagel" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height:auto !important;width:auto !important;"></a>
+
+
+
+<div class="wp-block-jetpack-markdown"><p>Enjoy!</p>
+<p><a href="https://www.cninnovation.com/Books">Bonus Chapters for Professional C# 7 and .NET Core 2</a></p>
+<p><a href="https://github.com/ProfessionalCSharp/ProfessionalCSharp7">Code Samples</a></p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2018/08/cropped-professionalcsharp7cover.jpg" alt="Professional C# 7"></p>
+</div>
+
+
+
+<p></p>
+]]>
+			</content:encoded>
+
+			<wfw:commentRss>https://csharp.christiannagel.com/2020/09/02/csharp8updates/feed/</wfw:commentRss>
+			<slash:comments>3</slash:comments>
+
+
+
+			<media:thumbnail url="https://csharpdotchristiannageldotcom.files.wordpress.com/2018/08/cropped-professionalcsharp7cover.jpg" />
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2018/08/cropped-professionalcsharp7cover.jpg" medium="image">
+				<media:title type="html">Professional C# 7</media:title>
+			</media:content>
+
+			<media:content url="https://1.gravatar.com/avatar/4736273aed82148d9d3c3ca192c1cd61?s=96&#38;d=identicon&#38;r=G" medium="image">
+				<media:title type="html">christiannagel1</media:title>
+			</media:content>
+
+			<media:content url="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" medium="image">
+				<media:title type="html">Buy Me A Coffee</media:title>
+			</media:content>
+		</item>
+		<item>
+			<title>Local Users with ASP.NET Core &#8211; ASP.NET Core Identity</title>
+			<link>https://csharp.christiannagel.com/2020/07/07/aspnetcoreroles/</link>
+			<comments>https://csharp.christiannagel.com/2020/07/07/aspnetcoreroles/#comments</comments>
+
+			<dc:creator><![CDATA[Christian Nagel]]></dc:creator>
+			<pubDate>Tue, 07 Jul 2020 11:11:00 +0000</pubDate>
+			<category><![CDATA[.NET Core]]></category>
+			<category><![CDATA[ASP.NET Core]]></category>
+			<category><![CDATA[aspnetcore]]></category>
+			<category><![CDATA[Authentication]]></category>
+			<category><![CDATA[Identity]]></category>
+			<guid isPermaLink="false">http://csharp.christiannagel.com/?p=2395</guid>
+
+			<description><![CDATA[Authentication and authorization is a built-in feature of ASP.NET Core. Creating an application, you can select to authenticate with the Azure Active Directory or the Azure Active Directory B2C, or store user information in a local database with the Web application. This article gives you the information to use local accounts, create roles programmatically from the application, and to restrict access to users belonging to specific roles.]]></description>
+			<content:encoded>
+				<![CDATA[
+<div class="wp-block-jetpack-markdown"><p>Authentication and authorization is a built-in feature of ASP.NET Core. Creating an application, you can select to authenticate with the Azure Active Directory or the Azure Active Directory B2C, or store user information in a local database with the Web application. This article gives you the information to use local accounts, create roles programmatically from the application, and to restrict access to users belonging to specific roles.</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/07/fingerprint.jpg" alt="Fingerprint authentication"></p>
+<h2>Overview</h2>
+<p>Before storing users of your Web applications in a local database, think about other options available. Instead of the need to manage users in a local database, a better option is to have user information stored and managed independent of the application, e.g. by using <em>Azure Active Directory</em> or <em>Azure Active Directory B2C</em>. If the authentication service needs to run on-premises, consider using <em>Identity Server</em>. Identity Server is OpenID certified and part of the .NET Foundation.</p>
+<p>In case you&#8217;ve reasons to store user information with the application in a SQL database, this feature is part of the ASP.NET Core experience as well. Let&#8217;s get into this.</p>
+<h2>Create the Application</h2>
+<p>Creating a new ASP.NET Core Web application, these are the options offered for authentication:</p>
+<ul>
+<li>No Authentication</li>
+<li>Individual User Accounts</li>
+<li>Work or School Accounts</li>
+<li>Windows Authentication</li>
+</ul>
+<p>Using <em>Work or School Accounts</em>, <em>Azure Active Directory</em> can be selected. <em>Individual User Accounts</em> allows for the selection of <em>Azure Active Directory B2C</em>, or <strong>Store user accounts in-app</strong> which uses a local database to store the user accounts.</p>
+<p>![https://csharpdotchristiannageldotcom.files.wordpress.com/2020/07/visualstudio2019storeuseraccountsinapp.png](Store user accounts in-app)</p>
+<p>The connection string to the database is defined with <em>appsettings.json</em> with the <code>DefaultConnection</code>, using SQL Server <em>localdb</em>.</p>
+<p>In the <code>Startup</code> class, the database is configured in the <code>ConfigureServices</code> method. Here, the <code>ApplicationDbContext</code> is configured as EF Core context to be used for the identity. The class <code>ApplicationDbContext</code> is defined with the created application and derives from the base class <code>IdentityDbContext</code> (namespace <code>Microsoft.AspNetCore.Identity.EntityFrameworkCore</code>) to define all the tables and columns used for authentication and authorization.</p>
+<pre><code class="language-csharp">public void ConfigureServices(IServiceCollection services)
+{
+		services.AddDbContext&lt;ApplicationDbContext&gt;(options =&gt;
+				options.UseSqlServer(
+						Configuration.GetConnectionString(&quot;DefaultConnection&quot;)));
+		services.AddDefaultIdentity&lt;IdentityUser&gt;(options =&gt; options.SignIn.RequireConfirmedAccount = true)
+				.AddEntityFrameworkStores&lt;ApplicationDbContext&gt;();
+		services.AddControllersWithViews();
+		services.AddRazorPages();
+}
+</code></pre>
+<blockquote>
+<p>In case you need to store additional data for your users, or adapt the information, the <code>ApplicationDbContext</code> is where you need to look at.</p>
+</blockquote>
+<p>The <code>Configure</code> method in the <code>Startup</code> class configures middleware for authentication and authorizaton invoking the methods <code>UseAuthentication</code> and <code>UseAuthorization</code>.</p>
+<pre><code class="language-csharp">public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+{
+		if (env.IsDevelopment())
+		{
+				app.UseDeveloperExceptionPage();
+				app.UseDatabaseErrorPage();
+		}
+		else
+		{
+				app.UseExceptionHandler(&quot;/Home/Error&quot;);
+				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+				app.UseHsts();
+		}
+		app.UseHttpsRedirection();
+		app.UseStaticFiles();
+
+		app.UseRouting();
+
+		app.UseAuthentication();
+		app.UseAuthorization();
+
+		app.UseEndpoints(endpoints =&gt;
+		{
+				endpoints.MapControllerRoute(
+						name: &quot;default&quot;,
+						pattern: &quot;{controller=Home}/{action=Index}/{id?}&quot;);
+				endpoints.MapRazorPages();
+		});
+}
+</code></pre>
+<p>Starting the application, you can already register a new user. If the database wasn&#8217;t created before, it is created using <strong>EF Core Migrations</strong>. You can start the database creation using the EF Core tools, or just start the application to register a user. Of course, you need to have the rights on your system to create the database. After creating of the application, <em>SQL Server Express LocalDB</em> is used. LocalDB is installed with Visual Studio.</p>
+<h2>Default User Interface</h2>
+<p>Where is the user interface for login and registration of the users coming from? It&#8217;s part of a library: <em>Microsoft.AspNetCore.Identity.UI</em>. This library contains Razor pages defining the user interface for identity. With the application created, you&#8217;ll find the <em>Areas/Identity/Pages</em> folder which contains the <em>_ViewStart.cshtml</em> file for this area. In this file you can see the assignment of the <code>Layout</code> property to reference the shared file <em>_Layout.cshtml</em>. This way the Razor pages from the library share the same layout definition with your application.</p>
+<pre><code class="language-razor">@{
+		Layout = &quot;/Views/Shared/_Layout.cshtml&quot;;
+}
+</code></pre>
+<p>In case you need more customization to the user interface, you can add a new scaffoled item for <em>Identity</em>:</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/07/visualstudio2019_scaffold_identity.png" alt="Scaffold Identity"></p>
+<p>With this option, you can select to override from all the different user interfaces that are part of this library to customize it for your application. Selecting the pages you want to customize, the Razor pages are created within the project, so you can easily customize it for your needs.</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/07/visualstudio2019_scaffold_identitypages.png" alt="Scaffold Razor Pages for Identity"></p>
+<h2>Verifying Emails</h2>
+<p>Registering a new account from the application succeeds after the database was created. However, this user cannot login. The reason is a default setting with the configuration of the default identity to require confirmed accounts. An easy way to change this behavior is to set the <code>RequireConfirmedAccount</code> to <code>false</code>. However, it&#8217;s not a lot more difficult to configure email validation. With the sample here, I&#8217;m using <strong>SendGrid</strong> to send emails. The <em>SendGrid</em> account can be created from the Microsoft Azure portal. Sending up to <strong>25,000 emails per month is free</strong> with this Microsoft Azure offering.</p>
+<p>To verify the emails, the interface <code>IEmailSender</code> needs to be implemented. This interface defines one method &#8211; <code>SendEmailAsync</code>. To send an email using <em>SendGrid</em>, the <strong>SendGrid</strong> NuGet package is added. This package contains the <code>SendGridClient</code> class that is used to send emails. After configuration, just the <code>SendEmailAsync</code> of the <code>SendGridClient</code> needs to be invoked.</p>
+<pre><code class="language-csharp">public class EmailSender : IEmailSender
+{
+		private readonly EmailSenderOptions _options;
+		public EmailSender(IOptions&lt;EmailSenderOptions&gt; options)
+		{
+				_options = options.Value;
+		}
+
+		public Task SendEmailAsync(string email, string subject, string htmlMessage)
+		{
+				var sendGridOptions = new SendGridClientOptions 
+				{
+						 ApiKey = _options.ApiKey
+				};
+				var emailClient = new SendGridClient(sendGridOptions);
+				var message = new SendGridMessage
+				{
+						From = new EmailAddress(&quot;authentication@sample.com&quot;),
+						Subject = subject,
+						HtmlContent = htmlMessage
+				};
+				message.AddTo(email);
+					
+				return emailClient.SendEmailAsync(message);
+		}
+}
+</code></pre>
+<p>For the configuration, the API key for SendGrid is needed. This key is supplied with the class <code>EmailSenderOptions</code>:</p>
+<pre><code class="language-csharp">public class EmailSenderOptions
+{
+		public string ApiKey { get; set; }
+}
+</code></pre>
+<p>The key is configured with the user secrets of the application &#8211; during development.</p>
+<pre><code class="language-json">{
+	&quot;SendGrid&quot;: {
+		&quot;ApiKey&quot;: &quot;add your API key&quot;
+	}
+}
+</code></pre>
+<p>The key can be created in the SendGrid portal that&#8217;s accessed from the Azure portal.</p>
+<p>The <code>EmailSender</code> now needs to be configured with the DI container &#8211; in the <code>ConfigureServices</code> method:</p>
+<pre><code class="language-csharp">public void ConfigureServices(IServiceCollection services)
+{
+		//...
+		services.Configure&lt;EmailSenderOptions&gt;(Configuration.GetSection(&quot;SendGrid&quot;));
+		services.AddTransient&lt;IEmailSender, EmailSender&gt;();
+}
+</code></pre>
+<p>With the <code>EmailSender</code> in place, a new account can be registered where an email is sent to verify the email address. After the email is clicked, the account is verified, and can successfully login to the Web application.</p>
+<h2>Features</h2>
+<p>The built-in authentication has support to reset the password via email, change the profile, and also supports the <em>General Data Protection Regulation</em> (GDPR). Clicking on the username, the user can download all his personal data stored, and delete the account.</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/07/aspnetcore3_profile.png" alt=""></p>
+<h2>Application Database</h2>
+<p>The created database contains these tables to manage users along with roles, claims, tokens&#8230;</p>
+<ul>
+<li>AspNetUsers</li>
+<li>AspNetUserLogins</li>
+<li>AspNetUserClaims</li>
+<li>AspNetUserTokens</li>
+<li>AspNetRoles</li>
+<li>AspNetUserRoles</li>
+<li>AspNetRoleClaims</li>
+</ul>
+<h2>Managing Roles from the Application</h2>
+<p>For using roles, some configuration is required. Using <code>AddDefaultIdentity</code> to configure the DI container with identities, roles are not included by default. Instead, you can use the <code>AddIdentity</code> extension method which allows not only to pass the type of the user, but the type for the roles used, e.g.</p>
+<pre><code class="language-csharp">services.AddIdentity&lt;IdentityUser, IdentityRole&gt;(options =&gt;
+		{
+				options.SignIn.RequireConfirmedAccount = true;
+		})
+		.AddDefaultUI()
+		.AddEntityFrameworkStores&lt;ApplicationDbContext&gt;()
+		.AddSignInManager()
+		.AddDefaultTokenProviders();
+</code></pre>
+<p>When using the method <code>AddDefaultIdentity</code>, the <code>AddRoles</code> method can be used to add role support as well.</p>
+<p>To manage roles from the application, EF Core can be used to access the database via the <code>ApplicationDbContext</code>. However, there&#8217;s also an API which is more user friendly and independent of probably future database changes: <code>RoleManager</code>. <code>RoleManager</code> is a generic type which allows specifying the type to be used for the roles as a generic type parameter &#8211; <code>IdentityRole</code>. The constructor of the <code>RoleManager</code> needs <code>IRoleStore</code>, <code>IRoleValidator</code>, <code>ILookupNormalizer</code>, <code>IdentityErrorDescriber</code>, and <code>ILogger</code> parameters. Using dependency injection, all these paramters can be injected. To inject the <code>RoleManager</code> in a controller, just the extension method <code>AddRoleManager</code> needs to be invoked with the DI container. Similar to manage roles, managing users can be done with the <code>UserManager</code> (code file <em>Startup.cs</em>):</p>
+<pre><code class="language-csharp">services.AddDefaultIdentity&lt;IdentityUser&gt;(options =&gt; options.SignIn.RequireConfirmedAccount = true)
+		.AddRoles&lt;IdentityRole&gt;()
+		.AddEntityFrameworkStores&lt;ApplicationDbContext&gt;()
+		.AddRoleManager&lt;RoleManager&lt;IdentityRole&gt;&gt;()
+		.AddUserManager&lt;UserManager&lt;IdentityUser&gt;&gt;();
+</code></pre>
+<p>The controller where the <code>RoleManager</code> is injected is the <code>RolesAdminController</code>. This controller just shows all the roles available with the <code>Index</code> method, and the two <code>Create</code> methods to create a new role &#8211; using the <code>CreateAsync</code> method of the <code>RoleManager</code> passing an <code>IdentityRole</code> (code file <em>Controllers/RolesAdminController.cs</em>):</p>
+<pre><code class="language-csharp">[Authorize(Roles = &quot;Admins&quot;)]
+public class RolesAdminController : Controller
+{
+		private readonly RoleManager&lt;IdentityRole&gt; _roleManager;
+		public RolesAdminController(RoleManager&lt;IdentityRole&gt; roleManager)
+		{
+				_roleManager = roleManager;
+		}
+
+		public async Task&lt;IActionResult&gt; Index()
+		{
+				var identityRoles = await _roleManager.Roles.ToListAsync();
+				return View(identityRoles);
+		}
+
+		public IActionResult Create()
+		{
+				return View();
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task&lt;IActionResult&gt; Create([Bind(&quot;Id, Name, NormalizedName&quot;)] IdentityRole role)
+		{
+				if (ModelState.IsValid)
+				{
+						await _roleManager.CreateAsync(role);
+
+						return RedirectToAction(nameof(Index));
+				}
+				return View(role);
+		}
+}
+</code></pre>
+<p>In the <em>Index</em> view, the list of roles is shown (code file <em>Views/RolesAdmin/Index.cshtml</em>):</p>
+<pre><code class="language-razor">@foreach (var item in Model)
+{
+		&lt;tr&gt;
+				&lt;td&gt;
+						@Html.DisplayFor(modelItem =&gt; item.Id)
+				&lt;/td&gt;
+				&lt;td&gt;
+						@Html.DisplayFor(model =&gt; item.Name)
+				&lt;/td&gt;
+				&lt;td&gt;
+						@Html.DisplayFor(modelItem =&gt; item.NormalizedName)
+				&lt;/td&gt;
+		&lt;/tr&gt;
+}
+</code></pre>
+<p>The <em>Create</em> view contains a HTML form to create new roles (code file <em>Views/RolesAdmin/Create.cshtml</em>):</p>
+<pre><code class="language-razor">&lt;div class=&quot;row&quot;&gt;
+		&lt;div class=&quot;col-md-4&quot;&gt;
+				&lt;form asp-action=&quot;Create&quot;&gt;
+						&lt;div asp-validation-summary=&quot;ModelOnly&quot; class=&quot;text-danger&quot;&gt;&lt;/div&gt;
+						&lt;div class=&quot;form-group&quot;&gt;
+								&lt;label asp-for=&quot;Name&quot; class=&quot;control-label&quot;&gt;&lt;/label&gt;
+								&lt;input asp-for=&quot;Name&quot; class=&quot;form-control&quot; /&gt;
+								&lt;span asp-validation-for=&quot;Name&quot; class=&quot;text-danger&quot;&gt;&lt;/span&gt;
+						&lt;/div&gt;
+						&lt;div class=&quot;form-group&quot;&gt;
+								&lt;input type=&quot;submit&quot; value=&quot;Create&quot; class=&quot;btn btn-primary&quot; /&gt;
+						&lt;/div&gt;
+				&lt;/form&gt;
+		&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>To programmatically assign a role to the current user, the <code>UserManager</code> can be used similar to the <code>RoleManager</code>. The method <code>AddToRoleAsync</code> requires an <code>IdentityUser</code> and the name of the role. The <code>IdentityUser</code> of the current user can be retrieved passing a <code>ClaimsPrincipal</code> to the <code>GetUserMethod</code>. The <code>User</code> property of the controllers base class returns the <code>ClaimsPrincipal</code> of the current user:</p>
+<pre><code class="language-csharp">var claimsPrincipal = User;
+var user = await userManager.GetUserAsync(claimsPrincipal);
+var result = await userManager.AddToRoleAsync(user, role.Name);
+</code></pre>
+<h2>Authentication with Roles</h2>
+<p>As roles are added to the <em>AspNetRoles</em> table, and mapping between users and roles is defined in the <em>AspNetUserRoles</em> table, requiring roles to invoke any action method of the controller can be applied with the <code>Authorize</code> attribute setting the <code>Roles</code> property. Applying this to the controller, every action method of the controller requires this authentication.</p>
+<pre><code class="language-csharp">[Authorize(Roles = &quot;Admins&quot;)]
+public class RolesAdminController : Controller
+{
+		//...
+}
+</code></pre>
+<p>Appling this attribute to the action method gives finer grained control. To programmatically check for a role, the <code>IsInRole</code> method of the <code>ClaimsPrincipal</code> can be used.</p>
+<h2>Take away</h2>
+<p>ASP.NET Core offers great built-in functionality to authenticate users from a local database. Checking for roles can be simple enabled with the identity configuration in the <code>Startup</code> class. With just a few lines of code, email verfication can be added. All the user interfaces for user registration, login, changing the password, downloading personal data&#8230; is included with a library &#8211; but can be completely customized with scaffolding. To manage users and roles programmatically, the <code>UserManager</code> and <code>RoleManager</code> APIs are available. Many features are available out of the box, easy to use, and completely customizable.</p>
+<p>If you like this article, consider buying me a coffee which helps me staying up longer and writing more articles.</p>
+</div>
+
+
+
+<a href="https://www.buymeacoffee.com/christiannagel" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height:auto !important;width:auto !important;"></a>
+
+
+
+<div class="wp-block-jetpack-markdown"><p>You can get the <a href="https://github.com/ProfessionalCSharp/MoreSamples">complete sample code</a>. See the <strong>RolesSample</strong> sample solution in the <em>AspNetCore</em> folder.</p>
+<p>Enjoy learning and programming!</p>
+<p>Christian</p>
+<h2>More Information</h2>
+<p><a href="https://docs.microsoft.com/aspnet/core/security/authentication/accconfirm">Account confirmation and password recovery</a></p>
+<p><a href="https://identityserver.io/">Identity Server</a></p>
+<p><a href="https://dotnetfoundation.org/">.NET Foundation</a></p>
+<p><a href="https://docs.microsoft.com/ef/core/miscellaneous/cli/dotnet">Entity Framework Core tools reference</a></p>
+<p><a href="https://csharp.christiannagel.com/2018/08/01/azureadb2c/">Using Azure Active Directory B2C with ASP.NET Core</a></p>
+<p><a href="https://csharp.christiannagel.com/2018/07/18/identitypages/">ASP.NET Core Identity Pages with ASP.NET Core 2.1</a></p>
+<p>More information on C# and programming .NET Core applications is in my book <a href="https://csharp.christiannagel.com/2018/04/16/professionalcsharp7/">Professional C# 7 and .NET Core 2.0</a>, and in my <a href="https://cninnovation.com/Training/">workshops</a>.</p>
+<p>Fingerprint authentication image <a href="https://www.dreamstime.com/yaremastudio_info">ID 188969170 © Serhii Yaremenko</a> | <a href="https://www.dreamstime.com/">Dreamstime.com</a></p>
+</div>
+]]>
+			</content:encoded>
+
+			<wfw:commentRss>https://csharp.christiannagel.com/2020/07/07/aspnetcoreroles/feed/</wfw:commentRss>
+			<slash:comments>9</slash:comments>
+
+
+
+			<media:thumbnail url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/07/fingerprint.jpg" />
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/07/fingerprint.jpg" medium="image">
+				<media:title type="html">Fingerprint Authentication</media:title>
+			</media:content>
+
+			<media:content url="https://1.gravatar.com/avatar/4736273aed82148d9d3c3ca192c1cd61?s=96&#38;d=identicon&#38;r=G" medium="image">
+				<media:title type="html">christiannagel1</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/07/visualstudio2019_scaffold_identity.png" medium="image">
+				<media:title type="html">Scaffold Identity</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/07/visualstudio2019_scaffold_identitypages.png" medium="image">
+				<media:title type="html">Scaffold Razor Pages for Identity</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/07/aspnetcore3_profile.png" medium="image" />
+
+			<media:content url="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" medium="image">
+				<media:title type="html">Buy Me A Coffee</media:title>
+			</media:content>
+		</item>
+		<item>
+			<title>How Hello World! changed &#8211; top level statements and functions (C# 9)</title>
+			<link>https://csharp.christiannagel.com/2020/06/30/helloworld9/</link>
+			<comments>https://csharp.christiannagel.com/2020/06/30/helloworld9/#comments</comments>
+
+			<dc:creator><![CDATA[Christian Nagel]]></dc:creator>
+			<pubDate>Tue, 30 Jun 2020 11:00:00 +0000</pubDate>
+			<category><![CDATA[CSharp]]></category>
+			<category><![CDATA[CSharp9]]></category>
+			<category><![CDATA[toplevelstatements]]></category>
+			<guid isPermaLink="false">http://csharp.christiannagel.com/?p=2385</guid>
+
+			<description><![CDATA[C# 9 comes with many new features to enhance productivity and fix bugs. One productivity enhancement comes for small and simple programs also helps learning C#: top level statements. This also allows for a new way to create a "Hello World" program with C#. It's not the first time that a new C# language feature made a change for "Hello World". This also happened with C# 6. Let's come on a tour how "Hello World" changed during the C# years, and what's going on with top level statements and functions.]]></description>
+			<content:encoded>
+				<![CDATA[
+<div class="wp-block-jetpack-markdown"><p>C# 9 comes with many new features to enhance productivity and fix bugs. One productivity enhancement comes for small programs and learning C#: <strong>top level statements</strong>. This also allows for a new way to create a <em>Hello World</em> program with C#. It&#8217;s not the first time that a new C# language feature made a change for <em>Hello World</em>. This also happened with C# 6. Let&#8217;s come on a tour how <em>Hello World</em> changed during the C# years, and what&#8217;s going on with <em>top level statements and functions</em>.</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/06/helloworld.jpg" alt="Hello World"></p>
+<h2>C# 1</h2>
+<p>The first version of C# was influenced by Java, Delphi, and C++. To create a simple Hello World application, the <code>Main</code> method had to be defined as the entry point into the application. With this object-oriented programming language every method had to be put into a type, e.g. the <code>Main</code> method into the <code>Program</code> class. To write a string to the console, the <code>WriteLine</code> method of the <code>Console</code> class can be used. The Console class is defined within the <code>System</code> namespace, so the using declation openend this namespace:</p>
+<pre><code class="language-csharp">using System;
+
+public class Program
+{
+	public static void Main()
+	{
+		Console.WriteLine(&quot;Hello World!&quot;);
+	}
+}
+</code></pre>
+<h2>C# 6 &#8211; Using Static Directive</h2>
+<p>Following the different versions of C#, every new version offers many new features &#8211; just a few mentioned here are generics, LINQ, and async/await. The <em>Hello World</em> application didn&#8217;t change &#8211; up to C# 6. With C# 6 <strong>using static</strong> was added which allows to open all members of a static type. It&#8217;s no longer needed to use the class name when invoking a static method. The first time with C# the <em>Hello World</em> application was changed. The <code>WriteLine</code> method can be invoked without the class name:</p>
+<pre><code class="language-csharp">using static System.Console;
+
+public class Program
+{
+	public static void Main()
+	{
+		WriteLine(&quot;Hello World!&quot;);
+	}
+}
+</code></pre>
+<h2>C# 9 &#8211; Top-Level Statements</h2>
+<p>It took some years for the next simplification of <em>Hello World</em>. With C# 9 <strong>Top-level statements</strong>, it&#8217;s no longer necessary to delcare the <code>Main</code> method at all. Just add method invocations top-level.</p>
+<pre><code class="language-csharp">using System;
+
+Console.WriteLine(&quot;Hello World!&quot;);
+</code></pre>
+<p>Behind the scenes, the compiler creates a <code>$Program</code> class and a <code>$Main</code> method:</p>
+<pre><code class="language-csharp">public class $Program
+{
+	public static void $Main()
+	{
+		System.Console.WriteLine(&quot;Hello World!&quot;);
+	}
+}
+</code></pre>
+<h2>Accessing Command Line Arguments</h2>
+<p>What about command-line arguments? Yes, you can access these as well. If the variable <strong>args</strong> is used, the compiler creates a <code>Main</code> with <code>string[] args</code>, and you can use it as you&#8217;re used to:</p>
+<pre><code class="language-csharp">if (args.Length &amp;gt; 0)
+{
+		foreach (var arg in args)
+		{
+				Console.WriteLine(arg);
+		}
+}
+</code></pre>
+<h2>Using Local Functions</h2>
+<p>What about declaring methods in the top-level scope without a class? This is not possible. Declaring methods requires a type where they are declared into. However, you can specify <strong>local functions</strong> in the top-level scope. Local functions can now be declared <em>static</em> if instance variables outside of the function don&#8217;t need to be accessed (see the static <code>Foo</code> local function). The <code>AddToX</code> local function accesses the variable x outside of its scope:</p>
+<pre><code class="language-csharp">Foo();
+
+int x = 3;
+
+int result = AddToX(4);
+Console.WriteLine(result);
+
+static void Foo()
+{
+		Console.WriteLine(&quot;Foo&quot;);
+}
+
+int AddToX(int y)
+{
+		return x + y;
+}
+</code></pre>
+<p>&gt; Local functions are available since C# 7. Static local functions are available since C# 8.</p>
+<h2>Take away</h2>
+<p>For many applications, C# 9&#8217;s <em>top level statements</em> will not offer any advantage. However, creating small tools, and learning C#, <em>top level statements</em> is a nice enhancements. It&#8217;s no longer necessary to define a <code>Main</code> method, and with this a class isn&#8217;t needed either.</p>
+<p>&gt; This feature is marked in the Roslyn repo with the label <strong>New Language Feature &#8211; Simple Programs</strong>.</p>
+<p>If you like this article, consider buying me a coffee which helps me staying up longer and writing more articles.</p>
+</div>
+
+
+
+<a href="https://www.buymeacoffee.com/christiannagel" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height:auto !important;width:auto !important;"></a>
+
+
+
+<div class="wp-block-jetpack-markdown"><p>You can get the <a href="https://github.com/ProfessionalCSharp/MoreSamples">complete sample code</a>. See the <strong>TopLevelStatements</strong> sample solution in the <em>CSharp</em> folder.</p>
+<p>Enjoy learning and programming!</p>
+<p>Christian</p>
+<h2>More Information</h2>
+<p><a href="https://csharp.christiannagel.com/2020/04/21/c-9-positional-or-nominal-creation/">C# 9 &#8211; Positional or Nominal Creation</a></p>
+<p><a href="https://csharp.christiannagel.com/2019/04/09/using/">Using, using, using with C# 8</a></p>
+<p><a href="https://csharp.christiannagel.com/2017/07/25/localfunctions/">C# 7 &#8211; Local Functions &#8211; What&#8217;s the Value?</a></p>
+<p><a href="https://github.com/dotnet/csharplang/blob/master/proposals/top-level-statements.md">C# Proposal Top Level Statements</a></p>
+<p><a href="https://github.com/dotnet/csharplang/issues/3117">Top level statements and functions</a></p>
+<p><a href="https://github.com/dotnet/roslyn/issues?q=top+level+label%3A%22New+Language+Feature+-+Simple+Programs%22/">New Language Feature &#8211; Simple Programs</a></p>
+<p>More information on C# and programming .NET Core applications is in my book <a href="https://csharp.christiannagel.com/2018/04/16/professionalcsharp7/">Professional C# 7 and .NET Core 2.0</a>, and in my <a href="https://cninnovation.com/Training/">workshops</a>.</p>
+<p>Hello world <a href="https://www.dreamstime.com/makaule_info">ID 49800341 © Makaule</a> | <a href="https://www.dreamstime.com/">Dreamstime.com</a></p>
+</div>
+]]>
+			</content:encoded>
+
+			<wfw:commentRss>https://csharp.christiannagel.com/2020/06/30/helloworld9/feed/</wfw:commentRss>
+			<slash:comments>7</slash:comments>
+
+
+
+			<media:thumbnail url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/06/helloworld.jpg" />
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/06/helloworld.jpg" medium="image">
+				<media:title type="html">The first program is written with the newly learned programming language</media:title>
+			</media:content>
+
+			<media:content url="https://1.gravatar.com/avatar/4736273aed82148d9d3c3ca192c1cd61?s=96&#38;d=identicon&#38;r=G" medium="image">
+				<media:title type="html">christiannagel1</media:title>
+			</media:content>
+
+			<media:content url="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" medium="image">
+				<media:title type="html">Buy Me A Coffee</media:title>
+			</media:content>
+		</item>
+		<item>
+			<title>It&#8217;s all in the Host Class &#8211; Part 2: Configuration</title>
+			<link>https://csharp.christiannagel.com/2020/06/23/configurationwithhost/</link>
+			<comments>https://csharp.christiannagel.com/2020/06/23/configurationwithhost/#comments</comments>
+
+			<dc:creator><![CDATA[Christian Nagel]]></dc:creator>
+			<pubDate>Tue, 23 Jun 2020 11:00:00 +0000</pubDate>
+			<category><![CDATA[.NET Core]]></category>
+			<category><![CDATA[Configuration]]></category>
+			<category><![CDATA[dotnet]]></category>
+			<category><![CDATA[dotnetcore]]></category>
+			<guid isPermaLink="false">http://csharp.christiannagel.com/?p=2374</guid>
+
+			<description><![CDATA[.NET Core gives flexible options to configure app settings. The Host class has DI, configuration, and logging built-in. Let's look into the configuration part of the Host class.]]></description>
+			<content:encoded>
+				<![CDATA[
+<div class="wp-block-jetpack-markdown"><p>In part 1 of this article series <em>Dependency Injection</em> was covered &#8211; one of the features of the <strong>Host</strong> class. This article shows another aspect that&#8217;s needed by nearly every application: configuration. Here, I&#8217;m covering using the <code>ConfigurationBuilder</code>, using the <code>IConfiguration</code> API, injecting this interface, and what&#8217;s in the <code>Host</code> class.</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/06/ferraristeeringwheel.jpg" alt="Ferrari Steering Wheel"></p>
+<h2>Overview</h2>
+<p>With the old .NET Framework, in Web applications, configuration values are stored in the XML file <strong>web.config</strong>. This file not only contains application settings, but a lot more such as redirects of assemblies based on versions, and runtime configuration. To allow having different configuration values for staging and production servers, and not the need to create copies of complete files (and to miss some changes in future versions), XML transformations can be done &#8211; and are supported with Visual Studio.</p>
+<p>.NET in its actual version offers more flexibility, it&#8217;s easier to use, and it&#8217;s more powerful with configurations. You can use different providers to store application settings in JSON files, environmental variables, and command line arguments, and easily add other providers such as having the configuration stored with <em>Azure App Configuration</em> or <em>Azure Key Vault</em>.</p>
+<p>Let&#8217;s get into an example.</p>
+<h2>Using Simple Configuration</h2>
+<p>The first code snippet is part of a .NET Core console application, and the configuration setup defines to read configuration from the JSON file <em>appsettings.json</em>. The NuGet package <em>Microsoft.Extensions.Configuration</em> is needed for all the configuration types, such as the <em>ConfigurationBuilder</em>. To read the configuration file from JSON, another NuGet package, <em>Microsoft.Extensions.Configuration.Json</em> is required. Creating a new <code>ConfigurationBuilder</code> instance, a Fluent API is offered. The <code>SetBasePath</code> method defines the directory where the configuration files are read from there on. The <code>AddJsonFile</code> extension method that has been made available from the <em>Microsoft.Extensions.Configuration.Json</em> package defines the filename for the configuration file. <code>SetBasePath</code> needs to be invoked before the invocation of the <code>AddJsonFile</code>. In case you want to read values from configuration files in different folders, <code>SetBasePath</code> needs to be invoked multiple times &#8211; always before defining the file itself. After this filename is configured, the <code>Build</code> method is invoked which returns an <code>IConfigurationRoot</code> object. This returned object is returned from the <code>SetupSimpleConfiguration</code> method.</p>
+<pre><code class="language-csharp">private static IConfiguration SetupSimpleConfiguration()
+	=&amp;gt; new ConfigurationBuilder()
+			.SetBasePath(Directory.GetCurrentDirectory())
+			.AddJsonFile(&quot;appsettings.json&quot;)
+			.Build();
+</code></pre>
+<p>&gt; The <code>Build</code> method that is defined by the <code>IConfigurationBuilder</code> interface returns an <code>IConfigurationRoot</code>, wheras the method <code>SetupSimpleConfiguration</code> returns <code>IConfiguration</code>. <code>IConfigurationRoot</code> derives from <code>IConfiguration</code> and adds the <code>Providers</code> property and the <code>Reload</code> method. The <code>Providers</code> property returns a list of configuration configuration providers. The <code>Reload</code> method can be invoked to refresh configuration values when they probably have been changed in the file system while the application was running.</p>
+<p>The configuration file <em>applicationsettings.json</em> defines a simple configuration value for the key <em>SimpleConfig</em>:</p>
+<pre><code class="language-json">{
+	&quot;SimpleConfig&quot;: &quot;SimpleValue&quot;
+}
+</code></pre>
+<p>To read the configuration value, all what&#8217;s needed is to use the indexer of the <code>IConfiguration</code> interface and pass the name of the key:</p>
+<pre><code class="language-csharp">private static void ReadSimpleConfiguration(IConfiguration configuration)
+{
+		Console.WriteLine(nameof(ReadSimpleConfiguration));
+		string val1 = configuration[&quot;SimpleConfig&quot;];
+		Console.WriteLine($&quot;Read {val1} using the key SimpleConfig&quot;);
+		Console.WriteLine();
+}
+</code></pre>
+<p>The variable val1 now contains the string <em>SimpleValue</em> and is shown on the console.</p>
+<h2>Using Different Configuration Providers</h2>
+<p>There&#8217;s no need to store your configuration values within JSON files. You can use XML files, also can make use of INI files, pass configuration files with command line arguments, or environmental variables &#8211; you can use any provider for configuration values, or create your own. To use configuration files from XML files, the NuGet package <em>Microsoft.Extensions.Configuration.Xml</em> can be used, with environmental variables the package <em>Microsoft.Extensions.Configuration.EnvironmentVariables</em>.</p>
+<pre><code class="language-csharp">private static IConfiguration SetupConfigurationWithMultipleProviders(string[] args) =&amp;gt;
+		new ConfigurationBuilder()
+				.SetBasePath(Directory.GetCurrentDirectory())
+				.AddJsonFile(&quot;appsettings.json&quot;)
+				.AddEnvironmentVariables()
+				.AddCommandLine(args)
+				.Build();
+</code></pre>
+<p>To run the application from Visual Studio, the program arguments as well as the environmental variables can be set from the Debug settings of the project properties:</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/06/visualstudiodebugconfiguration.png" alt="Visual Studio Debug Settings"></p>
+<p>&gt; Using the same configuration keys with multiple providers, the order how the providers are added to the ConfigurationBuilder becomes important. The provider that is added last wins.</p>
+<h2>Defining Different Values for Development, Staging, Production</h2>
+<p>With the new configuration it is easy to supply different configuration values for development, staging, and production environments. With the sample project I&#8217;ve configured the environment variable <em>DOTNET_Environment</em> to the name of the environment, e.g. <em>Staging</em>. This environmental variable is used to define the filename for the configuration. appsettings.json is used for the configuration that is not different with the servers, with the development server the additional configuration file appsettings.development.json is used, with the production server appsettings.production.json. By default, if the file does not exist, an exception is thrown. Passing <em>true</em> with the second argument of <code>AddJsonFile</code>, it can be specified that the setting is optional.</p>
+<pre><code class="language-csharp">private static IConfiguration SetupConfigurationWithOptionalSettings()
+{
+		string environment = Environment.GetEnvironmentVariable(&quot;DOTNET_Environment&quot;);
+
+		string environment = Environment.GetEnvironmentVariable(&quot;DOTNET_Environment&quot;) ?? &quot;Production&quot;;
+
+		return new ConfigurationBuilder()
+				.SetBasePath(Directory.GetCurrentDirectory())
+				.AddJsonFile(&quot;appsettings.json&quot;)
+				.AddJsonFile($&quot;appsettings.{environment}.json&quot;, optional: true)
+				.Build();
+}
+</code></pre>
+<h2>Reading from Sections</h2>
+<p>With the previous sample, no hierarchy was used. With JSON files it is also possible to define hierarchical levels. For example, the following JSON file defines a section <em>ConnectionStrings</em>, and the connection named <em>DefaultConnection</em> within this section:</p>
+<pre><code class="language-json">{
+	&quot;ConnectionStrings&quot;: {
+		&quot;DefaultConnection&quot;: &quot;Connection string to the staging database&quot;
+	}
+}
+</code></pre>
+<p>To read the connection string, the <code>GetSection</code> method can be used passing the section name. The GetSection method returns an <code>IConfigurationSection</code> where in turn again the indexer can be used to retrieve the values within this section.
+For easier use of connection strings, the extension method <code>GetConnectionString</code> exists that does the same &#8211; retrieving a key from the section <em>ConnectionStrings</em>.</p>
+<pre><code class="language-csharp">private static void ReadConfigurationWithOptionalSettings(IConfiguration configuration)
+{
+		Console.WriteLine(nameof(ReadConfigurationWithOptionalSettings));
+		Console.WriteLine(configuration.GetSection(&quot;ConnectionStrings&quot;)[&quot;DefaultConnection&quot;]);
+		Console.WriteLine(configuration.GetConnectionString(&quot;DefaultConnection&quot;));
+		Console.WriteLine();
+}
+</code></pre>
+<h2>Using the Host class</h2>
+<p>Using the <code>Host</code> class and invoking the method <code>CreateDefaultBuilder</code> a lot of the configuration is already done. This method adds these configuration providers:</p>
+<ul>
+<li>JSON file <em>appsettings.json</em></li>
+<li>JSON provider <em>appsettings.{environment}.json</em></li>
+<li>Provider for environmental variables</li>
+<li>Provider for command line arguments (in case the command-line arguments are passed to the <code>CreateDefaultBuilder</code>method)</li>
+<li>User secrets when user secrets are configured</li>
+</ul>
+<p>&gt; Storing secrets in a source code repository is not a good idea. Here, user secrets help. With user secrets, the configuration is stored in the user profile. Of course, this option is only available during development.</p>
+<p>With the second sample application, the <code>Controller</code> class is created which expects that the <code>IConfiguration</code> interface is injected. The variable where the object implementing the interface is assigned to is used in the method <code>ReadConfigurationValues</code>:</p>
+<pre><code class="language-csharp">public class Controller
+{
+		private readonly IConfiguration _configuration;
+		public Controller(IConfiguration configuration) =&amp;gt;
+				_configuration = configuration;
+
+		public void ReadConfigurationValues()
+		{
+				var config1 = _configuration[&quot;Config1&quot;];
+				Console.WriteLine($&quot;config1: {config1}&quot;);
+
+				var connectionString = _configuration.GetConnectionString(&quot;DefaultConnection&quot;);
+				Console.WriteLine(connectionString);
+		}
+}
+</code></pre>
+<p>To setup the <code>Host</code> class, the static method <code>CreateDefaultBuilder</code> is invoked. This method returns an <code>IHostBuilder</code>. This <code>IHostBuilder</code> is used to configure the <strong>dependency injection container</strong> (DI) calling the <code>ConfigureServices</code> method. The <code>Controller</code> class is registered, so that the container can inject the <code>IConfiguration</code> interface. The <code>IConfiguration</code> interface is one of the services registered with the DI containers method <code>CreateDefaultBuilder</code>. The <code>Build</code> method returns the host implementing the <code>IHost</code> interface. The <code>host</code> variable is then used to access the <code>Controller</code>, and invoke the <code>ReadConfigurationValues</code> method to display the configuration values.</p>
+<pre><code class="language-csharp">static void Main(string[] args)
+{
+		using var host = Host.CreateDefaultBuilder(args)
+				.ConfigureServices(services =&amp;gt;
+				{
+						services.AddTransient();
+				})
+				.Build();
+
+		var controller = host.Services.GetRequiredService();
+		controller.ReadConfigurationValues();
+}
+</code></pre>
+<p>All what now needs to be done is to create the <em>appsettings.json</em> file and configure the values (or to use environmental variables or command line arguments), and read retrieve the values.</p>
+<h2>Strongly Typed Access</h2>
+<p>For strongly typed access, .NET classes can be specified to define what configuration values are needed, such as the <code>MyConfiguration</code> class and the <code>InnerConfiguration</code> class. <code>MyConfiguration</code> defines properties for string and int values, as well as the contained <code>Inner</code> property to access values specified by <code>InnerConfiguration</code>:</p>
+<pre><code class="language-csharp">public class InnerConfiguration
+{
+		public string InnerText { get; set; } = string.Empty;
+}
+
+public class MyConfiguration
+{
+		public string Text1 { get; set; } = string.Empty;
+		public int Number1 { get; set; }
+
+		public InnerConfiguration Inner { get; } = new InnerConfiguration();
+}
+</code></pre>
+<p>The configuration values are defined with keys having the same name as the properties defined:</p>
+<pre><code class="language-json">{
+	&quot;Config2&quot;: &quot;from appsettings.json&quot;,
+	&quot;ConnectionStrings&quot;: {
+		&quot;DefaultConnection&quot;: &quot;Connection string to the default database&quot;
+	},
+
+	&quot;MyGroup1&quot;: {
+		&quot;Text1&quot;: &quot;value for text1&quot;,
+		&quot;Number1&quot;: 42,
+		&quot;Inner&quot;: {
+			&quot;InnerText&quot;: &quot;value for inner text&quot;
+		}
+	}
+}
+</code></pre>
+<p>Reading the configuration values, it&#8217;s possible to bind the retrieved values to this class. In the <code>Controller</code> class, an instance of the <code>MyConfiguration</code> class is created, and using the <code>IConfiguration</code> interface, and the values are assigned to the properties:</p>
+<pre><code class="language-csharp">public void StronglyTypedConfiguration()
+{
+		var settings = new MyConfiguration();
+		_configuration.GetSection(&quot;MyGroup1&quot;).Bind(settings);
+
+		Console.WriteLine($&quot;text: {settings.Text1}&quot;);
+		Console.WriteLine($&quot;number: {settings.Number1}&quot;);
+		Console.WriteLine($&quot;inner text: {settings.Inner.InnerText}&quot;);
+}
+</code></pre>
+<h2>Using Configuration with Options</h2>
+<p>In the previous blog article of this series I&#8217;ve shown how to use the <code>IOptions</code> interface to pass initialization data to a service class injected by using the DI container. The same initialization can be used to pass configuration data.</p>
+<pre><code class="language-csharp">public class ControllerWithOptions
+{
+		private readonly IOptions _options;
+		public ControllerWithOptions(IOptions options) =&amp;gt; 
+				_options = options;
+
+		public void StronglyTypedConfiguration()
+		{
+				Console.WriteLine($&quot;text: {_options.Value.Text1}&quot;);
+				Console.WriteLine($&quot;number: {_options.Value.Number1}&quot;);
+				Console.WriteLine($&quot;inner text: {_options.Value.Inner.InnerText}&quot;);
+		}
+}
+</code></pre>
+<p>Using a <code>Configure</code> extension method of the <code>IServiceCollection</code> interface, an object implementing the <code>IConfiguration</code> interface can be passed. To make this easy to combine it with the type <code>ControllerWithOptions</code> where the configuration data needs to be set, the extension method <code>AddControllerWithOptions</code> is specified:</p>
+<pre><code class="language-csharp">public static class ControllerWithOptionsExtensions
+{
+		public static IServiceCollection AddControllerWithOptions(
+				this IServiceCollection services,
+				IConfiguration configuration)
+		{
+				services.Configure(configuration);
+				return services.AddTransient();
+		}
+}
+</code></pre>
+<p>On configuring of the <code>Host</code> class, the <code>IConfiguration</code> interface can now be passed retrieving the section <em>MyGroup1</em> where the configuration values are stored. Because in this case accessing configuration information is needed on configuration of the services, an overload of <code>ConfigureServices</code> is used where the <code>HostBuilderContext</code> is the first parameter. Using this parameter, the configuration already defined by the <code>Host</code> class can be accessed using the <code>Configuration</code> property. Using the <code>configuration</code> variable, configuration is retrieved with the <code>GetSection</code> method. This method returns <code>IConfigurationSection</code> which itself derives from the base interface <code>IConfiguration</code>, and thus can be passed to the <code>AddControllerWithOptions</code> method.</p>
+<pre><code class="language-csharp">using var host = Host.CreateDefaultBuilder(args)
+		.ConfigureServices((context, services) =&amp;gt;
+		{
+				var configuration = context.Configuration;
+				services.AddControllerWithOptions(configuration.GetSection(&quot;MyGroup1&quot;));
+		})
+.Build();
+</code></pre>
+<h2>Customizing configuration with the Host class</h2>
+<p>To add other configuration providers to .NET applications, the only thing needed are to add a NuGet package for the configuration provider, and to configure the provider with the <code>ConfigureAppConfiguration</code> method, as shown in <a href="https://csharp.christiannagel.com/2020/05/19/azureappconfiguration/">Azure App Configuration: Configuration of .NET Applications</a> where the Azure App Configuration provider is added.</p>
+<h2>Take away</h2>
+<p>Configuration with .NET is very flexible in that it supports different configuration providers &#8211; no matter if the configuration is coming from JSON files, XML or INI files, environmental variables or command line arguments. The <code>Host</code> class defines preconfigured configuration. Built-in from the <code>Host</code> class is support to inject <code>IConfiguration</code> with services, so service implementations can directly access values coming from configuration. Configuration can also be passed to a service when configuring the <code>Host</code> class injecting the <code>IOptions</code> interface with the service, and accessing configuration data using an overload of the <code>ConfigureServices</code> method accessing the <code>HostBuilderContext</code>.</p>
+<p>If you&#8217;ve read this far, consider buying me a coffee which helps me staying up longer and writing more articles.</p>
+</div>
+
+
+
+<a href="https://www.buymeacoffee.com/christiannagel" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height:auto !important;width:auto !important;"></a>
+
+
+
+<div class="wp-block-jetpack-markdown"><p>ou can get the <a href="https://github.com/ProfessionalCSharp/MoreSamples">complete sample code</a>. See the <strong>ConfigurationWithHost</strong> sample solution in the <em>Dotnet</em> folder.</p>
+<p>Enjoy learning and programming!</p>
+<p>Christian</p>
+<h2>More Information</h2>
+<p><a href="https://csharp.christiannagel.com/2020/05/15/dependencyinjection-2/">It&#8217;s all in the Host Class &#8211; Dependency Injection with .NET</a></p>
+<p><a href="https://csharp.christiannagel.com/2020/05/19/azureappconfiguration/">Azure App Configuration: Configuration of .NET Applications</a></p>
+<p><a href="https://csharp.christiannagel.com/2019/08/06/azurefunctionsdi/">Azure Functions with Dependeny Injection</a></p>
+<p><a href="https://csharp.christiannagel.com/2018/08/29/scopes/">Disposing Injected Services</a></p>
+<p><a href="https://csharp.christiannagel.com/2018/06/05/httpclient/">HTTP Client Factory with .NET Core</a></p>
+<p><a href="https://github.com/dotnet/runtime/blob/6c2f5feef38c8561f54fc2aeeab00ba95a5c9d38/src/libraries/Microsoft.Extensions.Hosting/src/Host.cs#L57">Implementation of the CreateDefaultBuilder Method on GitHub</a></p>
+<p>More information on C# and programming .NET Core applications is in my book <a href="https://csharp.christiannagel.com/2018/04/16/professionalcsharp7/">Professional C# 7 and .NET Core 2.0</a>, and in my <a href="https://cninnovation.com/Training/">workshops</a>.</p>
+<p>Formula 1 Steering Wheel <a href="https://www.dreamstime.com/loganchislett03_info">ID 143423851 © Logan Chislett</a> | <a href="https://www.dreamstime.com/">Dreamstime.com</a></p>
+</div>
+]]>
+			</content:encoded>
+
+			<wfw:commentRss>https://csharp.christiannagel.com/2020/06/23/configurationwithhost/feed/</wfw:commentRss>
+			<slash:comments>3</slash:comments>
+
+
+
+			<media:thumbnail url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/06/ferraristeeringwheel.jpg" />
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/06/ferraristeeringwheel.jpg" medium="image">
+				<media:title type="html">Ferrari Steering Wheel</media:title>
+			</media:content>
+
+			<media:content url="https://1.gravatar.com/avatar/4736273aed82148d9d3c3ca192c1cd61?s=96&#38;d=identicon&#38;r=G" medium="image">
+				<media:title type="html">christiannagel1</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/06/visualstudiodebugconfiguration.png" medium="image">
+				<media:title type="html">Visual Studio Debug Settings</media:title>
+			</media:content>
+
+			<media:content url="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" medium="image">
+				<media:title type="html">Buy Me A Coffee</media:title>
+			</media:content>
+		</item>
+		<item>
+			<title>Microsoft Build 2020 &#8211; Highlights</title>
+			<link>https://csharp.christiannagel.com/2020/05/21/build2020/</link>
+			<comments>https://csharp.christiannagel.com/2020/05/21/build2020/#comments</comments>
+
+			<dc:creator><![CDATA[Christian Nagel]]></dc:creator>
+			<pubDate>Thu, 21 May 2020 14:06:34 +0000</pubDate>
+			<category><![CDATA[.NET Core]]></category>
+			<category><![CDATA[ASP.NET Core]]></category>
+			<category><![CDATA[Azure]]></category>
+			<category><![CDATA[Blazor]]></category>
+			<category><![CDATA[Conference]]></category>
+			<category><![CDATA[CSharp]]></category>
+			<category><![CDATA[Entity Framework Core]]></category>
+			<category><![CDATA[UWP]]></category>
+			<category><![CDATA[WPF]]></category>
+			<category><![CDATA[Xamarin]]></category>
+			<category><![CDATA[XAML]]></category>
+			<category><![CDATA[C#9]]></category>
+			<category><![CDATA[dotnet5]]></category>
+			<category><![CDATA[MAUI]]></category>
+			<category><![CDATA[MSBuild]]></category>
+			<category><![CDATA[WinUI]]></category>
+			<guid isPermaLink="false">http://csharp.christiannagel.com/?p=2347</guid>
+
+			<description>
+				<![CDATA[This Microsoft Build 2020 conference was very different from all the previous ones as a digital experience event because of the COVID-19 Coronavirus. Microsoft made it a great experience - with announcements on Microsoft Azure, .NET 5, Windows, and more.
+Here's my view with a summary of announcements.]]>
+			</description>
+			<content:encoded>
+				<![CDATA[
+<div class="wp-block-jetpack-markdown"><p>This Microsoft Build 2020 conference was very different from all the previous ones as a digital experience event because of the COVID-19 Coronavirus. Microsoft made it a great experience &#8211; with announcements on Microsoft Azure, .NET 5, Windows, and more.</p>
+<p>Here&#8217;s my view with a summary of announcements.</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/build2019.jpg" alt="Microsoft Build 2019"></p>
+<h2>Microsoft Build Digital Experience</h2>
+<p>So far I&#8217;ve attended <em>all Microsoft Build conferences</em>, and nearly all Microsoft PDC conferences. This event was very different with the digital experience. Already the MVP summit in March-2020 was a digital experience, so Microsoft could learn from this, and really created a rich experience.</p>
+<p>I already had registered and booked flights for the events in Seattle. Today I&#8217;m still waiting for the reimbursement of the Lufthansa flights from March and May. Microsoft itself was very fast to return the charge from the in-person event. The online event was completely free.</p>
+<p>There are advantages and disadvantages with the digital experience. What did I miss? What did I gain?</p>
+<h3>What I missed</h3>
+<p>Here are the things which were not possible with the <em>digital experience</em> that I missed.</p>
+<p>I missed&#8230;</p>
+<ul>
+<li>meeting people, friends from Microsoft and the community</li>
+<li>parties</li>
+<li>walking through Seattle</li>
+<li>technology discussions during breakfast and lunch</li>
+<li>reaching my goal for daily steps switching rooms or buildings</li>
+<li>&#8230;</li>
+</ul>
+<h3>What I didn&#8217;t miss</h3>
+<p>These things are better with the <em>digital experience</em>.</p>
+<p>I didn&#8217;t miss</p>
+<ul>
+<li>long flights</li>
+<li>waiting in long queues, e.g. to attend the keynote</li>
+<li>a not working wireless network during keynotes</li>
+<li>switching rooms or buildings</li>
+<li>switching the time zone</li>
+</ul>
+<p>Being in Seattle with a 9 hour time difference is always difficult in the evenings. At the end of the week I adjusted to the new time zone and have a problem on travel back again. However, this was not a lot better with the digital experience. The experience to repeat all the breakout sessions three times across different time zones was great. However, not all sessions and Q&amp;As were repeated, and I attended sessions meant for different time zones to attend more sessions &#8211; so I&#8217;m tired again.</p>
+<p>&gt; Microsoft created a great digital experience with 8 parallel sessions, great keynotes, great presentations, focus groups&#8230; And it was also fun with a lot of secret nerdy messages, e.g. <em>RGV2cw</em> (see the links below).</p>
+<p>Let&#8217;s get into the great news from <em>Microsoft Build 2020</em>!</p>
+<h2>Microsoft Azure</h2>
+<p>In the last months I&#8217;ve delivered several <strong>Azure Kubernetes Services</strong> workshops. Now Microsoft has an extension: a preview of <strong>Azure Arc-enabled Kubernetes</strong> which allows spanning Kubernetes clusters across datacenters, multicloud, and Azure Stack. There are many more new offerings to integrate on-premises environments with the Azure cloud.</p>
+<p>The <em>Azure Kubernetes Service</em> now also supports <em>Windows Server container support</em>! This makes it easier to move existing Windows applications to a dockerized environment. Windows and Linux applications can run side by side in the same AKS cluster!</p>
+<p><strong>Azure Cosmos DB serverless</strong> is great for intermittent traffic patterns, &quot;bursty&quot; workloads. Azure Cosmos DB has several new features, pint-in-time backup and restore, new delete functionality in the change feed, autoscale with single-digit millisecond latency and 99.999% availability&#8230;</p>
+<p><strong>Azure Cognitive Search</strong> is enhanced with <em>Azure Machine Learning</em> integration, and allows for a <em>custom search ranking</em> system.</p>
+<p>Microsoft announced <strong>Project Moab</strong> &#8211; an open-source balancing robot that helps learn how to build autonomous control systems with <strong>Project Bonsai</strong>. This robot can be 3D-printed &#8211; the plan is here!</p>
+<p>An interesting new app service functionality is <strong>Static Web Apps</strong> which offers static Web applications for a cheap price. In my blog you can find articles how to host an Angular app and a Blazor app in an <strong>Azure Storage</strong> account with an <strong>Azure Function</strong> app backend. Now we have a new offering which makes this easier and offers a lot more features. As source code is posted to a GitHub repo, a GitHub action takes over to deploy the content to the <em>Static Web App</em>. For an API backend, <em>Azure Functions</em> can be used in the same repo. Here you have support for custom domains, HTTPS, publishing to staging, and more!</p>
+<h2>Microsoft .NET</h2>
+<p>Let&#8217;s get into highlights of .NET updates &#8211; including <em>Blazor</em>, <em>MAUI</em>, and <em>C# 9</em></p>
+<h3>ASP.NET Blazor</h3>
+<p><strong>ASP.NET Blazor</strong> is now released &#8211; not only for the server-version (which is already released since the release of .NET Core 3.1), but also with .NET running in the client &#8211; in all modern browsers using <strong>WebAssembly</strong>. .NET can now be used both on the client and on the server &#8211; <strong>full-stack .NET development</strong>!</p>
+<h3>.NET MAUI</h3>
+<p>With .NET 5 the <strong>Journey to One .NET</strong> becomes a reality. Along the way, <strong>.NET MAUI</strong> is an evolution of <em>Xamarin.Forms</em> and will be part of the <em>One .NET</em> in the .NET 6 (!) time frame. Previews will be available end of 2020. Instead of having multiple projects to cover different platforms, everything can be resolved within one project. A Mac is no longer needed to build for iOS. Everything can be done on Windows. Just to deploy to the Apple store, a Mac is needed in the end &#8211; this list step can probably be resolved using CD in the Azure cloud.</p>
+<h3>C# 9</h3>
+<p><strong>C# 9</strong> is coming &#8211; with <strong>records</strong>! Another great feature of C# 9 and .NET 5 is the <strong>source generator</strong>. This allows creating source code dynamically to reduce the need for reflection! C# 9 is expected with .NET 5!</p>
+<h3>EF Core 5</h3>
+<p>An interesting extension coming with EF Core 5 is a new <em>migrations and deployment experience</em> with a separate application that&#8217;s started first instead of having the migration inside the main application/service.</p>
+<h3>Project Tye</h3>
+<p><strong>Project Tye</strong> makes it easy to develop solutions for Kubernetes without the need to create Dockerfiles and Helm charts, and easily deploy the solution to a Kubernetes cluster. See my blog article with a ASP.NET Core Web and API applications, and making use of tye!</p>
+<h3>Visual Studio</h3>
+<p><em>Visual Studio Online</em> has been renamed &#8211; again. It&#8217;s now <strong>Visual Studio Codespaces</strong> &#8211; Visual Studio or Visual Studio Code running in the cloud! Codespaces is also coming to GitHub &#8211; click a link in a GitHub repo, and you have the environment you need for the repo ready in the cloud!</p>
+<h2>GitHub</h2>
+<p>Let&#8217;s continue with GitHub. <em>Github&#8217;s Satellite Virtual 2020</em> already had some great announcements:</p>
+<ul>
+<li>GitHub Codespaces offers a cloud-hosted dev environment (also see Visual Studio Codespaces, the new name for Visual Studio Online)</li>
+<li>GitHub Discussions for brainstorming feature ideas, help new users&#8230;</li>
+<li>Code scanning and secret scanning &#8211; not only for public but also for private repositories</li>
+<li>GitHub Private Instances &#8211; a fully managed environment for enterprises</li>
+</ul>
+<p>More for GitHub from Build:</p>
+<ul>
+<li>GitHub Actions for Azure are now integrated within: <em>Visual Studio Code</em>, <em>Azure CLI</em>, and the <em>Azure Portal</em>. This makes it easier to deploy from GitHub to Azure!</li>
+</ul>
+<h2>Windows</h2>
+<p>Windows had a big part at Microsoft Build 2020!</p>
+<h3>Project Reunion</h3>
+<p>For me the most important announcement for the <em>Windows Platform</em> is the <strong>Project Reunion</strong>. This project has several aspects and features. With this project, UWP applications can not only run in a sandbox, but are fully powered Win32 applications using new WinUI 3.0 controls that are developed independent of Windows 10 versions, these controls can also be used with WPF and Windows Forms applications&#8230;</p>
+<p>Along <em>Project Reunion</em> the preview of the <strong>Windows SDK .NET package</strong> is available: .NET interop for all Windows WinRT APIs. The tool <strong>C#/WinRT</strong> was launched to create WinRT projections for .NET: .NET 5 applications can call Windows WinRT APIs and third-party WinRT components.</p>
+<p>The <strong>Uno Platform</strong> 3.0 supports WinUI 3.0! This allows creating apps using the modern XAML syntax for mobile devices, and also supports XAML and C# with WebAssembly!</p>
+<p>The <strong>Windows Package Manager</strong> allows for quick and easy searching, viewing, and installing commonly used developer tools. Now I can install applications with the command-line utility <strong>winget</strong>! To install Visual Studio Code:</p>
+<p><code>winget install vscode</code></p>
+<p>From Windows 10 insider builds I already love the next generation of WSL, the <strong>Windows Subsystem for Linux</strong>. With this, Hyper-V images are no longer needed to run Docker containers. Next GPU support is added for WSL. Support for GUI apps &#8211; without a third-party server &#8211; is added as well; and a simpler install experience is added as well.</p>
+<p>A summary of WSL 2:</p>
+<ul>
+<li>released with Windows 10 version 2004</li>
+<li>real Linux kernel built in by Microsoft</li>
+<li>100% system call compatibility</li>
+<li>increased file IO performance</li>
+<li>existing WSL can be converted to WSL 2</li>
+<li>GPU support will be added</li>
+<li>support for GUI apps will be added &#8211; without a third-party server needed</li>
+</ul>
+<p>Another feature I&#8217;m already using several months (before it was available on the Microsoft Store, but was already offered via a GitHub repo) is the new <strong>Windows Terminal</strong>. This is now released!  I&#8217;ve been using the previews since early days, and I&#8217;m loving it. It can be used full-screen with multiple tabs. I&#8217;ve tabs open for different folders, using WSL-2 with Linux distributions in other tabs, the Azure CLI in another tab&#8230;</p>
+<h2>Microsoft 365</h2>
+<p>Project Cortex (announced at Ignite 2019) will be generally available in summer 2019 &#8211; applies artificial intelligence (AI) and Microsoft Graph to create a knowledge network connecting to Microsoft 365 content as well as custom data sources.</p>
+<p>Of course there&#8217;s a lot more! I didn&#8217;t cover Microsoft 365, Quantum computing, and a lot more!</p>
+<h2>Take away</h2>
+<p>Blazor WASM is released &#8211; full-stack development with .NET is possible again! With .NET 5 We are on the way to one .NET, and <em>MAUI</em> will make mobile app development easier. With Windows, instead of the need to create UWP desktop applications, Windows Forms and WPF can be changed to new user experiences by directly using WinUI 3 controls. Not only Microsoft Azure has more Linux than Windows machines running, we have the Linux kernel also in Windows &#8211; with WSL 2. The new Windows terminal can be full-screen with multiple tabs&#8230; Azure Static Web apps are integrated with GitHub to make use of GitHub actions to create a static Web site with Azure Functions in the backend!</p>
+<p>Great news from Microsoft Build 2020!</p>
+<p>What are your highlights?</p>
+<p>If you&#8217;ve read this far, consider buying me a coffee which helps me staying up longer and writing more articles.</p>
+</div>
+
+
+
+<a href="https://www.buymeacoffee.com/christiannagel" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height:auto !important;width:auto !important;"></a>
+
+
+
+<div class="wp-block-jetpack-markdown"><p>Enjoy learning and programming!</p>
+<p>Christian</p>
+<h2>Links</h2>
+<h3>Fun</h3>
+<p><a href="https://www.theverge.com/2020/5/20/21264755/microsoft-build-2020-keynote-easter-eggs-secret-messages-scott-hanselman">Microsoft hid lots of secret nerdy messages to devs in its Build stream</a></p>
+<h3>.NET and C#</h3>
+<p><a href="https://csharp.christiannagel.com/2020/04/21/c-9-positional-or-nominal-creation/">C# 9 &#8211; Positional or Nominal Creation</a></p>
+<p><a href="https://csharp.christiannagel.com/2020/05/11/tye/">Project Tye &#8211; easier development with .NET for Kubernetes</a></p>
+<p><a href="https://csharp.christiannagel.com/2019/08/27/blazorserverandclient/">Blazor &#8211; on the server or on the client</a></p>
+<p><a href="https://timheuer.com/blog/hosting-blazor-in-azure-static-web-apps">Nosting Blazor in Azure Static Web Apps</a></p>
+<p><a href="https://devblogs.microsoft.com/dotnet/announcing-net-5-preview-4-and-our-journey-to-one-net/">Announcing .NET 5 Preview 4 and our journey to one .NET</a></p>
+<p><a href="https://devblogs.microsoft.com/dotnet/introducing-net-multi-platform-app-ui/">Introducing .NET Multi-platform App UI (MAUI)</a></p>
+<p><a href="https://github.com/dotnet/maui/wiki/Roadmap">MAUI Roadmap</a></p>
+<p><a href="https://devblogs.microsoft.com/dotnet/introducing-c-source-generators/">Introducing C# Source Generators</a></p>
+<p><a href="https://devblogs.microsoft.com/dotnet/announcing-entity-framework-core-5-0-preview-4/">Announcing Entity Framework 5.0 Preview 4</a></p>
+<p><a href="https://github.com/dotnet/efcore/issues/19587">EF Core migrations and deployment experience</a></p>
+<h3>Windows</h3>
+<p><a href="https://blogs.windows.com/windowsdeveloper/2020/05/19/developing-for-all-1-billion-windows-10-devices-and-beyond/">Developing for all 1 billion Windows 10 devices and beyond</a></p>
+<p><a href="https://github.com/microsoft/ProjectReunion/">Project Reunion &#8211; GitHub Repo</a></p>
+<p><a href="https://blogs.windows.com/windowsdeveloper/2020/05/19/introducing-winui-3-preview-1/">Introducing WinUI 3 Preview 1</a></p>
+<p><a href="https://platform.uno/blog/announcing-uno-platform-3-0-support-for-winui-3-0-preview-1/">Uno Platform 3.0 &#8211; Support for WinUI 3.0 Preview 1</a></p>
+<p><a href="https://docs.microsoft.com/en-us/windows/terminal/">What is Windows Terminal?</a></p>
+<p><a href="github.com/microsoft/winget-cli">Windows Package Manager CLI (winget) &#8211; GitHub repo</a></p>
+<p><a href="https://github.com/microsoft/winget-pkgs">Packages for the Windows Package Manager &#8211; GitHub repo</a></p>
+<h3>GitHub</h3>
+<p><a href="https://github.blog/2020-05-06-new-from-satellite-2020-github-codespaces-github-discussions-securing-code-in-private-repositories-and-more/">Announcements from GitHub&#8217;s Satellite 2020</a></p>
+<h3>Microsoft Azure</h3>
+<p><a href="https://azure.microsoft.com/en-us/blog/code-collaborate-and-ship-your-apps-from-anywhere/">Code, collaborate, and shop your apps from anywhere</a></p>
+<p><a href="https://techcommunity.microsoft.com/t5/azure-app-service/introducing-app-service-static-web-apps/ba-p/1394451">Introducing App Service Static Web Apps</a></p>
+<p><a href="https://azure.microsoft.com/en-us/blog/azure-arc-enabled-kubernetes-preview-and-new-ecosystem-partners/">Azure Arc enabled Kubernetes preview and new ecosystem partners</a></p>
+<p><a href="https://azure.microsoft.com/en-us/updates/build-updates-for-azure-cognitive-search/">Build Updates for Azure Cognitive Search</a></p>
+<p><a href="https://blogs.microsoft.com/ai-for-business/build-bonsai-public-preview/">Microsoft broadens availability of autonomous systems tools for engineers and developers</a></p>
+<p>More information on C# and programming .NET applications is in my book <a href="https://csharp.christiannagel.com/2018/04/16/professionalcsharp7/">Professional C# 7 and .NET Core 2.0</a>, and in my <a href="https://cninnovation.com/Training/">workshops</a>.</p>
+<p>The image was a view from Microsoft Build 2019</p>
+</div>
+]]>
+			</content:encoded>
+
+			<wfw:commentRss>https://csharp.christiannagel.com/2020/05/21/build2020/feed/</wfw:commentRss>
+			<slash:comments>7</slash:comments>
+
+
+
+			<media:thumbnail url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/build2019.jpg" />
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/build2019.jpg" medium="image">
+				<media:title type="html">Microsoft Build 2019</media:title>
+			</media:content>
+
+			<media:content url="https://1.gravatar.com/avatar/4736273aed82148d9d3c3ca192c1cd61?s=96&#38;d=identicon&#38;r=G" medium="image">
+				<media:title type="html">christiannagel1</media:title>
+			</media:content>
+
+			<media:content url="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" medium="image">
+				<media:title type="html">Buy Me A Coffee</media:title>
+			</media:content>
+		</item>
+		<item>
+			<title>Azure App Configuration: Configuration of .NET Applications</title>
+			<link>https://csharp.christiannagel.com/2020/05/19/azureappconfiguration/</link>
+			<comments>https://csharp.christiannagel.com/2020/05/19/azureappconfiguration/#comments</comments>
+
+			<dc:creator><![CDATA[Christian Nagel]]></dc:creator>
+			<pubDate>Tue, 19 May 2020 11:16:06 +0000</pubDate>
+			<category><![CDATA[.NET Core]]></category>
+			<category><![CDATA[ASP.NET Core]]></category>
+			<category><![CDATA[Azure]]></category>
+			<category><![CDATA[Configuration]]></category>
+			<category><![CDATA[dotnet]]></category>
+			<category><![CDATA[dotnetcore]]></category>
+			<guid isPermaLink="false">http://csharp.christiannagel.com/?p=2336</guid>
+
+			<description><![CDATA[In older solutions I&#8217;ve created a service that returns all the different configurations used by different projects in a solution, &#8230;]]></description>
+			<content:encoded>
+				<![CDATA[<p>In older solutions I&#8217;ve created a service that returns all the different configurations used by different projects in a solution, e.g. URLs to APIs, connection strings, and more. Now with <strong>Azure App Configuration</strong> a service is offered by Microsoft Azure that makes this easy a lot easier: a service that can be used by your solution. In this article series I&#8217;m covering different features of <em>Azure App Configuration</em>. The first article of this series shows how <em>Azure App Configuration</em> can be used in the development and in the production environment with a .NET application.</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/settingsgear.jpg" alt="Settings Gear" /></p>
+<h2>Create Azure App Configuration</h2>
+<p>At first, I&#8217;m creating an Azure App Configuration. For the sample app, I&#8217;m using the free tier. The free tier is limited to 1000 requests per day and returns a 429 result afterwards, and a maximum of 10 MB for the configuration storage and no SLA. With the production environment a switch to the Standard tier should be done which is about $ 1,20 per day which includes 1 GB storage and 200,000 requests a day.</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/appconfig_create.png" alt="Create Azure App Configuration" /></p>
+<p>After the resource is created, configurations can be added using the <em>Configuration explorer</em>. A simple key-value configuration I&#8217;m adding is using the key <code>app1:configuration1</code> and a value. Using colons with the key, a hierarchy of configuration values can be created.</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/appconfig_createconfig.png" alt="Create app configuration values" /></p>
+<p>With the <em>Access keys</em> section, the connection string needs to be retrieved &#8211; this string is used to access the <em>Azure App Configuration</em> from .NET. A connection string for read-only keys is enough for the application accessing the configuration values. Write access is not needed in that scenario.</p>
+<h2>Using the Configuration with .NET Applications</h2>
+<p>With an ASP.NET Core Web application, the <code>Host</code> class is used by default to access configuration values. By default multiple providers are used: a JSON configuration provider to read the configuration from the file <code>appsettings.json</code>, another JSON configuration provider that accesses the file <code>appsettings.{environment}.json</code>, a configuration provider accessing environmental variables, and a configuration provider using command-line arguments.</p>
+<p>The connection string to the Azure App Configuration shouldn&#8217;t be put in the configuration file that&#8217;s stored with the source code repository. Instead, user secrets can be used during development time. The user secretes configuration provider is added to a .NET application if user secrets are used. User secrets are stored in the user profile &#8211; so every developer working in a team on this project needs to configure the user secrets as well.</p>
+<p>User secrets can be initialized using the <em>dotnet CLI</em> with <code>dotnet user-secrets init</code> &#8211; or with Visual Studio in the Solution Explorer from the context menu <em>Manage User Secrets</em>. The initialization creates a user secrets identifier in the project configuration file: <em>UserSecretsId</em>. To not mess up with configurations of different applications which are all stored in the users profile, a unique identifier is used to only work with user secrets from the profile that map to this identifier.</p>
+<p>User secrets can be set with <code>dotnet user-secrets set</code> or changing <code>secrets.json</code> from Visual Studio:</p>
+<p><code>dotnet user-secrets set ConnectionStrings:AzureAppConfiguration "the secret connection string"</code>.</p>
+<p>The <code>secrets.json</code> file contains this information:</p>
+<pre class="brush: jscript; title: ; notranslate">
+{
+	&quot;ConnectionStrings&quot;: {
+		&quot;AzureAppConfiguration&quot;: &quot;the secret connection string&quot;
+	}
+}
+</pre>
+<p>Of course, the secret connection string needs to be changed to the connection string from the Azure App Configuration.</p>
+<p>Now, the Azure App Configuration Provider can be added. This provider is available in the NuGet package <code>Microsoft.Extensions.Configuration.AzureAppConfiguration</code>. In the <code>Program</code> class, the method <code>ConfigureAppConfiguration</code> can be used to change the configuration providers. The extension method <code>AddAzureAppConfiguration</code> is used to add the Azure App Configuration Provider. Because this configuration provider itself needs configuration values (the connection string), the configuration is build first to access the configuration values from the preconfigured providers. Taking the connection string from the user secrets, the value is passed to the <code>AddAzureAppConfiguration</code> method:</p>
+<pre class="brush: csharp; title: ; notranslate">
+public static IHostBuilder CreateHostBuilder(string[] args) =&gt;
+		Host.CreateDefaultBuilder(args)           
+				.ConfigureAppConfiguration(config =&gt;
+				{
+					 var settings = config.Build();
+					 var connectionString = settings.GetConnectionString(&quot;AzureAppConfiguration&quot;);
+					 config.AddAzureAppConfiguration(connectionString);
+				})
+				.ConfigureWebHostDefaults(webBuilder =&gt;
+				{
+						webBuilder.UseStartup&lt;Startup&gt;();
+				});
+</pre>
+<p>With this in place, configuration can be retrieved from a service or a controller. In the constructor of the <code>HomeController</code> class, the <code>IConfiguration</code> interface is injected:</p>
+<pre class="brush: csharp; title: ; notranslate">
+private readonly ILogger&lt;HomeController&gt; _logger;
+private readonly IConfiguration _configuration;
+
+public HomeController(IConfiguration configuration, ILogger&lt;HomeController&gt; logger)
+{
+		_configuration = configuration;
+		_logger = logger;
+}
+</pre>
+<p>The <code>Configuration1</code> method makes use of the <code>IConfiguration</code> variable to access the section and the key stored in <em>Azure App Configuration</em> and returns the value.</p>
+<pre class="brush: csharp; title: ; notranslate">
+public string Configuration1()
+{
+		return _configuration.GetSection(&quot;app1&quot;)[&quot;configuration1&quot;];
+}
+</pre>
+<blockquote><p>
+	Instead of using Azure App Configuration in development mode, you might also decide to put all the configuration in the JSON file <code>appsettings.json</code> (or development specific settings to <code>appsettings.Development.json</code>), and all the secrets to <em>user secrets</em>.
+</p></blockquote>
+<h2>Using Azure App Configuration in Production</h2>
+<p>To use <em>Azure App Configuration</em> in production, a change is necessary as the connection string cannot be retrieved from the user secrets. A good practice to do this is to use <em>Managed Identities</em> with the <em>Azure App Service</em> where the application is published to. The Managed Identity</p>
+<p>With the App Service where the Web application will be deployed to, you can enable a System-assigned <em>managed identity</em>. This configuration can be found with the App Service in the portal, in the Settings category, with the <strong>Identity</strong> configuration:</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/appconfig_appservicemanagedidentity.png" alt="Create a Managed Identity with the App Service" /></p>
+<p>With the <em>Azure App Configuration</em>, <strong>access control</strong> needs to be configured to allow access to the managed identity. With the <em>Access control</em> setting of the App Configuration, a role assignment with the role <em>App Configuration Data Reader</em> can be assigned to the system-assigned managed identity of the App Service:</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/appconfig_assignrole.png" alt="Assign access to the Managed Identity" /></p>
+<p>In the application code now just the endpoint of the Azure App Configuration needs to be configured. There&#8217;s no need to configure this with user secrets, as this is not a secret &#8211; and this information needs to be accessed from proruction. Putting this into appsettings.production.json is a good option:</p>
+<pre class="brush: jscript; title: ; notranslate">
+{
+	&quot;AppConfigEndpoint&quot;: &quot;https://dotnetappconfigsample.azconfig.io&quot;
+}
+
+</pre>
+<p>The method <code>CreateHostBuilder</code> in the <code>Program</code> class is now changed for the non-Development environment to retrieve the endpoint from the configuration. After this, a different overload of the AddAzureAppConfiguration method is invoked to pass a delegate with options of type <code>AzureAppConfigurationOptions</code>. Using these options, the <code>Connect</code> method is invoked to pass the endpoint and credentials instead of the complete connection string:</p>
+<pre class="brush: csharp; title: ; notranslate">
+public static IHostBuilder CreateHostBuilder(string[] args) =&gt;
+		Host.CreateDefaultBuilder(args)           
+				.ConfigureAppConfiguration((context, config) =&gt;
+				{
+						var settings = config.Build();
+						if (context.HostingEnvironment.IsDevelopment())
+						{
+								var connectionString = settings.GetConnectionString(&quot;AzureAppConfiguration&quot;);
+								config.AddAzureAppConfiguration(connectionString);
+						}
+						else
+						{
+								var endpoint = settings[&quot;AppConfigEndpoint&quot;];                
+								var credentials = new ManagedIdentityCredential();
+								config.AddAzureAppConfiguration(options =&gt;
+								{
+										options.Connect(new Uri(endpoint), credentials);
+								});
+						}
+				}).ConfigureWebHostDefaults(webBuilder =&gt;
+				{
+						webBuilder.UseStartup&lt;Startup&gt;();
+				});
+</pre>
+<p>Publishing the Web application to the Microsoft Azure AppService, the Web app retrieves the configuration from the <em>Azure App Configuration</em>.</p>
+<h2>Take away</h2>
+<p>Configuration management for a complete solution can be in one place. There&#8217;s no need to create a custom service for this functionality. <strong>Azure App Configuration</strong> already covers this &#8211; and it seamless integrates with the configuration providers of .NET.</p>
+<p>Other important features of <em>Azure App Configuration</em> are that <em>Azure Key Vault</em> can be used behind the scenes, and <em>Feature Flags</em>. These are topics of upcoming articles.</p>
+<p>If you&#8217;ve read this far, please consider buying me a coffee which helps me staying up longer and writing more articles.</p>
+<p><a href="https://www.buymeacoffee.com/christiannagel" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height:auto !important;width:auto !important;"></a></p>
+<p>You can get the <a href="https://github.com/ProfessionalCSharp/MoreSamples">complete sample code</a>.</p>
+<p>Enjoy learning and programming!</p>
+<p>Christian</p>
+<h2>Links</h2>
+<p><a href="https://csharp.christiannagel.com/2020/05/15/dependencyinjection-2/">It&#8217;s all in the Host Class &#8211; Dependency Injection with .NET</a></p>
+<p><a href="https://csharp.christiannagel.com/2016/08/02/netcoreconfiguration/">Configuration with .NET Core</a></p>
+<p>More information on C# and programming .NET Core applications is in my book <a href="https://csharp.christiannagel.com/2018/04/16/professionalcsharp7/">Professional C# 7 and .NET Core 2.0</a>, and in my <a href="https://cninnovation.com/Training/">workshops</a>.</p>
+<p>Settings gear image <a href="https://www.dreamstime.com/mungkorn2559_info">ID 140276272 © Mungkorn Lasonthi</a> | <a href="https://www.dreamstime.com/">Dreamstime.com</a></p>
+]]>
+			</content:encoded>
+
+			<wfw:commentRss>https://csharp.christiannagel.com/2020/05/19/azureappconfiguration/feed/</wfw:commentRss>
+			<slash:comments>5</slash:comments>
+
+
+
+			<media:thumbnail url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/settingsgear.jpg" />
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/settingsgear.jpg" medium="image">
+				<media:title type="html">Settings gear</media:title>
+			</media:content>
+
+			<media:content url="https://1.gravatar.com/avatar/4736273aed82148d9d3c3ca192c1cd61?s=96&#38;d=identicon&#38;r=G" medium="image">
+				<media:title type="html">christiannagel1</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/appconfig_create.png" medium="image">
+				<media:title type="html">Create Azure App Configuration</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/appconfig_createconfig.png" medium="image">
+				<media:title type="html">Create app configuration values</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/appconfig_appservicemanagedidentity.png" medium="image">
+				<media:title type="html">Create a Managed Identity with the App Service</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/appconfig_assignrole.png" medium="image">
+				<media:title type="html">Assign access to the Managed Identity</media:title>
+			</media:content>
+
+			<media:content url="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" medium="image">
+				<media:title type="html">Buy Me A Coffee</media:title>
+			</media:content>
+		</item>
+		<item>
+			<title>It&#8217;s all in the Host Class &#8211; Dependency Injection with .NET</title>
+			<link>https://csharp.christiannagel.com/2020/05/15/dependencyinjection-2/</link>
+			<comments>https://csharp.christiannagel.com/2020/05/15/dependencyinjection-2/#comments</comments>
+
+			<dc:creator><![CDATA[Christian Nagel]]></dc:creator>
+			<pubDate>Fri, 15 May 2020 08:00:59 +0000</pubDate>
+			<category><![CDATA[.NET Core]]></category>
+			<category><![CDATA[dependency injection]]></category>
+			<category><![CDATA[dotnet]]></category>
+			<category><![CDATA[dotnetcore]]></category>
+			<guid isPermaLink="false">http://csharp.christiannagel.com/?p=2312</guid>
+
+			<description><![CDATA[In the first article of this series, dependency injection is introduced, and I'm showing how a dependency injection container can be created with the Host class.]]></description>
+			<content:encoded>
+				<![CDATA[<p>I&#8217;ve written several articles about <strong>dependency injection</strong> with .NET Core. With changes since .NET Core 3, an update is necessary. This is an article of a services taking advantage of the <code>Host</code> class.</p>
+<p>In the first article of this series, <em>dependency injection</em> is introduced, and I&#8217;m showing how a dependency injection container can be created with the <code>Host</code> class.</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/breakingchains2.jpg" alt="Breaking Chains" /></p>
+<h2>Without Dependency Injection</h2>
+<p>Let&#8217;s start with a small sample where dependency injection is not used. Here, the <code>GreetingService</code> class offers a simple <code>Greet</code> method to return a string:</p>
+<pre class="brush: csharp; title: ; notranslate">
+public class GreetingService
+{
+		public string Greet(string name) =&gt; $&quot;Hello, {name}&quot;;
+}
+</pre>
+<p>This <code>GreetingService</code> class is used from the <code>Action</code> method in the <code>HelloController</code>:</p>
+<pre class="brush: csharp; title: ; notranslate">
+public class HelloController
+{
+		public string Action(string name)
+		{
+				var service = new GreetingService();
+				string message = service.Greet(name);
+				return message.ToUpper();
+		}
+}
+</pre>
+<p>Finally, the <code>Main</code> method of the <code>Program</code> class instantiates the <code>HelloController</code> and invokes the <code>Action</code> method.</p>
+<pre class="brush: csharp; title: ; notranslate">
+class Program
+{
+		static void Main()
+		{
+				var controller = new HelloController();
+				string result = controller.Action(&quot;Stephanie&quot;);
+				Console.WriteLine(result);
+		}
+}
+</pre>
+<p>The application runs writing a greeting message to the console. What&#8217;s the issue with this implementation? The <code>HelloController</code> has a string dependency on the <code>GreetingService</code> class. If the implementation of the GreetingService should be changed, e.g. offering one impementation where a database is accessed, or a REST service invoked, the <code>HelloController</code> needs to be changed as well. Also, creating a unit test for the <code>Action</code>method of the <code>HelloController</code>, the test shouldn&#8217;t cover the <code>GreetingService</code>. With a unit test of the <code>Action</code> method we only want to test the implementation of this method, and no other dependencies. Let&#8217;s solve this in the next step.</p>
+<h2>Inversion of Control &#8211; With Dependency Injection</h2>
+<p>Inversion of control is a design principle where – as the name says – the one who has control is inverted. Instead of a method (typically one within a library) that defines the complete functionality on its own, the caller can supply code. This code in turn is invoked by the called method.</p>
+<p>Using .NET, inversion of control can be implemented by using delegates or interfaces. To allow the <code>HelloController</code> not to take a dependency of the <code>GreetingService</code> class, the <code>IGreetingService</code> interface is introduced. This interface defines all the requirements for the <code>HelloController</code>, the <code>Greet</code> method:</p>
+<pre class="brush: csharp; title: ; notranslate">
+public interface IGreetingService
+{
+		string Greet(string name);
+}
+</pre>
+<p>The <code>GreetingService</code> class implements this interface:</p>
+<pre class="brush: csharp; title: ; notranslate">
+public class GreetingService : IGreetingService
+{
+		public string Greet(string name) =&gt; $&quot;Hello, {name}&quot;;
+}
+</pre>
+<p>Now the <code>HelloController</code> class can be changed to take a dependency only on the interface <code>IGreetingService</code>. This interface is injected in the constructor of the <code>HelloController</code>.</p>
+<pre class="brush: csharp; title: ; notranslate">
+public class HelloController
+{
+		private readonly IGreetingService _greetingService;
+		public HelloController(IGreetingService greetingService)
+		=&gt; _greetingService = greetingService;
+
+		public string Action(string name)
+		{
+				string message = _greetingService.Greet(name);
+				return message.ToUpper();
+		}
+}
+</pre>
+<p>The class to be used for the interface <code>IGreetingService</code> now needs to be defined outside of the <code>HelloController</code> &#8211; passing an object implementing the interface <code>IGreetingService</code> on instantiating of the object <code>HelloController</code>. This is where the term <em>inversion of control</em> is used: The control what type is used is now passed to the outside.</p>
+<blockquote><p>
+	Inversion of control is also known by the name “Hollywood principle” – don’t call us, we’ll call you.
+</p></blockquote>
+<p>The <code>Program</code> class is now changed to pass a instance of the <code>GreetingService</code> to the constructor of the <code>HelloController</code>. Other than that, the implementation does not differ:</p>
+<pre class="brush: csharp; title: ; notranslate">
+class Program
+{
+		static void Main()
+		{
+				var controller = new HelloController(new GreetingService());
+				string result = controller.Action(&quot;Matthias&quot;);
+				Console.WriteLine(result);
+		}
+}
+</pre>
+<blockquote><p>
+	With dependency injection, a dependency such as a type implementing the IGreetingService is injected.
+</p></blockquote>
+<h2>Using a Container</h2>
+<p>The issue with injecting dependencies, is that it&#8217;s usually not that simple. As the application grows, it&#8217;s not just one object that needs to be passed to the constructor. And sometimes state need to be kept, and probably the same instance of one service needs to be passed to multiple controllers or services. To reduce the complexity, a <strong>dependency injection container</strong> can be used. With .NET, you can use the NuGet package <strong>Microsoft.Extensions.DependencyInjection</strong>. This DI container is used with ASP.NET Core and EF Core. This container can also be used with UWP, Xamarin, and WPF.</p>
+<p>With the next change, the NuGet package <code>Microsoft.Extensions.DependencyInjection</code> is added. In the <code>GetContainer</code> method, the services that should be injected are added to the service ecollection. The <code>ServiceCollection</code> class keeps a list of the services. On invoking the <code>BuildServiceProvider</code> method, a <code>ServiceProvider</code> object that can be used to access the registered services is returned. The greeting service is registered passing the contract and the implementation types to the generic parameters of the <code>AddTransient</code> method. With the constructor of the <code>HelloController</code> class, the contract type is used for injection. The <code>HelloController</code> class itself doesn&#8217;t implement an interface, and this type will be retrieved from the DI container.</p>
+<p>In the <code>Main</code> method, the <code>HelloController</code> is retrieved from the DI container using the <code>GetService</code> method. The constructor of the <code>HelloController</code> requires an object implementing <code>IGreetingService</code>. Because the DI container knows this type, it can create a new instancde of the <code>HelloController</code> and pass an instance of the <code>GreetingService</code>type. In case the DI container does not know the type it needs, it throws an exception of type <code>InvalidOperationException</code> with the information <em>unable to resolve service for type IGreetingService while attempting to activate HelloController</em>. With this message it&#8217;s clear that the <code>IGreetingService</code> interface is not registered with the DI container.</p>
+<pre class="brush: csharp; title: ; notranslate">
+class Program
+{
+		static void Main()
+		{
+				using var container = GetContainer();
+				var controller = container.GetService&lt;HelloController&gt;();
+				string result = controller.Action(&quot;Katharina&quot;);
+				Console.WriteLine(result);
+		}
+
+		static ServiceProvider GetContainer()
+		{
+				var services = new ServiceCollection();
+				services.AddTransient&lt;IGreetingService, GreetingService&gt;();
+				services.AddTransient&lt;HelloController&gt;();
+				return services.BuildServiceProvider();
+		}
+}
+</pre>
+<blockquote><p>
+	Several extension methods can be used to register services: <code>AddSingleton</code>, <code>AddTransient</code>, and <code>AddScoped</code>. Registering a service into the DI container with the method <code>AddTransient</code> returns a new object every time the type is injected. With the method <code>AddSingleton</code>, the same object is returned with every injection. The method <code>AddScoped</code> is somewhere in between. In the same scope, the same instance is returned. In a different scope, a new instance is created. What is a scope? With ASP.NET Core applications, a HTTP request creates a new scope. Injecting services based on the HTTP request, with scoped services the same object is returned.
+</p></blockquote>
+<h2>Using Parameters</h2>
+<p>In case a service needs some parameters, you cannot define a constructor with just the types you need. The DI container doesn&#8217;t know how to pass these parameters. However, you can use a type that is known by the DI container to instantiate &#8211; e.g. a custom interface that is registered with the DI container. Instead of creating a custom interface, you can make use of the <code>IOptions</code> interface. This is a generic interface that allows passing a type, such as the <code>GreetingServiceOptions</code> class. This class is used to specify the values needed for the new <code>GreetingService</code> class:</p>
+<pre class="brush: csharp; title: ; notranslate">
+public class GreetingServiceOptions
+{
+		public string From { get; set; } = string.Empty;
+}
+</pre>
+<p>The <code>GreetingService</code> class now has a constructor that receives <code>IOptions</code>.</p>
+<pre class="brush: csharp; title: ; notranslate">
+public class GreetingService : IGreetingService
+{
+		private readonly string _from;
+		public GreetingService(IOptions&lt;GreetingServiceOptions&gt; options)
+				=&gt; _from = options.Value.From;
+
+		public string Greet(string name) 
+				=&gt; $&quot;Hello, {name}, greetings from {_from}&quot;;
+}
+</pre>
+<p>To remove the requirement to invoke the <code>AddTransient</code> method and to configure the service calling the <code>Configure</code> method, the extension method <code>AddGreetingService</code> is defined. This method extends the interfacde <code>IServcieCollection</code>, and thus can be used on configuration of the DI container. In the implementation, the <code>Configure</code> method is invoked passing a method that returns the type to specify the configuration for the service: <code>GreetingServiceOptions</code>. After the configuration is done, the service is registered to the DI container with the <code>AddTransient</code> method:</p>
+<pre class="brush: csharp; title: ; notranslate">
+public static class GreetingServiceCollectionExtensions
+{
+		public static IServiceCollection AddGreetingServce(this IServiceCollection services,
+				Action&lt;GreetingServiceOptions&gt;? setupAction = default)
+		{
+				if (setupAction != null)
+				{
+						services.Configure(setupAction);
+				}
+				return services.AddTransient&lt;IGreetingService, GreetingService&gt;();
+		}
+}
+</pre>
+<p>The configuration of the DI container can now be adapted to invoke the method <code>AddGreetingsService</code>, and to pass a method returning <code>GreetingServiceOptions</code>.</p>
+<pre class="brush: csharp; title: ; notranslate">
+class Program
+{
+		static void Main(string[] args)
+		{
+				using var host = Host.CreateDefaultBuilder()
+						.ConfigureServices(services =&gt;
+						{
+								services.AddGreetingServce(options =&gt;
+								{
+										options.From = &quot;Christian&quot;;
+								});
+								services.AddTransient&lt;HelloController&gt;();
+						})
+						.Build();
+				var controller = host.Services.GetService&lt;HelloController&gt;();
+				string result = controller.Action(&quot;Matthias&quot;);
+				Console.WriteLine(result);
+		}
+}
+</pre>
+<p>There&#8217;s also an extension method <code>AddOptions</code> to register an implementation of the <code>IOptions</code> interface with the DI container, so the container knows how to create instances of types that need this interface with construction. Using the <code>CreateDefaultBuilder</code> of the host factory to create a <code>Host</code> instance, this is not needed, as this method already specifies a few interfaces that are commonly needed with the DI container, e.g. for logging and configuration. You can already run the application and see the results.</p>
+<h2>Take away</h2>
+<p>Dependency injection reduces strong dependencies. Instead of having strong references to concrete types, constructor injection can be used to pass the concrete implementations from the outside. A dependency injection container becomes handsome when multiple services probably with different lifetimes need to be configured with the container. The configuration of the <code>Host</code> class already has a DI container built-in, and registers some commonly used services. If you add a breakpoint to the invocation of the <code>ConfigureServices</code> method, you&#8217;ll see that already 31 services are registered befor the call to <code>AddGreetingService</code>. Among these are <code>IHostEnvironment</code>, <code>IConfiguration</code>, <code>IApplicationLifetime</code>, <code>ILogger</code>, and others.</p>
+<p>Expect to read more about the <code>Host</code> class in future articles.</p>
+<p>If you&#8217;ve read this far, consider buying me a coffee which helps me staying up longer and writing more articles.</p>
+<p><a href="https://www.buymeacoffee.com/christiannagel" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height:auto !important;width:auto !important;"></a></p>
+<p>You can get the <a href="https://github.com/ProfessionalCSharp/MoreSamples">complete sample code</a>.</p>
+<p>Enjoy learning and programming!</p>
+<p>Christian</p>
+<h2>More Information</h2>
+<p><a href="https://csharp.christiannagel.com/2019/08/06/azurefunctionsdi/">Azure Functions with Dependency Injection</a></p>
+<p><a href="https://csharp.christiannagel.com/2018/08/29/scopes/">Disposing Injected Services</a></p>
+<p><a href="https://csharp.christiannagel.com/2018/06/05/httpclient/">HTTP Client Factory with .NET Core</a></p>
+<p>More information on C# and programming .NET Core applications is in my book <a href="https://csharp.christiannagel.com/2018/04/16/professionalcsharp7/">Professional C# 7 and .NET Core 2.0</a>, and in my <a href="https://cninnovation.com/Training/">workshops</a>.</p>
+<p>ID 143279026 © Rodolphe Trider | Dreamstime.com<br />
+Breaking Chains <a href="https://www.dreamstime.com/triderrodolphe_info">ID 143279026 © Rodolphe Trider</a> | <a href="https://www.dreamstime.com/">Dreamstime.com</a></p>
+]]>
+			</content:encoded>
+
+			<wfw:commentRss>https://csharp.christiannagel.com/2020/05/15/dependencyinjection-2/feed/</wfw:commentRss>
+			<slash:comments>12</slash:comments>
+
+
+
+			<media:thumbnail url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/breakingchains2.jpg" />
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/breakingchains2.jpg" medium="image">
+				<media:title type="html">Breaking Chains</media:title>
+			</media:content>
+
+			<media:content url="https://1.gravatar.com/avatar/4736273aed82148d9d3c3ca192c1cd61?s=96&#38;d=identicon&#38;r=G" medium="image">
+				<media:title type="html">christiannagel1</media:title>
+			</media:content>
+
+			<media:content url="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" medium="image">
+				<media:title type="html">Buy Me A Coffee</media:title>
+			</media:content>
+		</item>
+		<item>
+			<title>Project Tye &#8211; easier development with .NET for Kubernetes</title>
+			<link>https://csharp.christiannagel.com/2020/05/11/tye/</link>
+			<comments>https://csharp.christiannagel.com/2020/05/11/tye/#comments</comments>
+
+			<dc:creator><![CDATA[Christian Nagel]]></dc:creator>
+			<pubDate>Mon, 11 May 2020 11:16:45 +0000</pubDate>
+			<category><![CDATA[.NET Core]]></category>
+			<category><![CDATA[ASP.NET Core]]></category>
+			<category><![CDATA[Azure]]></category>
+			<category><![CDATA[ACR]]></category>
+			<category><![CDATA[AKS]]></category>
+			<category><![CDATA[aspnetcore]]></category>
+			<category><![CDATA[dotnet]]></category>
+			<category><![CDATA[Kubernetes]]></category>
+			<category><![CDATA[Tye]]></category>
+			<guid isPermaLink="false">http://csharp.christiannagel.com/?p=2309</guid>
+
+			<description><![CDATA[Visual Studio 2019 has great support for Docker and Kubernetes. After opening a solution, Dockerfile files and Helm charts can be added from within the Solution Explorer. For simple project, it still can be too complex to work with Helm chats, define deployments and services. Defining a Dockerfile can be avoided as well. With .NET projects, all the information needed to create a docker image can be found in the project file. This is where the Project Tye comes into play - deploy Microservices to Kubernetes with minimal configuration. In this article I'm showing an example creating a .NET Core web application and API service, let it run locally with tye, and deploy it to an Kubernetes cluster.]]></description>
+			<content:encoded>
+				<![CDATA[
+<div class="wp-block-jetpack-markdown"><p>Visual Studio 2019 has great support for Docker and Kubernetes. After opening a solution, Dockerfile files and Helm charts can be added from within the Solution Explorer. For simple project, it still can be too complex to work with Helm chats, define deployments and services. Defining a Dockerfile can be avoided as well. With .NET projects, all the information needed to create a docker image can be found in the project file. This is where the <strong>Project Tye</strong> comes into play &#8211; <em>deploy Microservices to Kubernetes with minimal configuration</em>. In this article I&#8217;m showing an example creating a .NET Core web application and API service, let it run locally with tye, and deploy it to an Kubernetes cluster.</p>
+<blockquote>
+<p>Project Tye is still in its early stages, currently it&#8217;s an open source experiment which lasts at least until Nov 2020. Looking how&#8217;s behind it with <a href="https://github.com/rynowak">Ryan Nowak (Dev/Architect on ASP.NET Core+Blazor)</a> and <a href="https://github.com/davidfowl">David Fowler, the creator of SignalR</a>, this looks very promising and exciting!</p>
+</blockquote>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/whale.jpg" alt="Whale"></p>
+<h2>Preparations</h2>
+<p>To get started, you need to have the <em>.NET Core 3.1 SDK</em>, the <em>Docker Desktop</em>, and <em>Project Tye</em> installed.</p>
+<h3>.NET Core SDK</h3>
+<p>The sample application is built using .NET Core 3.1. The SDK can be installed from the <a href="https://dot.net">dot.net</a> website.</p>
+<h3>Docker Desktop</h3>
+<p>To run docker on the local Windows system, the <a href="https://docs.docker.com/docker-for-windows/install/"><em>Docker Desktop</em></a> can be installed. Docker makes use of a HyperV image, or you can use WSL-2 (which requires at least Windows build 19018+). With WSL-2, Docker can make use of the <em>Windows Subsystem for Linux</em>.</p>
+<h3>Tye</h3>
+<p>The Tye CLI can be installed with the dotnet CLI:</p>
+<p><code>dotnet tool install -g Microsoft.Tye</code></p>
+<p>Because the latest version of this tool is not released yet, you need to supply the version number. Running this tool without a version number lists the version number that is available, thus you can get the version number from the output and use it to install the tool, e.g.</p>
+<p><code>dotnet tool install -g Microsoft.Tye --verson &quot;0.2.0-alpha.20258.3&quot;</code></p>
+<p>To see the current version installed, use</p>
+<p><code>tye --version</code></p>
+<h3>Azure CLI</h3>
+<p>With this sample I&#8217;m using the <em>Azure Kubernetes Service</em> and the <em>Azure Container Registry</em>, so the Azure CLI is needed as well: <a href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?view=azure-cli-latest">Install Azure CLI on Windows</a>.</p>
+<blockquote>
+<p>See <a href="https://github.com/dotnet/tye/blob/master/docs/getting_started.md">Getting Started</a> for more information.</p>
+</blockquote>
+<h2>.NET Core Projects</h2>
+<p>For the sample application, at first, I&#8217;m creating a solution using the dotnet CLI. The solution consists of a .NET Standard library with shared code, an ASP.NET Core Web API application offering a books service, and a Web Application using Razor Pages. A solution file is added, and dependencies between the projects added:</p>
+<pre><code>dotnet new classlib -o Books.Shared
+dotnet new api -o BooksAPI
+dotnet new webapp -o BooksApp
+dotnet new sln
+dotnet sln add Books.Shared
+dotnet sln add BooksAPI
+dotnet sln add BooksApp
+dotnet add BooksAPI reference Books.Shared
+dotnet add BooksApp reference Books.Shared
+</code></pre>
+<blockquote>
+<p>I would have named the projects with a dot in between, e.g. Books.API. However, there´s a current issue with such naming but I expect this to be resolved soon. Changing the name of the docker image in the tye file would be a temporary solution, but I want to show using tye with as little configuration as possible.</p>
+</blockquote>
+<h3>Library</h3>
+<p>With the library, the entity type <code>Book</code> is defined. This should just demonstrate the use of a library with tye.</p>
+<pre><code class="language-csharp">public class Book
+{
+		public int BookId { get; set; }
+		public string Title { get; set; } = string.Empty;
+		public string? Publisher { get; set; }
+}
+</code></pre>
+<h3>Web API</h3>
+<p>The Web API is a project to return a list of books. For this, the <code>BooksService</code> class is defined. This class returns a list of books with the <code>GetBooks</code> method:</p>
+<pre><code class="language-csharp">public class BooksService
+{
+		private readonly ILogger _logger;
+
+		public BooksService(ILogger&lt;BooksService&gt; logger)
+				=&gt; _logger = logger;
+
+		private List&lt;Book&gt; _books = new List&lt;Book&gt;()
+		{
+				new Book { BookId = 1, Title = &quot;Professional C# 7 and .NET Core 3&quot;, Publisher = &quot;Wrox Press&quot;},
+				new Book { BookId = 2, Title = &quot;Professional C# 9 and .NET 5&quot;, Publisher = &quot;Wrox Press&quot;}
+		};
+
+		public IEnumerable&lt;Book&gt; GetBooks()
+		{
+				_logger.LogTrace(&quot;GetBooks invoked&quot;);
+				return _books;
+		}
+}
+</code></pre>
+<p>The <code>BooksService</code> class is injected in the constructor of the <code>BooksController</code>, and a JSON result is returned from the <code>GetBooks</code> method:</p>
+<pre><code class="language-csharp">[ApiController]
+[Route(&quot;api/[controller]&quot;)]
+public class BooksController : ControllerBase
+{
+		private readonly BooksService _booksService;
+		public BooksController(BooksService booksService)
+				=&gt; _booksService = booksService;
+
+		[HttpGet]
+		public IActionResult GetBooks()
+				=&gt; Ok(_booksService.GetBooks());
+}
+</code></pre>
+<p>In the <code>Startup</code> class, the <code>BooksService</code> class is configured in the dependency injection container:</p>
+<pre><code class="language-csharp">public void ConfigureServices(IServiceCollection services)
+{
+		services.AddControllers();
+		services.AddSingleton&lt;BooksService&gt;();
+}
+</code></pre>
+<h3>Web Application</h3>
+<p>The ASP.NET Core Web application calls into the API service. For this, the <code>BooksClient</code> class is defined. This class receives an object of type <code>HttpClient</code> in the constructor, and sends a HTTP GET request to the API service to received books. The received JSON information is serialized with the new <code>System.Text.Json.JsonSerializer</code> &#8211; similar to the API backend where this serializer is the default for ASP.NET Core. To transfer the lowercase JSON into the uppercase properties of the <code>Book</code> class:</p>
+<pre><code class="language-csharp">public class BooksClient
+{
+		private readonly HttpClient _httpClient;
+		private readonly JsonSerializerOptions serializerOptions = new JsonSerializerOptions
+		{
+				PropertyNameCaseInsensitive = true,
+				PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+		};
+
+		public BooksClient(HttpClient httpClient) 
+				=&gt; _httpClient = httpClient; 
+
+		public async Task&lt;Book[]&gt; GetBooksAsync()
+		{
+				var response = await _httpClient.GetAsync(&quot;/api/Books&quot;);
+				var stream = await response.Content.ReadAsStreamAsync();
+				return await JsonSerializer.DeserializeAsync&lt;Book[]&gt;(stream, serializerOptions);
+		}
+}
+</code></pre>
+<p>The dependency injection container is configured with the <code>Startup</code> class. The HTTP Client Factory is used to configure the <code>BooksClient</code> class that gets the HttpClient class injected. With the HTTP Client Factory, the HttpClient is configured to set the base address of the Books Web API. <code>GetServiceUri</code> is an extension method to extend the <code>IConfiguration</code> interface to get based on the name of the service the host and port number for the service. Starting tye, environmental variables with the name <strong>service:{name}:host</strong> and <strong>service:{name}:port</strong> are configured, and <code>GetServiceUri</code> can be used to easily connect these values to return a URL. For using this API, the NuGet package <em>Microsoft.Tye.Extensions.Configuration</em> need to be referenced.</p>
+<pre><code class="language-csharp">public void ConfigureServices(IServiceCollection services)
+{
+		services.AddRazorPages();
+
+		services.AddHttpClient&lt;BooksClient&gt;(client =&gt;
+		{
+				client.BaseAddress = Configuration.GetServiceUri(&quot;booksapi&quot;);
+		});
+}
+</code></pre>
+<blockquote>
+<p>One feature of Project Tye is <strong>service discovery</strong> which can be used optionally. With the service discovery goals of tye, it&#8217;s recommended to avoid hardcoding of URIs/Addresses in application code. Service discovery can be used via configuration &#8211; this way deploying to different environments is easy.</p>
+</blockquote>
+<p>The Razor page <code>Books.cshtml</code> displays a book list in a HTML table:</p>
+<pre><code class="language-csharp">@page
+@model Books.App.Pages.BooksModel
+@{
+		ViewData[&quot;Title&quot;] = &quot;Books&quot;;
+}
+
+&lt;h1&gt;Books&lt;/h1&gt;
+
+&lt;table class=&quot;table&quot;&gt;
+		&lt;thead&gt;
+				&lt;tr&gt;
+						&lt;th&gt;Id&lt;/th&gt;
+						&lt;th&gt;Title&lt;/th&gt;
+						&lt;th&gt;Publisher&lt;/th&gt;
+				&lt;/tr&gt;
+		&lt;/thead&gt;
+		&lt;tbody&gt;
+				@foreach (var book in @Model.Books!)
+				{
+						&lt;tr&gt;
+								&lt;td&gt;@book.BookId&lt;/td&gt;
+								&lt;td&gt;@book.Title&lt;/td&gt;
+								&lt;td&gt;@book.Publisher&lt;/td&gt;
+						&lt;/tr&gt;
+				}
+		&lt;/tbody&gt;
+&lt;/table&gt;
+
+</code></pre>
+<p>With the code-behind file <code>BooksModel</code>, the <code>BooksClient</code> class is injected to retrieve the book list:</p>
+<pre><code class="language-csharp">public class BooksModel : PageModel
+{
+		public Book[]? Books { get; set; }
+
+		public async Task OnGet([FromServices] BooksClient booksClient)
+		{
+				Books = await booksClient.GetBooksAsync();
+		}
+}
+</code></pre>
+<blockquote>
+<p>Now it&#8217;s time to run tye!</p>
+</blockquote>
+<h2>Using Tye locally</h2>
+<p>To start with tye, in the folder of the solution, the command</p>
+<p><code>tye init</code></p>
+<p>can be used to create a tye application configuration file. Tye uses YAML, similar to the <em>Helm charts</em>. The configuration file contains the name of the solution, as well as the projects the tye command found for deployment &#8211; which are the Web API and the Web Application &#8211; and references the project files:</p>
+<pre><code class="language-yaml"># tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+name: tyesample
+services:
+- name: booksapi
+	project: BooksAPI/BooksAPI.csproj
+- name: booksapp
+	project: BooksApp/BooksApp.csproj
+</code></pre>
+<p>Having the tye application configuration file, the docker images can be built using</p>
+<p><code>tye build</code>.</p>
+<p>You can see the images built with the docker CLI, using</p>
+<p><code>docker images</code></p>
+<p>With output such as</p>
+<pre><code>REPOSITORY                             TAG                 IMAGE ID            CREATED             SIZE
+booksapp                              1.0.0               f1b7c024bc8d        3 hours ago         232MB
+booksapi                              1.0.0               4184fffeb7f6        3 hours ago         208MB
+mcr.microsoft.com/dotnet/core/aspnet   3.1                 79e79777c3bf        2 weeks ago         207MB
+</code></pre>
+<p>With this, it&#8217;s possible to run the application locally. You just need to start</p>
+<p><code>tye run</code></p>
+<p>Then you can open the Tye dashboard at <a href="http://127.0.0.1:8000" rel="nofollow">http://127.0.0.1:8000</a>. With the dashboard you can see the number of replicas and restarts, the bindings to the services, and have access to the logs and metrics:</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tyedashboard.png" alt="Tye Dashboard"></p>
+<p>Accessing the Books page, books are returned:</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tyebookspage.png" alt="Books page"></p>
+<p>It&#8217;s easy to look at log information from the different services:</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tyelogs.png" alt="Tye Logs"></p>
+<p>Tye also gives access to metric information:</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tyemetrics.png" alt="Tye Metrics"></p>
+<blockquote>
+<p>If not necessary, tye does not run the application locally via docker containers. Running the application it&#8217;s not required to build the docker images first.</p>
+</blockquote>
+<h2>Deploying using Tye</h2>
+<p>Next, we can deploy the solution to a Kubernetes cluster. If you already know working with Helm charts, creating yaml deployment and service files, you&#8217;ll see that the steps are now extremly easy.</p>
+<p>You can enable Kubernetes on <em>Docker Desktop</em>, or use different options for a Kubernetes cluster. Here, I&#8217;m creating an <strong>Azure Kubernetes Service</strong> (AKS) and a <strong>Azure Container Registry</strong> (ACR) to deploy the images. First, the images will be pushed to the ACR, and then the cluster pulls the images from there.</p>
+<p>First, I create the ACR with the Azure Portal:</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tye-createacr.png" alt="Create an Azure Container Registry"></p>
+<p>Next, the AKS is created with a single node to stay cheap:</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tye-createaks.png" alt="Create an Azure Kubernetes Service"></p>
+<p>Before clicking the final <em>Create</em> button, the ACR can be associated to the AKS with the <em>Integrations</em> tab:</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tye-createaksintegrateregistry.png" alt="Connect the Azure Kubernetes Service with the Azure Container Registry"></p>
+<blockquote>
+<p>It takes a few minutes to create the Azure Kubernetes Service. It takes much more time to create a Kubernetes cluster on-premises!</p>
+</blockquote>
+<p>After the cluster is created, the <em>kubectl</em> command needs to be associated with the cluster. This can be done using the Azure CLI:</p>
+<p><code>az aks get-credentials --resource-group {resource-group} --name {cluster-name}</code></p>
+<p>In case the cluster is not associated with the Azure Container Registry on creation of the cluster, it can be associated using the Azure CLI:</p>
+<p>az aks update &#8211;name {cluster-name} &#8211;resource-group {resource-group} &#8211;attach-acr {container-registry}</p>
+<p>The configuration for the kubectl command can be cound in the <code>.kube</code> folder from the users folder. The kubectl command connects to the cluster defined with the configuration.</p>
+<p>To start deployment,</p>
+<p><code>tye deploy --interactive</code></p>
+<p>can be used. In the interactive mode, you&#8217;re asked for the link to the Azure Container Registry. From there, this happens:</p>
+<ul>
+<li>Docker images are built</li>
+<li>Docker images are pushed to the registry</li>
+<li>Docker images are pulled from the Kubernetes cluster</li>
+<li>For every project, Deployments and Service definitions are created</li>
+<li>The Deployments and Services are applied to the Kubernetes cluster</li>
+</ul>
+<p>In case authentication with the ACR fails, login can help:</p>
+<p><code>az acr login --name {registry}</code></p>
+<p>To see the running pods in the cluster, you can use</p>
+<p><code>kubectl get pods</code></p>
+<p>which gives a result like this:</p>
+<pre><code>NAME                        READY   STATUS    RESTARTS   AGE
+booksapi-7d4b96c6bb-vxv64   1/1     Running   0          29m
+booksapp-764d98f56-rndsw    1/1     Running   0          7m9s
+</code></pre>
+<p>To see all the services, use</p>
+<p><code>kubectl get service</code></p>
+<pre><code>NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+booksapi     ClusterIP   10.0.207.102   &lt;none&gt;        80/TCP    23m
+booksapp     ClusterIP   10.0.164.169   &lt;none&gt;        80/TCP    23m
+kubernetes   ClusterIP   10.0.0.1       &lt;none&gt;        443/TCP   4h27m
+</code></pre>
+<p>To access the Web application from localhost, the port can be forwarded to localhost:</p>
+<p><code>kubectl port-forward svc/booksapp 5000:80</code></p>
+<p>Opening a browser to access <a href="http://localhost:5000" rel="nofollow">http://localhost:5000</a>, the Books page is shown accessing the API behind the scenes:</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tye-webappincluster.png" alt="Running the App with AKS"></p>
+<p>Using the Azure Portal, with monitoring enabled you can access information about resources used by the cluster, information about nodes, controllers, containers, and deployments.</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tye-aksmonitoring.png" alt="AKS Monitoring"></p>
+<h2>Take away</h2>
+<p>With Project Tye it&#8217;s easy to create a deployment to an Kubernetes cluster from a .NET solution. Base images needed to build docker images are mapped from the project dependencies, services are found using the service discovery feature, YAML files to define the deployments and services are not needed. A simple <code>tye deploy</code> creates docker images, and pushes the images to the container registry, and uploads the images with the Kubernetes cluster including all the required configuration including Deployments and Services.</p>
+<p>If you&#8217;ve read this far, consider buying me a coffee which helps me staying up longer and writing more articles.</p>
+</div>
+
+
+
+<a href="https://www.buymeacoffee.com/christiannagel" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height:auto !important;width:auto !important;"></a>
+
+
+
+<div class="wp-block-jetpack-markdown"><p>You can get the <a href="https://github.com/ProfessionalCSharp/MoreSamples">complete sample code</a>.</p>
+<p>Enjoy learning and programming!</p>
+<p>Christian</p>
+<h2>Links</h2>
+<p><a href="https://github.com/dotnet/tye">Project Tye on GitHub</a></p>
+<p><a href="https://github.com/dotnet/tye/blob/master/docs/getting_started.md">Getting Started</a></p>
+<p><a href="https://github.com/dotnet/tye/blob/master/docs/FAQ.md">Tye FAQ</a></p>
+<p><a href="https://github.com/dotnet/tye/blob/master/docs/reference/service_discovery.md">Service Discovery with Tye</a></p>
+<p><a href="https://csharp.christiannagel.com/2018/06/05/httpclient/">HTTP Client Factory with .NET Core</a></p>
+<p>More information on C# and programming .NET Core applications is in my book <a href="https://csharp.christiannagel.com/2018/04/16/professionalcsharp7/">Professional C# 7 and .NET Core 2.0</a>, and in my <a href="https://cninnovation.com/Training/">workshops</a>.</p>
+<p>Flying Whale, Peace, Hope, Inspiration <a href="https://www.dreamstime.com/wisconsinart_info">ID 91115509 © Wisconinart</a> | <a href="https://www.dreamstime.com/">Dreamstime.com</a></p>
+</div>
+]]>
+			</content:encoded>
+
+			<wfw:commentRss>https://csharp.christiannagel.com/2020/05/11/tye/feed/</wfw:commentRss>
+			<slash:comments>2</slash:comments>
+
+
+
+			<media:thumbnail url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/whale.jpg" />
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/whale.jpg" medium="image">
+				<media:title type="html">Whale</media:title>
+			</media:content>
+
+			<media:content url="https://1.gravatar.com/avatar/4736273aed82148d9d3c3ca192c1cd61?s=96&#38;d=identicon&#38;r=G" medium="image">
+				<media:title type="html">christiannagel1</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tyedashboard.png" medium="image">
+				<media:title type="html">Tye Dashboard</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tyebookspage.png" medium="image">
+				<media:title type="html">Books page</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tyelogs.png" medium="image">
+				<media:title type="html">Tye Logs</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tyemetrics.png" medium="image">
+				<media:title type="html">Tye Metrics</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tye-createacr.png" medium="image">
+				<media:title type="html">Create an Azure Container Registry</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tye-createaks.png" medium="image">
+				<media:title type="html">Create an Azure Kubernetes Service</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tye-createaksintegrateregistry.png" medium="image">
+				<media:title type="html">Connect the Azure Kubernetes Service with the Azure Container Registry</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tye-webappincluster.png" medium="image">
+				<media:title type="html">Running the App with AKS</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/05/tye-aksmonitoring.png" medium="image">
+				<media:title type="html">AKS Monitoring</media:title>
+			</media:content>
+
+			<media:content url="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" medium="image">
+				<media:title type="html">Buy Me A Coffee</media:title>
+			</media:content>
+		</item>
+		<item>
+			<title>C# 9 &#8211; Positional or Nominal Creation</title>
+			<link>https://csharp.christiannagel.com/2020/04/21/c-9-positional-or-nominal-creation/</link>
+			<comments>https://csharp.christiannagel.com/2020/04/21/c-9-positional-or-nominal-creation/#comments</comments>
+
+			<dc:creator><![CDATA[Christian Nagel]]></dc:creator>
+			<pubDate>Tue, 21 Apr 2020 11:15:32 +0000</pubDate>
+			<category><![CDATA[CSharp]]></category>
+			<category><![CDATA[C#]]></category>
+			<category><![CDATA[C#9]]></category>
+			<category><![CDATA[Records]]></category>
+			<guid isPermaLink="false">http://csharp.christiannagel.com/?p=2293</guid>
+
+			<description><![CDATA[C# allows writing code with positional or nominal code style. Using positional code style, constructors can be used. Object initializer &#8230;]]></description>
+			<content:encoded>
+				<![CDATA[<p>C# allows writing code with <strong>positional</strong> or <strong>nominal</strong> code style. Using <em>positional</em> code style, constructors can be used. Object initializer belong to the <em>nominal</em> category. So far the <em>nominal</em> category was restricted because it required writable properties. This can change with C# 9.</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/04/change.jpg" alt="Change" /></p>
+<h2>Positional Creation</h2>
+<p><strong>Positional creation</strong> is the traditional coding style we use since the first version of C#. We use constructors to initialize an object. With inheritance, the constructor initialization can call into the constructor of the base class. Objects are creating passing parameters to the constructor:</p>
+<pre class="brush: csharp; title: ; notranslate">
+public class Person
+{
+		public string FirstName { get; }
+		public string LastName { get; }
+
+		public Person(string firstName, string lastName)
+		{
+				FirstName = firstName;
+				LastName = lastName;
+		}
+}
+
+public class Racer : Person
+{
+		public string RacingTeam { get; }
+
+		public Racer(string firstName, string lastName, string racingTeam)
+		: base(firstName, lastName)
+		{
+				RacingTeam = racingTeam;
+		}
+}
+
+Person p = new Racer(&quot;Charles&quot;, &quot;Leclerc&quot;, &quot;Ferrari&quot;);
+</pre>
+<blockquote><p>
+	While positional creation was possible with C# 1, the code I&#8217;ve used in this sample doesn&#8217;t compile with C# 1. We didn&#8217;t have auto properties at that time and had to write more lines of code for full properties.
+</p></blockquote>
+<h2>Nominal Creation</h2>
+<p>With <strong>nominal creation</strong> the code can be reduced by a few code lines. Instead of defining constructors, an <strong>object initializer</strong> can be used.</p>
+<pre class="brush: csharp; title: ; notranslate">
+public class Person
+{
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+}
+
+public class Racer : Person
+{
+		public string RacingTeam { get; set; }
+}
+
+Person p = new Racer { FirstName = &quot;Charles&quot;, LastName = &quot;Leclerc&quot;, RacingTeam = &quot;Ferrari&quot; };
+</pre>
+<p>Object initialization comes with important restrictions. The object initializer is just syntax sugar. Behind the scenes, the object initializer sets properties &#8211; after the constructor was invoked. It&#8217;s not possible to create immutable types that way. The properties need to have a <em>set</em> accessor, otherwise the object initializer cannot be used. That&#8217;s why often I need to use the <em>positional</em> creation style, and I&#8217;m happy when frameworks support non-default constructors (like EF Core).</p>
+<h2>C# 9 Nominal Creation</h2>
+<p>The new C# 9 <strong>records</strong> feature is based on the nominal features. To create immutable types, this requires changes. The plan with C# 9 is to support <strong>init-only properties</strong> by defining the <strong>init</strong> accessor. These properties can be set after the constructor was running &#8211; with the initialization of the object using an object initializer:</p>
+<pre class="brush: csharp; title: ; notranslate">
+public class Person
+{
+		public string FirstName { get; init; }
+		public string LastName { get; init; }
+}
+
+public class Racer : Person
+{
+		public string RacingTeam { get; init; }
+}
+
+Person p = new Racer { FirstName = &quot;Charles&quot;, LastName = &quot;Leclerc&quot;, RacingTeam = &quot;Ferrari&quot; };
+</pre>
+<blockquote><p>
+	<strong>init only</strong> members can be initialized at the point of object creation but become readonly after object creation has completed.
+</p></blockquote>
+<p>Of course, sometimes more complex validation is required that cannot be done with single properties, e.g. using a combination of multiple properties. With single properties, the init accessor can have a code block like we know from the traditional property accessors, so simple checks can be done. For checking multiple properties, the new validator with the <em>init</em> code block can be used:</p>
+<pre class="brush: csharp; title: ; notranslate">
+public class Person
+{
+		public string FirstName { get; init; }
+		public string LastName { get; init; }
+
+		init
+		{
+				if (FirstName.Length + LastName.Length &gt; 52)
+				{
+						throw new Exception(&quot;...&quot;);
+				}
+		}
+}
+</pre>
+<h2>C# 9 Factories and With Expressions</h2>
+<p>To create new objects from existing ones, copy constructors and With factory methods can be used. In the code snippet, the Person class defines a copy constructor that returns a new person. The With method is marked as a factory method and invokes the copy constructor. With the Racer class that derives from Person, a copy constructor is defined that in turn invokes the copy constructor of the base class. This class overrides the With method of the base class to return a Racer. Overriding the method you can see that the return type is changed from a Person to a Racer. This is not possible with C# 8, but there&#8217;s a plan for C# 9 to allow this.</p>
+<p>After creating the first racer, using the same data the second racer is created using the With method. Because this method is a factory method, the object initializer can be used to make some changes.</p>
+<pre class="brush: csharp; title: ; notranslate">
+public class Person
+{
+		public string FirstName { get; init; }
+		public string LastName { get; init; }
+
+		protected Person(Person that) =&gt; (FirstName, LastName) = (that.FirstName, that.LastName);
+		[Factory] public virtual Person With() =&gt; new Person(this);
+}
+
+public class Racer : Person
+{
+		public string RacingTeam { get; init; }
+
+		protected Racer(Racer that) : base(that) =&gt; RacingTeam = that.RacingTeam;
+		[Factory] public override Racer With() =&gt; new Racer(this);
+}
+
+Person p1 = new Racer { FirstName = &quot;Charles&quot;, LastName = &quot;Leclerc&quot;, RacingTeam = &quot;Ferrari&quot; };
+Person p2 = p1.With() { FirstName = &quot;Arthur&quot; };
+</pre>
+<p>C# 9 also allows using a <strong>with expression</strong> instead of a method invocation:</p>
+<pre class="brush: csharp; title: ; notranslate">
+Person p3 = p1 with { FirstName = &quot;Arthur&quot; };
+</pre>
+<h2>C# 9 Records</h2>
+<p>Instead of defining a copy constructor and a With method, C# 9 can create an implementation with the new <strong>records</strong> syntax. Defining the class, <em>record</em> can be added to automatically create code for a copy constructor, a With method, equality comparisons, and more:</p>
+<pre class="brush: csharp; title: ; notranslate">
+public record class Person
+{
+		public string FirstName { get; init; }
+		public string LastName { get; init; }
+}
+
+public record class Racer : Person
+{
+		public string RacingTeam { get; init; }
+}
+
+Person p1 = new Racer { FirstName = &quot;Charles&quot;, LastName = &quot;Leclerc&quot;, RacingTeam = &quot;Ferrari&quot; };
+Person p2 = p1 with { FirstName = &quot;Arthur&quot; };
+
+</pre>
+<h2>Take away</h2>
+<p>Before C# 9, nominal creation had a limited scope &#8211; it was not possible to use this syntax for immutable types. C# 9 changes this, and I think this makes nominal creation the preferred syntax style.<br />
+I&#8217;m thinking on changing the code in the upcoming edition of my <strong>Professional C#</strong> book for nominal creation, and reduce positional creation to a minimum, just to keep it so existing code can be read as well. What do you think?</p>
+<p>If you&#8217;ve read this far, consider buying me a coffee which helps me staying up longer and writing more articles.</p>
+<p><a href="https://www.buymeacoffee.com/christiannagel" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height:auto !important;width:auto !important;"></a></p>
+<p>Enjoy learning and programming!</p>
+<p>Christian</p>
+<h2>Links</h2>
+<p><a href="https://github.com/dotnet/csharplang/blob/master/proposals/init.md">Init Only Setters &#8211; C# Proposal</a></p>
+<p><a href="https://github.com/dotnet/csharplang/blob/master/proposals/records-wip.md">Records Work-in-Progress</a></p>
+<p><a href="https://github.com/dotnet/csharplang/issues/3137">Records as a collection of features</a></p>
+<p><a href="https://github.com/dotnet/csharplang/blob/master/meetings/2020/LDM-2020-04-13.md">C# Language Design Meeting from April 13th, 2020 for init-only properties and the roadmap for records</a></p>
+<p><a href="https://github.com/dotnet/csharplang/blob/master/meetings/2020/LDM-2020-04-06.md">C# Language Design Meeting from April 6th, 2020 for init-only members</a></p>
+<p>More information on C# and programming .NET Core applications is in my book <a href="https://csharp.christiannagel.com/2018/04/16/professionalcsharp7/">Professional C# 7 and .NET Core 2.0</a>, and in my <a href="https://cninnovation.com/Training/">workshops</a>.</p>
+<p>Change / Chance Image <a href="https://www.dreamstime.com/fotoaccount_info">ID 115654656 © Fotoaccount</a> | <a href="https://www.dreamstime.com/">Dreamstime.com</a></p>
+]]>
+			</content:encoded>
+
+			<wfw:commentRss>https://csharp.christiannagel.com/2020/04/21/c-9-positional-or-nominal-creation/feed/</wfw:commentRss>
+			<slash:comments>16</slash:comments>
+
+
+
+			<media:thumbnail url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/04/change.jpg" />
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2020/04/change.jpg" medium="image">
+				<media:title type="html">Change</media:title>
+			</media:content>
+
+			<media:content url="https://1.gravatar.com/avatar/4736273aed82148d9d3c3ca192c1cd61?s=96&#38;d=identicon&#38;r=G" medium="image">
+				<media:title type="html">christiannagel1</media:title>
+			</media:content>
+
+			<media:content url="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" medium="image">
+				<media:title type="html">Buy Me A Coffee</media:title>
+			</media:content>
+		</item>
+		<item>
+			<title>Creating a Windows Service with .NET Core 3.0</title>
+			<link>https://csharp.christiannagel.com/2019/10/15/windowsservice/</link>
+			<comments>https://csharp.christiannagel.com/2019/10/15/windowsservice/#comments</comments>
+
+			<dc:creator><![CDATA[Christian Nagel]]></dc:creator>
+			<pubDate>Tue, 15 Oct 2019 11:20:00 +0000</pubDate>
+			<category><![CDATA[.NET Core]]></category>
+			<category><![CDATA[ASP.NET Core]]></category>
+			<category><![CDATA[aspnetcore]]></category>
+			<category><![CDATA[dotnetcore]]></category>
+			<category><![CDATA[windows service]]></category>
+			<guid isPermaLink="false">http://csharp.christiannagel.com/?p=2273</guid>
+
+			<description><![CDATA[In a previous version of a Professional C# book I&#8217;ve written a complete chapter on how to create Windows Services &#8230;]]></description>
+			<content:encoded>
+				<![CDATA[<p>In a previous version of a Professional C# book I&#8217;ve written a complete chapter on how to create Windows Services with the .NET Framework. Using .NET Core 3.0, it&#8217;s a lot easier to create <strong>Windows Services</strong>: just a single line of code is needed to convert a background worker to a Windows Service.</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2019/10/windowsservices.jpg" alt="Windows Services" /></p>
+<h2>Create a Worker</h2>
+<p>With .NET Core 3.0, a background worker can be created using Visual Studio or the dotnet CLI command <strong>dotnet new worker</strong>.</p>
+<p>With this template, a <code>Program</code> class is created that uses the <code>Host</code> class. The method <code>CreateDefaultBuilder</code> is used to setup the dependency injection container, configuration, and logging. The dependency injection container managed by the <code>Host</code> class is configured by invoking the method <code>ConfigureServices</code>. In the generated code, the extension method <code>AddHostedService</code> is used to register a background class that implements the interface <code>IHostedService</code>. This interface is indirectly implemented by the <code>Worker</code> class by deriving from the base class <code>BackgroundService</code>. The interface <code>IHostedService</code> defines the methods <code>StartAsync</code> and <code>StopAsync</code>. Adding a hosted service, invoking the <code>Run</code> method of the host starts the host and in turn invokes the startup of the <code>IHostedService</code>.</p>
+<pre class="brush: csharp; title: ; notranslate">
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		CreateHostBuilder(args).Build().Run();
+	}
+
+	public static IHostBuilder CreateHostBuilder(string[] args) =&gt;
+		Host.CreateDefaultBuilder(args)
+			.ConfigureServices((hostContext, services) =&gt;
+			{
+				services.AddHostedService&lt;Worker&gt;()
+					.Configure&lt;EventLogSettings&gt;(config =&gt;
+					{
+						config.LogName = &quot;Sample Service&quot;;
+						config.SourceName = &quot;Sample Service Source&quot;;
+					});
+				});
+		}
+</pre>
+<blockquote><p>
+	The <code>Host</code> class is also used by ASP.NET Core 3.0 Web projects. The <code>WebHost</code> class from .NET Core 2.0 is replaced by the more generic <code>Host</code> class.
+</p></blockquote>
+<p>The <code>Worker</code> class derives from the class <code>BackgroundService</code>. <code>BackgroundService</code> implements the interface <code>IHostedService</code> and defines the abstract method <code>ExecuteAsync</code>. This abstract method is called by the <code>StartAsync</code> method in the <code>BackgroundService</code>. <code>StartAsync</code> is defined by the <code>IHostedService</code> interface. With the implementation of the <code>Worker</code> class, <code>ExecuteAsync</code> uses an endless loop (until cancellation is requested) and writes a log message once a second.</p>
+<pre class="brush: csharp; title: ; notranslate">
+public class Worker : BackgroundService
+{
+	private readonly ILogger&lt;Worker&gt; _logger;
+
+	public Worker(ILogger&lt;Worker&gt; logger)
+	{
+		_logger = logger;
+	}
+
+	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+	{
+		while (!stoppingToken.IsCancellationRequested)
+		{
+			_logger.LogInformation(&quot;Worker running at: {time}&quot;, DateTimeOffset.Now);
+			await Task.Delay(1000, stoppingToken);
+		}
+	}
+}
+</pre>
+<p>The main functionality for the <code>Host</code> class is creating the dependency injection container, configuration, and logging. Using <code>CreateDefaultBuilder</code>, configuration is read from the configuration files <em>appsettings.json</em>, <em>appsettings.{env.EnvironmentName}.json</em>, environmental variables, and the command line.</p>
+<p><a href="https://github.com/aspnet/Extensions/blob/master/src/Hosting/Hosting/src/Host.cs">Source Code Host class</a></p>
+<p>Logging configuration is read from the section <em>Logging</em> within the configuration settings. Using the worker template, the configuration file <em>appsettings.json</em> defines logging based on the log level &#8211; with Microsoft sources to turn on logging for the Warning level, with the exception of Microsoft.Hosting.Lifetime: here logging is turned on for the Information level. The default configuration is also for the Information level:</p>
+<pre class="brush: jscript; title: ; notranslate">
+{
+	&quot;Logging&quot;: {
+		&quot;LogLevel&quot;: {
+			&quot;Default&quot;: &quot;Information&quot;,
+			&quot;Microsoft&quot;: &quot;Warning&quot;,
+			&quot;Microsoft.Hosting.Lifetime&quot;: &quot;Information&quot;
+		}
+	}
+}
+</pre>
+<p>If the application runs on a Windows system, the method <code>CreateDefaultBuilder</code> also adds logging to the Windows event log and sets a filter provider to only log warnings and more critical issues to this provider.</p>
+<p>Running the application, log information is written to the console. The worker writes a message every second.</p>
+<pre class="brush: plain; title: ; notranslate">
+info: WindowsServiceSample.Worker[0]
+			Worker running at: 10/13/2019 10:21:14 +02:00
+info: Microsoft.Hosting.Lifetime[0]
+			Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+			Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+			Content root path: C:\github\MoreSamples\DotnetCore\WindowsServiceSample\WindowsServiceSample
+info: WindowsServiceSample.Worker[0]
+			Worker running at: 10/13/2019 10:21:15 +02:00
+info: WindowsServiceSample.Worker[0]
+			Worker running at: 10/13/2019 10:21:16 +02:00
+info: WindowsServiceSample.Worker[0]
+			Worker running at: 10/13/2019 10:21:17 +02:00
+info: WindowsServiceSample.Worker[0]
+			Worker running at: 10/13/2019 10:21:18 +02:00
+info: WindowsServiceSample.Worker[0]
+</pre>
+<h2>Convert to a Windows Service</h2>
+<p>To make a Windows Service of this, you just need to add the NuGet package <strong>Microsoft.Extensions.Hosting.WindowsServices</strong>, and add the method invocation <strong>UseWindowsService</strong> to the IHostBuilder fluent API:</p>
+<pre class="brush: csharp; title: ; notranslate">
+public static IHostBuilder CreateHostBuilder(string[] args) =&gt;
+	Host.CreateDefaultBuilder(args)
+		.ConfigureLogging(
+			options =&gt; options.AddFilter&lt;EventLogLoggerProvider&gt;(level =&gt; level &gt;= LogLevel.Information))
+		.ConfigureServices((hostContext, services) =&gt;
+		{
+			services.AddHostedService&lt;Worker&gt;()
+				.Configure&lt;EventLogSettings&gt;(config =&gt;
+			{
+				config.LogName = &quot;Sample Service&quot;;
+				config.SourceName = &quot;Sample Service Source&quot;;
+			});
+		}).UseWindowsService();
+</pre>
+<p>To see information level logging in the Windows event log, the filter is explicitly applied with the <code>ConfigureLogging</code> method used with the host builder.</p>
+<h2>Installing and Managing the Windows Service</h2>
+<p>After building the application, the new Windows Service can be published using <strong>dotnet publish</strong> (or using Visual Studio):</p>
+<p>dotnet publish -c Release -o c:\sampleservice</p>
+<p>To control Windows Services, the <strong>sc</strong> command can be used. Creating a new Windows Service is done using <strong>sc create</strong> passing the name of the service and the <strong>binPath</strong> parameter referencing the executable:</p>
+<p>sc create &#8220;Sample Service&#8221; binPath=c:\sampleservice\WindowsServiceSample.exe</p>
+<p>The status of the service can be queried using the <strong>Services</strong> MMC, or with the command line <strong>sc query</strong>:</p>
+<p>sc query &#8220;Sample Service&#8221;</p>
+<p>After the service is created, it is stopped and need to be started:</p>
+<p>sc start &#8220;Sample Service&#8221;</p>
+<p>To stop and delete the service, the <strong>sc stop</strong> and <strong>sc delete</strong> commands can be used.</p>
+<p>After starting the service, log information can be seen with the Windows Event Viewer:</p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2019/10/windowslogsampleservice.png" alt="Windows Event Viewer Log" /></p>
+<h2>Web Application as Windows Service</h2>
+<p>What about hosting Kestrel as a Windows Service? There&#8217;s not a lot difference &#8211; the package <strong>Microsoft.Extensions.Hosting.WindowsServices</strong> needs to be added, and the API <strong>UseWindowsService</strong> invoked.</p>
+<p>A Web API project can be created using <strong>dotnet new api</strong>. This template creates an API returning random weather information.</p>
+<p>What&#8217;s changed to run the API as a Windows Service is a call to <strong>UseWindowsService</strong>, and a configuration to what port number the server should listen to. Port 80 is not used to not get in conflict with a local IIS configuration.</p>
+<pre class="brush: csharp; title: ; notranslate">
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		CreateHostBuilder(args).Build().Run();
+	}
+
+	public static IHostBuilder CreateHostBuilder(string[] args) =&gt;
+		Host.CreateDefaultBuilder(args)
+			.ConfigureServices(services =&gt;
+			{
+				services.Configure&lt;EventLogSettings&gt;(config =&gt;
+				{
+					config.LogName = &quot;Sample API Service&quot;;
+					config.SourceName = &quot;Sample API Service Source&quot;;
+				});
+			})
+			.ConfigureWebHostDefaults(webBuilder =&gt;
+			{
+				webBuilder.UseStartup&lt;Startup&gt;();
+			})
+			.ConfigureWebHost(config =&gt; 
+			{
+				config.UseUrls(&quot;http://*:5050&quot;); 
+			}).UseWindowsService();
+}
+</pre>
+<p>Now the service can be build, published, and configured as a Windows Service. Opening a browser to reference the configured port with the controller route WeatherForecast returns JSON information from the API service:</p>
+<p><a href="http://localhost:5050/WeatherForecast" rel="nofollow">http://localhost:5050/WeatherForecast</a></p>
+<p><img src="https://csharpdotchristiannageldotcom.files.wordpress.com/2019/10/weatherforecast.png" alt="Weather Forecast" /></p>
+<blockquote><p>
+	Accessing the Windows Service from a different system, the Firewall needs to be configured to allow accessing this port from the outside.
+</p></blockquote>
+<h2>Take away</h2>
+<p>The <code>Host</code> class which allows configuration, logging, and dependency injection services configuration in one place, also offers an easy way to create Windows Services. Adding the NuGet package <strong>Microsoft.Extensions.Hosting.WindowsServices</strong> along with the extension method <strong>UseWindowsService</strong> practically is all what&#8217;s needed.</p>
+<p>This way, background functionality based on the <strong>worker</strong> template, but also hosting a Kestrel server for offering ASP.NET Core Web applications is an easy task.</p>
+<blockquote><p>
+	While Windows Services are only offered on Windows Systems, similar functionality can be offered on Linux systems. On Linux, the NuGet package <strong>Microsoft.Extensions.Hosting.SystemD</strong> along with the extension method <strong>UseSystemD</strong> can be used. Using the <strong>UseWindowsService</strong> API call on a Linux system doesn&#8217;t break the server throwing an exception, but instead it just does nothing on a Linux system. Similarly invoking <strong>UseSystemD</strong> on Windows, nothing is done. This way it&#8217;s easy to create both a Windows Service and a SystemD daemon.
+</p></blockquote>
+<p>If you&#8217;ve read this far, consider buying me a coffee which helps me staying up longer and writing more articles.</p>
+<p><a href="https://www.buymeacoffee.com/christiannagel" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height:auto !important;width:auto !important;"></a></p>
+<p>You can get the <a href="https://github.com/ProfessionalCSharp/MoreSamples">complete sample code</a>.</p>
+<p>Enjoy learning and programming!</p>
+<p>Christian</p>
+<h2>Links</h2>
+<p><a href="https://csharp.christiannagel.com/2019/03/26/usinghost/">Hosting DI Container with .NET Core 3.0</a></p>
+<p><a href="https://github.com/aspnet/Extensions/blob/master/src/Hosting/Hosting/src/Host.cs">Source Code Host class</a></p>
+<p>More information on C# and programming .NET Core applications is in my book <a href="https://csharp.christiannagel.com/2018/04/16/professionalcsharp7/">Professional C# 7 and .NET Core 2.0</a>, and in my <a href="https://cninnovation.com/Training/">workshops</a>.</p>
+<p>Windows Cleaners Image <a href="https://www.dreamstime.com/kotafoty_info">ID 24554590 © Andrey Koturanov</a> | <a href="https://www.dreamstime.com/">Dreamstime.com</a></p>
+]]>
+			</content:encoded>
+
+			<wfw:commentRss>https://csharp.christiannagel.com/2019/10/15/windowsservice/feed/</wfw:commentRss>
+			<slash:comments>22</slash:comments>
+
+
+
+			<media:thumbnail url="https://csharpdotchristiannageldotcom.files.wordpress.com/2019/10/windowsservices.jpg" />
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2019/10/windowsservices.jpg" medium="image">
+				<media:title type="html">Windows Services</media:title>
+			</media:content>
+
+			<media:content url="https://1.gravatar.com/avatar/4736273aed82148d9d3c3ca192c1cd61?s=96&#38;d=identicon&#38;r=G" medium="image">
+				<media:title type="html">christiannagel1</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2019/10/windowslogsampleservice.png" medium="image">
+				<media:title type="html">Windows Event Viewer Log</media:title>
+			</media:content>
+
+			<media:content url="https://csharpdotchristiannageldotcom.files.wordpress.com/2019/10/weatherforecast.png" medium="image">
+				<media:title type="html">Weather Forecast</media:title>
+			</media:content>
+
+			<media:content url="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" medium="image">
+				<media:title type="html">Buy Me A Coffee</media:title>
+			</media:content>
+		</item>
+	</channel>
+</rss>

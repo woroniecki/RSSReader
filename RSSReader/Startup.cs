@@ -133,9 +133,11 @@ namespace RSSReader
             app.UseSpaStaticFiles();
 
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            //It breaks the SPA
             app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
             {
-                UseApiProblemDetailsException = true
+                UseApiProblemDetailsException = true,
+                IsApiOnly = false
             });
 
             app.UseAuthentication();

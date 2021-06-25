@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using DataLayer.Models;
 using DataLayer.Code.Configs;
+using System;
 
 namespace DataLayer.Code
 {
@@ -17,20 +18,21 @@ namespace DataLayer.Code
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            //optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.LogTo(Console.WriteLine);
+            optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new IdentityUserConfig());
-            modelBuilder.ApplyConfiguration(new IdentityRoleConfig());
-            modelBuilder.ApplyConfiguration(new IdentityUserLoginConfig());
-            modelBuilder.ApplyConfiguration(new IdentityUserRoleConfig());
-            modelBuilder.ApplyConfiguration(new IdentityUserTokenConfig());
-            modelBuilder.ApplyConfiguration(new IdentityUserClaimConfig());
-            modelBuilder.ApplyConfiguration(new IdentityRoleClaimConfig());
+            //modelBuilder.ApplyConfiguration(new IdentityUserConfig());
+            //modelBuilder.ApplyConfiguration(new IdentityRoleConfig());
+            //modelBuilder.ApplyConfiguration(new IdentityUserLoginConfig());
+            //modelBuilder.ApplyConfiguration(new IdentityUserRoleConfig());
+            //modelBuilder.ApplyConfiguration(new IdentityUserTokenConfig());
+            //modelBuilder.ApplyConfiguration(new IdentityUserClaimConfig());
+            //modelBuilder.ApplyConfiguration(new IdentityRoleClaimConfig());
             modelBuilder.ApplyConfiguration(new BlogConfig());
         }
     }

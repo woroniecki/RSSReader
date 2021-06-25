@@ -24,6 +24,7 @@ using DataLayer.Models;
 using Microsoft.Extensions.Options;
 using MySql.EntityFrameworkCore.Extensions;
 using RSSReader.Config;
+using System;
 
 namespace RSSReader
 {
@@ -49,13 +50,14 @@ namespace RSSReader
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string mySqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContextPool<DataContext>(options => options
-            .UseMySQL(
-                mySqlConnectionStr,
+            string sqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");
+
+            services.AddDbContext<DataContext>(options => options
+            .UseSqlServer(
+                sqlConnectionStr,
                 b => b.MigrationsAssembly("DataLayer"))
             );
-            
+             
             services.AddDefaultIdentity<ApiUser>()
                 .AddEntityFrameworkStores<DataContext>();
 

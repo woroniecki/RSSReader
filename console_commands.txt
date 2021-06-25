@@ -12,3 +12,7 @@ enable commitinng appsettings
 git update-index --no-assume-unchanged appsettings.json
 git update-index --no-assume-unchanged appsettings.Debug.json
 git update-index --no-assume-unchanged appsettings.Development.json
+
+PUBLISH
+prod db update
+dotnet ef database update --configuration Release -s ..\RssReader\RssReader.csproj

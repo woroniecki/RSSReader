@@ -23,7 +23,7 @@ namespace DataLayer.Models
         public int PostId { get; set; }
         public Post Post { get; set; }
         public ApiUser User { get; set; }
-        public int SubscriptionId { get; set; }
+        public int? SubscriptionId { get; set; }
         public Subscription Subscription { get; set; }
     }
 }

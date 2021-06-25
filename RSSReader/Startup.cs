@@ -21,8 +21,6 @@ using DbAccess.Core;
 using RSSReader.Helpers;
 using DataLayer.Code;
 using DataLayer.Models;
-using Microsoft.Extensions.Options;
-using MySql.EntityFrameworkCore.Extensions;
 using RSSReader.Config;
 using System;
 
@@ -30,11 +28,6 @@ namespace RSSReader
 {
     public class Startup
     {
-        //public Startup(IConfiguration configuration)
-        //{
-        //    Configuration = configuration;
-        //}
-
         public IConfiguration Configuration { get; }
 
         public Startup(IWebHostEnvironment env)
@@ -154,7 +147,7 @@ namespace RSSReader
             app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
             {
                 UseApiProblemDetailsException = true,
-                IsApiOnly = false
+                IsApiOnly = true
             });
 
             app.UseAuthentication();

@@ -23,6 +23,14 @@ namespace DataLayer.Code
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new IdentityUserConfig());
+            modelBuilder.ApplyConfiguration(new IdentityRoleConfig());
+            modelBuilder.ApplyConfiguration(new IdentityUserLoginConfig());
+            modelBuilder.ApplyConfiguration(new IdentityUserRoleConfig());
+            modelBuilder.ApplyConfiguration(new IdentityUserTokenConfig());
+            modelBuilder.ApplyConfiguration(new IdentityUserClaimConfig());
+            modelBuilder.ApplyConfiguration(new IdentityRoleClaimConfig());
             modelBuilder.ApplyConfiguration(new BlogConfig());
         }
     }

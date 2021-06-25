@@ -21,26 +21,41 @@ using DbAccess.Core;
 using RSSReader.Helpers;
 using DataLayer.Code;
 using DataLayer.Models;
+using Microsoft.Extensions.Options;
+using MySql.EntityFrameworkCore.Extensions;
+using RSSReader.Config;
 
 namespace RSSReader
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        //public Startup(IConfiguration configuration)
+        //{
+        //    Configuration = configuration;
+        //}
 
         public IConfiguration Configuration { get; }
+
+        public Startup(IWebHostEnvironment env)
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .ConfigureJsonFile()
+                .AddEnvironmentVariables();
+
+            Configuration = builder.Build();
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(options => options
-                .UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly("DataLayer"))
-                );
+            string mySqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContextPool<DataContext>(options => options
+            .UseMySQL(
+                mySqlConnectionStr,
+                b => b.MigrationsAssembly("DataLayer"))
+            );
+            
             services.AddDefaultIdentity<ApiUser>()
                 .AddEntityFrameworkStores<DataContext>();
 

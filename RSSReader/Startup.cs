@@ -146,8 +146,9 @@ namespace RSSReader
             //It breaks the SPA
             app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
             {
-                UseApiProblemDetailsException = true,
-                IsApiOnly = true
+                UseApiProblemDetailsException = false,
+                IsApiOnly = false,
+                BypassHTMLValidation = true
             });
 
             app.UseAuthentication();

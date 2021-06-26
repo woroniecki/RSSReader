@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { Button, Form, FormControl, InputGroup } from 'react-bootstrap'
+import { Button, ListItemText, ListItem, ListItemIcon } from '@material-ui/core'
+import { Form, FormControl, InputGroup } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import { groupsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
+import PostAddIcon from '@material-ui/icons/PostAdd'
 import { applyValidationErrors } from 'utils/utils'
 import { useFormik } from 'formik'
 import AddGroupFormPrompt from './AddGroupFormPrompt'
@@ -41,54 +43,14 @@ export const AddGroupBtn: React.FC<AddGroupBtnProps> = props => {
 
   return (
     <>
-      <Button
-        onClick={() => {
-          setShowPrompt(true)
-        }}
-        variant="primary"
-      >
-        Add group
-      </Button>
+      <ListItem button key="Register" onClick={() => setShowPrompt(true)}>
+        <ListItemIcon>
+          <PostAddIcon />
+        </ListItemIcon>
+        <ListItemText primary="New group" />
+      </ListItem>
       {renderAddPrompt()}
     </>
-  )
-
-  return (
-    <Form id="AddSub" onSubmit={formik.handleSubmit}>
-      <InputGroup className="mb-3">
-        <InputGroup.Prepend>
-          <Button
-            //disabled={isLoading}
-            //onClick={!isLoading ? handleClick : null}
-            variant="outline-primary"
-            type="submit"
-          >
-            +
-          </Button>
-        </InputGroup.Prepend>
-        <FormControl
-          type="text"
-          aria-describedby="basic-addon1"
-          placeholder="https://exampleblog.com/feed/"
-          id="url"
-          name="url"
-          onChange={event => {
-            formik.values.name = event.target.value
-            formik.handleChange
-          }}
-          onBlur={formik.handleBlur}
-          isInvalid={
-            !!formik.touched.name &&
-            (!!formik.errors.name || !!formik.errors.global)
-          }
-          required
-        />
-        <Form.Control.Feedback type="invalid">
-          {formik.errors.global}
-          {formik.errors.name}
-        </Form.Control.Feedback>
-      </InputGroup>
-    </Form>
   )
 }
 

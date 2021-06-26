@@ -1,11 +1,10 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Button } from '@material-ui/core'
 import DeleteGroupPrompt from 'components/AppNavbar/NavbarGroups/DeleteGroupPrompt'
 import React, { useState } from 'react'
-import { Button } from 'react-bootstrap'
 import { useHistory, useParams } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { groupsSlice, subscriptionsSlice } from 'store/slices'
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import DeleteIcon from '@material-ui/icons/Delete'
 import { remove } from 'store/slices/groupsSlice'
 import { useSelector } from 'react-redux'
 import { Subscription } from 'api/api.types'
@@ -77,9 +76,8 @@ export const RemoveGroupBtn: React.FC<RemoveGroupBtnProps> = props => {
         onClick={() => {
           setShowPrompt(true)
         }}
-        variant="primary"
       >
-        <FontAwesomeIcon icon={faTrashAlt} />
+        <DeleteIcon />
       </Button>
       {renderDeletePrompt()}
     </React.Fragment>

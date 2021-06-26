@@ -9,6 +9,7 @@ import { useAppDispatch } from 'store/store'
 import AddGroupBtn from './AddGroupBtn'
 import DeleteGroupPrompt from 'components/AppNavbar/NavbarGroups/DeleteGroupPrompt'
 import RemoveGroupBtn from './RemoveGroupBtn'
+import GroupsListDropdown from './GroupsListDropdown'
 
 export interface GroupsNavlistProps {
   curGroupId: number
@@ -37,11 +38,12 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
 
   const renderAllGroup = () => {
     return (
-      <LinkContainer exact to={'/'}>
-        <NavDropdown.Item active={props.curGroupId == NaN}>
-          All
-        </NavDropdown.Item>
-      </LinkContainer>
+      <GroupsListDropdown
+        groupId={-1}
+        groupName={'All'}
+        pushTo={`/`}
+        allBlogs={true}
+      />
     )
   }
 
@@ -51,11 +53,7 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
         .length > 0
     ) {
       return (
-        <LinkContainer to={'/-1'}>
-          <NavDropdown.Item active={props.curGroupId == -1}>
-            None
-          </NavDropdown.Item>
-        </LinkContainer>
+        <GroupsListDropdown groupId={-1} groupName={'None'} pushTo={`/-1`} />
       )
     }
   }
@@ -64,23 +62,21 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
     groupsList
       .filter(el => el.id != -1)
       .map(el => (
-        <LinkContainer to={'/' + el.id.toString()} key={el.id}>
-          <NavDropdown.Item active={props.curGroupId == el.id}>
-            {el.name}
-            <RemoveGroupBtn id={el.id} curGroupId={props.curGroupId} />
-          </NavDropdown.Item>
-        </LinkContainer>
+        <GroupsListDropdown
+          key={el.id}
+          groupId={el.id}
+          groupName={el.name}
+          pushTo={`/` + el.id.toString()}
+        />
       ))
 
   return (
-    <Nav>
-      <NavDropdown title="Groups" id="collasible-nav-dropdown" alignRight>
-        {renderAllGroup()}
-        {renderNoneGroup()}
-        {renderGroupsList()}
-        <AddGroupBtn />
-      </NavDropdown>
-    </Nav>
+    <>
+      {renderAllGroup()}
+      {renderNoneGroup()}
+      {renderGroupsList()}
+      <AddGroupBtn />
+    </>
   )
 }
 

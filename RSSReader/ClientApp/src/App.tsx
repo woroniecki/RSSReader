@@ -1,7 +1,10 @@
 import logo from './logo.svg'
 import './App.css'
 import React from 'react'
+import clsx from 'clsx';
 import {} from 'styled-components'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { makeStyles } from '@material-ui/core/styles';
 import AppHome from 'components/AppHome'
 import AppNavbar from 'components/AppNavbar/AppNavbar'
 import Login from 'components/Auth/Login'
@@ -27,25 +30,71 @@ function App() {
   useGetBlogsAndSubs()
   useResetLoaderSlice()
 
+  const classes = useStyles();
+
   return (
     <>
+      <div className={classes.root}>
+      <CssBaseline />
+      
       <Switch>
         <Route exact path={['/', '/:groupId']} component={AppNavbar} />
         <Route>
           <AppNavbar />
         </Route>
       </Switch>
-      <Switch>
-        <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
-        <Route path="/blog/:id" exact component={SingleBlog} />
-        <Route path="/blog/:id/article/:articleid" component={SingleArticle} />
-        <Route exact path={['/', '/:groupId']} component={AppHome} />
-        <Route>404</Route>
-      </Switch>
+
+      <main
+        className={clsx(classes.content, {
+          [classes.contentShift]: open,
+        })}
+      >
+        <div className={classes.drawerHeader} />
+        <Switch>
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
+          <Route path="/blog/:id" exact component={SingleBlog} />
+          <Route path="/blog/:id/article/:articleid" component={SingleArticle} />
+          <Route exact path={['/', '/:groupId']} component={AppHome} />
+          <Route>404</Route>
+        </Switch>
+      </main>
+      
+      </div>
       {loader != layoutSlice.type.none && <AppSpinner />}
     </>
   )
 }
+
+const drawerWidth = 240;
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  },
+}));
 
 export default App

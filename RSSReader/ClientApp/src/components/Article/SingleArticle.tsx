@@ -4,11 +4,10 @@ import { useAppDispatch } from 'store/store'
 import parse from 'html-react-parser'
 import { articlesSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
-import { Button } from 'react-bootstrap'
 import { authSlice } from 'store/slices'
 import ArticlePatchButtons from './ArticlePatchButtons'
 import useGetArticles from './useGetArticles'
-import { Typography } from '@material-ui/core'
+import { Button, CardHeader, Divider, Typography } from '@material-ui/core'
 
 export interface SingleArticleProps {}
 
@@ -48,7 +47,7 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
     if (!url || url.length === 0) return
     return (
       <a rel="noreferrer" target="_blank" href={url}>
-        <Button variant="primary">Visit page</Button>
+        <Button>Visit page</Button>
       </a>
     )
   }
@@ -62,17 +61,24 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
 
     return (
       <>
-        <Button onClick={() => push(`/blog/${id}`)} variant="primary">
-          Return
-        </Button>
-        {renderVisitPageButton(article.url)}
-        <ArticlePatchButtons
-          blogId={article.blogId}
-          postId={article.id}
-          readed={article.readed}
-          favourite={article.favourite}
+        <CardHeader
+          action={
+            <>
+              <ArticlePatchButtons
+                blogId={article.blogId}
+                postId={article.id}
+                readed={article.readed}
+                favourite={article.favourite}
+              />
+              {renderVisitPageButton(article.url)}
+              <Button onClick={() => push(`/blog/${id}`)}>Return</Button>
+            </>
+          }
+          title={<Typography variant="h4">{article.name}</Typography>}
+          subheader={`${article.publishDate}, ${article.author}`}
         />
-        <Typography variant="h4">{article.name}</Typography>
+        <Divider />
+
         {parse(article.content)}
       </>
     )

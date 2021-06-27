@@ -12,7 +12,7 @@ import Register from 'components/Auth/Register'
 import { Router, Switch, Route } from 'react-router'
 import AppSpinner from './components/Spinner/AppSpinner'
 import { useSelector } from 'react-redux'
-import { layoutSlice } from 'store/slices'
+import { layoutSlice, navbarSlice } from 'store/slices'
 import useRefreshToken from 'components/Auth/useRefreshToken'
 import useResetTokens from 'components/Auth/useResetTokens'
 import useGetBlogsAndSubs from 'components/Blog/useGetBlogsAndSubs'
@@ -25,6 +25,7 @@ import { useHistory } from 'react-router-dom'
 
 function App() {
   const { loader } = useSelector(layoutSlice.stateSelector)
+  const { navOpen } = useSelector(navbarSlice.stateSelector)
   useRefreshToken()
   useResetTokens()
   useGetBlogsAndSubs()
@@ -46,7 +47,7 @@ function App() {
 
         <main
           className={clsx(classes.content, {
-            [classes.contentShift]: open,
+            [classes.contentShift]: navOpen,
           })}
         >
           <div className={classes.drawerHeader} />

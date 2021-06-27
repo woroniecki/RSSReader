@@ -5,43 +5,38 @@ import Drawer from '@material-ui/core/Drawer'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
-import List from '@material-ui/core/List'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
+import { useAppDispatch } from 'store/store'
 
-import { Nav, Navbar } from 'react-bootstrap'
 import { useHistory, useParams } from 'react-router-dom'
-import { layoutSlice } from 'store/slices'
+import { layoutSlice, navbarSlice } from 'store/slices'
 import UserNavbar from './UserNavbar'
 import { useSelector } from 'react-redux'
-import { Button } from '@material-ui/core'
 
 export interface AppNavbarProps {}
 
 const selectAuth = (state: { auth: any }) => state.auth
 
 export const AppNavbar: React.FC<AppNavbarProps> = props => {
+  const dispatch = useAppDispatch()
   const { push } = useHistory()
   const { loader } = useSelector(layoutSlice.stateSelector)
   const { groupId } = useParams<{ groupId: string }>()
 
   const classes = useStyles()
   const theme = useTheme()
-  const [open, setOpen] = React.useState(true)
+  const { navOpen } = useSelector(navbarSlice.stateSelector)
 
   const handleDrawerOpen = () => {
-    setOpen(true)
+    dispatch(navbarSlice.actions.setOpen(true))
   }
 
   const handleDrawerClose = () => {
-    setOpen(false)
+    dispatch(navbarSlice.actions.setOpen(false))
   }
 
   const renderNavbar = () => {
@@ -53,7 +48,7 @@ export const AppNavbar: React.FC<AppNavbarProps> = props => {
             className={classes.drawer}
             variant="persistent"
             anchor="left"
-            open={open}
+            open={navOpen}
             classes={{
               paper: classes.drawerPaper,
             }}
@@ -74,7 +69,7 @@ export const AppNavbar: React.FC<AppNavbarProps> = props => {
           <AppBar
             position="fixed"
             className={clsx(classes.appBar, {
-              [classes.appBarShift]: open,
+              [classes.appBarShift]: navOpen,
             })}
           >
             <Toolbar>
@@ -83,7 +78,7 @@ export const AppNavbar: React.FC<AppNavbarProps> = props => {
                 aria-label="open drawer"
                 onClick={handleDrawerOpen}
                 edge="start"
-                className={clsx(classes.menuButton, open && classes.hide)}
+                className={clsx(classes.menuButton, navOpen && classes.hide)}
               >
                 <ChevronRightIcon />
               </IconButton>

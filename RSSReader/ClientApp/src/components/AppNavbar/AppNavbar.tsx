@@ -31,23 +31,6 @@ export const AppNavbar: React.FC<AppNavbarProps> = props => {
   const { push } = useHistory()
   const { loader } = useSelector(layoutSlice.stateSelector)
   const { groupId } = useParams<{ groupId: string }>()
-  const renderNavar = () => {
-    if (loader != layoutSlice.type.fullScreen) {
-      return (
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-          <Navbar.Brand href="#home">RSS Reader</Navbar.Brand>
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="mr-auto"></Nav>
-            <UserNavbar curGroupId={parseInt(groupId)} />
-          </Navbar.Collapse>
-          <Button color="primary">Hello World</Button>
-        </Navbar>
-      )
-    } else {
-      return <React.Fragment></React.Fragment>
-    }
-  }
 
   const classes = useStyles()
   const theme = useTheme()
@@ -61,54 +44,62 @@ export const AppNavbar: React.FC<AppNavbarProps> = props => {
     setOpen(false)
   }
 
-  return (
-    <>
-      <CssBaseline />
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </div>
-        <Divider />
-        <UserNavbar curGroupId={parseInt(groupId)} />
-      </Drawer>
-
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
+  const renderNavbar = () => {
+    if (loader != layoutSlice.type.fullScreen) {
+      return (
+        <>
+          <CssBaseline />
+          <Drawer
+            className={classes.drawer}
+            variant="persistent"
+            anchor="left"
+            open={open}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
           >
-            <ChevronRightIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            RSS Reader
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    </>
-  )
+            <div className={classes.drawerHeader}>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === 'ltr' ? (
+                  <ChevronLeftIcon />
+                ) : (
+                  <ChevronRightIcon />
+                )}
+              </IconButton>
+            </div>
+            <Divider />
+            <UserNavbar curGroupId={parseInt(groupId)} />
+          </Drawer>
+
+          <AppBar
+            position="fixed"
+            className={clsx(classes.appBar, {
+              [classes.appBarShift]: open,
+            })}
+          >
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                className={clsx(classes.menuButton, open && classes.hide)}
+              >
+                <ChevronRightIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap>
+                RSS Reader
+              </Typography>
+            </Toolbar>
+          </AppBar>
+        </>
+      )
+    } else {
+      return <React.Fragment></React.Fragment>
+    }
+  }
+
+  return renderNavbar()
 }
 
 const drawerWidth = 240

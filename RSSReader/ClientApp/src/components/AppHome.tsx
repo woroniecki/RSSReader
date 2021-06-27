@@ -7,6 +7,7 @@ import { getSubscribtionsList } from '../api/blogApi'
 import { authSlice, subscriptionsSlice, layoutSlice } from 'store/slices'
 import { subscriptionsAdapter } from 'store/slices/subscriptionsSlice'
 import { useSelector } from 'react-redux'
+import { Typography } from '@material-ui/core'
 
 export interface AppHomeProps {}
 
@@ -42,25 +43,17 @@ export const AppHome: React.FC<AppHomeProps> = props => {
   const renderMainPage = () => {
     if (token) {
       return (
-        <div style={{ marginTop: 15 }} className="container">
+        <>
           <AddSub activeGroupId={groupId} />
           {renderBlogList()}
-        </div>
+        </>
       )
     } else if (loader == layoutSlice.type.none) {
-      return (
-        <div style={{ marginTop: 15 }} className="container">
-          MAIN PAGE
-        </div>
-      )
+      return <Typography>MAIN PAGE</Typography>
     }
   }
 
-  return (
-    <div style={{ marginTop: 15 }} className="container">
-      {renderMainPage()}
-    </div>
-  )
+  return <div>{renderMainPage()}</div>
 }
 
 export default AppHome

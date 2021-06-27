@@ -1,15 +1,27 @@
 import React from 'react'
-import { Card, Button } from 'react-bootstrap'
-import Image from 'react-bootstrap/Image'
-import { useHistory } from 'react-router-dom'
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import CardMedia from '@material-ui/core/CardMedia'
+import IconButton from '@material-ui/core/IconButton'
+import Typography from '@material-ui/core/Typography'
+import { red } from '@material-ui/core/colors'
+import { Link, useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { subscriptionsSlice, articlesSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import { BlogGroup } from './BlogGroup'
 import UnsubscribeBlogBtn from './UnsubscribeBlogBtn'
+import {
+  Avatar,
+  Button,
+  CardActions,
+  CardHeader,
+  Divider,
+  List,
+  ListItem,
+} from '@material-ui/core'
 
 export interface BlogCardProps {
   title: string
@@ -21,6 +33,9 @@ export interface BlogCardProps {
 export const BlogCard: React.FC<BlogCardProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
+
+  const classes = useStyles()
+
   const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
   const articlesList = useSelector(articlesSlice.selectAll)
 
@@ -49,12 +64,7 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
 
     if (amount <= 0) return
 
-    return (
-      <React.Fragment>
-        <FontAwesomeIcon icon={faPlus} />
-        <b>{amount}</b>
-      </React.Fragment>
-    )
+    return `New ` + amount.toString() + (amount >= 10 ? `+` : ` `)
   }
 
   function getGroupId() {
@@ -67,38 +77,67 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
     'https://www.pngfind.com/pngs/m/269-2693798_png-file-svg-blog-vector-icon-png-transparent.png'
 
   return (
-    <div className="container-fluid" style={{ marginTop: 5 }}>
-      <div className="row">
-        <div className="col-12 mt-3">
-          <Card>
-            <div className="card-horizontal">
-              <div className="img-square-wrapper">
-                <Image
-                  width={100}
-                  src={props.imageUrl ? props.imageUrl : no_blog_img_url}
-                />
-              </div>
-              <Card.Body>
-                <Card.Title>{props.title}</Card.Title>
-                <Card.Text>{props.description}</Card.Text>
-                <Button
-                  onClick={() => push(`/blog/${props.id}`)}
-                  variant="primary"
-                >
-                  Read
-                </Button>
-                <BlogGroup subId={props.id} activeGroupId={getGroupId()} />
-              </Card.Body>
-              <div className="img-square-wrapper">
-                {getUnreadedAmount()}
-                <UnsubscribeBlogBtn id={props.id} />
-              </div>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
+    <Card className={classes.root}>
+      <CardHeader
+        avatar={
+          <Avatar
+            aria-label="recipe"
+            className={classes.avatar}
+            src={props.imageUrl}
+          >
+            <Typography variant="h5">
+              {props.title.length > 0 && props.title.charAt(0)}
+            </Typography>
+          </Avatar>
+        }
+        action={
+          <>
+            {getUnreadedAmount()}
+            <UnsubscribeBlogBtn id={props.id} />
+          </>
+        }
+        title={<Typography variant="h5">{props.title}</Typography>}
+        subheader={<BlogGroup subId={props.id} activeGroupId={getGroupId()} />}
+      />
+      <Divider />
+      <CardContent>
+        <Typography variant="body2" color="textSecondary" component="p">
+          {props.description}
+        </Typography>
+      </CardContent>
+      <CardActions disableSpacing>
+        <Button onClick={() => push(`/blog/${props.id}`)}>Read</Button>
+      </CardActions>
+    </Card>
   )
 }
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      maxWidth: 845,
+      margin: '15px 5px',
+    },
+    media: {
+      height: 0,
+      paddingTop: '56.25%', // 16:9
+    },
+    expand: {
+      transform: 'rotate(0deg)',
+      marginLeft: 'auto',
+      transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest,
+      }),
+    },
+    expandOpen: {
+      transform: 'rotate(180deg)',
+    },
+    avatar: {
+      backgroundColor: red[500],
+      width: theme.spacing(7),
+      height: theme.spacing(7),
+    },
+  })
+)
 
 export default BlogCard

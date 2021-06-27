@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Button } from 'react-bootstrap'
+import IconButton from '@material-ui/core/IconButton'
+import DeleteIcon from '@material-ui/icons/Delete'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { subscriptionsSlice } from 'store/slices'
@@ -33,14 +34,14 @@ export const UnsubscribeBlogBtn: React.FC<UnsubscribeBlogBtnProps> = props => {
   }
 
   return (
-    <Button
+    <IconButton
+      aria-label="delete"
       onClick={() => {
         unsubcribeBlog(props.id)
       }}
-      variant="primary"
     >
-      {getTrashBtnBody()}
-    </Button>
+      <DeleteIcon />
+    </IconButton>
   )
 }
 

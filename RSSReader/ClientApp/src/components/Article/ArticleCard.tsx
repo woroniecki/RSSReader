@@ -11,13 +11,7 @@ import { faBook } from '@fortawesome/free-solid-svg-icons'
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons'
 import { articlesSlice } from 'store/slices'
 import ArticlePatchButtons from './ArticlePatchButtons'
-import {
-  Button,
-  CardActions,
-  CardHeader,
-  CardMedia,
-  Divider,
-} from '@material-ui/core'
+import { Button, CardActions, CardHeader, Divider } from '@material-ui/core'
 
 export interface ArticleCardProps {
   id: number
@@ -40,7 +34,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
   const blogIdNumber = parseInt(id)
 
   return (
-    <Card className={classes.root}>
+    <Card className={props.readed ? classes.rootTransparent : classes.root}>
       <CardHeader
         title={<Typography variant="h5">{props.title}</Typography>}
         subheader={
@@ -74,6 +68,11 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       maxWidth: 845,
       margin: '15px 5px',
+    },
+    rootTransparent: {
+      maxWidth: 845,
+      margin: '15px 5px',
+      opacity: 0.7,
     },
     cronerImg: {
       maxHeight: 100,

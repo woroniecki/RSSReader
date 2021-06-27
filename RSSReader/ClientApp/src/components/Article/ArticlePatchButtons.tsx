@@ -1,11 +1,12 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { useAppDispatch } from 'store/store'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar } from '@fortawesome/free-solid-svg-icons'
-import { faBook } from '@fortawesome/free-solid-svg-icons'
-import { faBookOpen } from '@fortawesome/free-solid-svg-icons'
-import { Button } from 'react-bootstrap'
+import StarIcon from '@material-ui/icons/Star'
+import MenuBookIcon from '@material-ui/icons/MenuBook'
+import ImportContactsIcon from '@material-ui/icons/ImportContacts'
+import { IconButton } from '@material-ui/core'
+import { yellow } from '@material-ui/core/colors'
 import { articlesSlice } from 'store/slices'
 
 export interface ArticlePatchButtonsProps {
@@ -18,6 +19,7 @@ export interface ArticlePatchButtonsProps {
 export const ArticlePatchButtons: React.FC<ArticlePatchButtonsProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
+  const classes = useStyles()
 
   const patchPost = async (
     blogId: number,
@@ -41,25 +43,34 @@ export const ArticlePatchButtons: React.FC<ArticlePatchButtonsProps> = props => 
 
   return (
     <React.Fragment>
-      <Button
+      <IconButton
+        aria-label="favourite"
+        className={props.favourite ? classes.starYellow : classes.star}
         onClick={() => {
           patchPost(props.blogId, props.postId, null, !props.favourite)
         }}
       >
-        <FontAwesomeIcon
-          color={props.favourite ? 'yellow' : 'white'}
-          icon={faStar}
-        />
-      </Button>
-      <Button
+        <StarIcon />
+      </IconButton>
+      <IconButton
+        aria-label="readed"
         onClick={() => {
           patchPost(props.blogId, props.postId, !props.readed, null)
         }}
       >
-        <FontAwesomeIcon icon={props.readed ? faBookOpen : faBook} />
-      </Button>
+        {props.readed ? <ImportContactsIcon /> : <MenuBookIcon />}
+      </IconButton>
     </React.Fragment>
   )
 }
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    starYellow: {
+      color: yellow[500],
+    },
+    star: {},
+  })
+)
 
 export default ArticlePatchButtons

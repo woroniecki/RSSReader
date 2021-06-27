@@ -102,7 +102,7 @@ export const AppNavbar: React.FC<AppNavbarProps> = props => {
   return renderNavbar()
 }
 
-const drawerWidth = 240
+const drawerWidth = 300
 
 const useStyles = makeStyles(theme => ({
   appBar: {

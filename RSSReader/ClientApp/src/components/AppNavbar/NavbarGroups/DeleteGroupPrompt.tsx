@@ -1,5 +1,13 @@
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+} from '@material-ui/core'
 import React, { MouseEventHandler, useState } from 'react'
-import { Button, Modal } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 
@@ -20,23 +28,23 @@ export const DeleteGroupPrompt: React.FC<DeleteGroupPromptProps> = props => {
 
   return (
     <>
-      <Modal show={true} onHide={props.onClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Delete group</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>What to do with blogs assigned to group? `</Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={props.onMove}>
-            Move to all
-          </Button>
-          <Button variant="primary" onClick={props.onDelete}>
-            Delete
-          </Button>
-          <Button variant="secondary" onClick={props.onClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <Dialog
+        open={true}
+        onClose={props.onClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Delete group</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            What to do with blogs assigned to group?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={props.onMove}>Move to all</Button>
+          <Button onClick={props.onDelete}>Delete</Button>
+          <Button onClick={props.onClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
 }

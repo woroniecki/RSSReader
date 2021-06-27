@@ -7,6 +7,7 @@ import { useAppDispatch } from 'store/store'
 import ArticleCard from '../Article/ArticleCard'
 import useGetArticles from './../Article/useGetArticles'
 import BlogAvatar from './BlogAvatar'
+import BlogGroup from './BlogGroup'
 
 export interface SingleBlogProps {}
 
@@ -62,6 +63,7 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
             </>
           }
           title={<Typography variant="h4">{sub.blog.name}</Typography>}
+          subheader={<BlogGroup subId={sub.id} activeGroupId={sub.groupId} />}
         />
       </>
     )

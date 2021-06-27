@@ -2,10 +2,7 @@ import React from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import CardMedia from '@material-ui/core/CardMedia'
-import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
-import { red } from '@material-ui/core/colors'
 import { Link, useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { subscriptionsSlice, articlesSlice } from 'store/slices'
@@ -22,6 +19,7 @@ import {
   List,
   ListItem,
 } from '@material-ui/core'
+import BlogAvatar from './BlogAvatar'
 
 export interface BlogCardProps {
   title: string
@@ -79,17 +77,7 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
   return (
     <Card className={classes.root}>
       <CardHeader
-        avatar={
-          <Avatar
-            aria-label="recipe"
-            className={classes.avatar}
-            src={props.imageUrl}
-          >
-            <Typography variant="h5">
-              {props.title.length > 0 && props.title.charAt(0)}
-            </Typography>
-          </Avatar>
-        }
+        avatar={<BlogAvatar title={props.title} imageUrl={props.imageUrl} />}
         action={
           <>
             {getUnreadedAmount()}
@@ -121,11 +109,6 @@ const useStyles = makeStyles((theme: Theme) =>
     media: {
       height: 0,
       paddingTop: '56.25%', // 16:9
-    },
-    avatar: {
-      backgroundColor: red[500],
-      width: theme.spacing(7),
-      height: theme.spacing(7),
     },
   })
 )

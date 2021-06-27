@@ -1,11 +1,12 @@
+import { Button, CardHeader, Divider, Typography } from '@material-ui/core'
 import React, { useState } from 'react'
-import { Button } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 import { subscriptionsSlice, articlesSlice, authSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import ArticleCard from '../Article/ArticleCard'
 import useGetArticles from './../Article/useGetArticles'
+import BlogAvatar from './BlogAvatar'
 
 export interface SingleBlogProps {}
 
@@ -38,6 +39,32 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
 
     const sub = subscriptionsList.find(el => el.id == subId)
     return sub
+  }
+
+  const renderHeader = () => {
+    const sub = getCurrentSub()
+    if (sub == null) return
+    return (
+      <>
+        <CardHeader
+          avatar={<BlogAvatar title={sub.blog.name} imageUrl={sub.blog.url} />}
+          action={
+            <>
+              <Button
+                className={getFilterButtonClass(sub.filterReaded)}
+                onClick={() => {
+                  patchSubscription(sub.id, !sub.filterReaded)
+                }}
+              >
+                Filtr readed
+              </Button>
+              <Button onClick={() => push('/')}>Return</Button>
+            </>
+          }
+          title={<Typography variant="h4">{sub.blog.name}</Typography>}
+        />
+      </>
+    )
   }
 
   const renderArticles = () => {
@@ -75,28 +102,10 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
     return !enabled ? 'transparent' : ''
   }
 
-  const renderSubData = () => {
-    const sub = getCurrentSub()
-    if (sub == null) return
-
-    return (
-      <Button
-        className={getFilterButtonClass(sub.filterReaded)}
-        onClick={() => {
-          patchSubscription(sub.id, !sub.filterReaded)
-        }}
-      >
-        Filtr readed
-      </Button>
-    )
-  }
-
   return (
     <div style={{ marginTop: 15 }} className="container">
-      <Button onClick={() => push('/')} variant="primary">
-        Return
-      </Button>
-      {renderSubData()}
+      {renderHeader()}
+      <Divider />
       {renderArticles()}
     </div>
   )

@@ -22,6 +22,7 @@ import SingleArticle from 'components/Article/SingleArticle'
 import { useEffect } from 'react'
 import { useAppDispatch } from 'store/store'
 import { useHistory } from 'react-router-dom'
+import { Container } from '@material-ui/core'
 
 function App() {
   const { loader } = useSelector(layoutSlice.stateSelector)
@@ -51,17 +52,19 @@ function App() {
           })}
         >
           <div className={classes.drawerHeader} />
-          <Switch>
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
-            <Route path="/blog/:id" exact component={SingleBlog} />
-            <Route
-              path="/blog/:id/article/:articleid"
-              component={SingleArticle}
-            />
-            <Route exact path={['/', '/:groupId']} component={AppHome} />
-            <Route>404</Route>
-          </Switch>
+          <Container maxWidth="md">
+            <Switch>
+              <Route path="/login" component={Login} />
+              <Route path="/register" component={Register} />
+              <Route path="/blog/:id" exact component={SingleBlog} />
+              <Route
+                path="/blog/:id/article/:articleid"
+                component={SingleArticle}
+              />
+              <Route exact path={['/', '/:groupId']} component={AppHome} />
+              <Route>404</Route>
+            </Switch>
+          </Container>
         </main>
       </div>
       {loader != layoutSlice.type.none && <AppSpinner />}
@@ -69,7 +72,7 @@ function App() {
   )
 }
 
-const drawerWidth = 240
+export const drawerWidth = 260
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',

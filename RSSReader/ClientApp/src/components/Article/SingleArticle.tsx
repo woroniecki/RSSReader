@@ -8,6 +8,7 @@ import { Button } from 'react-bootstrap'
 import { authSlice } from 'store/slices'
 import ArticlePatchButtons from './ArticlePatchButtons'
 import useGetArticles from './useGetArticles'
+import { Typography } from '@material-ui/core'
 
 export interface SingleArticleProps {}
 
@@ -60,7 +61,7 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
     if (article == null) return
 
     return (
-      <div>
+      <>
         <Button onClick={() => push(`/blog/${id}`)} variant="primary">
           Return
         </Button>
@@ -71,17 +72,13 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
           readed={article.readed}
           favourite={article.favourite}
         />
-        <h1>{article.name}</h1>
-        <div>{parse(article.content)}</div>
-      </div>
+        <Typography variant="h4">{article.name}</Typography>
+        {parse(article.content)}
+      </>
     )
   }
 
-  return (
-    <div style={{ marginTop: 15 }} className="container">
-      {renderArticle()}
-    </div>
-  )
+  return <>{renderArticle()}</>
 }
 
 export default SingleArticle

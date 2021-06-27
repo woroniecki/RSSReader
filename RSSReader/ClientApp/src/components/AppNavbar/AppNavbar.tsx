@@ -16,6 +16,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { layoutSlice, navbarSlice } from 'store/slices'
 import UserNavbar from './UserNavbar'
 import { useSelector } from 'react-redux'
+import { drawerWidth } from '../../App'
 
 export interface AppNavbarProps {}
 
@@ -96,8 +97,6 @@ export const AppNavbar: React.FC<AppNavbarProps> = props => {
 
   return renderNavbar()
 }
-
-const drawerWidth = 300
 
 const useStyles = makeStyles(theme => ({
   appBar: {

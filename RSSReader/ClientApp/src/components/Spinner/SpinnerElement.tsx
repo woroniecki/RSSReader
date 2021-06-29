@@ -1,7 +1,7 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
-import { Spinner } from 'react-bootstrap'
+import { CircularProgress } from '@material-ui/core'
 
 export interface SpinnerElementProps {
   size: number
@@ -25,9 +25,7 @@ export const SpinnerElement: React.FC<SpinnerElementProps> = props => {
     return { width: `${props.size}px`, height: `${props.size}px` }
   }
 
-  return (
-    <Spinner style={getSize()} animation="border" variant={props.variant} />
-  )
+  return <CircularProgress size={props.size} />
 }
 
 export default SpinnerElement

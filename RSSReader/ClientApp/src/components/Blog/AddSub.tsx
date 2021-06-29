@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { InputGroup, Button, FormControl, Form } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { useFormik } from 'formik'
@@ -9,6 +8,12 @@ import { applyValidationErrors } from 'utils/utils'
 import { useSelector } from 'react-redux'
 import { authSlice } from 'store/slices'
 import SpinnerElement from 'components/Spinner/SpinnerElement'
+import {
+  Button,
+  FormHelperText,
+  InputAdornment,
+  TextField,
+} from '@material-ui/core'
 
 export interface AddSubProps {
   activeGroupId: string
@@ -25,9 +30,9 @@ export const AddSub: React.FC<AddSubProps> = props => {
       global: '',
       url: '',
     },
-    //validationSchema: Yup.object().shape({
-    //  url: Yup.string().required('Required'),
-    //}),
+    validationSchema: Yup.object().shape({
+      url: Yup.string().required('Required'),
+    }),
     onSubmit: async values => {
       if (isInAction) return
       setIsInAction(true)
@@ -56,39 +61,34 @@ export const AddSub: React.FC<AddSubProps> = props => {
   }
 
   return (
-    <Form id="AddSub" onSubmit={formik.handleSubmit}>
-      <InputGroup className="mb-3">
-        <InputGroup.Prepend>
-          <Button
-            //disabled={isLoading}
-            //onClick={!isLoading ? handleClick : null}
-            variant="outline-primary"
-            type="submit"
-          >
-            {getSubmitBtnBody()}
-          </Button>
-        </InputGroup.Prepend>
-        <FormControl
-          type="text"
-          aria-describedby="basic-addon1"
-          placeholder="https://exampleblog.com/feed/"
-          id="url"
-          name="url"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.url}
-          isInvalid={
-            !!formik.touched.url &&
-            (!!formik.errors.url || !!formik.errors.global)
-          }
-          required
-        />
-        <Form.Control.Feedback type="invalid">
-          {formik.errors.global}
-          {formik.errors.url}
-        </Form.Control.Feedback>
-      </InputGroup>
-    </Form>
+    <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
+      <TextField
+        label="Subscribe"
+        fullWidth
+        type="text"
+        placeholder="https://exampleblog.com/feed/"
+        id="url"
+        name="url"
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        value={formik.values.url}
+        error={
+          !!formik.touched.url &&
+          (!!formik.errors.url || !!formik.errors.global)
+        }
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Button type="submit">{getSubmitBtnBody()}</Button>
+            </InputAdornment>
+          ),
+        }}
+      />
+      <FormHelperText error id="component-error-text">
+        {formik.errors.global}
+        {formik.errors.url}
+      </FormHelperText>
+    </form>
   )
 }
 

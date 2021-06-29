@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Button, ListItemText, ListItem, ListItemIcon } from '@material-ui/core'
-import { Form, FormControl, InputGroup } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import { groupsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'

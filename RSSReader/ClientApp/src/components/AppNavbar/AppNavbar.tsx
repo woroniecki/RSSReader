@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import { useAppDispatch } from 'store/store'
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks'
 
 import { useHistory, useParams } from 'react-router-dom'
 import { layoutSlice, navbarSlice } from 'store/slices'
@@ -83,8 +84,9 @@ export const AppNavbar: React.FC<AppNavbarProps> = props => {
               >
                 <ChevronRightIcon />
               </IconButton>
+              <LibraryBooksIcon fontSize="large" />
               <Typography variant="h6" noWrap>
-                RSS Reader
+                Feedlog
               </Typography>
             </Toolbar>
           </AppBar>

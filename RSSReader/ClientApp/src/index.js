@@ -9,6 +9,9 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import { store } from 'store/store'
 import { Provider } from 'react-redux'
 import './api/axios'
+import { ThemeProvider as StyledProvider } from 'styled-components'
+import { ThemeProvider as MuiProvider, StylesProvider } from '@material-ui/core'
+import { theme } from 'components/theme/theme'
 // A custom theme for this app
 
 const history = createBrowserHistory()
@@ -17,7 +20,13 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router history={history}>
-        <App />
+        <StyledProvider theme={theme}>
+          <StylesProvider injectFirst>
+            <MuiProvider theme={theme}>
+              <App />
+            </MuiProvider>
+          </StylesProvider>
+        </StyledProvider>{' '}
       </Router>
     </Provider>
   </React.StrictMode>,

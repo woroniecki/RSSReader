@@ -8,7 +8,33 @@ import { authSlice } from 'store/slices'
 import ArticlePatchButtons from './ArticlePatchButtons'
 import useGetArticles from './useGetArticles'
 import { Button, CardHeader, Divider, Typography } from '@material-ui/core'
+import styled from 'styled-components'
+import AppButton from 'components/layout/AppButton'
 
+const SingleArticleWrapper = styled.div`
+  img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+  }
+  pre {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: auto;
+    overflow-y: hidden;
+    font-size: 12px;
+    line-height: 20px;
+    background: #efefef;
+    border: 1px solid #777;
+    background: url(lines.png) repeat 0 0;
+    padding: 10px;
+    color: #333;
+    overflow-x: auto;
+    white-space: pre-wrap;
+  }
+`
 export interface SingleArticleProps {}
 
 export const SingleArticle: React.FC<SingleArticleProps> = props => {
@@ -47,7 +73,7 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
     if (!url || url.length === 0) return
     return (
       <a rel="noreferrer" target="_blank" href={url}>
-        <Button>Visit page</Button>
+        <AppButton weight={700}>Visit page</AppButton>
       </a>
     )
   }
@@ -78,8 +104,7 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
           subheader={`${article.publishDate}, ${article.author}`}
         />
         <Divider />
-
-        {parse(article.content)}
+        <SingleArticleWrapper>{parse(article.content)}</SingleArticleWrapper>
       </>
     )
   }

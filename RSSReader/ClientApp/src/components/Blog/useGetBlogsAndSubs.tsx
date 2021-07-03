@@ -1,6 +1,6 @@
 import React from 'react'
 import { useAppDispatch } from 'store/store'
-import { authSlice, subscriptionsSlice } from 'store/slices'
+import { authSlice, blogsSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 import { layoutSlice } from 'store/slices'
 
@@ -9,12 +9,12 @@ export const useGetBlogsAndSubs = () => {
 
   const { token } = useSelector(authSlice.stateSelector)
 
-  const fetchList = async () => {
+  const fetchSubscribedBlogs = async () => {
     dispatch(layoutSlice.actions.setLoader(layoutSlice.type.partial))
 
-    const promise = await dispatch(subscriptionsSlice.getList())
+    const promise = await dispatch(blogsSlice.getSubscribedList())
 
-    if (subscriptionsSlice.getList.fulfilled.match(promise)) {
+    if (blogsSlice.getSubscribedList.fulfilled.match(promise)) {
     } else {
     }
 
@@ -23,7 +23,7 @@ export const useGetBlogsAndSubs = () => {
 
   React.useEffect(() => {
     if (token) {
-      fetchList()
+      fetchSubscribedBlogs()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token])

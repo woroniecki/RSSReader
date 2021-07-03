@@ -29,6 +29,21 @@ export interface Blog {
   url: string
   description: string
   imageUrl: string
+  userData: BlogUserData
+}
+
+export interface BlogUserData {
+  subId: number
+  firstSubscribeDate: string
+  lastSubscribeDate: string
+  lastUnsubscribeDate: string
+  groupId: number
+  unreadedCount: number
+  filterReaded: boolean
+}
+
+export interface BlogsListResponse {
+  list: Blog[]
 }
 
 export interface Subscription {

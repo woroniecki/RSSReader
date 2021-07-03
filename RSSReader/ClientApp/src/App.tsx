@@ -56,9 +56,9 @@ function App() {
             <Switch>
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
-              <Route path="/blog/:id" exact component={SingleBlog} />
+              <Route path="/blog/:blogid" exact component={SingleBlog} />
               <Route
-                path="/blog/:id/article/:articleid"
+                path="/blog/:blogid/article/:articleid"
                 component={SingleArticle}
               />
               <Route exact path={['/', '/:groupId']} component={AppHome} />

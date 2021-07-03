@@ -4,7 +4,12 @@ import { useAppDispatch } from 'store/store'
 import { AddSub } from './Blog/AddSub'
 import { BlogCard } from './Blog/BlogCard'
 import { getSubscribtionsList } from '../api/blogApi'
-import { authSlice, subscriptionsSlice, layoutSlice } from 'store/slices'
+import {
+  authSlice,
+  subscriptionsSlice,
+  blogsSlice,
+  layoutSlice,
+} from 'store/slices'
 import { subscriptionsAdapter } from 'store/slices/subscriptionsSlice'
 import { useSelector } from 'react-redux'
 import { Typography } from '@material-ui/core'
@@ -16,26 +21,29 @@ export const AppHome: React.FC<AppHomeProps> = props => {
   const { push } = useHistory()
   const { token } = useSelector(authSlice.stateSelector)
   const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
+  const blogsList = useSelector(blogsSlice.selectAll)
   const { groupId } = useParams<{ groupId: string }>()
   const { loader } = useSelector(layoutSlice.stateSelector)
 
   const renderBlogList = () => {
     const noGroupId = parseInt(groupId)
 
-    return subscriptionsList
+    return blogsList
       .filter(
-        x =>
+        el =>
           Number.isNaN(noGroupId) ||
-          x.groupId == noGroupId ||
-          (noGroupId == -1 && x.groupId == null)
+          (el.userData != null && el.userData.groupId == noGroupId) ||
+          (el.userData != null &&
+            noGroupId == -1 &&
+            el.userData.groupId == null)
       )
       .map(el => (
         <BlogCard
           key={el.id}
-          id={el.id}
-          title={el.blog.name}
-          description={el.blog.description}
-          imageUrl={el.blog.imageUrl}
+          blogid={el.id}
+          title={el.name}
+          description={el.description}
+          imageUrl={el.imageUrl}
         />
       ))
   }

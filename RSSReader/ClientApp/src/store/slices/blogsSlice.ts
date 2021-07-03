@@ -6,30 +6,48 @@ import {
 } from '@reduxjs/toolkit'
 import * as blogApi from '../../api/blogApi'
 import {
-  Subscription,
+  Blog,
   AddSubscriptionRequest,
   PatchSubGroupRequest,
   PatchSubscriptionRequest,
 } from '../../api/api.types'
 import { RootState } from 'store/rootReducer'
-const SUBSCRIPTIONS = 'subscriptions'
+const BLOGS = 'blogs'
 
-export const subscriptionsAdapter = createEntityAdapter<Subscription>({
+export const blogsAdapter = createEntityAdapter<Blog>({
   selectId: sub => sub.id,
+})
+
+export const getSubscribedList = createAsyncThunk<
+  // Return type of the payload creator
+  Blog[],
+  // First argument to the payload creator
+  void,
+  {
+    rejectValue: string
+  }
+>(`${BLOGS}/list`, async (params, { rejectWithValue }) => {
+  try {
+    const res = await blogApi.getSubscribedBlogsList()
+    return res
+  } catch (err) {
+    return rejectWithValue(err.response.data)
+  }
 })
 
 export const postAddSubscription = createAsyncThunk<
   // Return type of the payload creator
-  Subscription,
+  Blog,
   // First argument to the payload creator
   AddSubscriptionRequest,
   {
     rejectValue: string
   }
->(`${SUBSCRIPTIONS}/addSubscription`, async (params, { rejectWithValue }) => {
+>(`${BLOGS}/addSubscription`, async (params, { rejectWithValue }) => {
   try {
     const res = await blogApi.postAddSubscribtions(params)
-    return res
+    //return res
+    return null
   } catch (err) {
     throw err.data
   }
@@ -37,16 +55,17 @@ export const postAddSubscription = createAsyncThunk<
 
 export const putUnsubscribeBlog = createAsyncThunk<
   // Return type of the payload creator
-  Subscription,
+  Blog,
   // First argument to the payload creator
   number,
   {
     rejectValue: string
   }
->(`${SUBSCRIPTIONS}/unsubscribeBlog`, async (params, { rejectWithValue }) => {
+>(`${BLOGS}/unsubscribeBlog`, async (params, { rejectWithValue }) => {
   try {
     const res = await blogApi.putUnsubscribeBlog(params)
-    return res
+    //return res
+    return null
   } catch (err) {
     throw err.data
   }
@@ -54,80 +73,87 @@ export const putUnsubscribeBlog = createAsyncThunk<
 
 export const patchGroup = createAsyncThunk<
   // Return type of the payload creator
-  Subscription,
+  Blog,
   // First argument to the payload creator
   PatchSubGroupRequest,
   {
     rejectValue: string
   }
->(`${SUBSCRIPTIONS}/patchGroup`, async (params, { rejectWithValue }) => {
+>(`${BLOGS}/patchGroup`, async (params, { rejectWithValue }) => {
   try {
     const res = await blogApi.patchSubscriptionGroup(
       params.subId,
       params.groupId
     )
-    return res
+    //return res
+    return null
   } catch (err) {
     throw err.data
   }
 })
 
 export const patchSubscription = createAsyncThunk<
-  Subscription,
+  Blog,
   PatchSubscriptionRequest,
   {
     rejectValue: string
   }
->(`${SUBSCRIPTIONS}/patchSubscription`, async (params, { rejectWithValue }) => {
+>(`${BLOGS}/patchSubscription`, async (params, { rejectWithValue }) => {
   try {
     const res = await blogApi.patchSubscription(params)
-    return res
+    //return res
+    return null
   } catch (err) {
     return rejectWithValue(err.response.data)
   }
 })
 
-const subscriptionsSlice = createSlice({
-  name: 'subscriptions',
-  initialState: subscriptionsAdapter.getInitialState(),
+const blogsSlice = createSlice({
+  name: 'blogs',
+  initialState: blogsAdapter.getInitialState(),
   reducers: {
     clear: state => {
-      subscriptionsAdapter.removeAll(state)
+      blogsAdapter.removeAll(state)
     },
     resetGroup: (state, action: PayloadAction<number>) => {
-      state.entities[action.payload].groupId = -1
+      state.entities[action.payload].userData.groupId = -1
     },
     remove: (state, action: PayloadAction<number>) => {
-      subscriptionsAdapter.removeOne(state, action.payload)
+      blogsAdapter.removeOne(state, action.payload)
     },
   },
   extraReducers: builder => {
     builder
+      .addCase(getSubscribedList.fulfilled, (state, { payload }) => {
+        blogsAdapter.setAll(state, payload)
+        // state.entities[payload.id] = payload
+        // both `state` and `action` are now correctly typed
+        // based on the slice state and the `pending` action creator
+      })
       .addCase(postAddSubscription.fulfilled, (state, { payload }) => {
-        subscriptionsAdapter.addOne(state, payload)
+        blogsAdapter.addOne(state, payload)
       })
       .addCase(putUnsubscribeBlog.fulfilled, (state, { payload }) => {
-        subscriptionsAdapter.removeOne(state, payload.id)
+        blogsAdapter.removeOne(state, payload.id)
       })
       .addCase(patchGroup.fulfilled, (state, { payload }) => {
-        state.entities[payload.id].groupId = payload.groupId
+        state.entities[payload.id].userData.groupId = payload.userData.groupId
       })
       .addCase(patchSubscription.fulfilled, (state, { payload }) => {
-        state.entities[payload.id].filterReaded = payload.filterReaded
+        state.entities[payload.id].userData.filterReaded =
+          payload.userData.filterReaded
       })
   },
 })
 
-export const { actions } = subscriptionsSlice
+export const { actions } = blogsSlice
 
-export default subscriptionsSlice.reducer
+export default blogsSlice.reducer
 
-export const stateSelector = (state: RootState) => state.subscriptionsReducer
+export const stateSelector = (state: RootState) => state.blogsReducer
 
 export const {
   selectAll,
   selectById,
   selectIds,
-} = subscriptionsAdapter.getSelectors<RootState>(
-  state => state.subscriptionsReducer
-)
+} = blogsAdapter.getSelectors<RootState>(state => state.blogsReducer)

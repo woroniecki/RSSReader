@@ -1,39 +1,29 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
-import { subscriptionsSlice, articlesSlice, authSlice } from 'store/slices'
+import { blogsSlice, articlesSlice, authSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import { layoutSlice } from 'store/slices'
 
 export const useGetArticles = () => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
-  const { id } = useParams<{ id: string }>()
+  const { blogid } = useParams<{ blogid: string }>()
   const { token } = useSelector(authSlice.stateSelector)
-  const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
+  const blogsList = useSelector(blogsSlice.selectAll)
   const articlesList = useSelector(articlesSlice.selectAll)
   const [isFiltering, setFiltering] = useState(false)
 
-  const getCurrentBlogId = () => {
-    const subId = parseInt(id)
-    if (subId == NaN) return -1
-
-    const sub = subscriptionsList.find(el => el.id == subId)
-    if (sub == null) return -1
-
-    return sub.blog.id
-  }
-
   const fetchList = async () => {
-    const blogid = getCurrentBlogId()
-    if (blogid < 0) return
+    const blogId = parseInt(blogid)
+    if (blogId == NaN) return
 
-    const list_already_taken = articlesList.find(el => el.blogId == blogid)
+    const list_already_taken = articlesList.find(el => el.blogId == blogId)
     if (list_already_taken != null) return
 
     dispatch(layoutSlice.actions.setLoader(layoutSlice.type.partial))
 
-    const promise = await dispatch(articlesSlice.getArticles(blogid))
+    const promise = await dispatch(articlesSlice.getArticles(blogId))
 
     if (articlesSlice.getArticles.fulfilled.match(promise)) {
     } else {
@@ -46,7 +36,7 @@ export const useGetArticles = () => {
       fetchList()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subscriptionsList])
+  }, [])
 
   return
 }

@@ -2,7 +2,12 @@ import { Button, CardHeader, Divider, Typography } from '@material-ui/core'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
-import { subscriptionsSlice, articlesSlice, authSlice } from 'store/slices'
+import {
+  subscriptionsSlice,
+  blogsSlice,
+  articlesSlice,
+  authSlice,
+} from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import ArticleCard from '../Article/ArticleCard'
 import useGetArticles from './../Article/useGetArticles'
@@ -14,9 +19,9 @@ export interface SingleBlogProps {}
 export const SingleBlog: React.FC<SingleBlogProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
-  const { id } = useParams<{ id: string }>()
+  const { blogid } = useParams<{ blogid: string }>()
   const { token } = useSelector(authSlice.stateSelector)
-  const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
+  const blogsList = useSelector(blogsSlice.selectAll)
   const articlesList = useSelector(articlesSlice.selectAll)
 
   useGetArticles()
@@ -34,27 +39,27 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
     }
   }
 
-  const getCurrentSub = () => {
-    const subId = parseInt(id)
-    if (subId == NaN) return null
+  const getCurrentBlog = () => {
+    const blogId = parseInt(blogid)
+    if (blogId == NaN) return null
 
-    const sub = subscriptionsList.find(el => el.id == subId)
-    return sub
+    const blog = blogsList.find(el => el.id == blogId)
+    return blog
   }
 
   const renderHeader = () => {
-    const sub = getCurrentSub()
-    if (sub == null) return
+    const blog = getCurrentBlog()
+    if (blog == null) return
     return (
       <>
         <CardHeader
-          avatar={<BlogAvatar title={sub.blog.name} imageUrl={sub.blog.url} />}
+          avatar={<BlogAvatar title={blog.name} imageUrl={blog.url} />}
           action={
             <>
               <Button
-                className={getFilterButtonClass(sub.filterReaded)}
+                className={getFilterButtonClass(blog.userData.filterReaded)}
                 onClick={() => {
-                  patchSubscription(sub.id, !sub.filterReaded)
+                  patchSubscription(blog.id, !blog.userData.filterReaded)
                 }}
               >
                 Filtr readed
@@ -62,23 +67,28 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
               <Button onClick={() => push('/')}>Return</Button>
             </>
           }
-          title={<Typography variant="h4">{sub.blog.name}</Typography>}
-          subheader={<BlogGroup subId={sub.id} activeGroupId={sub.groupId} />}
+          title={<Typography variant="h4">{blog.name}</Typography>}
+          subheader={
+            <BlogGroup
+              subId={blog.userData.subId}
+              activeGroupId={blog.userData.groupId}
+            />
+          }
         />
       </>
     )
   }
 
   const renderArticles = () => {
-    const sub = getCurrentSub()
-    if (sub == null) return
+    const blog = getCurrentBlog()
+    if (blog == null) return
+    console.log(blog.id)
 
-    const blogid = sub.blog.id
+    const blogId = blog.id
+    const filterReaded = blog.userData != null && blog.userData.filterReaded
 
     return articlesList
-      .filter(
-        el => el.blogId == blogid && (sub.filterReaded ? !el.readed : true)
-      )
+      .filter(el => el.blogId == blogId && (filterReaded ? !el.readed : true))
       .sort((a, b) => {
         return (
           new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
@@ -87,7 +97,7 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
       .map(el => (
         <ArticleCard
           key={el.id}
-          id={el.id}
+          articleid={el.id}
           title={el.name}
           summary={el.summary}
           content={el.content}

@@ -14,7 +14,7 @@ import ArticlePatchButtons from './ArticlePatchButtons'
 import { Button, CardActions, CardHeader, Divider } from '@material-ui/core'
 
 export interface ArticleCardProps {
-  id: number
+  articleid: number
   title: string
   summary: string
   content: string
@@ -28,10 +28,11 @@ export interface ArticleCardProps {
 export const ArticleCard: React.FC<ArticleCardProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
-  const { id } = useParams<{ id: string }>()
+  const { blogid } = useParams<{ blogid: string }>()
   const classes = useStyles()
 
-  const blogIdNumber = parseInt(id)
+  const blogId = parseInt(blogid)
+  if (blogId == NaN) return
 
   return (
     <Card className={props.readed ? classes.rootTransparent : classes.root}>
@@ -49,12 +50,14 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button onClick={() => push(`/blog/${id}/article/${props.id}`)}>
+        <Button
+          onClick={() => push(`/blog/${blogid}/article/${props.articleid}`)}
+        >
           Read
         </Button>
         <ArticlePatchButtons
-          blogId={blogIdNumber}
-          postId={props.id}
+          blogId={blogId}
+          postId={props.articleid}
           readed={props.readed}
           favourite={props.favourite}
         />

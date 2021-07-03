@@ -40,7 +40,7 @@ export interface SingleArticleProps {}
 export const SingleArticle: React.FC<SingleArticleProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
-  const { id } = useParams<{ id: string }>()
+  const { blogid } = useParams<{ blogid: string }>()
   const { articleid } = useParams<{ articleid: string }>()
   const articlesList = useSelector(articlesSlice.selectAll)
   const { token } = useSelector(authSlice.stateSelector)
@@ -50,7 +50,7 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
   const readPostRequest = async () => {
     const promise = await dispatch(
       articlesSlice.putReadArticle({
-        blogId: parseInt(id),
+        blogId: parseInt(blogid),
         postId: parseInt(articleid),
       })
     )
@@ -97,7 +97,7 @@ export const SingleArticle: React.FC<SingleArticleProps> = props => {
                 favourite={article.favourite}
               />
               {renderVisitPageButton(article.url)}
-              <Button onClick={() => push(`/blog/${id}`)}>Return</Button>
+              <Button onClick={() => push(`/blog/${blogid}`)}>Return</Button>
             </>
           }
           title={<Typography variant="h4">{article.name}</Typography>}

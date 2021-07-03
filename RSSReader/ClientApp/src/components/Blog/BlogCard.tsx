@@ -5,7 +5,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import { Link, useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
-import { subscriptionsSlice, articlesSlice } from 'store/slices'
+import { blogsSlice, articlesSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 
 import { BlogGroup } from './BlogGroup'
@@ -25,7 +25,7 @@ export interface BlogCardProps {
   title: string
   description: string
   imageUrl: string
-  id: number
+  blogid: number
 }
 
 export const BlogCard: React.FC<BlogCardProps> = props => {
@@ -34,30 +34,35 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
 
   const classes = useStyles()
 
-  const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
+  const blogsList = useSelector(blogsSlice.selectAll)
   const articlesList = useSelector(articlesSlice.selectAll)
 
   const updateArticlesList = async () => {
-    const list_already_taken = articlesList.find(el => el.blogId == props.id)
+    const list_already_taken = articlesList.find(
+      el => el.blogId == props.blogid
+    )
     if (list_already_taken != null) return
 
-    const promise = await dispatch(articlesSlice.getArticles(props.id))
+    const promise = await dispatch(articlesSlice.getArticles(props.blogid))
 
     if (articlesSlice.getArticles.fulfilled.match(promise)) {
     } else {
     }
   }
 
-  function getUnreadedAmount() {
-    const sub = subscriptionsList.find(el => el.id == props.id)
+  function DrawUnreadedAmount() {
+    const blog = blogsList.find(el => el.id == props.blogid)
 
-    if (sub == null) return
+    if (blog == null) return
 
-    let amount = articlesList.filter(el => el.blogId == props.id && !el.readed)
-      .length
+    if (blog.userData == null) return
 
-    if (amount <= 0 && sub.unreadedCount != null) {
-      amount = sub.unreadedCount
+    let amount = articlesList.filter(
+      el => el.blogId == props.blogid && !el.readed
+    ).length
+
+    if (amount <= 0 && blog.userData.unreadedCount != null) {
+      amount = blog.userData.unreadedCount
     }
 
     if (amount <= 0) return
@@ -65,10 +70,16 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
     return `New ` + amount.toString() + (amount >= 10 ? `+` : ` `)
   }
 
-  function getGroupId() {
-    const sub = subscriptionsList.find(el => el.id == props.id)
+  function DrawGroup() {
+    const blog = blogsList.find(el => el.id == props.blogid)
 
-    return sub != null ? sub.groupId : -1
+    if (blog == null) return
+
+    if (blog.userData == null) return
+
+    return (
+      <BlogGroup subId={props.blogid} activeGroupId={blog.userData.groupId} />
+    )
   }
 
   const no_blog_img_url =
@@ -80,12 +91,12 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
         avatar={<BlogAvatar title={props.title} imageUrl={props.imageUrl} />}
         action={
           <>
-            {getUnreadedAmount()}
-            <UnsubscribeBlogBtn id={props.id} />
+            {DrawUnreadedAmount()}
+            <UnsubscribeBlogBtn id={props.blogid} />
           </>
         }
         title={<Typography variant="h5">{props.title}</Typography>}
-        subheader={<BlogGroup subId={props.id} activeGroupId={getGroupId()} />}
+        subheader={DrawGroup()}
       />
       <Divider />
       <CardContent>
@@ -94,7 +105,7 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button onClick={() => push(`/blog/${props.id}`)}>Read</Button>
+        <Button onClick={() => push(`/blog/${props.blogid}`)}>Read</Button>
       </CardActions>
     </Card>
   )

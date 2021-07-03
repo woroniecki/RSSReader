@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DataLayer.Models;
 using DbAccess.Core;
+using Dtos.Blogs;
 using Dtos.Subscriptions;
 using LogicLayer.Blogs;
 using LogicLayer.Helpers;
@@ -62,7 +63,7 @@ namespace ServiceLayer.SubscriptionServices
             _httpService = httpService;
         }
 
-        public async Task<SubscriptionResponseDto> Subscribe(SubscribeRequestDto inData, string userId)
+        public async Task<BlogResponseDto> Subscribe(SubscribeRequestDto inData, string userId)
         {
             _getOrCreateBlogAction = new GetOrCreateBlogAction(_httpService, _unitOfWork, _mapper);
 
@@ -100,7 +101,7 @@ namespace ServiceLayer.SubscriptionServices
             if (runner.HasErrors)
                 return null;
 
-            var returned_dto = _mapper.Map<SubscriptionResponseDto>(subscription);
+            var returned_dto = _mapper.Map<BlogResponseDto>(subscription);
 
             return returned_dto;
         }
@@ -108,6 +109,6 @@ namespace ServiceLayer.SubscriptionServices
 
     public interface ISubscribeService : IValidatedService
     {
-        Task<SubscriptionResponseDto> Subscribe(SubscribeRequestDto inData, string userId);
+        Task<BlogResponseDto> Subscribe(SubscribeRequestDto inData, string userId);
     }
 }

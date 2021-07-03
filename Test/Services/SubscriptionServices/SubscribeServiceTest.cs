@@ -78,13 +78,13 @@ namespace Tests.Services.SubscriptionServices
             Assert.That(created_sub.User.Id, Is.EqualTo(user.Id));
             Assert.That(created_sub.FirstSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
             Assert.That(created_sub.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
-            Assert.That(result.Blog.Url, Is.EqualTo(url_from_data));
-            Assert.IsNull(result.GroupId);
+            Assert.That(result.Url, Is.EqualTo(url_from_data));
+            Assert.IsNull(result.UserData.GroupId);
             httpHelperService.Verify();
 
             //<--verify if posts updated-->
-            Assert.That(result.UnreadedCount, Is.EqualTo(RssConsts.POSTS_PER_CALL));
-            Assert.That(created_sub.Blog.Posts.Count, Is.EqualTo(result.UnreadedCount));
+            Assert.That(result.UserData.UnreadedCount, Is.EqualTo(RssConsts.POSTS_PER_CALL));
+            Assert.That(created_sub.Blog.Posts.Count, Is.EqualTo(result.UserData.UnreadedCount));
             Assert.That(created_sub.Blog.LastPostsRefreshDate, Is.GreaterThanOrEqualTo(start_time));
             Assert.IsNull(created_sub.GroupId);
         }
@@ -142,11 +142,11 @@ namespace Tests.Services.SubscriptionServices
             Assert.That(created_sub.Blog.Id, Is.EqualTo(blog.Id));
             Assert.That(created_sub.FirstSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
             Assert.That(created_sub.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
-            Assert.That(result.Blog.Url, Is.EqualTo(dto.BlogUrl));
-            Assert.That(result.GroupId, Is.EqualTo(dto.GroupId));
+            Assert.That(result.Url, Is.EqualTo(dto.BlogUrl));
+            Assert.That(result.UserData.GroupId, Is.EqualTo(dto.GroupId));
 
             //<--count unreaded posts-->
-            Assert.That(result.UnreadedCount, Is.EqualTo(RssConsts.POSTS_PER_CALL));//Max amount is RssConsts.POSTS_PER_CALL
+            Assert.That(result.UserData.UnreadedCount, Is.EqualTo(RssConsts.POSTS_PER_CALL));//Max amount is RssConsts.POSTS_PER_CALL
             Assert.That(created_sub.Blog.Posts.Count, Is.GreaterThanOrEqualTo(RssConsts.POSTS_PER_CALL));
             Assert.That(created_sub.GroupId, Is.EqualTo(dto.GroupId));
         }
@@ -203,10 +203,10 @@ namespace Tests.Services.SubscriptionServices
             Assert.That(created_sub.Blog.Id, Is.EqualTo(blog.Id));
             Assert.That(created_sub.FirstSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
             Assert.That(created_sub.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
-            Assert.That(result.Blog.Url, Is.EqualTo(url_from_data));
+            Assert.That(result.Url, Is.EqualTo(url_from_data));
 
             //<--count unreaded posts-->
-            Assert.That(result.UnreadedCount, Is.EqualTo(RssConsts.POSTS_PER_CALL));//Max amount is RssConsts.POSTS_PER_CALL
+            Assert.That(result.UserData.UnreadedCount, Is.EqualTo(RssConsts.POSTS_PER_CALL));//Max amount is RssConsts.POSTS_PER_CALL
             Assert.That(created_sub.Blog.Posts.Count, Is.GreaterThanOrEqualTo(RssConsts.POSTS_PER_CALL));
         }
 
@@ -271,11 +271,11 @@ namespace Tests.Services.SubscriptionServices
             Assert.That(created_sub.User.Id, Is.EqualTo(user.Id));
             Assert.That(created_sub.Blog.Id, Is.EqualTo(blog.Id));
             Assert.That(created_sub.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
-            Assert.That(result.Blog.Url, Is.EqualTo(dto.BlogUrl));
-            Assert.That(result.GroupId, Is.EqualTo(dto.GroupId));
+            Assert.That(result.Url, Is.EqualTo(dto.BlogUrl));
+            Assert.That(result.UserData.GroupId, Is.EqualTo(dto.GroupId));
 
             //<--count unreaded posts-->
-            Assert.That(result.UnreadedCount, Is.EqualTo(1));
+            Assert.That(result.UserData.UnreadedCount, Is.EqualTo(1));
             Assert.That(created_sub.GroupId, Is.EqualTo(dto.GroupId));
             Assert.That(created_sub.GroupId, Is.EqualTo(dto.GroupId));
         }
@@ -344,11 +344,11 @@ namespace Tests.Services.SubscriptionServices
             Assert.That(created_sub.User.Id, Is.EqualTo(user.Id));
             Assert.That(created_sub.Blog.Id, Is.EqualTo(blog.Id));
             Assert.That(created_sub.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
-            Assert.That(result.Blog.Url, Is.EqualTo(dto.BlogUrl));
-            Assert.That(result.GroupId, Is.EqualTo(dto.GroupId));
+            Assert.That(result.Url, Is.EqualTo(dto.BlogUrl));
+            Assert.That(result.UserData.GroupId, Is.EqualTo(dto.GroupId));
 
             //<--count unreaded posts-->
-            Assert.That(result.UnreadedCount, Is.EqualTo(1));
+            Assert.That(result.UserData.UnreadedCount, Is.EqualTo(1));
             Assert.That(created_sub.GroupId, Is.EqualTo(dto.GroupId));
         }
 

@@ -39,10 +39,13 @@ namespace Tests.Services.SubscriptionServices
             var user = new ApiUser();
             _context.Add(user);
 
+            var blog = new Blog();
+            _context.Add(blog);
+
             var group_to_set = new Group() { User = user };
             _context.Add(group_to_set);
 
-            var sub = new Subscription() { UserId = user.Id, Group = null };
+            var sub = new Subscription() { UserId = user.Id, Group = null, Blog = blog };
             _context.Add(sub);
 
             _context.SaveChanges();
@@ -52,7 +55,8 @@ namespace Tests.Services.SubscriptionServices
             var result = await service.SetGroup(sub.Id, group_to_set.Id, user.Id);
 
             //ASSERT
-            Assert.That(result.GroupId, Is.EqualTo(group_to_set.Id));
+            Assert.That(result.Id, Is.EqualTo(blog.Id));
+            Assert.That(result.UserData.GroupId, Is.EqualTo(group_to_set.Id));
             var edited_sub = _context.Subscriptions.First(x => x.Id == sub.Id);
             Assert.That(edited_sub.GroupId, Is.EqualTo(group_to_set.Id));
         }
@@ -64,10 +68,13 @@ namespace Tests.Services.SubscriptionServices
             var user = new ApiUser();
             _context.Add(user);
 
+            var blog = new Blog();
+            _context.Add(blog);
+
             var group_to_set = new Group() { User = user };
             _context.Add(group_to_set);
 
-            var sub = new Subscription() { UserId = user.Id, GroupId = group_to_set.Id };
+            var sub = new Subscription() { UserId = user.Id, GroupId = group_to_set.Id, Blog = blog };
             _context.Add(sub);
 
             _context.SaveChanges();
@@ -78,7 +85,8 @@ namespace Tests.Services.SubscriptionServices
             var result = await service.SetGroup(sub.Id, -1, user.Id);
 
             //ASSERT
-            Assert.IsNull(result.GroupId);
+            Assert.That(result.Id, Is.EqualTo(blog.Id));
+            Assert.IsNull(result.UserData.GroupId);
             var edited_sub = _context.Subscriptions.Include(x => x.Group).First(x => x.Id == sub.Id);
             Assert.IsNull(edited_sub.GroupId);
         }
@@ -111,7 +119,7 @@ namespace Tests.Services.SubscriptionServices
             var user = new ApiUser();
             _context.Add(user);
 
-            var sub = new Subscription() { UserId = user.Id };
+            var sub = new Subscription() { UserId = user.Id, Blog = new Blog() };
             _context.Add(sub);
 
 
@@ -138,7 +146,7 @@ namespace Tests.Services.SubscriptionServices
             var group_to_set = new Group() { User = user };
             _context.Add(group_to_set);
 
-            var sub = new Subscription() { UserId = user2.Id };
+            var sub = new Subscription() { UserId = user2.Id, Blog = new Blog() };
             _context.Add(sub);
 
             _context.SaveChanges();
@@ -164,7 +172,7 @@ namespace Tests.Services.SubscriptionServices
             var group_to_set = new Group() { User = user2 };
             _context.Add(group_to_set);
 
-            var sub = new Subscription() { UserId = user.Id };
+            var sub = new Subscription() { UserId = user.Id, Blog = new Blog() };
             _context.Add(sub);
 
             _context.SaveChanges();

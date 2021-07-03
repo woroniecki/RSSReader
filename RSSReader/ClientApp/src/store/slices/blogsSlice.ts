@@ -84,8 +84,7 @@ export const patchGroup = createAsyncThunk<
       params.subId,
       params.groupId
     )
-    //return res
-    return null
+    return res
   } catch (err) {
     throw err.data
   }

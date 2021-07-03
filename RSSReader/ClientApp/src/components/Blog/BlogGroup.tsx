@@ -2,7 +2,7 @@ import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { useHistory, useParams } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
-import { groupsSlice, subscriptionsSlice } from 'store/slices'
+import { groupsSlice, blogsSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 import { FormControl, MenuItem, Select } from '@material-ui/core'
 
@@ -29,7 +29,7 @@ export const BlogGroup: React.FC<BlogGroupProps> = props => {
     if (groupId == props.activeGroupId) return
 
     const promise = await dispatch(
-      subscriptionsSlice.patchGroup({
+      blogsSlice.patchGroup({
         subId: props.subId,
         groupId: groupId,
       })

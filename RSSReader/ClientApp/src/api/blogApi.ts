@@ -130,7 +130,7 @@ export const patchSubscriptionGroup = async (
         `/set_group/` +
         newGroupId.toString()
     )
-    return res.data.result as Subscription
+    return res.data.result as Blog
   } catch (error) {
     throw error.response
   }

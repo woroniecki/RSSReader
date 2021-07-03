@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DataLayer.Models;
 using DbAccess.Core;
+using Dtos.Blogs;
 using Dtos.Subscriptions;
 using LogicLayer.Subscriptions;
 using ServiceLayer._Commons;
@@ -26,7 +27,7 @@ namespace ServiceLayer.SubscriptionServices
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<SubscriptionResponseDto> SetGroup(int subId, int groupId, string userId)
+        public async Task<BlogResponseDto> SetGroup(int subId, int groupId, string userId)
         {
             var sub = await _unitOfWork.SubscriptionRepo.GetByIdWithUser(subId);
 
@@ -38,7 +39,7 @@ namespace ServiceLayer.SubscriptionServices
             if (result == null || runner.HasErrors)
                 return null;
 
-            var returned_dto = _mapper.Map<Subscription, SubscriptionResponseDto>(result);
+            var returned_dto = _mapper.Map<Subscription, BlogResponseDto>(result);
 
             return returned_dto;
         }
@@ -46,6 +47,6 @@ namespace ServiceLayer.SubscriptionServices
 
     public interface ISubscriptionSetGroupService : IValidatedService
     {
-        Task<SubscriptionResponseDto> SetGroup(int subId, int groupId, string userId);
+        Task<BlogResponseDto> SetGroup(int subId, int groupId, string userId);
     }
 }

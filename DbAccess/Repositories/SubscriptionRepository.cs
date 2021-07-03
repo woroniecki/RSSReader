@@ -95,6 +95,7 @@ namespace DbAccess.Repositories
         {
             return await _context.Subscriptions
                 .Include(x => x.User)
+                .Include(x => x.Blog)
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
         }

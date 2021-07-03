@@ -18,26 +18,6 @@ export const subscriptionsAdapter = createEntityAdapter<Subscription>({
   selectId: sub => sub.id,
 })
 
-export const patchGroup = createAsyncThunk<
-  // Return type of the payload creator
-  Subscription,
-  // First argument to the payload creator
-  PatchSubGroupRequest,
-  {
-    rejectValue: string
-  }
->(`${SUBSCRIPTIONS}/patchGroup`, async (params, { rejectWithValue }) => {
-  try {
-    const res = await blogApi.patchSubscriptionGroup(
-      params.subId,
-      params.groupId
-    )
-    return res
-  } catch (err) {
-    throw err.data
-  }
-})
-
 export const patchSubscription = createAsyncThunk<
   Subscription,
   PatchSubscriptionRequest,
@@ -68,13 +48,9 @@ const subscriptionsSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder
-      .addCase(patchGroup.fulfilled, (state, { payload }) => {
-        state.entities[payload.id].groupId = payload.groupId
-      })
-      .addCase(patchSubscription.fulfilled, (state, { payload }) => {
-        state.entities[payload.id].filterReaded = payload.filterReaded
-      })
+    builder.addCase(patchSubscription.fulfilled, (state, { payload }) => {
+      state.entities[payload.id].filterReaded = payload.filterReaded
+    })
   },
 })
 

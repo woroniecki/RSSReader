@@ -2,7 +2,6 @@ import env from 'react-dotenv'
 import axios from 'api/axios'
 import {
   Blog,
-  Subscription,
   AddSubscriptionRequest,
   Post,
   PatchPostRequest,
@@ -16,15 +15,6 @@ export const getSubscribedBlogsList = async () => {
   try {
     const res = await axios.get(`/api/blog/subscribedList`)
     return res.data.result as Blog[]
-  } catch (error) {
-    throw error.response
-  }
-}
-
-export const getSubscribtionsList = async () => {
-  try {
-    const res = await axios.get(`/api/subscription/list`)
-    return res.data.result as Subscription[]
   } catch (error) {
     throw error.response
   }

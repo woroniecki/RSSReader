@@ -7,7 +7,7 @@ import { groupsSlice, blogsSlice } from 'store/slices'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { remove } from 'store/slices/groupsSlice'
 import { useSelector } from 'react-redux'
-import { Blog, Subscription } from 'api/api.types'
+import { Blog } from 'api/api.types'
 
 export interface RemoveGroupBtnProps {
   id: number

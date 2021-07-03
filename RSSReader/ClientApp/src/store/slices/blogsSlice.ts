@@ -99,8 +99,7 @@ export const patchSubscription = createAsyncThunk<
 >(`${BLOGS}/patchSubscription`, async (params, { rejectWithValue }) => {
   try {
     const res = await blogApi.patchSubscription(params)
-    //return res
-    return null
+    return res
   } catch (err) {
     return rejectWithValue(err.response.data)
   }

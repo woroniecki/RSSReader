@@ -36,7 +36,7 @@ export const useGetArticles = () => {
       fetchList()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [blogsList])
 
   return
 }

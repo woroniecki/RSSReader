@@ -18,21 +18,6 @@ export const subscriptionsAdapter = createEntityAdapter<Subscription>({
   selectId: sub => sub.id,
 })
 
-export const patchSubscription = createAsyncThunk<
-  Subscription,
-  PatchSubscriptionRequest,
-  {
-    rejectValue: string
-  }
->(`${SUBSCRIPTIONS}/patchSubscription`, async (params, { rejectWithValue }) => {
-  try {
-    const res = await blogApi.patchSubscription(params)
-    return res
-  } catch (err) {
-    return rejectWithValue(err.response.data)
-  }
-})
-
 const subscriptionsSlice = createSlice({
   name: 'subscriptions',
   initialState: subscriptionsAdapter.getInitialState(),
@@ -46,11 +31,6 @@ const subscriptionsSlice = createSlice({
     remove: (state, action: PayloadAction<number>) => {
       subscriptionsAdapter.removeOne(state, action.payload)
     },
-  },
-  extraReducers: builder => {
-    builder.addCase(patchSubscription.fulfilled, (state, { payload }) => {
-      state.entities[payload.id].filterReaded = payload.filterReaded
-    })
   },
 })
 

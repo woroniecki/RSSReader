@@ -2,12 +2,7 @@ import { Button, CardHeader, Divider, Typography } from '@material-ui/core'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
-import {
-  subscriptionsSlice,
-  blogsSlice,
-  articlesSlice,
-  authSlice,
-} from 'store/slices'
+import { blogsSlice, articlesSlice, authSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import ArticleCard from '../Article/ArticleCard'
 import useGetArticles from './../Article/useGetArticles'
@@ -28,7 +23,7 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
 
   const patchSubscription = async (subId: number, filterReaded: boolean) => {
     const promise = await dispatch(
-      subscriptionsSlice.patchSubscription({
+      blogsSlice.patchSubscription({
         subId: subId,
         filterReaded: filterReaded,
       })
@@ -59,7 +54,10 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
               <Button
                 className={getFilterButtonClass(blog.userData.filterReaded)}
                 onClick={() => {
-                  patchSubscription(blog.id, !blog.userData.filterReaded)
+                  patchSubscription(
+                    blog.userData.subId,
+                    !blog.userData.filterReaded
+                  )
                 }}
               >
                 Filtr readed

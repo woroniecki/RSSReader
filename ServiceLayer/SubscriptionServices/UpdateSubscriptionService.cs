@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DataLayer.Models;
 using DbAccess.Core;
+using Dtos.Blogs;
 using Dtos.Subscriptions;
 using LogicLayer.Subscriptions;
 using ServiceLayer._Commons;
@@ -26,7 +27,7 @@ namespace ServiceLayer.SubscriptionServices
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<SubscriptionResponseDto> Update(int subId, string userId, UpdateSubscriptionRequestDto inData)
+        public async Task<BlogResponseDto> Update(int subId, string userId, UpdateSubscriptionRequestDto inData)
         {
             _action = new UpdateSubscriptionAction(userId, subId, _unitOfWork);
 
@@ -39,7 +40,7 @@ namespace ServiceLayer.SubscriptionServices
                 return null;
             }
 
-            var response_dto = _mapper.Map<SubscriptionResponseDto>(result);
+            var response_dto = _mapper.Map<BlogResponseDto>(result);
 
             return response_dto;
         }
@@ -47,6 +48,6 @@ namespace ServiceLayer.SubscriptionServices
 
     public interface IUpdateSubscriptionService : IValidatedService
     {
-        Task<SubscriptionResponseDto> Update(int subId, string userId, UpdateSubscriptionRequestDto inData);
+        Task<BlogResponseDto> Update(int subId, string userId, UpdateSubscriptionRequestDto inData);
     }
 }

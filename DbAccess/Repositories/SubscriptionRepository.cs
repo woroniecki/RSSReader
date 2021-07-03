@@ -91,10 +91,18 @@ namespace DbAccess.Repositories
             return result.Select(x => x.Subscription);
         }
 
-        public async Task<Subscription> GetByIdWithUser(int id)
+        public async Task<Subscription> GetByIdWithUserAndBlog(int id)
         {
             return await _context.Subscriptions
                 .Include(x => x.User)
+                .Include(x => x.Blog)
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Subscription> GetByIdWithBlog(int id)
+        {
+            return await _context.Subscriptions
                 .Include(x => x.Blog)
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
@@ -123,6 +131,7 @@ namespace DbAccess.Repositories
         Task<Subscription> GetAndCountUnreaded(string user, Blog blog, int posts_amount);
         Task<Subscription> GetByUserIdAndBlogId(string userId, int blogId);
         Task<IEnumerable<Subscription>> GetListByUserId(string userId, int posts_amount);
-        Task<Subscription> GetByIdWithUser(int id);
+        Task<Subscription> GetByIdWithUserAndBlog(int id);
+        Task<Subscription> GetByIdWithBlog(int id);
     }
 }

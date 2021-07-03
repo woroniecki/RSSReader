@@ -24,7 +24,7 @@ namespace LogicLayer.Subscriptions
 
         public async Task<Subscription> ActionAsync(UpdateSubscriptionRequestDto dto)
         {
-            var sub = await _unitOfWork.SubscriptionRepo.GetByID(_subId);
+            var sub = await _unitOfWork.SubscriptionRepo.GetByIdWithBlog(_subId);
 
             if(sub == null)
             {

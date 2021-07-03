@@ -142,7 +142,7 @@ export const patchSubscription = async (data: PatchSubscriptionRequest) => {
       `/api/subscription/` + data.subId.toString() + `/update`,
       data
     )
-    return res.data.result as Subscription
+    return res.data.result as Blog
   } catch (error) {
     throw error.response
   }

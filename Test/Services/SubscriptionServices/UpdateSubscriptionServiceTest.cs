@@ -55,7 +55,8 @@ namespace Tests.Services.SubscriptionServices
             var result = await service.Update(sub.Id, user.Id, dto);
 
             //ASSERT
-            Assert.That(result.FilterReaded, Is.EqualTo(dto.FilterReaded));
+            Assert.That(result.Id, Is.EqualTo(blog.Id));
+            Assert.That(result.UserData.FilterReaded, Is.EqualTo(dto.FilterReaded));
             var sub_result = _context.Subscriptions.FirstOrDefault(x => x.Id == sub.Id);
             Assert.That(sub_result.FilterReaded, Is.EqualTo(dto.FilterReaded));
         }
@@ -83,7 +84,8 @@ namespace Tests.Services.SubscriptionServices
             var result = await service.Update(sub.Id, user.Id, dto);
 
             //ASSERT
-            Assert.That(result.FilterReaded, Is.EqualTo(dto.FilterReaded));
+            Assert.That(result.Id, Is.EqualTo(blog.Id));
+            Assert.That(result.UserData.FilterReaded, Is.EqualTo(dto.FilterReaded));
             var sub_result = _context.Subscriptions.FirstOrDefault(x => x.Id == sub.Id);
             Assert.That(sub_result.FilterReaded, Is.EqualTo(dto.FilterReaded));
         }
@@ -111,7 +113,8 @@ namespace Tests.Services.SubscriptionServices
             var result = await service.Update(sub.Id, user.Id, dto);
 
             //ASSERT
-            Assert.That(result.FilterReaded, Is.EqualTo(dto.FilterReaded));
+            Assert.That(result.Id, Is.EqualTo(blog.Id));
+            Assert.That(result.UserData.FilterReaded, Is.EqualTo(dto.FilterReaded));
             var sub_result = _context.Subscriptions.FirstOrDefault(x => x.Id == sub.Id);
             Assert.That(sub_result.FilterReaded, Is.EqualTo(dto.FilterReaded));
         }

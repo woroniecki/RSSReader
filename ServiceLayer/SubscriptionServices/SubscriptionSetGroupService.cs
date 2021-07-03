@@ -29,7 +29,7 @@ namespace ServiceLayer.SubscriptionServices
 
         public async Task<BlogResponseDto> SetGroup(int subId, int groupId, string userId)
         {
-            var sub = await _unitOfWork.SubscriptionRepo.GetByIdWithUser(subId);
+            var sub = await _unitOfWork.SubscriptionRepo.GetByIdWithUserAndBlog(subId);
 
             _action = new SetGroupOfSubscriptionAction(sub, userId, _unitOfWork);
 

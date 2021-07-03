@@ -21,17 +21,7 @@ export const subscriptionsAdapter = createEntityAdapter<Subscription>({
 const subscriptionsSlice = createSlice({
   name: 'subscriptions',
   initialState: subscriptionsAdapter.getInitialState(),
-  reducers: {
-    clear: state => {
-      subscriptionsAdapter.removeAll(state)
-    },
-    resetGroup: (state, action: PayloadAction<number>) => {
-      state.entities[action.payload].groupId = -1
-    },
-    remove: (state, action: PayloadAction<number>) => {
-      subscriptionsAdapter.removeOne(state, action.payload)
-    },
-  },
+  reducers: {},
 })
 
 export const { actions } = subscriptionsSlice

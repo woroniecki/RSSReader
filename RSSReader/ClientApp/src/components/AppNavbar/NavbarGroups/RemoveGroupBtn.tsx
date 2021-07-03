@@ -3,11 +3,11 @@ import DeleteGroupPrompt from 'components/AppNavbar/NavbarGroups/DeleteGroupProm
 import React, { useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
-import { groupsSlice, subscriptionsSlice } from 'store/slices'
+import { groupsSlice, blogsSlice } from 'store/slices'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { remove } from 'store/slices/groupsSlice'
 import { useSelector } from 'react-redux'
-import { Subscription } from 'api/api.types'
+import { Blog, Subscription } from 'api/api.types'
 
 export interface RemoveGroupBtnProps {
   id: number
@@ -17,21 +17,21 @@ export interface RemoveGroupBtnProps {
 export const RemoveGroupBtn: React.FC<RemoveGroupBtnProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
-  const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
+  const blogsList = useSelector(blogsSlice.selectAll)
   const [showPrompt, setShowPrompt] = useState(false)
 
-  const getSubs = () => {
-    const subs: Subscription[] = []
+  const getBlogs = () => {
+    const blogs: Blog[] = []
 
-    subscriptionsList
-      .filter(x => x.groupId == props.id)
-      .map(el => subs.push(el))
+    blogsList
+      .filter(x => x.userData.groupId == props.id)
+      .map(el => blogs.push(el))
 
-    return subs
+    return blogs
   }
 
   const removeGroup = async (id: number, moveSubsToAll: boolean) => {
-    const subs_to_change = getSubs()
+    const subs_to_change = getBlogs()
 
     const promise = await dispatch(
       groupsSlice.remove({
@@ -44,12 +44,12 @@ export const RemoveGroupBtn: React.FC<RemoveGroupBtnProps> = props => {
       if (moveSubsToAll) {
         //reset all unknown groups
         for (const sub of subs_to_change) {
-          dispatch(subscriptionsSlice.actions.resetGroup(sub.id))
+          dispatch(blogsSlice.actions.resetGroup(sub.id))
         }
       } else {
         //remove all subs with unknown group
         for (const sub of subs_to_change) {
-          dispatch(subscriptionsSlice.actions.remove(sub.id))
+          dispatch(blogsSlice.actions.remove(sub.id))
         }
       }
 

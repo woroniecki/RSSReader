@@ -10,7 +10,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore'
 import Divider from '@material-ui/core/Divider'
 import { useSelector } from 'react-redux'
 import { authSlice } from 'store/slices'
-import { subscriptionsSlice } from 'store/slices'
+import { blogsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import GroupsNavlist from './NavbarGroups/GroupsNavlist'
 import {
@@ -41,7 +41,7 @@ export const UserNavbar: React.FC<UserNavbarProps> = props => {
 
   function OnLogout() {
     dispatch(authSlice.actions.logout())
-    dispatch(subscriptionsSlice.actions.clear())
+    dispatch(blogsSlice.actions.clear())
   }
 
   if (!userName) {

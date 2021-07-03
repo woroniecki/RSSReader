@@ -3,14 +3,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { AddSub } from './Blog/AddSub'
 import { BlogCard } from './Blog/BlogCard'
-import { getSubscribtionsList } from '../api/blogApi'
-import {
-  authSlice,
-  subscriptionsSlice,
-  blogsSlice,
-  layoutSlice,
-} from 'store/slices'
-import { subscriptionsAdapter } from 'store/slices/subscriptionsSlice'
+import { authSlice, blogsSlice, layoutSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 import { Typography } from '@material-ui/core'
 
@@ -20,7 +13,6 @@ export const AppHome: React.FC<AppHomeProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
   const { token } = useSelector(authSlice.stateSelector)
-  const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
   const blogsList = useSelector(blogsSlice.selectAll)
   const { groupId } = useParams<{ groupId: string }>()
   const { loader } = useSelector(layoutSlice.stateSelector)

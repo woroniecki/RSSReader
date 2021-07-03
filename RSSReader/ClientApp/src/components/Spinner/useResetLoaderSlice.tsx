@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useAppDispatch } from 'store/store'
-import { authSlice, subscriptionsSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 import { layoutSlice } from 'store/slices'
 import { useHistory } from 'react-router-dom'

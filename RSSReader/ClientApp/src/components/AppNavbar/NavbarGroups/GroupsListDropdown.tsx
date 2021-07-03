@@ -11,7 +11,7 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { useStyles } from '../UserNavbar'
-import { subscriptionsSlice } from 'store/slices'
+import { blogsSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 import RemoveGroupBtn from './RemoveGroupBtn'
 
@@ -25,7 +25,7 @@ export interface GroupsListDropdownProps {
 export const GroupsListDropdown: React.FC<GroupsListDropdownProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
-  const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
+  const blogsList = useSelector(blogsSlice.selectAll)
 
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
@@ -36,11 +36,11 @@ export const GroupsListDropdown: React.FC<GroupsListDropdownProps> = props => {
   }
 
   const renderBlogs = () => {
-    return subscriptionsList
+    return blogsList
       .filter(
         el =>
-          el.groupId == props.groupId ||
-          (props.groupId == -1 && el.groupId == null) ||
+          el.userData.groupId == props.groupId ||
+          (props.groupId == -1 && el.userData.groupId == null) ||
           props.allBlogs
       )
       .map(el => (
@@ -51,7 +51,7 @@ export const GroupsListDropdown: React.FC<GroupsListDropdownProps> = props => {
           onClick={() => push(`/blog/` + el.id.toString())}
         >
           <ListItemIcon></ListItemIcon>
-          <ListItemText primary={el.blog.name} />
+          <ListItemText primary={el.name} />
         </ListItem>
       ))
     //

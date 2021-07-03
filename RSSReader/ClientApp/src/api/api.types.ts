@@ -46,21 +46,6 @@ export interface BlogsListResponse {
   list: Blog[]
 }
 
-export interface Subscription {
-  id: number
-  blog: Blog
-  firstSubscribeDate: string
-  lastSubscribeDate: string
-  lastUnsubscribeDate: string
-  groupId: number
-  unreadedCount: number
-  filterReaded: boolean
-}
-
-export interface SubscriptionsListResponse {
-  list: Subscription[]
-}
-
 export interface AddSubscriptionRequest {
   blogUrl: string
   GroupId: number

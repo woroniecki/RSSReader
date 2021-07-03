@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
-import { authSlice, groupsSlice, subscriptionsSlice } from 'store/slices'
+import { authSlice, groupsSlice, blogsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import AddGroupBtn from './AddGroupBtn'
 import GroupsListDropdown from './GroupsListDropdown'
@@ -16,7 +16,7 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
   const { push } = useHistory()
   const { token } = useSelector(authSlice.stateSelector)
   const groupsList = useSelector(groupsSlice.selectAll)
-  const subscriptionsList = useSelector(subscriptionsSlice.selectAll)
+  const blogsList = useSelector(blogsSlice.selectAll)
 
   const fetchList = async () => {
     const promise = await dispatch(groupsSlice.getList())
@@ -45,8 +45,9 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
 
   const renderNoneGroup = () => {
     if (
-      subscriptionsList.filter(x => x.groupId == -1 || x.groupId == null)
-        .length > 0
+      blogsList.filter(
+        x => x.userData.groupId == -1 || x.userData.groupId == null
+      ).length > 0
     ) {
       return (
         <GroupsListDropdown groupId={-1} groupName={'None'} pushTo={`/-1`} />

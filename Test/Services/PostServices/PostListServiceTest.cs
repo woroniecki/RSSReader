@@ -109,7 +109,7 @@ namespace Tests.Services.PostServices
         }
 
         [Test]
-        public async Task GetList_CantFindUserWithProvidedId_Null()
+        public async Task GetList_CantFindUserWithProvidedId_ListOfPostsWithoutData()
         {
             //ARRANGE
             var blog = new Blog() { LastPostsRefreshDate = DateTime.UtcNow };
@@ -127,8 +127,7 @@ namespace Tests.Services.PostServices
             var result = await service.GetList("0", blog.Id, 0);
 
             //ASSERT
-            Assert.IsNull(result);
-            Assert.That(service.Errors.Count, Is.EqualTo(1));
+            Assert.Null(result);
         }
 
         [Test]

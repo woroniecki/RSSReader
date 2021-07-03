@@ -18,6 +18,17 @@ namespace RSSReader.Helpers
             CreateMap<Group, GroupResponseDto>();
             CreateMap<AddGroupRequestDto, Group>();
             CreateMap<Blog, BlogResponseDto>();
+
+            CreateMap<Subscription, UserBlogDataDto>()
+                .ForMember(dest => dest.SubId, opt => opt.MapFrom(src => src.Id));
+            CreateMap<Subscription, BlogResponseDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Blog.Id))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Blog.Name))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Blog.Description))
+                .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.Blog.Url))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Blog.ImageUrl))
+                .ForMember(dest => dest.UserData, opt => opt.MapFrom(src => src));
+
             CreateMap<Subscription, SubscriptionResponseDto>()
                 .ForMember(
                     dest => dest.GroupId,

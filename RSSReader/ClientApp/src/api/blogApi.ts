@@ -33,7 +33,7 @@ export const getSubscribtionsList = async () => {
 export const postAddSubscribtions = async (data: AddSubscriptionRequest) => {
   try {
     const res = await axios.post(`/api/subscription/subscribe`, data)
-    return res.data.result as Subscription
+    return res.data.result as Blog
   } catch (error) {
     throw error.response
   }

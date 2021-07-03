@@ -18,23 +18,6 @@ export const subscriptionsAdapter = createEntityAdapter<Subscription>({
   selectId: sub => sub.id,
 })
 
-export const postAddSubscription = createAsyncThunk<
-  // Return type of the payload creator
-  Subscription,
-  // First argument to the payload creator
-  AddSubscriptionRequest,
-  {
-    rejectValue: string
-  }
->(`${SUBSCRIPTIONS}/addSubscription`, async (params, { rejectWithValue }) => {
-  try {
-    const res = await blogApi.postAddSubscribtions(params)
-    return res
-  } catch (err) {
-    throw err.data
-  }
-})
-
 export const putUnsubscribeBlog = createAsyncThunk<
   // Return type of the payload creator
   Subscription,
@@ -103,9 +86,6 @@ const subscriptionsSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(postAddSubscription.fulfilled, (state, { payload }) => {
-        subscriptionsAdapter.addOne(state, payload)
-      })
       .addCase(putUnsubscribeBlog.fulfilled, (state, { payload }) => {
         subscriptionsAdapter.removeOne(state, payload.id)
       })

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { subscriptionsSlice } from 'store/slices'
+import { blogsSlice } from 'store/slices'
 import { applyValidationErrors } from 'utils/utils'
 import { useSelector } from 'react-redux'
 import { authSlice } from 'store/slices'
@@ -41,13 +41,13 @@ export const AddSub: React.FC<AddSubProps> = props => {
       groupIdToSend = groupIdToSend == -1 ? null : groupIdToSend
 
       const promise = await dispatch(
-        subscriptionsSlice.postAddSubscription({
+        blogsSlice.postAddSubscription({
           blogUrl: values.url,
           GroupId: groupIdToSend,
         })
       )
 
-      if (subscriptionsSlice.postAddSubscription.fulfilled.match(promise)) {
+      if (blogsSlice.postAddSubscription.fulfilled.match(promise)) {
       } else {
         applyValidationErrors(formik, promise.error)
       }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DataLayer.Models;
 using DbAccess.Core;
+using Dtos.Blogs;
 using Dtos.Subscriptions;
 using LogicLayer.Subscriptions;
 using ServiceLayer._Commons;
@@ -26,7 +27,7 @@ namespace ServiceLayer.SubscriptionServices
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<SubscriptionResponseDto> Unsubscribe(int subId, string userId)
+        public async Task<BlogResponseDto> Unsubscribe(int subId, string userId)
         {
             _action = new DisableSubscriptionAction(userId, _unitOfWork);
 
@@ -36,7 +37,7 @@ namespace ServiceLayer.SubscriptionServices
             if (result == null || runner.HasErrors)
                 return null;
 
-            var returned_dto = _mapper.Map<Subscription, SubscriptionResponseDto>(result);
+            var returned_dto = _mapper.Map<Subscription, BlogResponseDto>(result);
 
             return returned_dto;
         }
@@ -44,6 +45,6 @@ namespace ServiceLayer.SubscriptionServices
 
     public interface IUnsubscribeService : IValidatedService
     {
-        Task<SubscriptionResponseDto> Unsubscribe(int subId, string userId);
+        Task<BlogResponseDto> Unsubscribe(int subId, string userId);
     }
 }

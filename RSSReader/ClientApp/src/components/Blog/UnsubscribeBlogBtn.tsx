@@ -3,7 +3,7 @@ import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
-import { subscriptionsSlice } from 'store/slices'
+import { blogsSlice } from 'store/slices'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import SpinnerElement from 'components/Spinner/SpinnerElement'
@@ -20,9 +20,9 @@ export const UnsubscribeBlogBtn: React.FC<UnsubscribeBlogBtnProps> = props => {
   const unsubcribeBlog = async (id: number) => {
     if (isInAction) return
     setIsInAction(true)
-    const promise = await dispatch(subscriptionsSlice.putUnsubscribeBlog(id))
+    const promise = await dispatch(blogsSlice.putUnsubscribeBlog(id))
 
-    if (subscriptionsSlice.putUnsubscribeBlog.fulfilled.match(promise)) {
+    if (blogsSlice.putUnsubscribeBlog.fulfilled.match(promise)) {
     } else {
     }
     setIsInAction(false)

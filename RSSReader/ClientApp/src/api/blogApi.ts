@@ -42,7 +42,7 @@ export const postAddSubscribtions = async (data: AddSubscriptionRequest) => {
 export const putUnsubscribeBlog = async (id: number) => {
   try {
     const res = await axios.put(`/api/subscription/${id}/unsubscribe`)
-    return res.data.result as Subscription
+    return res.data.result as Blog
   } catch (error) {
     throw error.response
   }

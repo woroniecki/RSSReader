@@ -55,7 +55,7 @@ export const postAddSubscription = createAsyncThunk<
 
 export const putUnsubscribeBlog = createAsyncThunk<
   // Return type of the payload creator
-  Blog,
+  number,
   // First argument to the payload creator
   number,
   {
@@ -64,8 +64,7 @@ export const putUnsubscribeBlog = createAsyncThunk<
 >(`${BLOGS}/unsubscribeBlog`, async (params, { rejectWithValue }) => {
   try {
     const res = await blogApi.putUnsubscribeBlog(params)
-    //return res
-    return null
+    return params
   } catch (err) {
     throw err.data
   }
@@ -134,7 +133,7 @@ const blogsSlice = createSlice({
         blogsAdapter.addOne(state, payload)
       })
       .addCase(putUnsubscribeBlog.fulfilled, (state, { payload }) => {
-        blogsAdapter.removeOne(state, payload.id)
+        blogsAdapter.removeOne(state, payload)
       })
       .addCase(patchGroup.fulfilled, (state, { payload }) => {
         state.entities[payload.id].userData.groupId = payload.userData.groupId

@@ -1,5 +1,5 @@
 import { Button, CardHeader, Divider, Typography } from '@material-ui/core'
-import React, { useState } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 import { blogsSlice, articlesSlice, authSlice } from 'store/slices'
@@ -11,11 +11,10 @@ import BlogGroup from './BlogGroup'
 
 export interface SingleBlogProps {}
 
-export const SingleBlog: React.FC<SingleBlogProps> = props => {
+export const SingleBlog: React.FC<SingleBlogProps> = () => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
   const { blogid } = useParams<{ blogid: string }>()
-  const { token } = useSelector(authSlice.stateSelector)
   const blogsList = useSelector(blogsSlice.selectAll)
   const articlesList = useSelector(articlesSlice.selectAll)
 
@@ -80,7 +79,6 @@ export const SingleBlog: React.FC<SingleBlogProps> = props => {
   const renderArticles = () => {
     const blog = getCurrentBlog()
     if (blog == null) return
-    console.log(blog.id)
 
     const blogId = blog.id
     const filterReaded = blog.userData != null && blog.userData.filterReaded

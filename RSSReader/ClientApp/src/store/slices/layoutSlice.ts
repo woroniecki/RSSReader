@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from 'store/rootReducer'
-const AUTH = 'auth'
 
 export enum type {
   none,
@@ -30,4 +29,5 @@ export const { actions } = layoutSlice
 
 export default layoutSlice.reducer
 
-export const stateSelector = (state: RootState) => state.layoutSlice
+export const stateSelector = (state: RootState): LayoutState =>
+  state.layoutSlice

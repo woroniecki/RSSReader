@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { useFormik } from 'formik'
 import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
@@ -12,7 +12,7 @@ import { Alert } from '@material-ui/lab'
 
 export interface LoginProps {}
 
-export const Login: React.FC<LoginProps> = props => {
+export const Login: React.FC<LoginProps> = () => {
   const { push } = useHistory()
   const dispatch = useAppDispatch()
 

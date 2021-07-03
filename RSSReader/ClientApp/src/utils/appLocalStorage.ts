@@ -15,14 +15,14 @@ export const saveTokenDataToStorage = (
   authExpires: number,
   refreshToken: string,
   refreshExpires: number
-) => {
+): void => {
   localStorage.setItem(authTokenHeader, authToken)
   localStorage.setItem(authExpiresHeader, authExpires.toString())
   localStorage.setItem(refreshTokenHeader, refreshToken)
   localStorage.setItem(refreshExpiresHeader, refreshExpires.toString())
 }
 
-export const getTokenDataFromStorage = () => {
+export const getTokenDataFromStorage = (): StorageTokenData => {
   const authToken = localStorage.getItem(authTokenHeader)
   const authExpires = Number(localStorage.getItem(authExpiresHeader))
   const refreshToken = localStorage.getItem(refreshTokenHeader)
@@ -41,7 +41,7 @@ export const getTokenDataFromStorage = () => {
   } as unknown) as StorageTokenData
 }
 
-export const cleatTokenDataFromStorage = () => {
+export const cleatTokenDataFromStorage = (): void => {
   localStorage.removeItem(authTokenHeader)
   localStorage.removeItem(refreshTokenHeader)
   localStorage.removeItem(refreshExpiresHeader)

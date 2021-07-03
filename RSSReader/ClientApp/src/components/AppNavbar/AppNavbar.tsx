@@ -13,7 +13,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import { useAppDispatch } from 'store/store'
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks'
 
-import { useHistory, useParams } from 'react-router-dom'
 import { layoutSlice, navbarSlice } from 'store/slices'
 import UserNavbar from './UserNavbar'
 import { useSelector } from 'react-redux'
@@ -21,13 +20,9 @@ import { drawerWidth } from '../../App'
 
 export interface AppNavbarProps {}
 
-const selectAuth = (state: { auth: any }) => state.auth
-
-export const AppNavbar: React.FC<AppNavbarProps> = props => {
+export const AppNavbar: React.FC<AppNavbarProps> = () => {
   const dispatch = useAppDispatch()
-  const { push } = useHistory()
   const { loader } = useSelector(layoutSlice.stateSelector)
-  const { groupId } = useParams<{ groupId: string }>()
 
   const classes = useStyles()
   const theme = useTheme()
@@ -65,7 +60,7 @@ export const AppNavbar: React.FC<AppNavbarProps> = props => {
               </IconButton>
             </div>
             <Divider />
-            <UserNavbar curGroupId={parseInt(groupId)} />
+            <UserNavbar />
           </Drawer>
 
           <AppBar

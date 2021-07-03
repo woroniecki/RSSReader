@@ -1,5 +1,3 @@
-import navbarSlice from './navbarSlice'
-
 export * as authSlice from './authSlice'
 export * as layoutSlice from './layoutSlice'
 export * as blogsSlice from './blogsSlice'

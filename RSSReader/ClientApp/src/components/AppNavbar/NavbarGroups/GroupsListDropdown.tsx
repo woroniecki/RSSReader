@@ -1,5 +1,4 @@
 import {
-  Button,
   Collapse,
   List,
   ListItem,
@@ -9,7 +8,6 @@ import {
 import { ExpandLess, ExpandMore } from '@material-ui/icons'
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { useAppDispatch } from 'store/store'
 import { useStyles } from '../UserNavbar'
 import { blogsSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
@@ -23,7 +21,6 @@ export interface GroupsListDropdownProps {
 }
 
 export const GroupsListDropdown: React.FC<GroupsListDropdownProps> = props => {
-  const dispatch = useAppDispatch()
   const { push } = useHistory()
   const blogsList = useSelector(blogsSlice.selectAll)
 

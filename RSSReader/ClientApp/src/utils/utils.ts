@@ -1,6 +1,4 @@
-import { useHistory } from 'react-router-dom'
-
-export const applyValidationErrors = (formik: any, response: any) => {
+export const applyValidationErrors = (formik: any, response: any): void => {
   if (response.result && response.result.validationErrors) {
     response.result.validationErrors.forEach((element: any) => {
       formik.setFieldError(element.name.toLowerCase(), element.reason)

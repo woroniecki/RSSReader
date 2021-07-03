@@ -1,16 +1,15 @@
-﻿import env from 'react-dotenv'
-import axios from 'api/axios'
+﻿import axios from 'api/axios'
 import { LoginRequest, LoginResponse, RefreshRequest } from './api.types'
 
-export const register = async (data: any) => {
+export const register = async (data: any): Promise<void> => {
   try {
-    const res = await axios.post(`/api/auth/register`, data)
+    await axios.post(`/api/auth/register`, data)
   } catch (error) {
     throw error.response
   }
 }
 
-export const login = async (data: LoginRequest) => {
+export const login = async (data: LoginRequest): Promise<LoginResponse> => {
   try {
     const res = await axios.post(`/api/auth/login`, data)
     return res.data.result as LoginResponse
@@ -19,7 +18,7 @@ export const login = async (data: LoginRequest) => {
   }
 }
 
-export const refresh = async (data: RefreshRequest) => {
+export const refresh = async (data: RefreshRequest): Promise<LoginResponse> => {
   try {
     const res = await axios.post(`/api/auth/refresh`, data)
     return res.data.result as LoginResponse

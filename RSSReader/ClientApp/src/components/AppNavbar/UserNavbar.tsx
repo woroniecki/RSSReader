@@ -21,11 +21,9 @@ import {
   ListItemText,
 } from '@material-ui/core'
 
-export interface UserNavbarProps {
-  curGroupId: number
-}
+export interface UserNavbarProps {}
 
-export const UserNavbar: React.FC<UserNavbarProps> = props => {
+export const UserNavbar: React.FC<UserNavbarProps> = () => {
   const { push } = useHistory()
   const { userName } = useSelector(authSlice.stateSelector)
   const dispatch = useAppDispatch()
@@ -84,7 +82,7 @@ export const UserNavbar: React.FC<UserNavbarProps> = props => {
           </Collapse>
         </List>
         <Divider />
-        <GroupsNavlist curGroupId={props.curGroupId} />
+        <GroupsNavlist />
       </React.Fragment>
     )
   }

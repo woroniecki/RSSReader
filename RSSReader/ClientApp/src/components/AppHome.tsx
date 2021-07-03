@@ -1,6 +1,5 @@
 import React from 'react'
-import { useHistory, useParams } from 'react-router-dom'
-import { useAppDispatch } from 'store/store'
+import { useParams } from 'react-router-dom'
 import { AddSub } from './Blog/AddSub'
 import { BlogCard } from './Blog/BlogCard'
 import { authSlice, blogsSlice, layoutSlice } from 'store/slices'
@@ -9,9 +8,7 @@ import { Typography } from '@material-ui/core'
 
 export interface AppHomeProps {}
 
-export const AppHome: React.FC<AppHomeProps> = props => {
-  const dispatch = useAppDispatch()
-  const { push } = useHistory()
+export const AppHome: React.FC<AppHomeProps> = () => {
   const { token } = useSelector(authSlice.stateSelector)
   const blogsList = useSelector(blogsSlice.selectAll)
   const { groupId } = useParams<{ groupId: string }>()

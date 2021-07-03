@@ -21,8 +21,6 @@ export interface AddSubProps {
 
 export const AddSub: React.FC<AddSubProps> = props => {
   const dispatch = useAppDispatch()
-  const { push } = useHistory()
-  const { userName } = useSelector(authSlice.stateSelector)
   const [isInAction, setIsInAction] = useState(false)
 
   const formik = useFormik({
@@ -57,7 +55,7 @@ export const AddSub: React.FC<AddSubProps> = props => {
 
   function getSubmitBtnBody() {
     if (!isInAction) return '+'
-    return <SpinnerElement variant="primary" size={12} />
+    return <SpinnerElement size={12} />
   }
 
   return (

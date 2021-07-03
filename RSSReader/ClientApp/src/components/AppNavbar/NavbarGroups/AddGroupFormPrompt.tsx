@@ -1,5 +1,4 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { useFormik } from 'formik'
 import { groupsSlice } from 'store/slices'
@@ -22,7 +21,6 @@ export interface AddGroupFormPromptProps {
 
 export const AddGroupFormPrompt: React.FC<AddGroupFormPromptProps> = props => {
   const dispatch = useAppDispatch()
-  const { push } = useHistory()
 
   const formik = useFormik({
     initialValues: {

@@ -1,14 +1,11 @@
-import { LoginResponse, Token } from 'api/api.types'
 import React from 'react'
-import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
-import { useSelector } from 'react-redux'
 import { authSlice } from 'store/slices'
 import { getTokenDataFromStorage } from 'utils/appLocalStorage'
 
 export interface useResetTokensProps {}
 
-export const useResetTokens = () => {
+export const useResetTokens = (): void => {
   const dispatch = useAppDispatch()
 
   const MINUTE_MS = 60000
@@ -31,7 +28,7 @@ export const useResetTokens = () => {
         return
       }
 
-      const promise = dispatch(
+      dispatch(
         authSlice.refresh({
           refreshToken: tokenData.refreshToken,
           authToken: tokenData.authToken,

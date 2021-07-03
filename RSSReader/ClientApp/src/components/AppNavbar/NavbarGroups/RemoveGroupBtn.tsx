@@ -1,11 +1,10 @@
 import { Button } from '@material-ui/core'
 import DeleteGroupPrompt from 'components/AppNavbar/NavbarGroups/DeleteGroupPrompt'
 import React, { useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { groupsSlice, blogsSlice } from 'store/slices'
 import DeleteIcon from '@material-ui/icons/Delete'
-import { remove } from 'store/slices/groupsSlice'
 import { useSelector } from 'react-redux'
 import { Blog } from 'api/api.types'
 

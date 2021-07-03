@@ -18,7 +18,6 @@ export interface ArticlePatchButtonsProps {
 
 export const ArticlePatchButtons: React.FC<ArticlePatchButtonsProps> = props => {
   const dispatch = useAppDispatch()
-  const { push } = useHistory()
   const classes = useStyles()
 
   const patchPost = async (
@@ -64,7 +63,7 @@ export const ArticlePatchButtons: React.FC<ArticlePatchButtonsProps> = props => 
   )
 }
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     starYellow: {
       color: yellow[500],

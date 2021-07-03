@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { useFormik } from 'formik'
-import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { layoutSlice } from 'store/slices'
@@ -12,7 +11,7 @@ import Alert from '@material-ui/lab/Alert'
 
 export interface RegisterProps {}
 
-export const Register: React.FC<RegisterProps> = props => {
+export const Register: React.FC<RegisterProps> = () => {
   const { push } = useHistory()
   const dispatch = useAppDispatch()
 

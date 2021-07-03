@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { Button, ListItemText, ListItem, ListItemIcon } from '@material-ui/core'
-import { useHistory } from 'react-router-dom'
+import { ListItemText, ListItem, ListItemIcon } from '@material-ui/core'
 import { groupsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import PostAddIcon from '@material-ui/icons/PostAdd'
@@ -10,9 +9,8 @@ import AddGroupFormPrompt from './AddGroupFormPrompt'
 
 export interface AddGroupBtnProps {}
 
-export const AddGroupBtn: React.FC<AddGroupBtnProps> = props => {
+export const AddGroupBtn: React.FC<AddGroupBtnProps> = () => {
   const dispatch = useAppDispatch()
-  const { push } = useHistory()
   const [showPrompt, setShowPrompt] = useState(false)
 
   const formik = useFormik({

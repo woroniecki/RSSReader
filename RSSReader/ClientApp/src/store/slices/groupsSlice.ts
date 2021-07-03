@@ -2,12 +2,10 @@ import {
   createAsyncThunk,
   createEntityAdapter,
   createSlice,
-  PayloadAction,
 } from '@reduxjs/toolkit'
 import * as blogApi from '../../api/blogApi'
 import { AddGroupRequest, Group, RemoveGroupRequest } from '../../api/api.types'
 import { RootState } from 'store/rootReducer'
-import { NumberSchema } from 'yup'
 const GROUPS = 'groups'
 
 export const groupsAdapter = createEntityAdapter<Group>({
@@ -19,9 +17,7 @@ export const getList = createAsyncThunk<
   Group[],
   // First argument to the payload creator
   void,
-  {
-    rejectValue: string
-  }
+  unknown
 >(`${GROUPS}/list`, async (params, { rejectWithValue }) => {
   try {
     const res = await blogApi.getGroupsList()
@@ -36,9 +32,7 @@ export const postAdd = createAsyncThunk<
   Group,
   // First argument to the payload creator
   AddGroupRequest,
-  {
-    rejectValue: string
-  }
+  unknown
 >(`${GROUPS}/add`, async (params, { rejectWithValue }) => {
   try {
     const res = await blogApi.postAddGroup(params)
@@ -53,9 +47,7 @@ export const remove = createAsyncThunk<
   number,
   // First argument to the payload creator
   RemoveGroupRequest,
-  {
-    rejectValue: string
-  }
+  unknown
 >(`${GROUPS}/remove`, async (params, { rejectWithValue }) => {
   try {
     const res = await blogApi.removeGroup(params)

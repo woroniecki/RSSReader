@@ -11,8 +11,6 @@ export interface BlogAvatarProps {
 }
 
 export const BlogAvatar: React.FC<BlogAvatarProps> = props => {
-  const dispatch = useAppDispatch()
-  const { push } = useHistory()
   const classes = useStyles()
 
   return (

@@ -3,22 +3,14 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { blogsSlice, articlesSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 
 import { BlogGroup } from './BlogGroup'
 import UnsubscribeBlogBtn from './UnsubscribeBlogBtn'
-import {
-  Avatar,
-  Button,
-  CardActions,
-  CardHeader,
-  Divider,
-  List,
-  ListItem,
-} from '@material-ui/core'
+import { Button, CardActions, CardHeader, Divider } from '@material-ui/core'
 import BlogAvatar from './BlogAvatar'
 
 export interface BlogCardProps {
@@ -29,26 +21,12 @@ export interface BlogCardProps {
 }
 
 export const BlogCard: React.FC<BlogCardProps> = props => {
-  const dispatch = useAppDispatch()
   const { push } = useHistory()
 
   const classes = useStyles()
 
   const blogsList = useSelector(blogsSlice.selectAll)
   const articlesList = useSelector(articlesSlice.selectAll)
-
-  const updateArticlesList = async () => {
-    const list_already_taken = articlesList.find(
-      el => el.blogId == props.blogid
-    )
-    if (list_already_taken != null) return
-
-    const promise = await dispatch(articlesSlice.getArticles(props.blogid))
-
-    if (articlesSlice.getArticles.fulfilled.match(promise)) {
-    } else {
-    }
-  }
 
   function DrawUnreadedAmount() {
     const blog = blogsList.find(el => el.id == props.blogid)
@@ -82,9 +60,6 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
     )
   }
 
-  const no_blog_img_url =
-    'https://www.pngfind.com/pngs/m/269-2693798_png-file-svg-blog-vector-icon-png-transparent.png'
-
   return (
     <Card className={classes.root}>
       <CardHeader
@@ -111,7 +86,7 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
   )
 }
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       maxWidth: 845,

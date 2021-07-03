@@ -1,20 +1,18 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { blogsSlice, articlesSlice, authSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import { layoutSlice } from 'store/slices'
 
 export const useGetArticles = () => {
   const dispatch = useAppDispatch()
-  const { push } = useHistory()
   const { blogid } = useParams<{ blogid: string }>()
   const { token } = useSelector(authSlice.stateSelector)
   const blogsList = useSelector(blogsSlice.selectAll)
   const articlesList = useSelector(articlesSlice.selectAll)
-  const [isFiltering, setFiltering] = useState(false)
 
-  const fetchList = async () => {
+  const fetchList = async (): Promise<void> => {
     const blogId = parseInt(blogid)
     if (blogId == NaN) return
 

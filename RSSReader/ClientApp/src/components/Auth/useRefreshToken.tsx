@@ -1,6 +1,4 @@
-import { LoginResponse, Token } from 'api/api.types'
 import React from 'react'
-import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { authSlice, layoutSlice } from 'store/slices'
 import {
@@ -10,7 +8,7 @@ import {
 
 export interface useRefreshTokenProps {}
 
-export const useRefreshToken = () => {
+export const useRefreshToken = (): void => {
   const dispatch = useAppDispatch()
 
   React.useEffect(() => {

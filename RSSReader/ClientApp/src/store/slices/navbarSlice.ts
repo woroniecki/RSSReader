@@ -23,4 +23,5 @@ export const { actions } = navbarSlice
 
 export default navbarSlice.reducer
 
-export const stateSelector = (state: RootState) => state.navbarSlice
+export const stateSelector = (state: RootState): NavbarState =>
+  state.navbarSlice

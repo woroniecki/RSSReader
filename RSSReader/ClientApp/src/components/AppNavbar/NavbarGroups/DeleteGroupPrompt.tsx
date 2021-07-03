@@ -5,11 +5,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField,
 } from '@material-ui/core'
-import React, { MouseEventHandler, useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import { useAppDispatch } from 'store/store'
+import React from 'react'
 
 export interface DeleteGroupPromptProps {
   onMove: (event: React.MouseEvent<HTMLButtonElement>) => void
@@ -18,14 +15,6 @@ export interface DeleteGroupPromptProps {
 }
 
 export const DeleteGroupPrompt: React.FC<DeleteGroupPromptProps> = props => {
-  const dispatch = useAppDispatch()
-  const { push } = useHistory()
-
-  const [show, setShow] = useState(false)
-
-  const handleClose = () => setShow(false)
-  const handleShow = () => setShow(true)
-
   return (
     <>
       <Dialog

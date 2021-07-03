@@ -1,6 +1,5 @@
 import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { useHistory, useParams } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { groupsSlice, blogsSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
@@ -13,12 +12,10 @@ export interface BlogGroupProps {
 
 export const BlogGroup: React.FC<BlogGroupProps> = props => {
   const dispatch = useAppDispatch()
-  const { push } = useHistory()
 
   const classes = useStyles()
 
   const groupsList = useSelector(groupsSlice.selectAll)
-  const none_group = 'None'
 
   const getActiveGroup = () => {
     const group = groupsList.find(el => el.id == props.activeGroupId)
@@ -67,7 +64,7 @@ export const BlogGroup: React.FC<BlogGroupProps> = props => {
   )
 }
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     formControl: {
       minWidth: 120,

@@ -37,7 +37,7 @@ const SingleArticleWrapper = styled.div`
 `
 export interface SingleArticleProps {}
 
-export const SingleArticle: React.FC<SingleArticleProps> = props => {
+export const SingleArticle: React.FC<SingleArticleProps> = () => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
   const { blogid } = useParams<{ blogid: string }>()

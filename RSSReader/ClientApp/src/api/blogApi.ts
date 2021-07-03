@@ -1,4 +1,3 @@
-import env from 'react-dotenv'
 import axios from 'api/axios'
 import {
   Blog,
@@ -11,7 +10,7 @@ import {
   RemoveGroupRequest,
 } from './api.types'
 
-export const getSubscribedBlogsList = async () => {
+export const getSubscribedBlogsList = async (): Promise<Blog[]> => {
   try {
     const res = await axios.get(`/api/blog/subscribedList`)
     return res.data.result as Blog[]
@@ -20,7 +19,9 @@ export const getSubscribedBlogsList = async () => {
   }
 }
 
-export const postAddSubscribtions = async (data: AddSubscriptionRequest) => {
+export const postAddSubscribtions = async (
+  data: AddSubscriptionRequest
+): Promise<Blog> => {
   try {
     const res = await axios.post(`/api/subscription/subscribe`, data)
     return res.data.result as Blog
@@ -29,7 +30,7 @@ export const postAddSubscribtions = async (data: AddSubscriptionRequest) => {
   }
 }
 
-export const putUnsubscribeBlog = async (id: number) => {
+export const putUnsubscribeBlog = async (id: number): Promise<Blog> => {
   try {
     const res = await axios.put(`/api/subscription/${id}/unsubscribe`)
     return res.data.result as Blog
@@ -38,7 +39,7 @@ export const putUnsubscribeBlog = async (id: number) => {
   }
 }
 
-export const getPostsList = async (blogId: number) => {
+export const getPostsList = async (blogId: number): Promise<Post[]> => {
   try {
     const res = await axios.get(
       `/api/blog/` + blogId.toString() + `/post/list/0`
@@ -49,7 +50,10 @@ export const getPostsList = async (blogId: number) => {
   }
 }
 
-export const putReadPost = async (blogId: number, postId: number) => {
+export const putReadPost = async (
+  blogId: number,
+  postId: number
+): Promise<Post> => {
   try {
     const res = await axios.put(
       `/api/blog/` + blogId.toString() + `/post/` + postId.toString()
@@ -60,7 +64,7 @@ export const putReadPost = async (blogId: number, postId: number) => {
   }
 }
 
-export const patchPost = async (data: PatchPostRequest) => {
+export const patchPost = async (data: PatchPostRequest): Promise<Post> => {
   try {
     const res = await axios.patch(
       `/api/blog/` +
@@ -76,7 +80,7 @@ export const patchPost = async (data: PatchPostRequest) => {
   }
 }
 
-export const getGroupsList = async () => {
+export const getGroupsList = async (): Promise<Group[]> => {
   try {
     const res = await axios.get(`/api/group/list`)
     const group_none: Group = {
@@ -89,7 +93,7 @@ export const getGroupsList = async () => {
   }
 }
 
-export const postAddGroup = async (data: AddGroupRequest) => {
+export const postAddGroup = async (data: AddGroupRequest): Promise<Group> => {
   try {
     const res = await axios.post(`/api/group/add`, data)
     return res.data.result as Group
@@ -98,7 +102,7 @@ export const postAddGroup = async (data: AddGroupRequest) => {
   }
 }
 
-export const removeGroup = async (data: RemoveGroupRequest) => {
+export const removeGroup = async (data: RemoveGroupRequest): Promise<Group> => {
   try {
     const res = await axios.delete(`/api/group/remove`, {
       data: data,
@@ -112,7 +116,7 @@ export const removeGroup = async (data: RemoveGroupRequest) => {
 export const patchSubscriptionGroup = async (
   subId: number,
   newGroupId: number
-) => {
+): Promise<Blog> => {
   try {
     const res = await axios.patch(
       `/api/subscription/` +
@@ -126,7 +130,9 @@ export const patchSubscriptionGroup = async (
   }
 }
 
-export const patchSubscription = async (data: PatchSubscriptionRequest) => {
+export const patchSubscription = async (
+  data: PatchSubscriptionRequest
+): Promise<Blog> => {
   try {
     const res = await axios.patch(
       `/api/subscription/` + data.subId.toString() + `/update`,

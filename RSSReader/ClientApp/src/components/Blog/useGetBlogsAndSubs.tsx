@@ -4,7 +4,7 @@ import { authSlice, blogsSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 import { layoutSlice } from 'store/slices'
 
-export const useGetBlogsAndSubs = () => {
+export const useGetBlogsAndSubs = (): void => {
   const dispatch = useAppDispatch()
 
   const { token } = useSelector(authSlice.stateSelector)

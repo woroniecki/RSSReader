@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import React from 'react'
 import { useSelector } from 'react-redux'
 
 import { authSlice, groupsSlice, blogsSlice } from 'store/slices'
@@ -7,13 +6,10 @@ import { useAppDispatch } from 'store/store'
 import AddGroupBtn from './AddGroupBtn'
 import GroupsListDropdown from './GroupsListDropdown'
 
-export interface GroupsNavlistProps {
-  curGroupId: number
-}
+export interface GroupsNavlistProps {}
 
-export const GroupsNavlist: React.FC<GroupsNavlistProps> = props => {
+export const GroupsNavlist: React.FC<GroupsNavlistProps> = () => {
   const dispatch = useAppDispatch()
-  const { push } = useHistory()
   const { token } = useSelector(authSlice.stateSelector)
   const groupsList = useSelector(groupsSlice.selectAll)
   const blogsList = useSelector(blogsSlice.selectAll)

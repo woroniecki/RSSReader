@@ -9,6 +9,11 @@ namespace RSSReader.Helpers
 {
     public static class ControllerExt
     {
+        public static bool IsLoggedIn(this Controller controller)
+        {
+            return controller.User.FindFirst(ClaimTypes.NameIdentifier) != null;
+        }
+
         public static string GetCurUserId(this Controller controller)
         {
             return controller.User.FindFirst(ClaimTypes.NameIdentifier).Value;

@@ -8,7 +8,7 @@ using LogicLayer._GenericActions;
 
 namespace LogicLayer.Groups
 {
-    public class GetAndUpdatePostsListAction :
+    public class GetPostsListAction :
         ActionErrors,
         IActionAsync<int, IEnumerable<Post>>
     {
@@ -16,7 +16,7 @@ namespace LogicLayer.Groups
         private int _blogId;
         private IUnitOfWork _unitOfWork;
 
-        public GetAndUpdatePostsListAction(string userId, int blogId, IUnitOfWork unitOfWork)
+        public GetPostsListAction(string userId, int blogId, IUnitOfWork unitOfWork)
         {
             _userId = userId;
             _blogId = blogId;
@@ -25,13 +25,6 @@ namespace LogicLayer.Groups
 
         public async Task<IEnumerable<Post>> ActionAsync(int page)
         {
-            ApiUser user = await _unitOfWork.UserRepo.GetByID(_userId);
-            if (user == null)
-            {
-                AddError("Unauthorized.");
-                return null;
-            }
-
             IEnumerable<Post> posts = await _unitOfWork.PostRepo
                 .GetLatest(_blogId, page * RssConsts.POSTS_PER_CALL, RssConsts.POSTS_PER_CALL);
 

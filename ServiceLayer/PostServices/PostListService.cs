@@ -21,7 +21,7 @@ namespace ServiceLayer.PostServices
     public class PostListService : IPostListService
     {
         private UpdateBlogPostsAction _updateBlogPostsAction;
-        private GetAndUpdatePostsListAction _getAndUpdatePostsListAction;
+        private GetPostsListAction _getPostsListAction;
         private GetUserPostDataListAction _getUserPostDataListAction;
         private IMapper _mapper;
         private IUnitOfWork _unitOfWork;
@@ -34,14 +34,14 @@ namespace ServiceLayer.PostServices
                 if (_updateBlogPostsAction != null && _updateBlogPostsAction.HasErrors)
                     return _updateBlogPostsAction.Errors;
 
-                if (_getAndUpdatePostsListAction != null && _getAndUpdatePostsListAction.HasErrors)
-                    return _getAndUpdatePostsListAction.Errors;
+                if (_getPostsListAction != null && _getPostsListAction.HasErrors)
+                    return _getPostsListAction.Errors;
 
                 if (_getUserPostDataListAction != null && _getUserPostDataListAction.HasErrors)
                     return _getUserPostDataListAction.Errors;
 
                 return _updateBlogPostsAction != null ? _updateBlogPostsAction.Errors :
-                       _getAndUpdatePostsListAction != null ? _getAndUpdatePostsListAction.Errors :
+                       _getPostsListAction != null ? _getPostsListAction.Errors :
                        _getUserPostDataListAction != null ? _getUserPostDataListAction.Errors :
                        null;
             }
@@ -65,11 +65,11 @@ namespace ServiceLayer.PostServices
             if (blog == null || runner.HasErrors)
                 return null;
 
-            _getAndUpdatePostsListAction = new GetAndUpdatePostsListAction(userId, blogId, _unitOfWork);
+            _getPostsListAction = new GetPostsListAction(userId, blogId, _unitOfWork);
 
-            var posts = await _getAndUpdatePostsListAction.ActionAsync(page);
+            var posts = await _getPostsListAction.ActionAsync(page);
 
-            if (_getAndUpdatePostsListAction.HasErrors)
+            if (_getPostsListAction.HasErrors)
                 return null;
 
             _getUserPostDataListAction = new GetUserPostDataListAction(userId, _unitOfWork);

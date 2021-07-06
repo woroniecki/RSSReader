@@ -6,6 +6,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
 import ArticlePatchButtons from './ArticlePatchButtons'
 import { Button, CardActions, CardHeader, Divider } from '@material-ui/core'
+import { PostUserData } from 'api/api.types'
 
 export interface ArticleCardProps {
   articleid: number
@@ -14,9 +15,8 @@ export interface ArticleCardProps {
   content: string
   url: string
   imageUrl: string
-  readed: boolean
-  favourite: boolean
   publishDate: string
+  userData: PostUserData
 }
 
 export const ArticleCard: React.FC<ArticleCardProps> = props => {
@@ -28,7 +28,13 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
   if (blogId == NaN) return
 
   return (
-    <Card className={props.readed ? classes.rootTransparent : classes.root}>
+    <Card
+      className={
+        props.userData != null && props.userData.readed
+          ? classes.rootTransparent
+          : classes.root
+      }
+    >
       <CardHeader
         title={<Typography variant="h5">{props.title}</Typography>}
         subheader={
@@ -51,8 +57,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
         <ArticlePatchButtons
           blogId={blogId}
           postId={props.articleid}
-          readed={props.readed}
-          favourite={props.favourite}
+          userData={props.userData}
         />
       </CardActions>
     </Card>

@@ -73,6 +73,10 @@ export interface Post {
   url: string
   author: string
   publishDate: string
+  userData: PostUserData
+}
+
+export interface PostUserData {
   readed: boolean
   favourite: boolean
 }

@@ -93,8 +93,7 @@ export const SingleArticle: React.FC<SingleArticleProps> = () => {
               <ArticlePatchButtons
                 blogId={article.blogId}
                 postId={article.id}
-                readed={article.readed}
-                favourite={article.favourite}
+                userData={article.userData}
               />
               {renderVisitPageButton(article.url)}
               <Button onClick={() => push(`/blog/${blogid}`)}>Return</Button>

@@ -74,11 +74,12 @@ const articlesSlice = createSlice({
         articlesAdapter.addMany(state, payload)
       })
       .addCase(putReadArticle.fulfilled, (state, { payload }) => {
-        state.entities[payload.id].readed = payload.readed
+        state.entities[payload.id].userData.readed = payload.userData.readed
       })
       .addCase(patchPost.fulfilled, (state, { payload }) => {
-        state.entities[payload.id].readed = payload.readed
-        state.entities[payload.id].favourite = payload.favourite
+        state.entities[payload.id].userData.readed = payload.userData.readed
+        state.entities[payload.id].userData.favourite =
+          payload.userData.favourite
       })
   },
 })

@@ -7,11 +7,6 @@ namespace Dtos.Posts
 {
     public class PostResponseDto
     {
-        public PostResponseDto()
-        {
-            Readed = false;
-            Favourite = false;
-        }
         public int Id { get; set; }
         public string Url { get; set; }
         public string Name { get; set; }
@@ -22,6 +17,16 @@ namespace Dtos.Posts
         public DateTime PublishDate { get; set; }
 
         /// User Data
+        public UserPostDataResponseDto UserData{ get; set; }
+    }
+
+    public class UserPostDataResponseDto
+    {
+        public UserPostDataResponseDto()
+        {
+            Readed = false;
+            Favourite = false;
+        }
         public bool Readed { get; set; }
         public bool Favourite { get; set; }
     }

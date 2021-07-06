@@ -42,9 +42,12 @@ namespace RSSReader.Controllers
         }
 
         [HttpGet("list/{page}")]
+        [AllowAnonymous]
         public async Task<ApiResponse> GetPosts(int blogid, int page, [FromServices] IPostListService service)
         {
-            var result = await service.GetList(this.GetCurUserId(), blogid, page);
+            string user_id = this.IsLoggedIn() ? this.GetCurUserId() : "";
+
+            var result = await service.GetList(user_id, blogid, page);
 
             if (service.Errors.Any())
                 return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);

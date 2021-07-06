@@ -59,8 +59,8 @@ namespace Tests.Services.PostServices
 
             //ASSERT
             Assert.That(result.Id, Is.EqualTo(post.Id));
-            Assert.That(result.Readed, Is.EqualTo(inData.Readed));
-            Assert.That(result.Favourite, Is.EqualTo(false));
+            Assert.That(result.UserData.Readed, Is.EqualTo(inData.Readed));
+            Assert.That(result.UserData.Favourite, Is.EqualTo(false));
             var update_upd = _context.UserPostDatas.Where(x => x.Post.Id == post.Id && x.User.Id == user.Id).FirstOrDefault();
             Assert.That(update_upd.Readed, Is.EqualTo(inData.Readed));
             Assert.That(update_upd.Favourite, Is.EqualTo(false));
@@ -103,8 +103,8 @@ namespace Tests.Services.PostServices
 
             //ASSERT
             Assert.That(result.Id, Is.EqualTo(post.Id));
-            Assert.That(result.Readed, Is.EqualTo(inData.Readed));
-            Assert.That(result.Favourite, Is.EqualTo(false));
+            Assert.That(result.UserData.Readed, Is.EqualTo(inData.Readed));
+            Assert.That(result.UserData.Favourite, Is.EqualTo(false));
             var update_upd = _context.UserPostDatas.Where(x => x.Id == user_post_data.Id).FirstOrDefault();
             Assert.IsNotNull(update_upd);
             Assert.That(update_upd.Readed, Is.EqualTo(inData.Readed));
@@ -147,8 +147,8 @@ namespace Tests.Services.PostServices
 
             //ASSERT
             Assert.That(result.Id, Is.EqualTo(post.Id));
-            Assert.That(result.Readed, Is.EqualTo(inData.Readed));
-            Assert.That(result.Favourite, Is.EqualTo(inData.Favourite));
+            Assert.That(result.UserData.Readed, Is.EqualTo(inData.Readed));
+            Assert.That(result.UserData.Favourite, Is.EqualTo(inData.Favourite));
             var update_upd = _context.UserPostDatas.Where(x => x.Id == user_post_data.Id).FirstOrDefault();
             Assert.IsNotNull(update_upd);
             Assert.That(update_upd.Readed, Is.EqualTo(inData.Readed));

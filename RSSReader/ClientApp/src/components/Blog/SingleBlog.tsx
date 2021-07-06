@@ -84,7 +84,11 @@ export const SingleBlog: React.FC<SingleBlogProps> = () => {
     const filterReaded = blog.userData != null && blog.userData.filterReaded
 
     return articlesList
-      .filter(el => el.blogId == blogId && (filterReaded ? !el.readed : true))
+      .filter(
+        el =>
+          el.blogId == blogId &&
+          (filterReaded ? el.userData != null && !el.userData.readed : true)
+      )
       .sort((a, b) => {
         return (
           new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
@@ -99,9 +103,8 @@ export const SingleBlog: React.FC<SingleBlogProps> = () => {
           content={el.content}
           url={el.url}
           imageUrl={el.imageUrl}
-          readed={el.readed}
-          favourite={el.favourite}
           publishDate={el.publishDate}
+          userData={el.userData}
         />
       ))
   }

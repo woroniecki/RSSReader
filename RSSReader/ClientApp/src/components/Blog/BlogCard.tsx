@@ -36,7 +36,8 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
     if (blog.userData == null) return
 
     let amount = articlesList.filter(
-      el => el.blogId == props.blogid && !el.readed
+      el =>
+        el.blogId == props.blogid && el.userData != null && !el.userData.readed
     ).length
 
     if (amount <= 0 && blog.userData.unreadedCount != null) {

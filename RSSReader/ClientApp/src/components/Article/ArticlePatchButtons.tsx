@@ -8,12 +8,12 @@ import ImportContactsIcon from '@material-ui/icons/ImportContacts'
 import { IconButton } from '@material-ui/core'
 import { yellow } from '@material-ui/core/colors'
 import { articlesSlice } from 'store/slices'
+import { PostUserData } from 'api/api.types'
 
 export interface ArticlePatchButtonsProps {
   blogId: number
   postId: number
-  favourite: boolean
-  readed: boolean
+  userData: PostUserData
 }
 
 export const ArticlePatchButtons: React.FC<ArticlePatchButtonsProps> = props => {
@@ -40,13 +40,15 @@ export const ArticlePatchButtons: React.FC<ArticlePatchButtonsProps> = props => 
     }
   }
 
+  if (props.userData == null) return
+
   return (
     <React.Fragment>
       <IconButton
         aria-label="favourite"
-        className={props.favourite ? classes.starYellow : classes.star}
+        className={props.userData.favourite ? classes.starYellow : classes.star}
         onClick={() => {
-          patchPost(props.blogId, props.postId, null, !props.favourite)
+          patchPost(props.blogId, props.postId, null, !props.userData.favourite)
         }}
       >
         <StarIcon />
@@ -54,10 +56,10 @@ export const ArticlePatchButtons: React.FC<ArticlePatchButtonsProps> = props => 
       <IconButton
         aria-label="readed"
         onClick={() => {
-          patchPost(props.blogId, props.postId, !props.readed, null)
+          patchPost(props.blogId, props.postId, !props.userData.readed, null)
         }}
       >
-        {props.readed ? <ImportContactsIcon /> : <MenuBookIcon />}
+        {props.userData.readed ? <ImportContactsIcon /> : <MenuBookIcon />}
       </IconButton>
     </React.Fragment>
   )

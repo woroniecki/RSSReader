@@ -12,13 +12,11 @@ namespace LogicLayer.Groups
         ActionErrors,
         IActionAsync<int, IEnumerable<Post>>
     {
-        private string _userId;
         private int _blogId;
         private IUnitOfWork _unitOfWork;
 
-        public GetPostsListAction(string userId, int blogId, IUnitOfWork unitOfWork)
+        public GetPostsListAction(int blogId, IUnitOfWork unitOfWork)
         {
-            _userId = userId;
             _blogId = blogId;
             _unitOfWork = unitOfWork;
         }

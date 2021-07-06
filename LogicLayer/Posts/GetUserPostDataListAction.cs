@@ -23,6 +23,13 @@ namespace LogicLayer.Posts
 
         public async Task<IEnumerable<UserPostData>> ActionAsync(int blogId)
         {
+            ApiUser user = await _unitOfWork.UserRepo.GetByID(_userId);
+            if (user == null)
+            {
+                AddError("Unauthorized.");
+                return null;
+            }
+
             IEnumerable<UserPostData> user_post_datas = await _unitOfWork.UserPostDataRepo
                 .GetListWithPosts(x => x.User.Id == _userId && x.Post.Blog.Id == blogId);
 

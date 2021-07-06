@@ -65,31 +65,37 @@ namespace ServiceLayer.PostServices
             if (blog == null || runner.HasErrors)
                 return null;
 
-            _getPostsListAction = new GetPostsListAction(userId, blogId, _unitOfWork);
+            _getPostsListAction = new GetPostsListAction(blogId, _unitOfWork);
 
             var posts = await _getPostsListAction.ActionAsync(page);
 
             if (_getPostsListAction.HasErrors)
                 return null;
 
-            _getUserPostDataListAction = new GetUserPostDataListAction(userId, _unitOfWork);
-
-            var user_post_datas = await _getUserPostDataListAction.ActionAsync(blogId);
-
-            if (_getUserPostDataListAction.HasErrors)
-                return null;
-
             var post_dtos = _mapper.Map<IEnumerable<Post>, IEnumerable<PostResponseDto>>(posts);
 
-            foreach (var user_post_data in user_post_datas)
+            //Add user data if user is logged in
+            if (!string.IsNullOrEmpty(userId))
             {
-                PostResponseDto post_dto = post_dtos
-                    .FirstOrDefault(x => x.Id == user_post_data.Post.Id);
+                _getUserPostDataListAction = new GetUserPostDataListAction(userId, _unitOfWork);
 
-                if (post_dto != null)
+                var user_post_datas = await _getUserPostDataListAction.ActionAsync(blogId);
+
+                if (_getUserPostDataListAction.HasErrors)
+                    return null;
+
+                foreach (var post in post_dtos)
                 {
-                    post_dto.Readed = user_post_data.Readed;
-                    post_dto.Favourite = user_post_data.Favourite;
+                    post.UserData = new UserPostDataResponseDto();
+
+                    var user_post_data = user_post_datas
+                        .FirstOrDefault(x => x.Post.Id == post.Id);
+
+                    if (user_post_data != null)
+                    {
+                        post.UserData.Readed = user_post_data.Readed;
+                        post.UserData.Favourite = user_post_data.Favourite;
+                    }
                 }
             }
 

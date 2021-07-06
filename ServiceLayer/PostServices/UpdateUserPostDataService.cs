@@ -63,8 +63,9 @@ namespace ServiceLayer.PostServices
 
             //TODO this could be normlized
             PostResponseDto post_dto = _mapper.Map<Post, PostResponseDto>(user_post_data.Post);
-            post_dto.Readed = user_post_data.Readed;
-            post_dto.Favourite = user_post_data.Favourite;
+            post_dto.UserData = new UserPostDataResponseDto();
+            post_dto.UserData.Readed = user_post_data.Readed;
+            post_dto.UserData.Favourite = user_post_data.Favourite;
 
             return post_dto;
         }

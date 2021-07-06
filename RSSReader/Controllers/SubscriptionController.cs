@@ -16,13 +16,6 @@ namespace RSSReader.Controllers
     [Route("api/[controller]")]
     public class SubscriptionController : Controller
     {
-        [HttpGet("list")]
-        public async Task<ApiResponse> GetList([FromServices] ISubscriptionListService service)
-        {
-            var list = await service.GetListAsync(this.GetCurUserId());
-            return new ApiResponse(MsgSucceed, list, Status200OK);
-        }
-
         [HttpPost("subscribe")]
         public async Task<ApiResponse> Subscribe(SubscribeRequestDto dto, [FromServices] ISubscribeService service)
         {

@@ -58,8 +58,8 @@ namespace Tests.Services.PostServices
 
             //ASSERT
             Assert.That(result.Count, Is.EqualTo(RssConsts.POSTS_PER_CALL));
-            Assert.That(result.Where(x => !x.Favourite).Count, Is.EqualTo(RssConsts.POSTS_PER_CALL));
-            Assert.That(result.Where(x => !x.Readed).Count, Is.EqualTo(RssConsts.POSTS_PER_CALL));
+            Assert.That(result.Where(x => !x.UserData.Favourite).Count, Is.EqualTo(RssConsts.POSTS_PER_CALL));
+            Assert.That(result.Where(x => !x.UserData.Readed).Count, Is.EqualTo(RssConsts.POSTS_PER_CALL));
             var updated_blog = _context.Blogs.Include(x => x.Posts).Where(x => x.Id == blog.Id).FirstOrDefault();
             Assert.That(updated_blog.Posts.Count, Is.EqualTo(RssConsts.POSTS_PER_CALL));
             Assert.That(updated_blog.LastPostsRefreshDate, Is.GreaterThanOrEqualTo(start_time));
@@ -100,16 +100,46 @@ namespace Tests.Services.PostServices
 
             //ASSERT
             Assert.That(result.Count, Is.EqualTo(3));
-            Assert.That(result.Where(x => x.Favourite).Count, Is.EqualTo(1));
-            Assert.That(result.Where(x => !x.Favourite).Count, Is.EqualTo(2));
-            Assert.That(result.Where(x => x.Readed).Count, Is.EqualTo(1));
-            Assert.That(result.Where(x => !x.Readed).Count, Is.EqualTo(2));
+            Assert.That(result.Where(x => x.UserData.Favourite).Count, Is.EqualTo(1));
+            Assert.That(result.Where(x => !x.UserData.Favourite).Count, Is.EqualTo(2));
+            Assert.That(result.Where(x => x.UserData.Readed).Count, Is.EqualTo(1));
+            Assert.That(result.Where(x => !x.UserData.Readed).Count, Is.EqualTo(2));
             Assert.NotNull(result.Where(x => x.Id == post1.Id).First());
             Assert.NotNull(result.Where(x => x.Id == post2.Id).First());
         }
 
         [Test]
-        public async Task GetList_CantFindUserWithProvidedId_ListOfPostsWithoutData()
+        public async Task GetList_HappyPathUserNotLoggedIn_ListWithoutUserData()
+        {
+            //ARRANGE
+            var blog = new Blog() { LastPostsRefreshDate = DateTime.UtcNow };
+            var post1 = new Post() { Blog = blog };
+            var post2 = new Post() { Blog = blog };
+            var post3 = new Post() { Blog = blog };
+            _context.Add(blog);
+            _context.Add(post1);
+            _context.Add(post2);
+            _context.Add(post3);
+            _unitOfWork.Context.SaveChanges();
+
+            var service = new PostListService
+                (
+                    MapperHelper.GetNewInstance(),
+                    _unitOfWork,
+                    new FakeHttpHelperService().Object
+                );
+
+            //ACT
+            var result = await service.GetList("", blog.Id, 0);
+
+            //ASSERT
+            Assert.That(result.Count, Is.EqualTo(3));
+            Assert.NotNull(result.Where(x => x.Id == post1.Id).First());
+            Assert.NotNull(result.Where(x => x.Id == post2.Id).First());
+        }
+
+        [Test]
+        public async Task GetList_CantFindUserWithProvidedId_Null()
         {
             //ARRANGE
             var blog = new Blog() { LastPostsRefreshDate = DateTime.UtcNow };

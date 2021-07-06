@@ -14,10 +14,10 @@ namespace Dtos.Blogs
         public string Description { get; set; }
         public string Url { get; set; }
         public string ImageUrl { get; set; }
-        public UserBlogDataDto UserData { get; set; }
+        public UserBlogDataResponseDto UserData { get; set; }
     }
 
-    public class UserBlogDataDto
+    public class UserBlogDataResponseDto
     {
         public int SubId { get; set; }
         public DateTime FirstSubscribeDate { get; set; }

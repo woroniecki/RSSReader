@@ -40,7 +40,7 @@ export const ArticlePatchButtons: React.FC<ArticlePatchButtonsProps> = props => 
     }
   }
 
-  if (props.userData == null) return
+  if (props.userData == null) return <></>
 
   return (
     <React.Fragment>

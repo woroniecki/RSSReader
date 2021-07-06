@@ -80,10 +80,10 @@ export const SingleArticle: React.FC<SingleArticleProps> = () => {
 
   const renderArticle = () => {
     const numberArticleId = parseInt(articleid)
-    if (numberArticleId == NaN) return
+    if (numberArticleId == NaN) return '404'
 
     const article = articlesList.find(el => el.id == numberArticleId)
-    if (article == null) return
+    if (article == null) return '404'
 
     return (
       <>

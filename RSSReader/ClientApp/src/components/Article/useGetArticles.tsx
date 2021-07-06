@@ -29,12 +29,18 @@ export const useGetArticles = () => {
 
     dispatch(layoutSlice.actions.setLoader(layoutSlice.type.none))
   }
+
   React.useEffect(() => {
     if (token) {
       fetchList()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blogsList])
+
+  React.useEffect(() => {
+    fetchList()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return
 }

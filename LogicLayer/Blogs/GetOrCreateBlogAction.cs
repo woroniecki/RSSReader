@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using DataLayer.Models;
 using DbAccess.Core;
+using HtmlAgilityPack;
 using LogicLayer._const;
 using LogicLayer._GenericActions;
 using LogicLayer.Helpers;
@@ -14,6 +17,11 @@ namespace LogicLayer.Blogs
         ActionErrors,
         IActionAsync<string, Blog>
     {
+        public static string ErrorMsg_NoContent(string link) => $"Can't get content under url {link}.";
+        public static string ErrorMsg_CantGetRssFormat(string link) => $"Can't find rss content under {link}.";
+        public static string ErrorMsg_CantGetRssLink(string link) => $"Can't get rss link in {link}.";
+        public const string ErrorMsg_BlogUpdateFail = "Update blog failed";
+
         private readonly IHttpHelperService _httpService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -27,6 +35,11 @@ namespace LogicLayer.Blogs
 
         public async Task<Blog> ActionAsync(string url)
         {
+            return await RunRecursiveActionAsync(url, false);
+        }
+
+        public async Task<Blog> RunRecursiveActionAsync(string url, bool blockRecursion)
+        {
             Blog blog = await GetBlog(url);
 
             if (blog == null)
@@ -34,7 +47,7 @@ namespace LogicLayer.Blogs
                 var http_response = await _httpService.GetRssHttpResponse(url);
                 if (http_response == null)
                 {
-                    AddError("Can't get content under url.");
+                    AddError(ErrorMsg_NoContent(url));
                     return null;
                 }
 
@@ -49,7 +62,23 @@ namespace LogicLayer.Blogs
                 IEnumerable<RssSchema> parsed_feed = FeedMethods.Parse(http_response.Content);
                 if (parsed_feed == null)
                 {
-                    AddError("Content under url is not rss format.");
+                    string feed_url = GetFeedUrlFromHtml(http_response);
+
+                    if (!blockRecursion)
+                    {
+                        if (!string.IsNullOrEmpty(feed_url))
+                        {
+                            //Try again with link taken from content
+                            return await RunRecursiveActionAsync(feed_url, true);
+                        }
+                        else
+                        {
+                            AddError(ErrorMsg_CantGetRssLink(url));
+                            return null;
+                        }
+                    }
+
+                    AddError(ErrorMsg_CantGetRssFormat(url));
                     return null;
                 }
 
@@ -62,7 +91,7 @@ namespace LogicLayer.Blogs
 
                 if (FeedMethods.UpdateBlogPosts(blog, parsed_feed, _mapper) < 0)
                 {
-                    AddError("Update blog failed");
+                    AddError(ErrorMsg_BlogUpdateFail);
                     return null;
                 }
 
@@ -70,6 +99,38 @@ namespace LogicLayer.Blogs
             }
 
             return blog;
+        }
+
+        string GetFeedUrlFromHtml(HttpHelperService.HttpCallResponse html)
+        {
+            try
+            {
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(html.Content);
+
+
+                foreach (HtmlNode node in htmlDoc.DocumentNode
+                                                 .Descendants("link")
+                                                 .Where(x => "" != x.GetAttributeValue("type", "")))
+                {
+                    string type = node.GetAttributeValue("type", "");
+                    switch (type)
+                    {
+                        case "application/rss+xml":
+                            string href = node.GetAttributeValue("href", "");
+                            if ("" != href)
+                                return href;
+
+                            break;
+                    }
+                }
+            } 
+            catch(Exception ex)
+            {
+                //TODO
+                Console.Write(ex);
+            }
+            return "";
         }
 
         private async Task<Blog> GetBlog(string url)

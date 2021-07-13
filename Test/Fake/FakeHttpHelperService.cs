@@ -41,7 +41,7 @@ namespace Tests.Helpers
             return this;
         }
 
-        public FakeHttpHelperService GetRssHttpResponse(string param, HttpHelperService.RssHttpResponse value)
+        public FakeHttpHelperService GetRssHttpResponse(string param, HttpHelperService.HttpCallResponse value)
         {
             Setup(x => x.GetRssHttpResponse(param))
                 .Returns(Task.FromResult(value))
@@ -58,7 +58,7 @@ namespace Tests.Helpers
                 feed_data = r.ReadToEnd();
             }
 
-            var result = new HttpHelperService.RssHttpResponse();
+            var result = new HttpHelperService.HttpCallResponse();
             result.Content = feed_data;
             result.RequestUrl = requestUri;
 

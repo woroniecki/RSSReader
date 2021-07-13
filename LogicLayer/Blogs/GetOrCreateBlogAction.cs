@@ -116,7 +116,12 @@ namespace LogicLayer.Blogs
                     string type = node.GetAttributeValue("type", "");
                     switch (type)
                     {
+
                         case "application/rss+xml":
+                        case "application/rdf+xml":
+                        case "application/atom+xml":
+                        case "application/xml":
+                        case "text/xml":
                             string href = node.GetAttributeValue("href", "");
                             if ("" != href)
                                 return href;

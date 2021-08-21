@@ -5,4 +5,8 @@
     <Configurations>Debug;Release;Development</Configurations>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+
 </Project>

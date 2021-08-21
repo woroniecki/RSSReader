@@ -18,6 +18,7 @@ namespace LogicLayer.Blogs
         IActionAsync<string, Blog>
     {
         public static string ErrorMsg_NoContent(string link) => $"Can't get content under url {link}.";
+        public static string ErrorMsg_WrongUrlSyntax(string link) => $"Url syntax is not correct {link}.";
         public static string ErrorMsg_CantGetRssFormat(string link) => $"Can't find rss content under {link}.";
         public static string ErrorMsg_CantGetRssLink(string link) => $"Can't get rss link in {link}.";
         public const string ErrorMsg_BlogUpdateFail = "Update blog failed";
@@ -66,15 +67,44 @@ namespace LogicLayer.Blogs
 
                     if (!blockRecursion)
                     {
+                        Uri new_uri;
+                        try
+                        {
+                            new_uri = new Uri(url);
+                        }
+                        catch
+                        {
+                            AddError(ErrorMsg_WrongUrlSyntax(url));
+                            return null;
+                        }
+
                         if (!string.IsNullOrEmpty(feed_url))
                         {
                             //Try again with link taken from content
-                            return await RunRecursiveActionAsync(feed_url, true);
+                            string recursive_url;
+                            try
+                            {
+                                Uri new_feed_uri = new Uri(feed_url);
+                                recursive_url = feed_url;
+                            }
+                            catch
+                            {
+                                recursive_url = new_uri.AbsoluteUri + feed_url.TrimStart();
+                            }
+                            return await RunRecursiveActionAsync(recursive_url, true);
                         }
                         else
                         {
-                            AddError(ErrorMsg_CantGetRssLink(url));
-                            return null;
+                            //Try to use common link if it couldn't find it in sources
+                            try
+                            {
+                                return await RunRecursiveActionAsync(new_uri.AbsoluteUri + "feed", true);
+                            }
+                            catch
+                            {
+                                AddError(ErrorMsg_CantGetRssLink(url));
+                                return null;
+                            }
                         }
                     }
 

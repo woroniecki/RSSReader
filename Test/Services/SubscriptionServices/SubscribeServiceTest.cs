@@ -146,6 +146,62 @@ namespace Tests.Services.SubscriptionServices
         }
 
         [Test]
+        public async Task Subscribe_CreatesNewSubscriptionAndBlogByAddingFeedToUrl_SubscriptionResponseDto()
+        {
+            //ARRANGE
+            string url_from_data = "http://gry-online.pl/feed";
+            string website_url = "http://gry-online.pl";
+
+            var dto = new SubscribeRequestDto()
+            {
+                BlogUrl = website_url
+            };
+
+            var user = new ApiUser()
+            {
+                Id = "0"
+            };
+
+            _context.Add(user);
+            _context.SaveChanges();
+
+            var httpHelperService = new FakeHttpHelperService()
+                .GetRssHttpResponseFromFile(url_from_data, url_from_data, "../../../Data/feeddata.xml")
+                .GetRssHttpResponseFromFile(website_url, website_url, "../../../Data/website_no_feed_url.html");
+            var startTime = DateTime.UtcNow;
+            var service = new SubscribeService(
+                    MapperHelper.GetNewInstance(),
+                    _unitOfWork,
+                    httpHelperService.Object
+                );
+            var start_time = DateTime.UtcNow;
+            //ACT
+            var result = await service.Subscribe(dto, user.Id);
+
+            //ASSERT
+            var created_sub = _context
+                .Subscriptions
+                .Include(x => x.Blog)
+                .ThenInclude(x => x.Posts)
+                .Include(x => x.User)
+                .Where(x => x.User.Id == user.Id && x.Blog.Url == url_from_data)
+                .First();
+            Assert.IsNotNull(created_sub);
+            Assert.That(created_sub.User.Id, Is.EqualTo(user.Id));
+            Assert.That(created_sub.FirstSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
+            Assert.That(created_sub.LastSubscribeDate, Is.GreaterThanOrEqualTo(startTime));
+            Assert.That(result.Url, Is.EqualTo(url_from_data));
+            Assert.IsNull(result.UserData.GroupId);
+            httpHelperService.Verify();
+
+            //<--verify if posts updated-->
+            Assert.That(result.UserData.UnreadedCount, Is.EqualTo(RssConsts.POSTS_PER_CALL));
+            Assert.That(created_sub.Blog.Posts.Count, Is.EqualTo(result.UserData.UnreadedCount));
+            Assert.That(created_sub.Blog.LastPostsRefreshDate, Is.GreaterThanOrEqualTo(start_time));
+            Assert.IsNull(created_sub.GroupId);
+        }
+
+        [Test]
         public async Task Subscribe_CreatesNewSubscriptionForExistingBlogAndAsignGroup_SubscriptionResponseDto()
         {
             //ARRANGE

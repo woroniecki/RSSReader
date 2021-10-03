@@ -19,6 +19,7 @@ import useResetLoaderSlice from 'components/Spinner/useResetLoaderSlice'
 import SingleBlog from 'components/Blog/SingleBlog'
 import SingleArticle from 'components/Article/SingleArticle'
 import { Container } from '@material-ui/core'
+import Footer from 'components/Footer/Footer'
 
 function App() {
   const { loader } = useSelector(layoutSlice.stateSelector)
@@ -64,6 +65,7 @@ function App() {
         </main>
       </div>
       {loader != layoutSlice.type.none && <AppSpinner />}
+      <Footer />
     </>
   )
 }

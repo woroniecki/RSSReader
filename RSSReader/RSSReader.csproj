@@ -61,11 +61,18 @@
 	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
 		<!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
 		<Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
-		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+
+		<Message Importance="high" Text="Started building development version of the spa ..." Condition=" '$(Configuration)' == 'Development' "/>
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:development" Condition=" '$(Configuration)' == 'Development' "/>
+		<Message Importance="high" Text="Started building production version of the spa ..." Condition=" '$(Configuration)' == 'Release' "/>
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:production" Condition=" '$(Configuration)' == 'Release' "/>
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" Condition=" '$(Configuration)' == 'Debug' " />
 
 		<!-- Include the newly-built files in the publish output -->
 		<ItemGroup>
-			<DistFiles Include="$(SpaRoot)build\**" />
+			<DistFiles Include="$(SpaRoot)build\**" Condition=" '$(Configuration)' == 'Debug' " />
+			<DistFiles Include="$(SpaRoot)development\**" Condition=" '$(Configuration)' == 'Development' " />
+			<DistFiles Include="$(SpaRoot)production\**" Condition=" '$(Configuration)' == 'Release' " />
 			<ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
 				<RelativePath>%(DistFiles.Identity)</RelativePath>
 				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

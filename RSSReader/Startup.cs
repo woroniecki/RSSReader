@@ -29,6 +29,7 @@ namespace RSSReader
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        public string ConfigName { get; set; }
 
         public Startup(IWebHostEnvironment env)
         {
@@ -43,6 +44,8 @@ namespace RSSReader
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigName = Configuration.GetValue(typeof(string), "ConfigName") as string;
+
             string sqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<DataContext>(options => options
@@ -105,10 +108,7 @@ namespace RSSReader
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
             // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/build";
-            });
+            services.AddSpaStaticFiles(configuration => configuration.RootPath = $"ClientApp/{ConfigName}");
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -165,7 +165,7 @@ namespace RSSReader
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    spa.UseReactDevelopmentServer(npmScript: $"start:{ConfigName.ToLower()}");
                 }
             });
         }

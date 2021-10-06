@@ -19,6 +19,11 @@ using System.Threading.Tasks;
 
 namespace LogicLayer.PopulateDB
 {
+    public class DeadlockInt
+    {
+        public int value { get; set; }
+    }
+
     public class Seed
     {
         public static void SeedBlogs(
@@ -58,12 +63,15 @@ namespace LogicLayer.PopulateDB
                     urls.Add(url);
                 }
 
-                var batchSize = 10;
+                int batchSize = 10;
                 int batchCount = (int)Math.Ceiling((double)urls.Count / batchSize);
 
                 for (int i = 0; i < batchCount; i++)
                 {
                     Console.WriteLine($"New batch run {i}/{batchCount}");
+
+                    //Use counters to avoid deadlocks, when all tasks finished searching than execute save in db
+                    DeadlockInt finishedTasksAmount = new DeadlockInt() { value = 0 };
 
                     var urlsToAddBlog = urls.Skip(i * batchSize).Take(batchSize);
                     var tasks = urlsToAddBlog.Select(
@@ -74,7 +82,9 @@ namespace LogicLayer.PopulateDB
                             httpService,
                             url,
                             succeed_add,
-                            failed_add)
+                            failed_add,
+                            urlsToAddBlog.Count(),
+                            finishedTasksAmount)
                         ).ToArray();
 
                     Task.WaitAll(tasks);
@@ -112,16 +122,19 @@ namespace LogicLayer.PopulateDB
             IHttpHelperService httpService,
             string url,
             List<string> succeed,
-            List<string> failed)
+            List<string> failed,
+            int tasksAmount,
+            DeadlockInt finishedTasksAmount)
         {
-            try
+            using (var scope = host.Services.CreateScope())
             {
-                using (var scope = host.Services.CreateScope())
-                {
-                    var services = scope.ServiceProvider;
-                    var context = services.GetRequiredService<DataContext>();
-                    var uow = new UnitOfWork(context);
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<DataContext>();
+                var uow = new UnitOfWork(context);
 
+                //PREPARE CONTEXT
+                try
+                {
                     GetOrCreateBlogAction getOrCreateBlogAction = new GetOrCreateBlogAction(httpService, uow, mapper);
 
                     Blog blog = await getOrCreateBlogAction.ActionAsync(url);
@@ -130,35 +143,52 @@ namespace LogicLayer.PopulateDB
                     {
                         logger.LogError($"Failed to add blog {url}\n{getOrCreateBlogAction.Errors[0]}");
 
-                        lock (failed)
-                        {
-                            failed.Add($"{url} - {getOrCreateBlogAction.Errors[0]}");
-                        }
+                        lock (failed) failed.Add($"{url} - {getOrCreateBlogAction.Errors[0]}"); 
 
+                        lock (finishedTasksAmount) finishedTasksAmount.value++;
                         return false;
                     }
 
-                    lock (succeed)
-                    {
-                        succeed.Add(url);
-                    }
-
-                    await context.SaveChangesAsync();
-
-                    return true;
+                    lock (finishedTasksAmount) finishedTasksAmount.value++;
                 }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError($"Failed to add blog {url}\n{ex}");
-            }
+                catch (Exception ex)
+                {
+                    logger.LogError($"Failed to add blog {url}\n{ex}");
 
-            lock (failed)
-            {
-                failed.Add(url);
-            }
+                    lock (failed) failed.Add($"{url} - {ex.GetType()}");
 
-            return false;
+                    lock (finishedTasksAmount) finishedTasksAmount.value++;
+                    return false;
+                }
+
+                //Wait until all tasks are done before context save to avoid deadlocks
+                while (finishedTasksAmount.value < tasksAmount)
+                {
+                    await Task.Delay(200);
+                }
+
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError($"[EXCEPTION] Failed to add blog {url}\n{ex}");
+
+                    lock (failed) failed.Add($"{url} - {ex.GetType()}");
+                    return false;
+                }
+
+                lock (succeed) 
+                {
+                    if(!succeed.Contains(url)) 
+                        succeed.Add(url); 
+                    else
+                        logger.LogWarning($"DUPLICATED URL {url}");
+                }
+
+                return true;
+            }
 
         }
     }

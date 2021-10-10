@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using ServiceLayer.SmtpService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,16 @@ namespace ServiceLayer.CronServices
     public class UpdateBlogsCron : CronJobService
     {
         private readonly ILogger<UpdateBlogsCron> _logger;
+        private readonly ISmtpService _smtpService;
 
-        public UpdateBlogsCron(IScheduleConfig<UpdateBlogsCron> config, ILogger<UpdateBlogsCron> logger)
+        public UpdateBlogsCron(
+            IScheduleConfig<UpdateBlogsCron> config,
+            ISmtpService smtpService,
+            ILogger<UpdateBlogsCron> logger)
             : base(config.CronExpression, config.TimeZoneInfo)
         {
             _logger = logger;
+            _smtpService = smtpService;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
@@ -29,6 +35,7 @@ namespace ServiceLayer.CronServices
         public override Task DoWork(CancellationToken cancellationToken)
         {
             _logger.LogInformation($"{DateTime.Now:hh:mm:ss} UpdateBlogsCron is working.");
+            _smtpService.SendEmailToAdministration("Title", "Message");
             return Task.CompletedTask;
         }
 

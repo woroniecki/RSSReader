@@ -31,6 +31,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.8.0" />
 		<PackageReference Include="Microsoft.Toolkit.Parsers" Version="6.1.1" />
 		<PackageReference Include="NetCore.AutoRegisterDi" Version="2.1.0" />

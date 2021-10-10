@@ -24,6 +24,7 @@ using DataLayer.Models;
 using RSSReader.Config;
 using System;
 using ServiceLayer.CronServices;
+using ServiceLayer.SmtpService;
 
 namespace RSSReader
 {
@@ -129,6 +130,8 @@ namespace RSSReader
                 c.TimeZoneInfo = TimeZoneInfo.Local;
                 c.CronExpression = @"*/1 * * * *";
             });
+
+            services.AddSmtpConfig(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

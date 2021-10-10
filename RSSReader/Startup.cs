@@ -23,6 +23,7 @@ using DataLayer.Code;
 using DataLayer.Models;
 using RSSReader.Config;
 using System;
+using ServiceLayer.CronServices;
 
 namespace RSSReader
 {
@@ -122,6 +123,12 @@ namespace RSSReader
                         ValidateAudience = false
                     };
                 });
+
+            services.AddCronJob<UpdateBlogsCron>(c =>
+            {
+                c.TimeZoneInfo = TimeZoneInfo.Local;
+                c.CronExpression = @"*/1 * * * *";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

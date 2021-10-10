@@ -17,6 +17,7 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
 		<PackageReference Include="AutoWrapper.Core" Version="4.5.0" />
+		<PackageReference Include="Cronos" Version="0.7.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.0" />
@@ -62,10 +63,10 @@
 		<!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
 		<Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
 
-		<Message Importance="high" Text="Started building development version of the spa ..." Condition=" '$(Configuration)' == 'Development' "/>
-		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:development" Condition=" '$(Configuration)' == 'Development' "/>
-		<Message Importance="high" Text="Started building production version of the spa ..." Condition=" '$(Configuration)' == 'Release' "/>
-		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:production" Condition=" '$(Configuration)' == 'Release' "/>
+		<Message Importance="high" Text="Started building development version of the spa ..." Condition=" '$(Configuration)' == 'Development' " />
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:development" Condition=" '$(Configuration)' == 'Development' " />
+		<Message Importance="high" Text="Started building production version of the spa ..." Condition=" '$(Configuration)' == 'Release' " />
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:production" Condition=" '$(Configuration)' == 'Release' " />
 		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" Condition=" '$(Configuration)' == 'Debug' " />
 
 		<!-- Include the newly-built files in the publish output -->

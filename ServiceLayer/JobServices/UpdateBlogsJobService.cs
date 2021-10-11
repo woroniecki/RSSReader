@@ -11,6 +11,7 @@ using DbAccess.Core;
 using Dtos.Jobs;
 using LogicLayer.Helpers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ServiceLayer.JobServices
 {
@@ -20,14 +21,20 @@ namespace ServiceLayer.JobServices
         private IMapper _mapper;
         private IUnitOfWork _unitOfWork;
         private IHttpHelperService _httpService;
+        private ILogger<UpdateBlogsJobService> _logger;
 
         //public IImmutableList<ValidationResult> Errors => _action != null ? _action.Errors : null;
 
-        public UpdateBlogsJobService(IMapper mapper, IUnitOfWork unitOfWork, IHttpHelperService httpService)
+        public UpdateBlogsJobService(
+            IMapper mapper,
+            IUnitOfWork unitOfWork,
+            IHttpHelperService httpService,
+            ILogger<UpdateBlogsJobService> logger)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _httpService = httpService;
+            _logger = logger;
         }
 
         public async Task<UpdateBlogsJobResponse> UpdateBlogs()
@@ -35,7 +42,7 @@ namespace ServiceLayer.JobServices
             List<string> failed_updates = new List<string>();
             List<string> succeeded_updates = new List<string>();
             List<string> no_update = new List<string>();
-            int big_step = 100;
+            int big_step = 32;
             int small_step = 4;
             int skip_amount = 0;
 
@@ -43,6 +50,8 @@ namespace ServiceLayer.JobServices
             do
             {
                 blogs = await _unitOfWork.BlogRepo.GetListWithPosts(skip_amount, big_step);
+
+                _logger.LogInformation($"UpdateBlogs progress: {skip_amount} updated");
 
                 skip_amount += big_step;
 

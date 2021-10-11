@@ -128,7 +128,7 @@ namespace RSSReader
             services.AddCronJob<UpdateBlogsCron>(c =>
             {
                 c.TimeZoneInfo = TimeZoneInfo.Local;
-                c.CronExpression = @"*/1 * * * *";
+                c.CronExpression = @"0 21 * * *";
             });
 
             services.AddSmtpConfig(Configuration);

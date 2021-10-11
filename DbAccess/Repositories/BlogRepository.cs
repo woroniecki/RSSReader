@@ -56,6 +56,7 @@ namespace DbAccess.Repositories
         {
             return await _context.Blogs
                 .Include(x => x.Posts)
+                .OrderBy(x => x.Id)
                 .Skip(skip).Take(take)
                 .ToListAsync();
         }

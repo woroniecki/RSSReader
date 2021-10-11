@@ -1,11 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceLayer.SmtpService
 {
@@ -13,25 +9,11 @@ namespace ServiceLayer.SmtpService
     {
         public ISmtpConfig _config { get; }
         public ILogger<SmtpService> _logger { get; }
-        private SmtpClient _smtpClient;
 
         public SmtpService(ISmtpConfig config, ILogger<SmtpService> logger)
         {
             _config = config;
             _logger = logger;
-
-            CreateClient();
-        }
-
-        private void CreateClient()
-        {
-            NetworkCredential basicCredential = new NetworkCredential(_config.GetUserName(), _config.GetPassword());
-
-            _smtpClient = new SmtpClient();
-            _smtpClient.Host = _config.GetHost();
-            _smtpClient.Port = _config.GetPort();
-            _smtpClient.UseDefaultCredentials = false;
-            _smtpClient.Credentials = basicCredential;
         }
 
         bool CanSendEmail()
@@ -44,17 +26,25 @@ namespace ServiceLayer.SmtpService
             if (!CanSendEmail())
                 return false;
 
-            MailMessage message = new MailMessage();
-            MailAddress fromAddress = new MailAddress(_config.GetSender());
+            NetworkCredential basic_credential = new NetworkCredential(_config.GetUserName(), _config.GetPassword());
 
-            message.From = fromAddress;
+            SmtpClient smtp_client = new SmtpClient();
+            smtp_client.Host = _config.GetHost();
+            smtp_client.Port = _config.GetPort();
+            smtp_client.UseDefaultCredentials = false;
+            smtp_client.Credentials = basic_credential;
+
+            MailMessage message = new MailMessage();
+            MailAddress from_address = new MailAddress(_config.GetSender());
+
+            message.From = from_address;
             message.Subject = title;
             message.Body = msg;
             _config.GetRecipients().ForEach(x => message.To.Add(x));
 
             try
             {
-                _smtpClient.Send(message);
+                smtp_client.Send(message);
             }
             catch (Exception ex)
             {

@@ -60,6 +60,15 @@ namespace DbAccess.Repositories
                 .Skip(skip).Take(take)
                 .ToListAsync();
         }
+
+        public async Task<List<Blog>> Search(string value, int take)
+        {
+            return await _context.Blogs
+                .Where(x => x.Url.Contains(value) || x.Name.Contains(value))
+                .OrderBy(x => x.Id)
+                .Take(take)
+                .ToListAsync();
+        }
     }
 
     public interface IBlogRepository : IBaseRepository<Blog>
@@ -67,5 +76,6 @@ namespace DbAccess.Repositories
         Task<Blog> GetByUrl(string url, int posts_amount);
         Task<Blog> GetWithPosts(Expression<Func<Blog, bool>> predicate);
         Task<List<Blog>> GetListWithPosts(int skip, int take);
+        Task<List<Blog>> Search(string value, int take);
     }
 }

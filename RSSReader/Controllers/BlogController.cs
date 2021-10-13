@@ -28,9 +28,9 @@ namespace RSSReader.Controllers
             return new ApiResponse(MsgSucceed, list, Status200OK);
         }
 
-        [HttpGet("search/{searchValue}")]
+        [HttpGet("search")]
         [AllowAnonymous]
-        public async Task<ApiResponse> Search([FromServices] IBlogSearchService service, string searchValue)
+        public async Task<ApiResponse> Search([FromBody] string searchValue, [FromServices] IBlogSearchService service)
         {
             var list = await service.Search(searchValue);
             return new ApiResponse(MsgSucceed, list, Status200OK);

@@ -30,9 +30,9 @@ namespace RSSReader.Controllers
 
         [HttpGet("search")]
         [AllowAnonymous]
-        public async Task<ApiResponse> Search([FromBody] string searchValue, [FromServices] IBlogSearchService service)
+        public async Task<ApiResponse> SearchPost([FromServices] IBlogSearchService service, string value)
         {
-            var list = await service.Search(searchValue);
+            var list = await service.Search(value);
             return new ApiResponse(MsgSucceed, list, Status200OK);
         }
     }

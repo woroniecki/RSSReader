@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 
 import { authSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
-import { layoutSlice } from 'store/slices'
+import { layoutSlice, snackbarSlice } from 'store/slices'
 import { applyValidationErrors } from 'utils/utils'
 import { Button, FormHelperText, TextField } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
@@ -40,6 +40,13 @@ export const Login: React.FC<LoginProps> = () => {
         push('/')
       } else {
         applyValidationErrors(formik, promise.payload)
+        dispatch(
+          snackbarSlice.actions.setSnackbar({
+            open: true,
+            color: 'error',
+            msg: 'Logging in failed',
+          })
+        )
       }
     },
   })

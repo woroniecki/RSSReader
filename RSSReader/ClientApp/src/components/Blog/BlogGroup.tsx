@@ -1,7 +1,7 @@
 import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { useAppDispatch } from 'store/store'
-import { groupsSlice, blogsSlice } from 'store/slices'
+import { groupsSlice, blogsSlice, snackbarSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 import { FormControl, MenuItem, Select } from '@material-ui/core'
 
@@ -32,8 +32,20 @@ export const BlogGroup: React.FC<BlogGroupProps> = props => {
       })
     )
 
-    if (groupsSlice.remove.fulfilled.match(promise)) {
+    if (blogsSlice.patchGroup.fulfilled.match(promise)) {
+      dispatch(
+        snackbarSlice.actions.setSnackbar({
+          open: true,
+          color: 'success',
+          msg: 'Group changed',
+        })
+      )
     } else {
+      snackbarSlice.actions.setSnackbar({
+        open: true,
+        color: 'error',
+        msg: 'Group change failed',
+      })
     }
   }
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { useFormik } from 'formik'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
-import { layoutSlice } from 'store/slices'
+import { layoutSlice, snackbarSlice } from 'store/slices'
 import * as Yup from 'yup'
 import { register } from '../../api/authApi'
 import { applyValidationErrors } from 'utils/utils'
@@ -40,6 +40,13 @@ export const Register: React.FC<RegisterProps> = () => {
         push('/login')
       } catch (err) {
         applyValidationErrors(formik, err.data)
+        dispatch(
+          snackbarSlice.actions.setSnackbar({
+            open: true,
+            color: 'error',
+            msg: 'Register failed',
+          })
+        )
       }
       dispatch(layoutSlice.actions.setLoader(layoutSlice.type.none))
     },

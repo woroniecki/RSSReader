@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export const applyValidationErrors = (formik: any, response: any): void => {
   if (response.result && response.result.validationErrors) {
     response.result.validationErrors.forEach((element: any) => {
@@ -10,4 +12,8 @@ export const applyValidationErrors = (formik: any, response: any): void => {
   } else if (response.message) {
     formik.setFieldError('global', response.message)
   }
+}
+
+export const formatDate = (date: string): string => {
+  return moment(date).format('DD/MM/YYYY')
 }

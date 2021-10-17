@@ -10,6 +10,7 @@ import useGetArticles from './useGetArticles'
 import { Button, CardHeader, Divider, Typography } from '@material-ui/core'
 import styled from 'styled-components'
 import AppButton from 'components/layout/AppButton'
+import { formatDate } from 'utils/utils'
 
 const SingleArticleWrapper = styled.div`
   img {
@@ -100,7 +101,7 @@ export const SingleArticle: React.FC<SingleArticleProps> = () => {
             </>
           }
           title={<Typography variant="h4">{article.name}</Typography>}
-          subheader={`${article.publishDate}, ${article.author}`}
+          subheader={`${formatDate(article.publishDate)}, ${article.author}`}
         />
         <Divider />
         <SingleArticleWrapper>{parse(article.content)}</SingleArticleWrapper>

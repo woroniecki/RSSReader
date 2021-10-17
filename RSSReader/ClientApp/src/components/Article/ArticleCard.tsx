@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import ArticlePatchButtons from './ArticlePatchButtons'
 import { Button, CardActions, CardHeader, Divider } from '@material-ui/core'
 import { PostUserData } from 'api/api.types'
+import { formatDate } from 'utils/utils'
 
 export interface ArticleCardProps {
   articleid: number
@@ -38,7 +39,9 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
       <CardHeader
         title={<Typography variant="h5">{props.title}</Typography>}
         subheader={
-          <time dateTime={props.publishDate}>{props.publishDate}</time>
+          <time dateTime={props.publishDate}>
+            {formatDate(props.publishDate)}
+          </time>
         }
         action={<img className={classes.cronerImg} src={props.imageUrl} />}
       />

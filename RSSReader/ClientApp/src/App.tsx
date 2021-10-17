@@ -11,7 +11,7 @@ import Register from 'components/Auth/Register'
 import { Switch, Route } from 'react-router'
 import AppSpinner from './components/Spinner/AppSpinner'
 import { useSelector } from 'react-redux'
-import { layoutSlice, navbarSlice } from 'store/slices'
+import { layoutSlice, navbarSlice, snackbarSlice } from 'store/slices'
 import useRefreshToken from 'components/Auth/useRefreshToken'
 import useResetTokens from 'components/Auth/useResetTokens'
 import useGetBlogsAndSubs from 'components/Blog/useGetBlogsAndSubs'
@@ -20,9 +20,11 @@ import SingleBlog from 'components/Blog/SingleBlog'
 import SingleArticle from 'components/Article/SingleArticle'
 import { Container } from '@material-ui/core'
 import Footer from 'components/Footer/Footer'
+import CustomizedSnackbar from 'components/Snackbar/CustomizedSnackbar'
 
 function App() {
   const { loader } = useSelector(layoutSlice.stateSelector)
+  const snackbar = useSelector(snackbarSlice.stateSelector)
   const { navOpen } = useSelector(navbarSlice.stateSelector)
   useRefreshToken()
   useResetTokens()
@@ -65,6 +67,7 @@ function App() {
         </main>
       </div>
       {loader != layoutSlice.type.none && <AppSpinner />}
+      {snackbar.open && <CustomizedSnackbar />}
       <Footer />
     </>
   )

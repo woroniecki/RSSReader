@@ -5,6 +5,7 @@ import blogsReducer from './slices/blogsSlice'
 import articlesReducer from './slices/articlesSlice'
 import groupsReducer from './slices/groupsSlice'
 import navbarSlice from './slices/navbarSlice'
+import snackbarSlice from './slices/snackbarSlice'
 
 export const rootReducer = combineReducers({
   authReducer,
@@ -13,6 +14,7 @@ export const rootReducer = combineReducers({
   articlesReducer,
   groupsReducer,
   navbarSlice,
+  snackbarSlice,
 })
 
 export type RootState = ReturnType<typeof rootReducer>

@@ -20,6 +20,7 @@ import { Autocomplete } from '@material-ui/lab'
 import { BlogSearchResponse } from 'api/api.types'
 import BlogAvatar from './BlogAvatar'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { snackbarSlice } from 'store/slices'
 
 export interface AddSubProps {
   activeGroupId: string
@@ -54,8 +55,22 @@ export const AddSub: React.FC<AddSubProps> = props => {
       )
 
       if (blogsSlice.postAddSubscription.fulfilled.match(promise)) {
+        dispatch(
+          snackbarSlice.actions.setSnackbar({
+            open: true,
+            color: 'success',
+            msg: 'Subscription added',
+          })
+        )
       } else {
         applyValidationErrors(formik, promise.error)
+        dispatch(
+          snackbarSlice.actions.setSnackbar({
+            open: true,
+            color: 'error',
+            msg: 'Adding subscription failed',
+          })
+        )
       }
       setIsInAction(false)
     },

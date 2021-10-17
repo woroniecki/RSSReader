@@ -5,10 +5,12 @@ import { useAppDispatch } from 'store/store'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { red } from '@material-ui/core/colors'
 
+export type Size = 'small' | 'large'
+
 export interface BlogAvatarProps {
   title: string
   imageUrl: string
-  size?: string
+  size?: Size
 }
 
 export const BlogAvatar: React.FC<BlogAvatarProps> = props => {

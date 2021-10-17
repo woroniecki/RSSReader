@@ -57,7 +57,10 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
     if (blog.userData == null) return
 
     return (
-      <BlogGroup subId={props.blogid} activeGroupId={blog.userData.groupId} />
+      <BlogGroup
+        subId={blog.userData.subId}
+        activeGroupId={blog.userData.groupId}
+      />
     )
   }
 

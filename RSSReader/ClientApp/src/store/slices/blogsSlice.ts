@@ -134,11 +134,10 @@ const blogsSlice = createSlice({
         blogsAdapter.removeOne(state, payload)
       })
       .addCase(patchGroup.fulfilled, (state, { payload }) => {
-        state.entities[payload.id].userData.groupId = payload.userData.groupId
+        blogsAdapter.upsertOne(state, payload)
       })
       .addCase(patchSubscription.fulfilled, (state, { payload }) => {
-        state.entities[payload.id].userData.filterReaded =
-          payload.userData.filterReaded
+        blogsAdapter.upsertOne(state, payload)
       })
   },
 })

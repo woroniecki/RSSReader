@@ -1,6 +1,7 @@
 import axios from 'api/axios'
 import {
   Blog,
+  BlogSearchResponse,
   AddSubscriptionRequest,
   Post,
   PatchPostRequest,
@@ -14,6 +15,17 @@ export const getSubscribedBlogsList = async (): Promise<Blog[]> => {
   try {
     const res = await axios.get(`/api/blog/subscribedList`)
     return res.data.result as Blog[]
+  } catch (error) {
+    throw error.response
+  }
+}
+
+export const getSearchBlogs = async (
+  value: string
+): Promise<BlogSearchResponse[]> => {
+  try {
+    const res = await axios.get(`/api/blog/search?value=${value}`)
+    return res.data.result as BlogSearchResponse[]
   } catch (error) {
     throw error.response
   }

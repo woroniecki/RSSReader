@@ -32,6 +32,12 @@ export interface Blog {
   userData: BlogUserData
 }
 
+export interface BlogSearchResponse {
+  name: string
+  url: string
+  imageUrl: string
+}
+
 export interface BlogUserData {
   subId: number
   firstSubscribeDate: string

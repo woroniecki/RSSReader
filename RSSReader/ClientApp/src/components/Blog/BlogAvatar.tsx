@@ -8,13 +8,23 @@ import { red } from '@material-ui/core/colors'
 export interface BlogAvatarProps {
   title: string
   imageUrl: string
+  size?: string
 }
 
 export const BlogAvatar: React.FC<BlogAvatarProps> = props => {
   const classes = useStyles()
 
+  function getAvatarClass() {
+    if (props.size === 'small') return classes.avatarSmall
+    return classes.avatarLarge
+  }
+
   return (
-    <Avatar aria-label="recipe" className={classes.avatar} src={props.imageUrl}>
+    <Avatar
+      aria-label="recipe"
+      className={getAvatarClass()}
+      src={props.imageUrl}
+    >
       <Typography variant="h5">
         {props.title.length > 0 && props.title.charAt(0)}
       </Typography>
@@ -24,7 +34,12 @@ export const BlogAvatar: React.FC<BlogAvatarProps> = props => {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    avatar: {
+    avatarSmall: {
+      backgroundColor: red[500],
+      width: theme.spacing(3),
+      height: theme.spacing(3),
+    },
+    avatarLarge: {
       backgroundColor: red[500],
       width: theme.spacing(7),
       height: theme.spacing(7),

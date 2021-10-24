@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import {
   Button,
   Dialog,
@@ -6,15 +7,21 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@material-ui/core'
-import React from 'react'
+import SpinnerElement from 'components/Spinner/SpinnerElement'
 
 export interface DeleteGroupPromptProps {
   onMove: (event: React.MouseEvent<HTMLButtonElement>) => void
   onDelete: (event: React.MouseEvent<HTMLButtonElement>) => void
   onClose: (event: React.MouseEvent<HTMLButtonElement>) => void
+  enableSpinner: boolean
 }
 
 export const DeleteGroupPrompt: React.FC<DeleteGroupPromptProps> = props => {
+  function renderProcessing() {
+    if (!props.enableSpinner) return
+    return <SpinnerElement size={24} />
+  }
+
   return (
     <>
       <Dialog
@@ -27,6 +34,15 @@ export const DeleteGroupPrompt: React.FC<DeleteGroupPromptProps> = props => {
           <DialogContentText>
             What to do with blogs assigned to group?
           </DialogContentText>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            {renderProcessing()}
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={props.onMove}>Move to all</Button>

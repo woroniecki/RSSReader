@@ -41,11 +41,13 @@ export const BlogGroup: React.FC<BlogGroupProps> = props => {
         })
       )
     } else {
-      snackbarSlice.actions.setSnackbar({
-        open: true,
-        color: 'error',
-        msg: 'Group change failed',
-      })
+      dispatch(
+        snackbarSlice.actions.setSnackbar({
+          open: true,
+          color: 'error',
+          msg: 'Group change failed',
+        })
+      )
     }
   }
 

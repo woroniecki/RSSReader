@@ -3,7 +3,7 @@ import DeleteGroupPrompt from 'components/AppNavbar/NavbarGroups/DeleteGroupProm
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
-import { groupsSlice, blogsSlice } from 'store/slices'
+import { groupsSlice, blogsSlice, snackbarSlice } from 'store/slices'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { useSelector } from 'react-redux'
 import { Blog } from 'api/api.types'
@@ -18,6 +18,7 @@ export const RemoveGroupBtn: React.FC<RemoveGroupBtnProps> = props => {
   const { push } = useHistory()
   const blogsList = useSelector(blogsSlice.selectAll)
   const [showPrompt, setShowPrompt] = useState(false)
+  const [inAction, setInAction] = useState(false)
 
   const getBlogs = () => {
     const blogs: Blog[] = []
@@ -30,6 +31,10 @@ export const RemoveGroupBtn: React.FC<RemoveGroupBtnProps> = props => {
   }
 
   const removeGroup = async (id: number, moveSubsToAll: boolean) => {
+    if (inAction) return
+
+    setInAction(true)
+
     const subs_to_change = getBlogs()
 
     const promise = await dispatch(
@@ -53,8 +58,25 @@ export const RemoveGroupBtn: React.FC<RemoveGroupBtnProps> = props => {
       }
 
       if (props.curGroupId == id) push('/')
+
+      dispatch(
+        snackbarSlice.actions.setSnackbar({
+          open: true,
+          color: 'success',
+          msg: 'Group removed',
+        })
+      )
     } else {
+      dispatch(
+        snackbarSlice.actions.setSnackbar({
+          open: true,
+          color: 'error',
+          msg: 'Failed to remove group',
+        })
+      )
     }
+
+    setInAction(false)
   }
 
   const renderDeletePrompt = () => {
@@ -64,6 +86,7 @@ export const RemoveGroupBtn: React.FC<RemoveGroupBtnProps> = props => {
           onMove={() => removeGroup(props.id, true)}
           onDelete={() => removeGroup(props.id, false)}
           onClose={() => setShowPrompt(false)}
+          enableSpinner={inAction}
         />
       )
     }

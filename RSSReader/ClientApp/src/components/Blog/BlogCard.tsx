@@ -12,12 +12,10 @@ import { BlogGroup } from './BlogGroup'
 import UnsubscribeBlogBtn from './UnsubscribeBlogBtn'
 import { Button, CardActions, CardHeader, Divider } from '@material-ui/core'
 import BlogAvatar from './BlogAvatar'
+import { Blog } from 'api/api.types'
 
 export interface BlogCardProps {
-  title: string
-  description: string
-  imageUrl: string
-  blogid: number
+  blog: Blog
 }
 
 export const BlogCard: React.FC<BlogCardProps> = props => {
@@ -29,19 +27,17 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
   const articlesList = useSelector(articlesSlice.selectAll)
 
   function DrawUnreadedAmount() {
-    const blog = blogsList.find(el => el.id == props.blogid)
+    if (props.blog == null) return
 
-    if (blog == null) return
-
-    if (blog.userData == null) return
+    if (props.blog.userData == null) return
 
     let amount = articlesList.filter(
       el =>
-        el.blogId == props.blogid && el.userData != null && !el.userData.readed
+        el.blogId == props.blog.id && el.userData != null && !el.userData.readed
     ).length
 
-    if (amount <= 0 && blog.userData.unreadedCount != null) {
-      amount = blog.userData.unreadedCount
+    if (amount <= 0 && props.blog.userData.unreadedCount != null) {
+      amount = props.blog.userData.unreadedCount
     }
 
     if (amount <= 0) return
@@ -50,16 +46,14 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
   }
 
   function DrawGroup() {
-    const blog = blogsList.find(el => el.id == props.blogid)
+    if (props.blog == null) return
 
-    if (blog == null) return
-
-    if (blog.userData == null) return
+    if (props.blog.userData == null) return
 
     return (
       <BlogGroup
-        subId={blog.userData.subId}
-        activeGroupId={blog.userData.groupId}
+        subId={props.blog.userData.subId}
+        activeGroupId={props.blog.userData.groupId}
       />
     )
   }
@@ -67,24 +61,26 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
   return (
     <Card className={classes.root}>
       <CardHeader
-        avatar={<BlogAvatar title={props.title} imageUrl={props.imageUrl} />}
+        avatar={
+          <BlogAvatar title={props.blog.name} imageUrl={props.blog.imageUrl} />
+        }
         action={
           <>
             {DrawUnreadedAmount()}
-            <UnsubscribeBlogBtn id={props.blogid} />
+            <UnsubscribeBlogBtn blog={props.blog} />
           </>
         }
-        title={<Typography variant="h5">{props.title}</Typography>}
+        title={<Typography variant="h5">{props.blog.name}</Typography>}
         subheader={DrawGroup()}
       />
       <Divider />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          {props.description}
+          {props.blog.description}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button onClick={() => push(`/blog/${props.blogid}`)}>Read</Button>
+        <Button onClick={() => push(`/blog/${props.blog.id}`)}>Read</Button>
       </CardActions>
     </Card>
   )

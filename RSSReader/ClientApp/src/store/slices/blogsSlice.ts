@@ -57,14 +57,14 @@ export const putUnsubscribeBlog = createAsyncThunk<
   // Return type of the payload creator
   number,
   // First argument to the payload creator
-  number,
+  Blog,
   {
     rejectValue: string
   }
 >(`${BLOGS}/unsubscribeBlog`, async (params, { rejectWithValue }) => {
   try {
-    const res = await blogApi.putUnsubscribeBlog(params)
-    return params
+    const res = await blogApi.putUnsubscribeBlog(params.userData.subId)
+    return params.id
   } catch (err) {
     throw err.data
   }

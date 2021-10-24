@@ -26,15 +26,7 @@ export const AppHome: React.FC<AppHomeProps> = () => {
             noGroupId == -1 &&
             el.userData.groupId == null)
       )
-      .map(el => (
-        <BlogCard
-          key={el.id}
-          blogid={el.id}
-          title={el.name}
-          description={el.description}
-          imageUrl={el.imageUrl}
-        />
-      ))
+      .map(el => <BlogCard blog={el} />)
   }
 
   const renderMainPage = () => {

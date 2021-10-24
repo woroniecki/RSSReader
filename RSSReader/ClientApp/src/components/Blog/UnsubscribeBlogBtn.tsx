@@ -3,19 +3,20 @@ import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { useAppDispatch } from 'store/store'
 import { blogsSlice } from 'store/slices'
+import { Blog } from 'api/api.types'
 
 export interface UnsubscribeBlogBtnProps {
-  id: number
+  blog: Blog
 }
 
 export const UnsubscribeBlogBtn: React.FC<UnsubscribeBlogBtnProps> = props => {
   const dispatch = useAppDispatch()
   const [isInAction, setIsInAction] = useState(false)
 
-  const unsubcribeBlog = async (id: number) => {
+  const unsubcribeBlog = async () => {
     if (isInAction) return
     setIsInAction(true)
-    const promise = await dispatch(blogsSlice.putUnsubscribeBlog(id))
+    const promise = await dispatch(blogsSlice.putUnsubscribeBlog(props.blog))
 
     if (blogsSlice.putUnsubscribeBlog.fulfilled.match(promise)) {
     } else {
@@ -27,7 +28,7 @@ export const UnsubscribeBlogBtn: React.FC<UnsubscribeBlogBtnProps> = props => {
     <IconButton
       aria-label="delete"
       onClick={() => {
-        unsubcribeBlog(props.id)
+        unsubcribeBlog()
       }}
     >
       <DeleteIcon />

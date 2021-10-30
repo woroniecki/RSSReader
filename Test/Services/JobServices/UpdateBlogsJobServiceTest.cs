@@ -10,6 +10,7 @@ using Moq;
 using NUnit.Framework;
 using ServiceLayer.JobServices;
 using Tests.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace Tests.Services.JobServices
 {
@@ -56,7 +57,8 @@ namespace Tests.Services.JobServices
             var service = new UpdateBlogsJobService(
                     MapperHelper.GetNewInstance(),
                     _unitOfWork,
-                    httpHelperService.Object
+                    httpHelperService.Object,
+                    new Mock<ILogger<UpdateBlogsJobService>>().Object
                 );
 
             //ACT
@@ -107,7 +109,8 @@ namespace Tests.Services.JobServices
             var service = new UpdateBlogsJobService(
                     MapperHelper.GetNewInstance(),
                     _unitOfWork,
-                    httpHelperService.Object
+                    httpHelperService.Object,
+                    new Mock<ILogger<UpdateBlogsJobService>>().Object
                 );
 
             //ACT

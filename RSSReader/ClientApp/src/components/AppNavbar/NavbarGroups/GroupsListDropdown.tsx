@@ -17,6 +17,7 @@ export interface GroupsListDropdownProps {
   groupId: number
   pushTo: string
   groupName: string
+  dropdown: boolean
   allBlogs?: boolean
 }
 
@@ -59,15 +60,20 @@ export const GroupsListDropdown: React.FC<GroupsListDropdownProps> = props => {
       return <RemoveGroupBtn id={props.groupId} curGroupId={props.groupId} />
   }
 
+  const renderDropdownIcon = () => {
+    if (!props.dropdown) return
+    return open ? <ExpandLess /> : <ExpandMore />
+  }
+
   return (
     <List>
       <ListItem key="Userpanel" button onClick={handleClick}>
         <ListItemIcon></ListItemIcon>
         <ListItemText primary={props.groupName} />
-        {open ? <ExpandLess /> : <ExpandMore />}
+        {renderDropdownIcon()}
         {renderDeleteBtn()}
       </ListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse in={open && props.dropdown} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {renderBlogs()}
         </List>

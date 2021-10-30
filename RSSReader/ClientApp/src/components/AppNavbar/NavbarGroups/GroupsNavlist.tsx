@@ -32,9 +32,10 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = () => {
     return (
       <GroupsListDropdown
         groupId={-1}
-        groupName={'All'}
+        groupName={'Home'}
         pushTo={`/`}
         allBlogs={true}
+        dropdown={false}
       />
     )
   }
@@ -46,7 +47,12 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = () => {
       ).length > 0
     ) {
       return (
-        <GroupsListDropdown groupId={-1} groupName={'None'} pushTo={`/-1`} />
+        <GroupsListDropdown
+          groupId={-1}
+          groupName={'Feeds'}
+          dropdown={true}
+          pushTo={`/-1`}
+        />
       )
     }
   }
@@ -59,6 +65,7 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = () => {
           key={el.id}
           groupId={el.id}
           groupName={el.name}
+          dropdown={true}
           pushTo={`/` + el.id.toString()}
         />
       ))

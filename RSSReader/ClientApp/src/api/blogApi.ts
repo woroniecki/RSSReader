@@ -97,7 +97,7 @@ export const getGroupsList = async (): Promise<Group[]> => {
     const res = await axios.get(`/api/group/list`)
     const group_none: Group = {
       id: -1,
-      name: 'None',
+      name: 'Feeds',
     }
     return [group_none].concat(res.data.result)
   } catch (error) {

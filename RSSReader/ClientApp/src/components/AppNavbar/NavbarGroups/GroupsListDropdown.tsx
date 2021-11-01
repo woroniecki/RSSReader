@@ -12,6 +12,8 @@ import { useStyles } from '../UserNavbar'
 import { blogsSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 import RemoveGroupBtn from './RemoveGroupBtn'
+import BlogAvatar from 'components/Blog/BlogAvatar'
+import AppListItemText from '../AppListItemText'
 
 export interface GroupsListDropdownProps {
   groupId: number
@@ -44,12 +46,16 @@ export const GroupsListDropdown: React.FC<GroupsListDropdownProps> = props => {
       .map(el => (
         <ListItem
           button
-          className={classes.nested}
           key={el.id}
           onClick={() => push(`/blog/` + el.id.toString())}
         >
-          <ListItemIcon></ListItemIcon>
-          <ListItemText primary={el.name} />
+          <BlogAvatar
+            title={el.name}
+            imageUrl={el.imageUrl}
+            size="small"
+            variant="rounded"
+          />
+          <AppListItemText fontSize={12} variant="button" text={el.name} />
         </ListItem>
       ))
     //
@@ -68,13 +74,12 @@ export const GroupsListDropdown: React.FC<GroupsListDropdownProps> = props => {
   return (
     <List>
       <ListItem key="Userpanel" button onClick={handleClick}>
-        <ListItemIcon></ListItemIcon>
-        <ListItemText primary={props.groupName} />
+        <AppListItemText fontSize={14} variant="h3" text={props.groupName} />
         {renderDropdownIcon()}
         {renderDeleteBtn()}
       </ListItem>
       <Collapse in={open && props.dropdown} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
+        <List component="div" disablePadding={false}>
           {renderBlogs()}
         </List>
       </Collapse>

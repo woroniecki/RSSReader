@@ -6,6 +6,8 @@ import PostAddIcon from '@material-ui/icons/PostAdd'
 import { applyValidationErrors } from 'utils/utils'
 import { useFormik } from 'formik'
 import AddGroupFormPrompt from './AddGroupFormPrompt'
+import AppListItemIcon from '../AppListItemIcon'
+import AppListItemText from '../AppListItemText'
 
 export interface AddGroupBtnProps {}
 
@@ -41,10 +43,10 @@ export const AddGroupBtn: React.FC<AddGroupBtnProps> = () => {
   return (
     <>
       <ListItem button key="Register" onClick={() => setShowPrompt(true)}>
-        <ListItemIcon>
+        <AppListItemIcon>
           <PostAddIcon />
-        </ListItemIcon>
-        <ListItemText primary="New group" />
+        </AppListItemIcon>
+        <AppListItemText fontSize={16} variant="h2" text="Add group" />
       </ListItem>
       {renderAddPrompt()}
     </>

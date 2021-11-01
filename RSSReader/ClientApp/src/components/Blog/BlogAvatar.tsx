@@ -11,6 +11,7 @@ export interface BlogAvatarProps {
   title: string
   imageUrl: string
   size?: Size
+  variant?: 'circle' | 'circular' | 'rounded' | 'square'
 }
 
 export const BlogAvatar: React.FC<BlogAvatarProps> = props => {
@@ -24,6 +25,7 @@ export const BlogAvatar: React.FC<BlogAvatarProps> = props => {
   return (
     <Avatar
       aria-label="recipe"
+      variant={props.variant}
       className={getAvatarClass()}
       src={props.imageUrl}
     >
@@ -40,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: red[500],
       width: theme.spacing(3),
       height: theme.spacing(3),
+      margin: '0px 10px 0px 12px',
     },
     avatarLarge: {
       backgroundColor: red[500],

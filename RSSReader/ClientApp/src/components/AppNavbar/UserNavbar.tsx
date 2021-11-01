@@ -20,6 +20,8 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@material-ui/core'
+import AppListItemText from './AppListItemText'
+import AppListItemIcon from './AppListItemIcon'
 
 export interface UserNavbarProps {}
 
@@ -46,16 +48,16 @@ export const UserNavbar: React.FC<UserNavbarProps> = () => {
     returnValue = (
       <List>
         <ListItem button key="login" onClick={() => push(`/login`)}>
-          <ListItemIcon>
+          <AppListItemIcon>
             <CreateIcon />
-          </ListItemIcon>
-          <ListItemText primary="Login" />
+          </AppListItemIcon>
+          <AppListItemText fontSize={16} variant="h2" text="Login" />
         </ListItem>
         <ListItem button key="Register" onClick={() => push(`/register`)}>
-          <ListItemIcon>
+          <AppListItemIcon>
             <PersonAddIcon />
-          </ListItemIcon>
-          <ListItemText primary="Register" />
+          </AppListItemIcon>
+          <AppListItemText fontSize={16} variant="h2" text="Register" />
         </ListItem>
       </List>
     )
@@ -64,19 +66,19 @@ export const UserNavbar: React.FC<UserNavbarProps> = () => {
       <React.Fragment>
         <List>
           <ListItem key="Userpanel" button onClick={handleClick}>
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText primary={userName} />
+            <AppListItemIcon>
+              <PersonIcon fontSize="small" />
+            </AppListItemIcon>
+            <AppListItemText fontSize={16} variant="h2" text={userName} />
             {userPanelDropdown ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={userPanelDropdown} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button className={classes.nested} onClick={OnLogout}>
-                <ListItemIcon>
-                  <ExitToAppIcon />
-                </ListItemIcon>
-                <ListItemText primary="Logout" />
+              <ListItem button onClick={OnLogout}>
+                <AppListItemIcon style={{ margin: '0px 4px 0px 16px' }}>
+                  <ExitToAppIcon fontSize="small" />
+                </AppListItemIcon>
+                <AppListItemText fontSize={12} variant="button" text="Logout" />
               </ListItem>
             </List>
           </Collapse>

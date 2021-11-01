@@ -1,22 +1,19 @@
 import React from 'react'
-import clsx from 'clsx'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
-import CssBaseline from '@material-ui/core/CssBaseline'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import { useAppDispatch } from 'store/store'
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks'
 
 import { layoutSlice, navbarSlice } from 'store/slices'
 import UserNavbar from './UserNavbar'
 import { useSelector } from 'react-redux'
 import { drawerWidth } from '../../App'
+import { Hidden } from '@material-ui/core'
+import MenuIcon from '@material-ui/icons/Menu'
 
 export interface AppNavbarProps {}
 
@@ -28,63 +25,68 @@ export const AppNavbar: React.FC<AppNavbarProps> = () => {
   const theme = useTheme()
   const { navOpen } = useSelector(navbarSlice.stateSelector)
 
-  const handleDrawerOpen = () => {
-    dispatch(navbarSlice.actions.setOpen(true))
+  const handleDrawerToggle = () => {
+    dispatch(navbarSlice.actions.setOpen(!navOpen))
   }
 
-  const handleDrawerClose = () => {
-    dispatch(navbarSlice.actions.setOpen(false))
-  }
+  const drawer = (
+    <div>
+      <div className={classes.toolbar} />
+      <Divider />
+      <UserNavbar />
+    </div>
+  )
 
   const renderNavbar = () => {
     if (loader != layoutSlice.type.fullScreen) {
       return (
         <>
-          <CssBaseline />
-          <Drawer
-            className={classes.drawer}
-            variant="persistent"
-            anchor="left"
-            open={navOpen}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-          >
-            <div className={classes.drawerHeader}>
-              <IconButton onClick={handleDrawerClose}>
-                {theme.direction === 'ltr' ? (
-                  <ChevronLeftIcon />
-                ) : (
-                  <ChevronRightIcon />
-                )}
-              </IconButton>
-            </div>
-            <Divider />
-            <UserNavbar />
-          </Drawer>
-
-          <AppBar
-            position="fixed"
-            className={clsx(classes.appBar, {
-              [classes.appBarShift]: navOpen,
-            })}
-          >
+          <AppBar position="fixed" className={classes.appBar}>
             <Toolbar>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
-                onClick={handleDrawerOpen}
                 edge="start"
-                className={clsx(classes.menuButton, navOpen && classes.hide)}
+                onClick={handleDrawerToggle}
+                className={classes.menuButton}
               >
-                <ChevronRightIcon />
+                <MenuIcon />
               </IconButton>
-              <LibraryBooksIcon fontSize="large" />
               <Typography variant="h6" noWrap>
-                Feedlog
+                Rss Box
               </Typography>
             </Toolbar>
           </AppBar>
+          <nav className={classes.drawer} aria-label="mailbox folders">
+            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+            <Hidden smUp implementation="css">
+              <Drawer
+                variant="temporary"
+                anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                open={navOpen}
+                onClose={handleDrawerToggle}
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                ModalProps={{
+                  keepMounted: true, // Better open performance on mobile.
+                }}
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
+            <Hidden xsDown implementation="css">
+              <Drawer
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                variant="permanent"
+                open
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
+          </nav>
         </>
       )
     } else {
@@ -96,40 +98,35 @@ export const AppNavbar: React.FC<AppNavbarProps> = () => {
 }
 
 const useStyles = makeStyles(theme => ({
-  appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
+  root: {
+    display: 'flex',
   },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  appBar: {
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
   },
   menuButton: {
     marginRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
   },
-  hide: {
-    display: 'none',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
   },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
   },
 }))
 

@@ -3,7 +3,7 @@ import React from 'react'
 import clsx from 'clsx'
 import {} from 'styled-components'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
 import AppHome from 'components/AppHome'
 import AppNavbar from 'components/AppNavbar/AppNavbar'
 import Login from 'components/Auth/Login'
@@ -18,11 +18,21 @@ import useGetBlogsAndSubs from 'components/Blog/useGetBlogsAndSubs'
 import useResetLoaderSlice from 'components/Spinner/useResetLoaderSlice'
 import SingleBlog from 'components/Blog/SingleBlog'
 import SingleArticle from 'components/Article/SingleArticle'
+import { useAppDispatch } from 'store/store'
 import { Container } from '@material-ui/core'
 import Footer from 'components/Footer/Footer'
 import CustomizedSnackbar from 'components/Snackbar/CustomizedSnackbar'
+import UserNavbar from 'components/AppNavbar/UserNavbar'
 
-function App() {
+interface Props {
+  /**
+   * Injected by the documentation to work in an iframe.
+   * You won't need it on your project.
+   */
+  window?: () => Window
+}
+
+function App(props: Props) {
   const { loader } = useSelector(layoutSlice.stateSelector)
   const snackbar = useSelector(snackbarSlice.stateSelector)
   const { navOpen } = useSelector(navbarSlice.stateSelector)
@@ -32,6 +42,8 @@ function App() {
   useResetLoaderSlice()
 
   const classes = useStyles()
+
+  const theme = useTheme()
 
   return (
     <>
@@ -45,12 +57,8 @@ function App() {
           </Route>
         </Switch>
 
-        <main
-          className={clsx(classes.content, {
-            [classes.contentShift]: navOpen,
-          })}
-        >
-          <div className={classes.drawerHeader} />
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
           <Container maxWidth="md">
             <Switch>
               <Route path="/login" component={Login} />
@@ -73,34 +81,37 @@ function App() {
   )
 }
 
-export const drawerWidth = 260
+export const drawerWidth = 240
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
   },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  appBar: {
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+  drawerPaper: {
+    width: drawerWidth,
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
   },
 }))
 

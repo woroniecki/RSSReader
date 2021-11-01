@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux'
 
 import { authSlice, groupsSlice, blogsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
-import AddGroupBtn from './AddGroupBtn'
 import GroupsListDropdown from './GroupsListDropdown'
 
 export interface GroupsNavlistProps {}
@@ -75,7 +74,6 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = () => {
       {renderAllGroup()}
       {renderNoneGroup()}
       {renderGroupsList()}
-      <AddGroupBtn />
     </>
   )
 }

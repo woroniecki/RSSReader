@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux'
 import { drawerWidth } from '../../App'
 import { Hidden } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
+import ActionsBar from './NavbarActions/ActionsBar'
 
 export interface AppNavbarProps {}
 
@@ -34,6 +35,7 @@ export const AppNavbar: React.FC<AppNavbarProps> = () => {
       <div className={classes.toolbar} />
       <Divider />
       <UserNavbar />
+      <ActionsBar />
     </div>
   )
 

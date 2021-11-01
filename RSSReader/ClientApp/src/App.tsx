@@ -3,7 +3,12 @@ import React from 'react'
 import clsx from 'clsx'
 import {} from 'styled-components'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import {
+  makeStyles,
+  useTheme,
+  createMuiTheme,
+  ThemeProvider,
+} from '@material-ui/core/styles'
 import AppHome from 'components/AppHome'
 import AppNavbar from 'components/AppNavbar/AppNavbar'
 import Login from 'components/Auth/Login'
@@ -35,7 +40,7 @@ interface Props {
 function App(props: Props) {
   const { loader } = useSelector(layoutSlice.stateSelector)
   const snackbar = useSelector(snackbarSlice.stateSelector)
-  const { navOpen } = useSelector(navbarSlice.stateSelector)
+  const [mode, setMode] = React.useState<'light' | 'dark'>('dark')
   useRefreshToken()
   useResetTokens()
   useGetBlogsAndSubs()
@@ -43,45 +48,60 @@ function App(props: Props) {
 
   const classes = useStyles()
 
-  const theme = useTheme()
+  const theme = React.useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          type: mode,
+          background: {
+            default: '#2B2B2B',
+            paper: '#262626',
+          },
+          divider: '#000000',
+        },
+      }),
+    [mode]
+  )
 
   return (
     <>
-      <div className={classes.root}>
-        <CssBaseline />
+      <ThemeProvider theme={theme}>
+        <div className={classes.root}>
+          <CssBaseline />
 
-        <Switch>
-          <Route exact path={['/', '/:groupId']} component={AppNavbar} />
-          <Route>
-            <AppNavbar />
-          </Route>
-        </Switch>
+          <Switch>
+            <Route exact path={['/', '/:groupId']} component={AppNavbar} />
+            <Route>
+              <AppNavbar />
+            </Route>
+          </Switch>
 
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Container maxWidth="md">
-            <Switch>
-              <Route path="/login" component={Login} />
-              <Route path="/register" component={Register} />
-              <Route path="/blog/:blogid" exact component={SingleBlog} />
-              <Route
-                path="/blog/:blogid/article/:articleid"
-                component={SingleArticle}
-              />
-              <Route exact path={['/', '/:groupId']} component={AppHome} />
-              <Route>404</Route>
-            </Switch>
-          </Container>
-        </main>
-      </div>
-      {loader != layoutSlice.type.none && <AppSpinner />}
-      {snackbar.open && <CustomizedSnackbar />}
-      <Footer />
+          <main className={classes.content}>
+            <div className={classes.toolbar} />
+            <Container maxWidth="md">
+              <Switch>
+                <Route path="/login" component={Login} />
+                <Route path="/register" component={Register} />
+                <Route path="/blog/:blogid" exact component={SingleBlog} />
+                <Route
+                  path="/blog/:blogid/article/:articleid"
+                  component={SingleArticle}
+                />
+                <Route exact path={['/', '/:groupId']} component={AppHome} />
+                <Route>404</Route>
+              </Switch>
+            </Container>
+          </main>
+        </div>
+        {loader != layoutSlice.type.none && <AppSpinner />}
+        {snackbar.open && <CustomizedSnackbar />}
+        <Footer />
+      </ThemeProvider>
     </>
   )
 }
 
-export const drawerWidth = 240
+export const drawerWidth = 290
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',

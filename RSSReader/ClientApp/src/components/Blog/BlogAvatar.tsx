@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { red } from '@material-ui/core/colors'
+import randomColor from 'randomcolor'
 
 export type Size = 'small' | 'large'
 
@@ -22,10 +23,18 @@ export const BlogAvatar: React.FC<BlogAvatarProps> = props => {
     return classes.avatarLarge
   }
 
+  function color(seed: string) {
+    return randomColor({
+      luminosity: 'bright',
+      seed: seed,
+    })
+  }
+
   return (
     <Avatar
       aria-label="recipe"
       variant={props.variant}
+      style={{ backgroundColor: color(props.title) }}
       className={getAvatarClass()}
       src={props.imageUrl}
     >

@@ -47,7 +47,7 @@ export const SingleBlog: React.FC<SingleBlogProps> = () => {
     return (
       <>
         <CardHeader
-          avatar={<BlogAvatar title={blog.name} imageUrl={blog.url} />}
+          avatar={<BlogAvatar title={blog.name} imageUrl={blog.imageUrl} />}
           action={
             <>
               <Button

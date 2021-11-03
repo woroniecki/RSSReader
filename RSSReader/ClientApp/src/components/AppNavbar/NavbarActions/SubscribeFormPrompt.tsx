@@ -16,17 +16,19 @@ import {
   TextField,
   Box,
   InputAdornment,
+  Select,
+  MenuItem,
+  FormControl,
 } from '@material-ui/core'
-import { useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { authSlice } from 'store/slices'
-import SpinnerElement from 'components/Spinner/SpinnerElement'
+import InputLabel from '@material-ui/core/InputLabel'
 import { Autocomplete } from '@material-ui/lab'
 import { BlogSearchResponse } from 'api/api.types'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { snackbarSlice } from 'store/slices'
 import { getSearchBlogs } from 'api/blogApi'
 import BlogAvatar from 'components/Blog/BlogAvatar'
+import SpinnerElement from 'components/Spinner/SpinnerElement'
 
 export interface SubscribeFormPromptProps {
   onClose: (event: React.MouseEvent<HTMLButtonElement>) => void
@@ -36,12 +38,14 @@ export const SubscribeFormPrompt: React.FC<SubscribeFormPromptProps> = props => 
   const dispatch = useAppDispatch()
   const [isInAction, setIsInAction] = useState(false)
   const [hintsList, setHintsList] = useState<BlogSearchResponse[]>([])
+  const groupsList = useSelector(groupsSlice.selectAll)
   const classes = useStyles()
 
   const formik = useFormik({
     initialValues: {
       global: '',
       url: '',
+      group: -1,
     },
     validationSchema: Yup.object().shape({
       url: Yup.string().required('Required'),
@@ -50,13 +54,10 @@ export const SubscribeFormPrompt: React.FC<SubscribeFormPromptProps> = props => 
       if (isInAction) return
       setIsInAction(true)
 
-      let groupIdToSend = -1 //parseInt(props.activeGroupId)
-      groupIdToSend = groupIdToSend == -1 ? null : groupIdToSend
-
       const promise = await dispatch(
         blogsSlice.postAddSubscription({
           blogUrl: values.url,
-          GroupId: groupIdToSend,
+          GroupId: values.group,
         })
       )
 
@@ -83,9 +84,9 @@ export const SubscribeFormPrompt: React.FC<SubscribeFormPromptProps> = props => 
     },
   })
 
-  function getSubmitBtnBody() {
-    if (!isInAction) return '+'
-    return <SpinnerElement size={12} />
+  function renderSubmitButton() {
+    if (!isInAction) return 'Submit'
+    return <SpinnerElement size={18} />
   }
 
   function setUrlFieldValue(data: any) {
@@ -111,6 +112,14 @@ export const SubscribeFormPrompt: React.FC<SubscribeFormPromptProps> = props => 
     }
   }
 
+  const renderGroupsList = () => {
+    return groupsList.map(el => (
+      <MenuItem key={el.id} value={el.id}>
+        {el.name}
+      </MenuItem>
+    ))
+  }
+
   return (
     <Dialog
       open={true}
@@ -122,99 +131,94 @@ export const SubscribeFormPrompt: React.FC<SubscribeFormPromptProps> = props => 
       <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
       <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
         <DialogContent>
-          <DialogContentText>Provide rss url</DialogContentText>
-          <Autocomplete
-            freeSolo
-            id="autocomplete-url"
-            options={hintsList}
-            onChange={(_, value) => {
-              setUrlFieldValue(value)
-            }}
-            getOptionLabel={option => option.url}
-            renderOption={(props, option) => (
-              <Box component="li" className={classes.hintLine} {...props}>
-                <BlogAvatar
-                  title={props.name}
-                  imageUrl={props.imageUrl}
-                  size="small"
-                />
-                <div>{props.name}</div>
-              </Box>
-            )}
-            renderInput={params => {
-              return (
-                <TextField
-                  {...params}
-                  label="Subscribe"
-                  fullWidth
-                  placeholder="https://exampleblog.com/feed/"
-                  id="url"
-                  name="url"
-                  onChange={event => {
-                    formik.handleChange(event)
-                    onChangeGetHintsList(event)
-                  }}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.url}
-                  error={
-                    !!formik.touched.url &&
-                    (!!formik.errors.url || !!formik.errors.global)
-                  }
-                />
-              )
-            }}
-          />
-          <FormHelperText error id="component-error-text">
-            {formik.errors.global}
-            {formik.errors.url}
-          </FormHelperText>
+          <DialogContentText>Provide subscription data</DialogContentText>
+          {renderUrlField()}
+          <DialogContentText />
+          {renderGroupField()}
         </DialogContent>
         <DialogActions>
-          <Button type="submit">Subscribe</Button>
+          <Button type="submit">{renderSubmitButton()}</Button>
           <Button onClick={props.onClose}>Close</Button>
         </DialogActions>
       </form>
     </Dialog>
   )
 
-  return (
-    <Dialog
-      open={true}
-      onClose={props.onClose}
-      aria-labelledby="form-dialog-title"
-    >
-      <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
-      <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
-        <DialogContent>
-          <DialogContentText>Provide rss url</DialogContentText>
-          <TextField
-            autoFocus
-            id="name"
-            label="Group name"
-            fullWidth
+  function renderUrlField() {
+    return (
+      <>
+        <Autocomplete
+          freeSolo
+          id="autocomplete-url"
+          options={hintsList}
+          onChange={(_, value) => {
+            setUrlFieldValue(value)
+          }}
+          getOptionLabel={option => option.url}
+          renderOption={(props, option) => (
+            <Box component="li" className={classes.hintLine} {...props}>
+              <BlogAvatar
+                title={props.name}
+                imageUrl={props.imageUrl}
+                size="small"
+              />
+              <div>{props.name}</div>
+            </Box>
+          )}
+          renderInput={params => {
+            return (
+              <TextField
+                {...params}
+                label="Url address"
+                fullWidth
+                placeholder="https://exampleblog.com/feed/"
+                id="url"
+                name="url"
+                onChange={event => {
+                  formik.handleChange(event)
+                  onChangeGetHintsList(event)
+                }}
+                onBlur={formik.handleBlur}
+                value={formik.values.url}
+                error={
+                  !!formik.touched.url &&
+                  (!!formik.errors.url || !!formik.errors.global)
+                }
+              />
+            )
+          }}
+        />
+        <FormHelperText error id="component-error-text">
+          {formik.errors.url}
+        </FormHelperText>
+      </>
+    )
+  }
+
+  function renderGroupField() {
+    return (
+      <>
+        <FormControl>
+          <InputLabel>Group</InputLabel>
+          <Select
+            id="group"
+            name="group"
             onChange={event => {
-              formik.values.url = event.target.value
-              formik.handleChange
+              formik.handleChange(event)
             }}
+            value={formik.values.group}
+            displayEmpty
             onBlur={formik.handleBlur}
-            error={
-              !!formik.touched.url &&
-              (!!formik.errors.url || !!formik.errors.global)
-            }
-            required
-          />
-          <FormHelperText error id="component-error-text">
-            {formik.errors.global}
-            {formik.errors.url}
-          </FormHelperText>
-        </DialogContent>
-        <DialogActions>
-          <Button type="submit">Subscribe</Button>
-          <Button onClick={props.onClose}>Close</Button>
-        </DialogActions>
-      </form>
-    </Dialog>
-  )
+          >
+            {renderGroupsList()}
+          </Select>
+        </FormControl>
+        <FormHelperText error id="component-error-text">
+          {formik.errors.global}
+        </FormHelperText>
+      </>
+    )
+  }
 }
 
 const useStyles = makeStyles((theme: Theme) =>

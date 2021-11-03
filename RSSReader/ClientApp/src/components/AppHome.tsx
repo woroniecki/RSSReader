@@ -1,6 +1,5 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { AddSub } from './Blog/AddSub'
 import { BlogCard } from './Blog/BlogCard'
 import { authSlice, blogsSlice, layoutSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
@@ -31,12 +30,7 @@ export const AppHome: React.FC<AppHomeProps> = () => {
 
   const renderMainPage = () => {
     if (token) {
-      return (
-        <>
-          <AddSub activeGroupId={groupId} />
-          {renderBlogList()}
-        </>
-      )
+      return <>{renderBlogList()}</>
     } else if (loader == layoutSlice.type.none) {
       return <Typography>MAIN PAGE</Typography>
     }

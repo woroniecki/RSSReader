@@ -167,7 +167,8 @@ namespace DataLayer.Models
 
             for (int i = remove_all_above + 1; i < sorted_posts.Count(); i++)
             {
-                posts_to_delete.Add(sorted_posts[i]);
+                if(sorted_posts[i].FavouriteAmount <= 0)
+                    posts_to_delete.Add(sorted_posts[i]);
             }
 
             return posts_to_delete;

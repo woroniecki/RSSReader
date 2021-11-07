@@ -29,6 +29,7 @@ import { snackbarSlice } from 'store/slices'
 import { getSearchBlogs } from 'api/blogApi'
 import BlogAvatar from 'components/Blog/BlogAvatar'
 import SpinnerElement from 'components/Spinner/SpinnerElement'
+import { useParams } from 'react-router-dom'
 
 export interface SubscribeFormPromptProps {
   onClose: (event: React.MouseEvent<HTMLButtonElement>) => void
@@ -40,12 +41,19 @@ export const SubscribeFormPrompt: React.FC<SubscribeFormPromptProps> = props => 
   const [hintsList, setHintsList] = useState<BlogSearchResponse[]>([])
   const groupsList = useSelector(groupsSlice.selectAll)
   const classes = useStyles()
+  const { groupId } = useParams<{ groupId: string }>()
+
+  function getDefaultGroup(): number {
+    const value = parseInt(groupId)
+    if (isNaN(value)) return -1
+    return value
+  }
 
   const formik = useFormik({
     initialValues: {
       global: '',
       url: '',
-      group: -1,
+      group: getDefaultGroup(),
     },
     validationSchema: Yup.object().shape({
       url: Yup.string().required('Required'),

@@ -76,7 +76,7 @@ namespace Tests.Services.PostServices
             var blog = new Blog() { };
             _context.Add(blog);
 
-            var post = new Post() { Blog = blog };
+            var post = new Post() { Blog = blog, FavouriteAmount = 0 };
             _context.Add(post);
 
             var sub = new Subscription(user.Id, blog);
@@ -109,6 +109,7 @@ namespace Tests.Services.PostServices
             Assert.IsNotNull(update_upd);
             Assert.That(update_upd.Readed, Is.EqualTo(inData.Readed));
             Assert.That(update_upd.Favourite, Is.EqualTo(false));
+            Assert.That(update_upd.Post.FavouriteAmount, Is.EqualTo(0));
         }
 
         [Test]
@@ -121,7 +122,7 @@ namespace Tests.Services.PostServices
             var blog = new Blog() { };
             _context.Add(blog);
 
-            var post = new Post() { Blog = blog };
+            var post = new Post() { Blog = blog, FavouriteAmount = 1 };
             _context.Add(post);
 
             var sub = new Subscription(user.Id, blog);
@@ -153,6 +154,7 @@ namespace Tests.Services.PostServices
             Assert.IsNotNull(update_upd);
             Assert.That(update_upd.Readed, Is.EqualTo(inData.Readed));
             Assert.That(update_upd.Favourite, Is.EqualTo(inData.Favourite));
+            Assert.That(update_upd.Post.FavouriteAmount, Is.EqualTo(1));
         }
 
         [Test]

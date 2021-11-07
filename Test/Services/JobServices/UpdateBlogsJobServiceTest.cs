@@ -83,7 +83,7 @@ namespace Tests.Services.JobServices
 
             var httpHelperService = new FakeHttpHelperService();
 
-            int amount = 60;
+            int amount = 3;
 
             for (int i = 0; i < amount; i++)
             {
@@ -100,7 +100,7 @@ namespace Tests.Services.JobServices
                 }
                 else if (i % 3 == 2)//no update
                 {
-                    blog.LastPostsRefreshDate = DateTime.UtcNow;
+                    httpHelperService.GetStringContentFromFile(blog.Url, $"../../../Data/feeddata_empty.xml");
                 }
             }
 

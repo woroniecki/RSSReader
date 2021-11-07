@@ -12,6 +12,7 @@ using Dtos.Jobs;
 using LogicLayer.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Toolkit.Parsers.Rss;
 
 namespace ServiceLayer.JobServices
 {
@@ -86,8 +87,10 @@ namespace ServiceLayer.JobServices
         {
             try
             {
-                int result = await FeedMethods.UpdateBlogPostsIfRequired(blog, _httpService, _mapper);
-                if (result == -1)
+                string content = await _httpService.GetStringContent(blog.Url);
+                IEnumerable < RssSchema > rss_schemas = FeedMethods.Parse(content);
+                var result = blog.UpdatePosts(rss_schemas, _mapper);
+                if (result == null)
                 {
                     lock (failed_updates)
                     {
@@ -96,11 +99,11 @@ namespace ServiceLayer.JobServices
                 }
                 else
                 {
-                    if (result > 0)
+                    if (result.Value.Added > 0 || result.Value.Deleted > 0)
                     {
                         lock (succeeded_updates)
                         {
-                            succeeded_updates.Add($"{blog.Url} - {result} added");
+                            succeeded_updates.Add($"{blog.Url} - {result}");
                         }
                     }
                     else

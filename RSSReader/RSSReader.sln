@@ -10,6 +10,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSSReader", "RSSReader.cspr
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "..\DataLayer\DataLayer.csproj", "{25C3263D-6255-49EE-95AD-FC0AC2E96CD1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{114D5F8B-A81B-4068-A69C-E394C84E9D0E} = {114D5F8B-A81B-4068-A69C-E394C84E9D0E}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbAccess", "..\DbAccess\DbAccess.csproj", "{952A1DD1-AA17-497B-BCC9-C0986A7E9288}"
 EndProject

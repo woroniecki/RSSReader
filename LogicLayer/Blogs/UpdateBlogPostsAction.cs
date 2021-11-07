@@ -1,10 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
+using LogicLayer._const;
 using DataLayer.Models;
 using DbAccess.Core;
-
 using LogicLayer._GenericActions;
 using LogicLayer.Helpers;
+using Microsoft.Toolkit.Parsers.Rss;
 
 namespace LogicLayer.Blogs
 {
@@ -32,11 +35,25 @@ namespace LogicLayer.Blogs
                 return null;
             }
 
-            //HACK 
-            //It would be much better if it wouldn't require to push httpService and mapper
-            await FeedMethods.UpdateBlogPostsIfRequired(blog, _httpService, _mapper);
+            if (!ShouldRefreshBlog(blog))
+                return blog;
+
+            string content = await _httpService.GetStringContent(blog.Url);
+            IEnumerable<RssSchema> rss_schemas = FeedMethods.Parse(content);
+            var result = blog.UpdatePosts(rss_schemas, _mapper);
+
+            if (result == null)
+            {
+                AddError("Failed to update blog");
+                return blog;
+            }
 
             return blog;
+        }
+
+        private static bool ShouldRefreshBlog(Blog blog)
+        {
+            return blog.LastPostsRefreshDate.AddSeconds(RssConsts.UPDATE_BLOG_DELAY_S) < DateTime.UtcNow;
         }
     }
 }

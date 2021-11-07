@@ -1,4 +1,4 @@
-DB
+DB - PowerShell, open DataLayer folder
 dotnet ef database update -s ..\RssReader\RssReader.csproj
 dotnet ef migrations add 'name' -s ..\RssReader\RssReader.csproj
 

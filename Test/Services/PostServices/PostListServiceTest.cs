@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using LogicLayer._const;
 using DataLayer.Code;
 using DataLayer.Models;
 using DbAccess.Core;
-using LogicLayer._const;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 using ServiceLayer.PostServices;
 using Tests.Helpers;
+using System.Collections.Generic;
 
 namespace Tests.Services.PostServices
 {
@@ -136,6 +137,113 @@ namespace Tests.Services.PostServices
             Assert.That(result.Count, Is.EqualTo(3));
             Assert.NotNull(result.Where(x => x.Id == post1.Id).First());
             Assert.NotNull(result.Where(x => x.Id == post2.Id).First());
+        }
+
+        [Test]
+        public async Task GetList_HalfPostsAreNew_ListOfGroups()
+        {
+            //ARRANGE
+            const int POSTS_AMOUNT_IN_FILE = 4;
+            var user1 = new ApiUser() { UserName = "user1" };
+
+            var blog = new Blog() { Url = "www.url.com", LastPostsRefreshDate = DateTime.UtcNow.AddDays(-1) };
+            blog.Posts = new List<Post>();
+            for(int i = 3; i < 5; i++)
+                blog.Posts.Add(new Post() { Name = $"Title{i}", AddedDate = DateTime.UtcNow.AddSeconds(-i) });
+
+            _context.Add(blog);
+            _context.Add(user1);
+            _unitOfWork.Context.SaveChanges();
+
+            int id_post_added_before_update = blog.Posts.Last().Id;
+
+            var httpHelperService = new FakeHttpHelperService().GetStringContentFromFile(blog.Url, "../../../Data/feeddata_update_test.xml");
+            var service = new PostListService
+                (
+                    MapperHelper.GetNewInstance(),
+                    _unitOfWork,
+                    httpHelperService.Object
+                );
+
+            var start_time = DateTime.UtcNow;
+            //ACT
+            var result = await service.GetList(user1.Id, blog.Id, 0);
+
+            //ASSERT
+            Assert.That(result.Count, Is.EqualTo(POSTS_AMOUNT_IN_FILE), "Should add 2 blogs and remove 2 old ones");
+            Assert.That(result.ElementAt(0).Name, Is.EqualTo("Title1"), "Verify if new post were added");
+            Assert.That(result.Last().Id, Is.EqualTo(id_post_added_before_update), "Verify that last post weren't deleted");
+        }
+
+        [Test]
+        public async Task GetList_NonePostIsNewSoDontAddAny_ListOfGroups()
+        {
+            //ARRANGE
+            const int POSTS_AMOUNT_IN_FILE = 4;
+            var user1 = new ApiUser() { UserName = "user1" };
+
+            var blog = new Blog() { Url = "www.url.com", LastPostsRefreshDate = DateTime.UtcNow.AddDays(-1) };
+            blog.Posts = new List<Post>();
+            for (int i = 1; i < POSTS_AMOUNT_IN_FILE + 1; i++)
+                blog.Posts.Add(new Post() { Name = $"Title{i}", AddedDate = DateTime.UtcNow.AddSeconds(-i) });
+
+            _context.Add(blog);
+            _context.Add(user1);
+            _unitOfWork.Context.SaveChanges();
+
+            int id_post_added_before_update_first = blog.Posts.First().Id;
+            int id_post_added_before_update_last = blog.Posts.Last().Id;
+
+            var httpHelperService = new FakeHttpHelperService().GetStringContentFromFile(blog.Url, "../../../Data/feeddata_update_test.xml");
+            var service = new PostListService
+                (
+                    MapperHelper.GetNewInstance(),
+                    _unitOfWork,
+                    httpHelperService.Object
+                );
+
+            var start_time = DateTime.UtcNow;
+            //ACT
+            var result = await service.GetList(user1.Id, blog.Id, 0);
+
+            //ASSERT
+            Assert.That(result.Count, Is.EqualTo(POSTS_AMOUNT_IN_FILE), "Should add 2 blogs and remove 2 old ones");
+            Assert.That(result.ElementAt(0).Id, Is.EqualTo(id_post_added_before_update_first), "Verify that first post weren't deleted");
+            Assert.That(result.Last().Id, Is.EqualTo(id_post_added_before_update_last), "Verify that last post weren't deleted");
+        }
+
+        [Test]
+        public async Task GetList_AllPostsAreNewSoAddAllAndRemoveOldOne_ListOfGroups()
+        {
+            //ARRANGE
+            const int POSTS_AMOUNT_IN_FILE = 4;
+            var user1 = new ApiUser() { UserName = "user1" };
+
+            var blog = new Blog() { Url = "www.url.com", LastPostsRefreshDate = DateTime.UtcNow.AddDays(-1) };
+            blog.Posts = new List<Post>();
+            for (int i = 5; i < 5 + POSTS_AMOUNT_IN_FILE; i++)
+                blog.Posts.Add(new Post() { Name = $"Title{i}", AddedDate = DateTime.UtcNow.AddSeconds(-i) });
+
+            _context.Add(blog);
+            _context.Add(user1);
+            _unitOfWork.Context.SaveChanges();
+
+            var httpHelperService = new FakeHttpHelperService().GetStringContentFromFile(blog.Url, "../../../Data/feeddata_update_test.xml");
+            var service = new PostListService
+                (
+                    MapperHelper.GetNewInstance(),
+                    _unitOfWork,
+                    httpHelperService.Object
+                );
+
+            var start_time = DateTime.UtcNow;
+            //ACT
+            var result = await service.GetList(user1.Id, blog.Id, 0);
+
+            //ASSERT
+            Assert.That(result.Count, Is.EqualTo(POSTS_AMOUNT_IN_FILE), "Should add 2 blogs and remove 2 old ones");
+            Assert.That(result.First().Name, Is.EqualTo("Title1"), "Verify if new post were added");
+            Assert.That(result.Last().Name, Is.EqualTo("Title4"), "Verify if new post were added");
         }
 
         [Test]

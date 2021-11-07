@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using LogicLayer._const;
 using DataLayer.Models;
 using DbAccess.Core;
 using HtmlAgilityPack;
-using LogicLayer._const;
 using LogicLayer._GenericActions;
 using LogicLayer.Helpers;
 using Microsoft.Toolkit.Parsers.Rss;
@@ -112,14 +112,14 @@ namespace LogicLayer.Blogs
                     return null;
                 }
 
-                blog = FeedMethods.CreateBlogObject(
+                blog = new Blog(
                     http_response.RequestUrl,//to avaid duplicated blogs use url from response
                     http_response.Content,
                     parsed_feed);
 
                 blog.ImageUrl = await BlogIconMethods.GetHigherIconResolution(blog.ImageUrl, _httpService);
 
-                if (FeedMethods.UpdateBlogPosts(blog, parsed_feed, _mapper) < 0)
+                if (blog.UpdatePosts(parsed_feed, _mapper) == null)
                 {
                     AddError(ErrorMsg_BlogUpdateFail);
                     return null;

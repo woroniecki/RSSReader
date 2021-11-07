@@ -29,6 +29,9 @@ namespace LogicLayer.UserPostDatas
 
             if (dto.Favourite.HasValue)
             {
+                if (_userPostData.Favourite != dto.Favourite.Value)
+                    _userPostData.Post.FavouriteAmount += dto.Favourite.Value ? 1 : -1;
+
                 _userPostData.Favourite = dto.Favourite.Value;
             }
 

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { useAppDispatch } from 'store/store'
 import { blogsSlice, snackbarSlice } from 'store/slices'
 import { Blog } from 'api/api.types'
 import SpinnerElement from 'components/Spinner/SpinnerElement'
+import { Button } from '@material-ui/core'
 
 export interface UnsubscribeBlogBtnProps {
   blog: Blog
@@ -45,14 +45,14 @@ export const UnsubscribeBlogBtn: React.FC<UnsubscribeBlogBtnProps> = props => {
   }
 
   return (
-    <IconButton
+    <Button
       aria-label="delete"
       onClick={() => {
         unsubcribeBlog()
       }}
     >
       {getBtnBody()}Unsubscribe
-    </IconButton>
+    </Button>
   )
 }
 

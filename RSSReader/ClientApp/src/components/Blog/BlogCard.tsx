@@ -1,15 +1,14 @@
 import React from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
-import { useAppDispatch } from 'store/store'
 import { blogsSlice, articlesSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
 
 import { BlogGroup } from './BlogGroup'
 import UnsubscribeBlogBtn from './UnsubscribeBlogBtn'
+import SubjectOutlinedIcon from '@material-ui/icons/SubjectOutlined'
 import { Button, CardActions, CardHeader, Divider } from '@material-ui/core'
 import BlogAvatar from './BlogAvatar'
 import { Blog } from 'api/api.types'
@@ -71,7 +70,10 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
       />
       <Divider />
       <CardActions disableSpacing>
-        <Button onClick={() => push(`/blog/${props.blog.id}`)}>Read</Button>
+        <Button onClick={() => push(`/blog/${props.blog.id}`)}>
+          <SubjectOutlinedIcon />
+          Read
+        </Button>
         <UnsubscribeBlogBtn blog={props.blog} />
       </CardActions>
     </Card>

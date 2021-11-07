@@ -213,7 +213,7 @@ namespace Tests.Services.PostServices
         }
 
         [Test]
-        public async Task GetList_AllPostsAreNewSoAddAllAndRemoveOldOne_ListOfGroups()
+        public async Task GetList_AllPostsAreNewSoAddAllAndAllWhichAreNotFavourite_ListOfGroups()
         {
             //ARRANGE
             const int POSTS_AMOUNT_IN_FILE = 4;
@@ -223,6 +223,7 @@ namespace Tests.Services.PostServices
             blog.Posts = new List<Post>();
             for (int i = 5; i < 5 + POSTS_AMOUNT_IN_FILE; i++)
                 blog.Posts.Add(new Post() { Name = $"Title{i}", AddedDate = DateTime.UtcNow.AddSeconds(-i) });
+            blog.Posts.Last().FavouriteAmount = 1;
 
             _context.Add(blog);
             _context.Add(user1);
@@ -241,9 +242,9 @@ namespace Tests.Services.PostServices
             var result = await service.GetList(user1.Id, blog.Id, 0);
 
             //ASSERT
-            Assert.That(result.Count, Is.EqualTo(POSTS_AMOUNT_IN_FILE), "Should add 2 blogs and remove 2 old ones");
+            Assert.That(result.Count, Is.EqualTo(POSTS_AMOUNT_IN_FILE + 1), "Should add 4 blogs and keep one which is favourite");
             Assert.That(result.First().Name, Is.EqualTo("Title1"), "Verify if new post were added");
-            Assert.That(result.Last().Name, Is.EqualTo("Title4"), "Verify if new post were added");
+            Assert.That(result.ElementAt(POSTS_AMOUNT_IN_FILE - 1).Name, Is.EqualTo("Title4"), "Verify if new post were added");
         }
 
         [Test]

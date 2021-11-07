@@ -83,7 +83,7 @@ namespace Tests.Services.JobServices
 
             var httpHelperService = new FakeHttpHelperService();
 
-            int amount = 3;
+            int amount = 60;
 
             for (int i = 0; i < amount; i++)
             {

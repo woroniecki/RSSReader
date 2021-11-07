@@ -39,7 +39,7 @@ export const Login: React.FC<LoginProps> = () => {
       if (authSlice.login.fulfilled.match(promise)) {
         push('/')
       } else {
-        applyValidationErrors(formik, promise.payload)
+        if (err && err.data) applyValidationErrors(formik, promise.payload)
         dispatch(
           snackbarSlice.actions.setSnackbar({
             open: true,

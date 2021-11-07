@@ -45,7 +45,6 @@ export const ActionsBar: React.FC<ActionsBarProps> = props => {
         style={{ position: 'fixed', bottom: 0, width: drawerWidth - 1 }}
         value={''}
         onChange={(event, newValue) => {
-          console.log(newValue)
           switch (newValue) {
             case 0:
               setShowSubscribePrompt(true)

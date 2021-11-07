@@ -40,7 +40,7 @@ export const AddGroupFormPrompt: React.FC<AddGroupFormPromptProps> = props => {
       if (groupsSlice.postAdd.fulfilled.match(promise)) {
         props.onClose(this)
       } else {
-        applyValidationErrors(formik, promise.error)
+        if (err && err.data) applyValidationErrors(formik, promise.error)
       }
     },
   })

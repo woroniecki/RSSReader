@@ -13,7 +13,6 @@ export const useGetArticles = () => {
   const articlesList = useSelector(articlesSlice.selectAll)
 
   const fetchList = async (): Promise<void> => {
-    console.log('feczuje')
     const blogId = parseInt(blogid)
     if (blogId == NaN) return
 

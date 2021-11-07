@@ -39,7 +39,7 @@ export const Register: React.FC<RegisterProps> = () => {
         await register(values)
         push('/login')
       } catch (err) {
-        applyValidationErrors(formik, err.data)
+        if (err && err.data) applyValidationErrors(formik, err.data)
         dispatch(
           snackbarSlice.actions.setSnackbar({
             open: true,

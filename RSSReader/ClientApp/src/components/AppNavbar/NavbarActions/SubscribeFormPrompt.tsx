@@ -79,7 +79,7 @@ export const SubscribeFormPrompt: React.FC<SubscribeFormPromptProps> = props => 
           })
         )
       } else {
-        applyValidationErrors(formik, promise.error)
+        if (err && err.data) applyValidationErrors(formik, promise.error)
         dispatch(
           snackbarSlice.actions.setSnackbar({
             open: true,

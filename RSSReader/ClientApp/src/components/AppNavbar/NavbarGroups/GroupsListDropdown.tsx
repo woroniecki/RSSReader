@@ -1,17 +1,10 @@
-import {
-  Collapse,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from '@material-ui/core'
+import { Collapse, List, ListItem } from '@material-ui/core'
 import { ExpandLess, ExpandMore } from '@material-ui/icons'
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { useStyles } from '../UserNavbar'
 import { blogsSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
-import RemoveGroupBtn from './RemoveGroupBtn'
 import BlogAvatar from 'components/Blog/BlogAvatar'
 import AppListItemText from '../AppListItemText'
 import { useParams } from 'react-router-dom'

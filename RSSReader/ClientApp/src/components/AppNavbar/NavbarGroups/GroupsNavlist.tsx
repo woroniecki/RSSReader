@@ -30,7 +30,7 @@ export const GroupsNavlist: React.FC<GroupsNavlistProps> = () => {
   const renderAllGroup = () => {
     return (
       <GroupsListDropdown
-        groupId={-1}
+        groupId={NaN}
         groupName={'Home'}
         pushTo={`/`}
         allBlogs={true}

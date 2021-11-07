@@ -61,26 +61,18 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
   return (
     <Card className={classes.root}>
       <CardHeader
+        onClick={() => push(`/blog/${props.blog.id}`)}
         avatar={
           <BlogAvatar title={props.blog.name} imageUrl={props.blog.imageUrl} />
         }
-        action={
-          <>
-            {DrawUnreadedAmount()}
-            <UnsubscribeBlogBtn blog={props.blog} />
-          </>
-        }
+        action={<>{DrawUnreadedAmount()}</>}
         title={<Typography variant="h5">{props.blog.name}</Typography>}
-        subheader={DrawGroup()}
+        subheader={props.blog.description}
       />
       <Divider />
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {props.blog.description}
-        </Typography>
-      </CardContent>
       <CardActions disableSpacing>
         <Button onClick={() => push(`/blog/${props.blog.id}`)}>Read</Button>
+        <UnsubscribeBlogBtn blog={props.blog} />
       </CardActions>
     </Card>
   )

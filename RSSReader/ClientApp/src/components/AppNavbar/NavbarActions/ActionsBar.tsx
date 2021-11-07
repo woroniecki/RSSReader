@@ -6,23 +6,34 @@ import AddIcon from '@material-ui/icons/Add'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
 import { drawerWidth } from '../../../App'
-import AddGroupFormPrompt from '../NavbarGroups/AddGroupFormPrompt'
+import AddGroupFormPrompt from './AddGroupFormPrompt'
 import SubscribeFormPrompt from './SubscribeFormPrompt'
+import { useParams } from 'react-router-dom'
+import DeleteGroupPrompt from './DeleteGroupPrompt'
 
 export interface ActionsBarProps {}
 
 export const ActionsBar: React.FC<ActionsBarProps> = props => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
-  const [showGroupPrompt, setShowGroupPrompt] = useState(false)
+  const { groupId } = useParams<{ groupId: string }>()
   const [showSubscribePrompt, setShowSubscribePrompt] = useState(false)
+  const [showGroupPrompt, setShowGroupPrompt] = useState(false)
+  const [showDeleteGroupPrompt, setShowDeleteGroupPrompt] = useState(false)
 
-  const renderAddGroupPrompt = () => {
+  const renderPrompt = () => {
     if (showGroupPrompt) {
       return <AddGroupFormPrompt onClose={() => setShowGroupPrompt(false)} />
     } else if (showSubscribePrompt) {
       return (
         <SubscribeFormPrompt onClose={() => setShowSubscribePrompt(false)} />
+      )
+    } else if (showDeleteGroupPrompt) {
+      return (
+        <DeleteGroupPrompt
+          groupId={parseInt(groupId)}
+          onClose={() => setShowDeleteGroupPrompt(false)}
+        />
       )
     }
   }
@@ -43,16 +54,20 @@ export const ActionsBar: React.FC<ActionsBarProps> = props => {
               setShowGroupPrompt(true)
               break
             case 2:
-              setShowGroupPrompt(true)
+              setShowDeleteGroupPrompt(true)
               break
           }
         }}
       >
         <BottomNavigationAction label="Subscribe" icon={<AddIcon />} />
         <BottomNavigationAction label="Add" icon={<PostAddIcon />} />
-        <BottomNavigationAction label="Remove" icon={<DeleteIcon />} />
+        <BottomNavigationAction
+          disabled={isNaN(parseInt(groupId))}
+          label="Remove"
+          icon={<DeleteIcon />}
+        />
       </BottomNavigation>
-      {renderAddGroupPrompt()}
+      {renderPrompt()}
     </>
   )
 }

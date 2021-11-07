@@ -51,7 +51,7 @@ export const UnsubscribeBlogBtn: React.FC<UnsubscribeBlogBtnProps> = props => {
         unsubcribeBlog()
       }}
     >
-      {getBtnBody()}
+      {getBtnBody()}Unsubscribe
     </IconButton>
   )
 }

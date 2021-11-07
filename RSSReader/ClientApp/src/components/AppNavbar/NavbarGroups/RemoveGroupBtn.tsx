@@ -1,5 +1,5 @@
 import { Button } from '@material-ui/core'
-import DeleteGroupPrompt from 'components/AppNavbar/NavbarGroups/DeleteGroupPrompt'
+import DeleteGroupPrompt from 'components/AppNavbar/NavbarActions/DeleteGroupPrompt'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
@@ -80,16 +80,7 @@ export const RemoveGroupBtn: React.FC<RemoveGroupBtnProps> = props => {
   }
 
   const renderDeletePrompt = () => {
-    if (showPrompt) {
-      return (
-        <DeleteGroupPrompt
-          onMove={() => removeGroup(props.id, true)}
-          onDelete={() => removeGroup(props.id, false)}
-          onClose={() => setShowPrompt(false)}
-          enableSpinner={inAction}
-        />
-      )
-    }
+    return
   }
 
   return (

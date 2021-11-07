@@ -14,9 +14,10 @@ import { useSelector } from 'react-redux'
 import RemoveGroupBtn from './RemoveGroupBtn'
 import BlogAvatar from 'components/Blog/BlogAvatar'
 import AppListItemText from '../AppListItemText'
+import { useParams } from 'react-router-dom'
 
 export interface GroupsListDropdownProps {
-  groupId: number
+  groupId?: number
   pushTo: string
   groupName: string
   dropdown: boolean
@@ -26,7 +27,7 @@ export interface GroupsListDropdownProps {
 export const GroupsListDropdown: React.FC<GroupsListDropdownProps> = props => {
   const { push } = useHistory()
   const blogsList = useSelector(blogsSlice.selectAll)
-
+  const { groupId } = useParams<{ groupId: string }>()
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
 
@@ -61,11 +62,6 @@ export const GroupsListDropdown: React.FC<GroupsListDropdownProps> = props => {
     //
   }
 
-  const renderDeleteBtn = () => {
-    if (props.groupId >= 0)
-      return <RemoveGroupBtn id={props.groupId} curGroupId={props.groupId} />
-  }
-
   const renderDropdownIcon = () => {
     if (!props.dropdown) return
     return open ? <ExpandLess /> : <ExpandMore />
@@ -73,10 +69,17 @@ export const GroupsListDropdown: React.FC<GroupsListDropdownProps> = props => {
 
   return (
     <List>
-      <ListItem key="Userpanel" button onClick={handleClick}>
+      <ListItem
+        selected={
+          props.groupId == parseInt(groupId) ||
+          (isNaN(parseInt(groupId)) && isNaN(props.groupId))
+        }
+        key={'grouplist' + props.groupId}
+        button
+        onClick={handleClick}
+      >
         <AppListItemText fontSize={14} variant="h3" text={props.groupName} />
         {renderDropdownIcon()}
-        {renderDeleteBtn()}
       </ListItem>
       <Collapse in={open && props.dropdown} timeout="auto" unmountOnExit>
         <List component="div" disablePadding={false}>

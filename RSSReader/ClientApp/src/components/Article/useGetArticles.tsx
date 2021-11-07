@@ -13,6 +13,7 @@ export const useGetArticles = () => {
   const articlesList = useSelector(articlesSlice.selectAll)
 
   const fetchList = async (): Promise<void> => {
+    console.log('feczuje')
     const blogId = parseInt(blogid)
     if (blogId == NaN) return
 
@@ -35,12 +36,15 @@ export const useGetArticles = () => {
       fetchList()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blogsList])
+  }, [token])
 
+  const url = window.location.pathname.split('/').pop()
   React.useEffect(() => {
-    fetchList()
+    if (token) {
+      fetchList()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [url])
 
   return
 }

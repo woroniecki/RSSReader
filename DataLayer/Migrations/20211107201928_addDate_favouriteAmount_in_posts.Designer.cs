@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20211107183427_addedDate_and_favouriteAmount_to_posts")]
-    partial class addedDate_and_favouriteAmount_to_posts
+    [Migration("20211107201928_addDate_favouriteAmount_in_posts")]
+    partial class addDate_favouriteAmount_in_posts
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

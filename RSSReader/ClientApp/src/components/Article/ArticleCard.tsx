@@ -1,13 +1,13 @@
-import React from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { Button, CardActions, CardHeader, Divider } from '@material-ui/core'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import { useHistory, useParams } from 'react-router-dom'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import ArticlePatchButtons from './ArticlePatchButtons'
-import { Button, CardActions, CardHeader, Divider } from '@material-ui/core'
 import { PostUserData } from 'api/api.types'
+import React from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import { formatDate } from 'utils/utils'
+import ArticlePatchButtons from './ArticlePatchButtons'
 
 export interface ArticleCardProps {
   articleid: number

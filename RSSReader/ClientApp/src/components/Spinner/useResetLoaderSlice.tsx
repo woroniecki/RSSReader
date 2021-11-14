@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { useAppDispatch } from 'store/store'
 import { useSelector } from 'react-redux'
-import { layoutSlice } from 'store/slices'
 import { useHistory } from 'react-router-dom'
+import { layoutSlice } from 'store/slices'
+import { useAppDispatch } from 'store/store'
 
 export const useResetLoaderSlice = () => {
   const dispatch = useAppDispatch()

@@ -3,9 +3,9 @@ import {
   createEntityAdapter,
   createSlice,
 } from '@reduxjs/toolkit'
-import * as blogApi from '../../api/blogApi'
-import { PatchPostRequest, Post, ReadPostRequest } from '../../api/api.types'
 import { RootState } from 'store/rootReducer'
+import { PatchPostRequest, Post, ReadPostRequest } from '../../api/api.types'
+import * as blogApi from '../../api/blogApi'
 const ARTICLES = 'articles'
 
 export const articlesAdapter = createEntityAdapter<Post>({

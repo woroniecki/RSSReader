@@ -1,16 +1,16 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import * as authApi from '../../api/authApi'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { RootState } from 'store/rootReducer'
+import {
+  cleatTokenDataFromStorage as clearTokenDataFromStorage,
+  saveTokenDataToStorage,
+} from 'utils/appLocalStorage'
+import { setAuthHeader } from 'utils/setHeader'
 import {
   LoginRequest,
   LoginResponse,
   RefreshRequest,
 } from '../../api/api.types'
-import { RootState } from 'store/rootReducer'
-import { setAuthHeader } from 'utils/setHeader'
-import {
-  cleatTokenDataFromStorage as clearTokenDataFromStorage,
-  saveTokenDataToStorage,
-} from 'utils/appLocalStorage'
+import * as authApi from '../../api/authApi'
 const AUTH = 'auth'
 interface AuthState {
   token?: string

@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-
-import { authSlice, groupsSlice, blogsSlice } from 'store/slices'
+import { authSlice, blogsSlice, groupsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import GroupsListDropdown from './GroupsListDropdown'
 

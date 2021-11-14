@@ -1,10 +1,3 @@
-import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import { useAppDispatch } from 'store/store'
-import { groupsSlice, blogsSlice, snackbarSlice } from 'store/slices'
-import DeleteIcon from '@material-ui/icons/Delete'
-import { useSelector } from 'react-redux'
-import { Blog } from 'api/api.types'
 import {
   Button,
   Dialog,
@@ -13,7 +6,13 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@material-ui/core'
+import { Blog } from 'api/api.types'
 import SpinnerElement from 'components/Spinner/SpinnerElement'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { blogsSlice, groupsSlice, snackbarSlice } from 'store/slices'
+import { useAppDispatch } from 'store/store'
 
 export interface DeleteGroupPromptProps {
   onClose: (event: React.MouseEvent<HTMLButtonElement>) => void

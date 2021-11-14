@@ -1,9 +1,3 @@
-import React from 'react'
-import { useAppDispatch } from 'store/store'
-import { useFormik } from 'formik'
-import { groupsSlice } from 'store/slices'
-import { applyValidationErrors } from 'utils/utils'
-import * as Yup from 'yup'
 import {
   Button,
   Dialog,
@@ -14,6 +8,12 @@ import {
   FormHelperText,
   TextField,
 } from '@material-ui/core'
+import { useFormik } from 'formik'
+import React from 'react'
+import { groupsSlice } from 'store/slices'
+import { useAppDispatch } from 'store/store'
+import { applyValidationErrors } from 'utils/utils'
+import * as Yup from 'yup'
 
 export interface AddGroupFormPromptProps {
   onClose: (event: React.MouseEvent<HTMLButtonElement>) => void

@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import { Button } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
-import { useAppDispatch } from 'store/store'
-import { blogsSlice, snackbarSlice } from 'store/slices'
 import { Blog } from 'api/api.types'
 import SpinnerElement from 'components/Spinner/SpinnerElement'
-import { Button } from '@material-ui/core'
+import React, { useState } from 'react'
+import { blogsSlice, snackbarSlice } from 'store/slices'
+import { useAppDispatch } from 'store/store'
 
 export interface UnsubscribeBlogBtnProps {
   blog: Blog

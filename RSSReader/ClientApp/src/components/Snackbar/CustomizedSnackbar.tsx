@@ -1,6 +1,6 @@
-import { Button, Snackbar } from '@material-ui/core'
+import { Snackbar } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-import React, { useState } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { snackbarSlice } from 'store/slices'

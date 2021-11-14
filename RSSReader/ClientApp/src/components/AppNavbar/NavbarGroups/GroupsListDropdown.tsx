@@ -1,13 +1,12 @@
 import { Collapse, List, ListItem } from '@material-ui/core'
 import { ExpandLess, ExpandMore } from '@material-ui/icons'
-import React from 'react'
-import { useHistory } from 'react-router-dom'
-import { useStyles } from '../UserNavbar'
-import { blogsSlice } from 'store/slices'
-import { useSelector } from 'react-redux'
 import BlogAvatar from 'components/Blog/BlogAvatar'
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { useHistory, useParams } from 'react-router-dom'
+import { blogsSlice } from 'store/slices'
 import AppListItemText from '../AppListItemText'
-import { useParams } from 'react-router-dom'
+import { useStyles } from '../UserNavbar'
 
 export interface GroupsListDropdownProps {
   groupId?: number

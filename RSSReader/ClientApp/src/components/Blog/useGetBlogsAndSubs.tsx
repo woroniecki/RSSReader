@@ -1,8 +1,7 @@
 import React from 'react'
-import { useAppDispatch } from 'store/store'
-import { authSlice, blogsSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
-import { layoutSlice } from 'store/slices'
+import { authSlice, blogsSlice, layoutSlice } from 'store/slices'
+import { useAppDispatch } from 'store/store'
 
 export const useGetBlogsAndSubs = (): void => {
   const dispatch = useAppDispatch()

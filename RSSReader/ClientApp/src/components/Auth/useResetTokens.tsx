@@ -1,6 +1,6 @@
 import React from 'react'
-import { useAppDispatch } from 'store/store'
 import { authSlice } from 'store/slices'
+import { useAppDispatch } from 'store/store'
 import { getTokenDataFromStorage } from 'utils/appLocalStorage'
 
 export interface useResetTokensProps {}

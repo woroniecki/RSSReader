@@ -1,27 +1,20 @@
-import React from 'react'
-import CreateIcon from '@material-ui/icons/Create'
-import PersonAddIcon from '@material-ui/icons/PersonAdd'
-import PersonIcon from '@material-ui/icons/Person'
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-import { useHistory } from 'react-router-dom'
+import { Collapse, List, ListItem } from '@material-ui/core'
+import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/core/styles'
+import CreateIcon from '@material-ui/icons/Create'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
-import Divider from '@material-ui/core/Divider'
+import PersonIcon from '@material-ui/icons/Person'
+import PersonAddIcon from '@material-ui/icons/PersonAdd'
+import React from 'react'
 import { useSelector } from 'react-redux'
-import { authSlice } from 'store/slices'
-import { blogsSlice } from 'store/slices'
+import { useHistory } from 'react-router-dom'
+import { authSlice, blogsSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
-import GroupsNavlist from './NavbarGroups/GroupsNavlist'
-import {
-  Collapse,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from '@material-ui/core'
-import AppListItemText from './AppListItemText'
 import AppListItemIcon from './AppListItemIcon'
+import AppListItemText from './AppListItemText'
+import GroupsNavlist from './NavbarGroups/GroupsNavlist'
 
 export interface UserNavbarProps {}
 

@@ -1,7 +1,7 @@
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { API_URL } from 'utils/envs'
 
 export interface FooterProps {}

@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { blogsSlice, articlesSlice, authSlice } from 'store/slices'
+import { articlesSlice, authSlice, blogsSlice, layoutSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
-import { layoutSlice } from 'store/slices'
 
 export const useGetArticles = () => {
   const dispatch = useAppDispatch()

@@ -1,17 +1,16 @@
-import React from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { Button, CardActions, CardHeader, Divider } from '@material-ui/core'
 import Card from '@material-ui/core/Card'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import { useHistory } from 'react-router-dom'
-import { blogsSlice, articlesSlice } from 'store/slices'
+import SubjectOutlinedIcon from '@material-ui/icons/SubjectOutlined'
+import { Blog } from 'api/api.types'
+import React from 'react'
 import { useSelector } from 'react-redux'
-
+import { useHistory } from 'react-router-dom'
+import { articlesSlice, blogsSlice } from 'store/slices'
+import BlogAvatar from './BlogAvatar'
 import { BlogGroup } from './BlogGroup'
 import UnsubscribeBlogBtn from './UnsubscribeBlogBtn'
-import SubjectOutlinedIcon from '@material-ui/icons/SubjectOutlined'
-import { Button, CardActions, CardHeader, Divider } from '@material-ui/core'
-import BlogAvatar from './BlogAvatar'
-import { Blog } from 'api/api.types'
 
 export interface BlogCardProps {
   blog: Blog

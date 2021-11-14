@@ -1,14 +1,13 @@
-import React from 'react'
-import { useHistory } from 'react-router-dom'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import { useAppDispatch } from 'store/store'
-import StarIcon from '@material-ui/icons/Star'
-import MenuBookIcon from '@material-ui/icons/MenuBook'
-import ImportContactsIcon from '@material-ui/icons/ImportContacts'
 import { IconButton } from '@material-ui/core'
 import { yellow } from '@material-ui/core/colors'
-import { articlesSlice } from 'store/slices'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
+import ImportContactsIcon from '@material-ui/icons/ImportContacts'
+import MenuBookIcon from '@material-ui/icons/MenuBook'
+import StarIcon from '@material-ui/icons/Star'
 import { PostUserData } from 'api/api.types'
+import React from 'react'
+import { articlesSlice } from 'store/slices'
+import { useAppDispatch } from 'store/store'
 
 export interface ArticlePatchButtonsProps {
   blogId: number

@@ -1,9 +1,9 @@
-import React from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { useAppDispatch } from 'store/store'
-import { groupsSlice, blogsSlice, snackbarSlice } from 'store/slices'
-import { useSelector } from 'react-redux'
 import { FormControl, MenuItem, Select } from '@material-ui/core'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { blogsSlice, groupsSlice, snackbarSlice } from 'store/slices'
+import { useAppDispatch } from 'store/store'
 
 export interface BlogGroupProps {
   subId: number

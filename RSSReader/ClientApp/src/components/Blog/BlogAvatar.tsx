@@ -1,10 +1,8 @@
 import { Avatar, Typography } from '@material-ui/core'
-import React from 'react'
-import { useHistory } from 'react-router-dom'
-import { useAppDispatch } from 'store/store'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { red } from '@material-ui/core/colors'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import randomColor from 'randomcolor'
+import React from 'react'
 
 export type Size = 'small' | 'large'
 

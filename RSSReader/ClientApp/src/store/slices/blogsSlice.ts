@@ -4,14 +4,14 @@ import {
   createSlice,
   PayloadAction,
 } from '@reduxjs/toolkit'
-import * as blogApi from '../../api/blogApi'
+import { RootState } from 'store/rootReducer'
 import {
-  Blog,
   AddSubscriptionRequest,
+  Blog,
   PatchSubGroupRequest,
   PatchSubscriptionRequest,
 } from '../../api/api.types'
-import { RootState } from 'store/rootReducer'
+import * as blogApi from '../../api/blogApi'
 const BLOGS = 'blogs'
 
 export const blogsAdapter = createEntityAdapter<Blog>({

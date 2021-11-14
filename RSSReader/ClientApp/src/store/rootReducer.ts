@@ -1,9 +1,9 @@
 import { combineReducers } from '@reduxjs/toolkit'
-import authReducer from './slices/authSlice'
-import layoutSlice from './slices/layoutSlice'
-import blogsReducer from './slices/blogsSlice'
 import articlesReducer from './slices/articlesSlice'
+import authReducer from './slices/authSlice'
+import blogsReducer from './slices/blogsSlice'
 import groupsReducer from './slices/groupsSlice'
+import layoutSlice from './slices/layoutSlice'
 import navbarSlice from './slices/navbarSlice'
 import snackbarSlice from './slices/snackbarSlice'
 

@@ -1,6 +1,6 @@
+import { Color } from '@material-ui/lab'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from 'store/rootReducer'
-import { Color } from '@material-ui/lab'
 
 interface SnackbarState {
   open: boolean

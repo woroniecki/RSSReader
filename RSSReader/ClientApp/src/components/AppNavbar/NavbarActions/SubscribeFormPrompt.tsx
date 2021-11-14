@@ -1,35 +1,32 @@
-import React, { useState } from 'react'
-import { useAppDispatch } from 'store/store'
-import { useFormik } from 'formik'
-import { groupsSlice } from 'store/slices'
-import { blogsSlice } from 'store/slices'
-import { applyValidationErrors } from 'utils/utils'
-import * as Yup from 'yup'
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  FormHelperText,
-  TextField,
-  Box,
-  InputAdornment,
-  Select,
-  MenuItem,
   FormControl,
+  FormHelperText,
+  MenuItem,
+  Select,
+  TextField,
 } from '@material-ui/core'
-import { useSelector } from 'react-redux'
 import InputLabel from '@material-ui/core/InputLabel'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Autocomplete } from '@material-ui/lab'
 import { BlogSearchResponse } from 'api/api.types'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import { snackbarSlice } from 'store/slices'
 import { getSearchBlogs } from 'api/blogApi'
 import BlogAvatar from 'components/Blog/BlogAvatar'
 import SpinnerElement from 'components/Spinner/SpinnerElement'
+import { useFormik } from 'formik'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { blogsSlice, groupsSlice, snackbarSlice } from 'store/slices'
+import { useAppDispatch } from 'store/store'
+import { applyValidationErrors } from 'utils/utils'
+import * as Yup from 'yup'
 
 export interface SubscribeFormPromptProps {
   onClose: (event: React.MouseEvent<HTMLButtonElement>) => void

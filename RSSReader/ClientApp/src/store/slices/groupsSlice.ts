@@ -3,9 +3,9 @@ import {
   createEntityAdapter,
   createSlice,
 } from '@reduxjs/toolkit'
-import * as blogApi from '../../api/blogApi'
-import { AddGroupRequest, Group, RemoveGroupRequest } from '../../api/api.types'
 import { RootState } from 'store/rootReducer'
+import { AddGroupRequest, Group, RemoveGroupRequest } from '../../api/api.types'
+import * as blogApi from '../../api/blogApi'
 const GROUPS = 'groups'
 
 export const groupsAdapter = createEntityAdapter<Group>({

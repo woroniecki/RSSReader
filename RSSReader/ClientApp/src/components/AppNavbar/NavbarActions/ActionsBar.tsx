@@ -1,15 +1,14 @@
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core'
-import React, { useState } from 'react'
-import PostAddIcon from '@material-ui/icons/PostAdd'
-import DeleteIcon from '@material-ui/icons/Delete'
 import AddIcon from '@material-ui/icons/Add'
-import { useHistory } from 'react-router-dom'
+import DeleteIcon from '@material-ui/icons/Delete'
+import PostAddIcon from '@material-ui/icons/PostAdd'
+import React, { useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import { useAppDispatch } from 'store/store'
-import { drawerWidth } from '../../../App'
+import { drawerWidth } from '../../UserApp'
 import AddGroupFormPrompt from './AddGroupFormPrompt'
-import SubscribeFormPrompt from './SubscribeFormPrompt'
-import { useParams } from 'react-router-dom'
 import DeleteGroupPrompt from './DeleteGroupPrompt'
+import SubscribeFormPrompt from './SubscribeFormPrompt'
 
 export interface ActionsBarProps {}
 

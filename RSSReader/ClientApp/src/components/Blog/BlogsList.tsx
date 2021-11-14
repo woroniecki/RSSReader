@@ -1,13 +1,12 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
-import { BlogCard } from './Blog/BlogCard'
-import { authSlice, blogsSlice, layoutSlice } from 'store/slices'
 import { useSelector } from 'react-redux'
-import { Typography } from '@material-ui/core'
+import { useParams } from 'react-router-dom'
+import { authSlice, blogsSlice, layoutSlice } from 'store/slices'
+import { BlogCard } from './BlogCard'
 
-export interface AppHomeProps {}
+export interface BlogsListProps {}
 
-export const AppHome: React.FC<AppHomeProps> = () => {
+export const BlogsList: React.FC<BlogsListProps> = () => {
   const { token } = useSelector(authSlice.stateSelector)
   const blogsList = useSelector(blogsSlice.selectAll)
   const { groupId } = useParams<{ groupId: string }>()
@@ -28,15 +27,7 @@ export const AppHome: React.FC<AppHomeProps> = () => {
       .map(el => <BlogCard key={el.id} blog={el} />)
   }
 
-  const renderMainPage = () => {
-    if (token) {
-      return <>{renderBlogList()}</>
-    } else if (loader == layoutSlice.type.none) {
-      return <Typography>MAIN PAGE</Typography>
-    }
-  }
-
-  return <div>{renderMainPage()}</div>
+  return <div>{renderBlogList()}</div>
 }
 
-export default AppHome
+export default BlogsList

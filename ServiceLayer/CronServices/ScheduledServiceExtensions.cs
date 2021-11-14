@@ -5,7 +5,24 @@ namespace ServiceLayer.CronServices
 {
     public static class ScheduledServiceExtensions
     {
-        public static IServiceCollection AddCronJob<T>(this IServiceCollection services, Action<IScheduleConfig<T>> options) where T : CronJobService
+        public static IServiceCollection ConfigureCronJobs(this IServiceCollection services)
+        {
+            services.AddCronJob<UpdateBlogsCron>(c =>
+            {
+                c.TimeZoneInfo = TimeZoneInfo.Local;
+                c.CronExpression = @"0 0 * * *";
+            });
+
+            services.AddCronJob<ImStillAliveCron>(c =>
+            {
+                c.TimeZoneInfo = TimeZoneInfo.Local;
+                c.CronExpression = @"*/20 * * * *";
+            });
+
+            return services;
+        }
+
+        private static IServiceCollection AddCronJob<T>(this IServiceCollection services, Action<IScheduleConfig<T>> options) where T : CronJobService
         {
             if (options == null)
             {

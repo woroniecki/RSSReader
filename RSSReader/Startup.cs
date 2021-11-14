@@ -125,12 +125,7 @@ namespace RSSReader
                     };
                 });
 
-            services.AddCronJob<UpdateBlogsCron>(c =>
-            {
-                c.TimeZoneInfo = TimeZoneInfo.Local;
-                c.CronExpression = @"0 21 * * *";
-            });
-
+            services.ConfigureCronJobs();
             services.AddSmtpConfig(Configuration);
         }
 

@@ -38,6 +38,14 @@ export const ActionsBar: React.FC<ActionsBarProps> = props => {
     }
   }
 
+  const IsDeleteGroupDisabled = () => {
+    const value = parseInt(groupId)
+
+    if (isNaN(value) || value < 0) return true
+
+    return false
+  }
+
   return (
     <>
       <BottomNavigation
@@ -61,7 +69,7 @@ export const ActionsBar: React.FC<ActionsBarProps> = props => {
         <BottomNavigationAction label="Subscribe" icon={<AddIcon />} />
         <BottomNavigationAction label="Add" icon={<PostAddIcon />} />
         <BottomNavigationAction
-          disabled={isNaN(parseInt(groupId))}
+          disabled={IsDeleteGroupDisabled()}
           label="Remove"
           icon={<DeleteIcon />}
         />

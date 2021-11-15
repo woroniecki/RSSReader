@@ -2,7 +2,8 @@ import { createMuiTheme } from '@material-ui/core/styles'
 import useRefreshToken from 'components/Auth/useRefreshToken'
 import useResetTokens from 'components/Auth/useResetTokens'
 import useGetBlogsAndSubs from 'components/Blog/useGetBlogsAndSubs'
-import HomeApp from 'components/LandingPage/HomeApp'
+import HomeApp from 'components/Main/HomeApp'
+import MainPage from 'components/Main/MainPage'
 import CustomizedSnackbar from 'components/Snackbar/CustomizedSnackbar'
 import useResetLoaderSlice from 'components/Spinner/useResetLoaderSlice'
 import UserApp from 'components/UserApp'
@@ -49,7 +50,7 @@ function App(props: Props) {
 
   const GetContent = () => {
     if (!userName) {
-      return <HomeApp />
+      return <MainPage />
     } else {
       return <UserApp />
     }

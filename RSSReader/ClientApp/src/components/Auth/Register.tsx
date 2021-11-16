@@ -1,4 +1,11 @@
-import { Button, FormHelperText, TextField } from '@material-ui/core'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  FormHelperText,
+  TextField,
+} from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import { useFormik } from 'formik'
 import React from 'react'
@@ -53,69 +60,80 @@ export const Register: React.FC<RegisterProps> = () => {
   })
 
   return (
-    <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
-      <TextField
-        label="Username"
-        fullWidth
-        type="text"
-        placeholder="Username"
-        id="username"
-        name="username"
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.username}
-        error={!!formik.touched.username && !!formik.errors.username}
-        required
-      />
-      {formik.touched.username && formik.errors.username ? (
-        <FormHelperText error id="component-error-text">
-          {formik.errors.username}
-        </FormHelperText>
-      ) : null}
+    <Dialog
+      open={true}
+      onClose={() => push('/')}
+      aria-labelledby="form-dialog-title"
+    >
+      <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
+        <DialogContent>
+          <TextField
+            label="Username"
+            fullWidth
+            type="text"
+            placeholder="Username"
+            id="username"
+            name="username"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.username}
+            error={!!formik.touched.username && !!formik.errors.username}
+            required
+          />
+          {formik.touched.username && formik.errors.username ? (
+            <FormHelperText error id="component-error-text">
+              {formik.errors.username}
+            </FormHelperText>
+          ) : null}
 
-      <TextField
-        label="Email"
-        fullWidth
-        type="text"
-        placeholder="email"
-        id="email"
-        name="email"
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.email}
-        error={!!formik.touched.email && !!formik.errors.email}
-        required
-      />
-      {formik.touched.email && formik.errors.email ? (
-        <FormHelperText error id="component-error-text">
-          {formik.errors.email}
-        </FormHelperText>
-      ) : null}
+          <TextField
+            label="Email"
+            fullWidth
+            type="text"
+            placeholder="email"
+            id="email"
+            name="email"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+            error={!!formik.touched.email && !!formik.errors.email}
+            required
+          />
+          {formik.touched.email && formik.errors.email ? (
+            <FormHelperText error id="component-error-text">
+              {formik.errors.email}
+            </FormHelperText>
+          ) : null}
 
-      <TextField
-        label="Password"
-        fullWidth
-        type="password"
-        placeholder="Password"
-        id="password"
-        name="password"
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.password}
-        error={!!formik.touched.password && !!formik.errors.password}
-        required
-      />
-      {formik.touched.password && formik.errors.password ? (
-        <FormHelperText error id="component-error-text">
-          {formik.errors.password}
-        </FormHelperText>
-      ) : null}
+          <TextField
+            label="Password"
+            fullWidth
+            type="password"
+            placeholder="Password"
+            id="password"
+            name="password"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.password}
+            error={!!formik.touched.password && !!formik.errors.password}
+            required
+          />
+          {formik.touched.password && formik.errors.password ? (
+            <FormHelperText error id="component-error-text">
+              {formik.errors.password}
+            </FormHelperText>
+          ) : null}
 
-      {formik.errors.global != null && (
-        <Alert severity="error">{formik.errors.global}</Alert>
-      )}
-      <Button type="submit">Register</Button>
-    </form>
+          {formik.errors.global != null && (
+            <Alert severity="error">{formik.errors.global}</Alert>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button type="submit">Login</Button>
+          <Button onClick={() => push('/')}>Close</Button>
+        </DialogActions>
+      </form>
+    </Dialog>
   )
 }
 

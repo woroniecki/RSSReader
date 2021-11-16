@@ -13,11 +13,13 @@ import GridContainer from 'components/Main/components/Grid/GridContainer.js'
 import GridItem from 'components/Main/components/Grid/GridItem.js'
 import NavPills from 'components/Main/components/NavPills/NavPills.js'
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles(styles)
 
 export default function ParagraphOne() {
   const classes = useStyles()
+  const { push } = useHistory()
 
   return (
     <div className={classes.sectionbig}>
@@ -26,7 +28,11 @@ export default function ParagraphOne() {
           <GridContainer justify="center">
             <GridItem xs={12} sm={12} md={8}>
               <h1>Join us now</h1>
-              <Button color="primary" size="lg">
+              <Button
+                onClick={() => push('/register')}
+                color="primary"
+                size="lg"
+              >
                 Sign up
               </Button>
             </GridItem>

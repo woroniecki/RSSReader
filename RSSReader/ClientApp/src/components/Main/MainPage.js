@@ -14,6 +14,7 @@ import Header from 'components/Main/components/Header/Header.js'
 import HeaderLinks from 'components/Main/components/Header/HeaderLinks.js'
 import Parallax from 'components/Main/components/Parallax/Parallax.js'
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import ParagraphFooter from './ParagraphFooter.js'
 // react components for routing our app without refresh
 import ParagraphOne from './ParagraphOne.js'
@@ -24,6 +25,7 @@ const useStyles = makeStyles(styles)
 
 export default function MainPage(props) {
   const classes = useStyles()
+  const { push } = useHistory()
   const { ...rest } = props
   return (
     <div style={{ backgroundColor: '#000000' }}>
@@ -50,7 +52,11 @@ export default function MainPage(props) {
                   Follow your interests with RSS and keep everything in one
                   place.
                 </h3>
-                <Button color="primary" size="lg">
+                <Button
+                  onClick={() => push('/register')}
+                  color="primary"
+                  size="lg"
+                >
                   Sign up
                 </Button>
               </div>

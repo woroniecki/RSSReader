@@ -16,7 +16,7 @@ namespace ServiceLayer.CronServices
             services.AddCronJob<ImStillAliveCron>(c =>
             {
                 c.TimeZoneInfo = TimeZoneInfo.Local;
-                c.CronExpression = @"*/20 * * * *";
+                c.CronExpression = @"*/3 * * * *";
             });
 
             return services;

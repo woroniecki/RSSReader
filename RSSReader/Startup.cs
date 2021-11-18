@@ -138,7 +138,7 @@ namespace RSSReader
                     };
                 });
 
-            services.ConfigureCronJobs();
+            services.AddCronJobs(Configuration);
             services.AddSmtpConfig(Configuration);
         }
 

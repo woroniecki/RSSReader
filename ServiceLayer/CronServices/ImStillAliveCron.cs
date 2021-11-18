@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using ServiceLayer.SmtpService;
 using System;
 using System.IO;
@@ -23,12 +22,12 @@ namespace ServiceLayer.CronServices
             IScheduleConfig<ImStillAliveCron> config,
             ISmtpService smtpService,
             ILogger<ImStillAliveCron> logger,
-            IConfiguration project_config)
+            ICronConfig cron_config)
             : base(config.CronExpression, config.TimeZoneInfo)
         {
             _smtpService = smtpService;
             _logger = logger;
-            _urlBase = project_config.GetSection("BaseUrl").Get<string>();
+            _urlBase = cron_config.GetBaseUrl();
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)

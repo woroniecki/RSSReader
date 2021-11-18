@@ -1,12 +1,17 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using System;
 
 namespace ServiceLayer.CronServices
 {
     public static class ScheduledServiceExtensions
     {
-        public static IServiceCollection ConfigureCronJobs(this IServiceCollection services)
+        public static IServiceCollection AddCronJobs(
+            this IServiceCollection services, 
+            IConfiguration config)
         {
+            AddCronConfig(services, config);
+
             services.AddCronJob<UpdateBlogsCron>(c =>
             {
                 c.TimeZoneInfo = TimeZoneInfo.Local;
@@ -20,6 +25,18 @@ namespace ServiceLayer.CronServices
             });
 
             return services;
+        }
+
+        private static void AddCronConfig(IServiceCollection services, IConfiguration config)
+        {
+            if (config == null)
+            {
+                throw new ArgumentNullException(nameof(config), @"Please provide Configuration.");
+            }
+
+            services.AddSingleton<ICronConfig>(sp => new CronConfig(
+                config.GetSection("BaseUrl").Get<string>()
+                ));
         }
 
         private static IServiceCollection AddCronJob<T>(this IServiceCollection services, Action<IScheduleConfig<T>> options) where T : CronJobService

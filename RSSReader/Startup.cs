@@ -25,6 +25,8 @@ using RSSReader.Config;
 using System;
 using ServiceLayer.CronServices;
 using ServiceLayer.SmtpService;
+using ServiceLayer._Command;
+using ServiceLayer.SubscriptionCommands;
 
 namespace RSSReader
 {
@@ -46,8 +48,6 @@ namespace RSSReader
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(Configuration);
-
             ConfigName = Configuration.GetValue(typeof(string), "ConfigName") as string;
 
             string sqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");
@@ -57,7 +57,7 @@ namespace RSSReader
                 sqlConnectionStr,
                 b => b.MigrationsAssembly("DataLayer"))
             );
-             
+
             services.AddDefaultIdentity<ApiUser>()
                 .AddEntityFrameworkStores<DataContext>();
 
@@ -82,7 +82,8 @@ namespace RSSReader
                 options.User.RequireUniqueEmail = false;
             });
 
-            services.Configure<ApiBehaviorOptions>(options => {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
                 //options.SuppressModelStateInvalidFilter = true;
                 options.InvalidModelStateResponseFactory = actionContext =>
                 {
@@ -93,7 +94,7 @@ namespace RSSReader
             services.AddMvc();
 
             services.AddCors();
-            
+
             services.AddHttpContextAccessor();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -102,6 +103,16 @@ namespace RSSReader
             services.RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(AuthLoginService)))
                 .Where(c => c.Name.EndsWith("Service"))
                 .AsPublicImplementedInterfaces();
+
+            services.RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(DisableSubCommandHandler)))
+                .Where(c => c.Name.EndsWith("Handler"))
+                .AsPublicImplementedInterfaces();
+
+            services.AddScoped(provider => new Func<Type, IHandleCommand>(
+                    (type) => (IHandleCommand)provider.GetRequiredService(type)
+                ));
+
+            services.AddScoped<ICommandsBus, CommandsBus>();
 
             services.AddControllers().AddNewtonsoftJson(opt =>
             {

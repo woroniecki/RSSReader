@@ -37,5 +37,17 @@ namespace DataLayer.Models
         // <-- NOT MAPPED -->
         [NotMapped]
         public int? UnreadedCount { get; set; }
+
+        public void Disable(string disabledBy)
+        {
+            if (UserId != disabledBy)
+                throw new Exception("Unauthorized");
+
+            if (!Active)
+                throw new Exception("Subscription is already disabled");
+
+            Active = false;
+            LastUnsubscribeDate = DateTime.UtcNow;
+        }
     }
 }

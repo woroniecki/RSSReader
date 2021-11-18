@@ -5,6 +5,8 @@ using Dtos.Subscriptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RSSReader.Helpers;
+using ServiceLayer._Command;
+using ServiceLayer.SubscriptionCommands;
 using ServiceLayer.SubscriptionServices;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
@@ -16,6 +18,13 @@ namespace RSSReader.Controllers
     [Route("api/[controller]")]
     public class SubscriptionController : Controller
     {
+        private ICommandsBus _commandBus;
+
+        public SubscriptionController(ICommandsBus commandBus)
+        {
+            _commandBus = commandBus;
+        }
+
         [HttpPost("subscribe")]
         public async Task<ApiResponse> Subscribe(SubscribeRequestDto dto, [FromServices] ISubscribeService service)
         {
@@ -30,12 +39,19 @@ namespace RSSReader.Controllers
         [HttpPut("{id}/unsubscribe")]
         public async Task<ApiResponse> Unsubscribe(int id, [FromServices] IUnsubscribeService service)
         {
-            var result = await service.Unsubscribe(id, this.GetCurUserId());
+            await _commandBus.Send(new DisableSubCommand() { 
+                UserId = this.GetCurUserId(),
+                SubId = id
+            }); 
 
-            if (service.Errors.Any())
-                return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);
+            return new ApiResponse(MsgSucceed, null, Status200OK);
 
-            return new ApiResponse(MsgSucceed, result, Status200OK);
+            //var result = await service.Unsubscribe(id, this.GetCurUserId());
+
+            //if (service.Errors.Any())
+            //    return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);
+
+            //return new ApiResponse(MsgSucceed, result, Status200OK);
         }
 
         [HttpPatch("{subid}/set_group/{groupid}")]

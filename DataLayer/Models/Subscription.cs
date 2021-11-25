@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dtos.Subscriptions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -68,6 +69,17 @@ namespace DataLayer.Models
 
                 GroupId = group.Id;
                 Group = group;
+            }
+        }
+
+        public void Update(string userId, UpdateSubscriptionRequestDto dto)
+        {
+            if (UserId != userId)
+                throw new Exception("Unauthorized.");
+
+            if (dto.FilterReaded.HasValue)
+            {
+                FilterReaded = dto.FilterReaded.Value;
             }
         }
     }

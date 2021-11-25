@@ -72,16 +72,22 @@ namespace RSSReader.Controllers
         }
 
         [HttpPatch("{subid}/update")]
-        public async Task<ApiResponse> Update(int subId, [FromBody]UpdateSubscriptionRequestDto updateDto, [FromServices] IUpdateSubscriptionService service)
+        public async Task<ApiResponse> Update(int subId, [FromBody]UpdateSubscriptionRequestDto updateDto)
         {
-            var result = await service.Update(subId, this.GetCurUserId(), updateDto);
+            await _commandBus.Send(new UpdateSubCommand()
+            {
+                UserId = this.GetCurUserId(),
+                SubId = subId,
+                UpdateData = updateDto
+            });
 
-            if (service.Errors.Any())
-                return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);
+            var response = await _queriesBus.Get(
+                new GetBlogResponseDtoBySubIdQuery()
+                {
+                    SubId = subId
+                });
 
-            return new ApiResponse(MsgSucceed, result, Status200OK);
+            return new ApiResponse(MsgSucceed, response, Status200OK);
         }
-
-
     }
 }

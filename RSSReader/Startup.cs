@@ -27,6 +27,7 @@ using ServiceLayer.CronServices;
 using ServiceLayer.SmtpService;
 using ServiceLayer._Command;
 using ServiceLayer.SubscriptionCommands;
+using ServiceLayer._CQRS;
 
 namespace RSSReader
 {
@@ -100,20 +101,6 @@ namespace RSSReader
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IHttpHelperService, HttpHelperService>();
 
-            services.RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(AuthLoginService)))
-                .Where(c => c.Name.EndsWith("Service"))
-                .AsPublicImplementedInterfaces();
-
-            services.RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(DisableSubCommandHandler)))
-                .Where(c => c.Name.EndsWith("Handler"))
-                .AsPublicImplementedInterfaces();
-
-            services.AddScoped(provider => new Func<Type, IHandleCommand>(
-                    (type) => (IHandleCommand)provider.GetRequiredService(type)
-                ));
-
-            services.AddScoped<ICommandsBus, CommandsBus>();
-
             services.AddControllers().AddNewtonsoftJson(opt =>
             {
                 opt.SerializerSettings.ReferenceLoopHandling =
@@ -138,8 +125,13 @@ namespace RSSReader
                     };
                 });
 
+            services.RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(AuthLoginService)))
+                            .Where(c => c.Name.EndsWith("Service"))
+                            .AsPublicImplementedInterfaces();
+
             services.AddCronJobs(Configuration);
             services.AddSmtpConfig(Configuration);
+            services.AddCQRS();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

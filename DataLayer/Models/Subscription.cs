@@ -49,5 +49,26 @@ namespace DataLayer.Models
             Active = false;
             LastUnsubscribeDate = DateTime.UtcNow;
         }
+
+        public void SetGroup(string userId, Group group)
+        {
+            if (UserId != userId)
+                throw new Exception("Unauthorized.");
+
+            //-1 is resetting group to null, so it's treaded as none group
+            if (group == null)
+            {
+                GroupId = null;
+                Group = null;
+            }
+            else
+            {
+                if (group.User.Id != userId)
+                    throw new Exception("Unauthorized.");
+
+                GroupId = group.Id;
+                Group = group;
+            }
+        }
     }
 }

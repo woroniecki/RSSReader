@@ -1,11 +1,14 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoWrapper.Wrappers;
+using Dtos.Blogs;
 using Dtos.Subscriptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RSSReader.Helpers;
 using ServiceLayer._Command;
+using ServiceLayer._Queries;
+using ServiceLayer.BlogQueries;
 using ServiceLayer.SubscriptionCommands;
 using ServiceLayer.SubscriptionServices;
 using static Microsoft.AspNetCore.Http.StatusCodes;
@@ -19,10 +22,12 @@ namespace RSSReader.Controllers
     public class SubscriptionController : Controller
     {
         private ICommandsBus _commandBus;
+        private IQueriesBus _queriesBus;
 
-        public SubscriptionController(ICommandsBus commandBus)
+        public SubscriptionController(ICommandsBus commandBus, IQueriesBus queriesBus)
         {
             _commandBus = commandBus;
+            _queriesBus = queriesBus;
         }
 
         [HttpPost("subscribe")]
@@ -37,7 +42,7 @@ namespace RSSReader.Controllers
         }
 
         [HttpPut("{id}/unsubscribe")]
-        public async Task<ApiResponse> Unsubscribe(int id, [FromServices] IUnsubscribeService service)
+        public async Task<ApiResponse> Unsubscribe(int id)
         {
             await _commandBus.Send(new DisableSubCommand() { 
                 UserId = this.GetCurUserId(),
@@ -45,24 +50,25 @@ namespace RSSReader.Controllers
             }); 
 
             return new ApiResponse(MsgSucceed, null, Status200OK);
-
-            //var result = await service.Unsubscribe(id, this.GetCurUserId());
-
-            //if (service.Errors.Any())
-            //    return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);
-
-            //return new ApiResponse(MsgSucceed, result, Status200OK);
         }
 
         [HttpPatch("{subid}/set_group/{groupid}")]
-        public async Task<ApiResponse> SetGroup(int subId, int groupId, [FromServices] ISubscriptionSetGroupService service)
+        public async Task<ApiResponse> SetGroup(int subId, int groupId)
         {
-            var result = await service.SetGroup(subId, groupId, this.GetCurUserId());
+            await _commandBus.Send(new SetGroupSubCommand()
+            {
+                UserId = this.GetCurUserId(),
+                SubId = subId,
+                NewGroupId = groupId
+            });
 
-            if (service.Errors.Any())
-                return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);
+            var response = await _queriesBus.Get(
+                new GetBlogResponseDtoBySubIdQuery()
+                { 
+                    SubId = subId
+                });
 
-            return new ApiResponse(MsgSucceed, result, Status200OK);
+            return new ApiResponse(MsgSucceed, response, Status200OK);
         }
 
         [HttpPatch("{subid}/update")]

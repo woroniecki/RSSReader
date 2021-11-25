@@ -21,6 +21,7 @@ namespace DataLayer.Models
             FilterReaded = false;
         }
         public int Id { get; set; }
+        public Guid Guid { get; set; }
         public bool Active { get; set; }
         public DateTime FirstSubscribeDate { get; set; }
         public DateTime LastSubscribeDate { get; set; }

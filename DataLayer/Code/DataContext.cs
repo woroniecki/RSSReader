@@ -27,6 +27,7 @@ namespace DataLayer.Code
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new BlogConfig());
+            modelBuilder.ApplyConfiguration(new SubscriptionConfig());
         }
     }
 }

@@ -83,5 +83,11 @@ namespace DataLayer.Models
                 FilterReaded = dto.FilterReaded.Value;
             }
         }
+
+        public void Activate()
+        {
+            Active = true;
+            LastSubscribeDate = DateTime.UtcNow;
+        }
     }
 }

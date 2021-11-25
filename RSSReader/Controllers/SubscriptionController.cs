@@ -1,13 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoWrapper.Wrappers;
-using Dtos.Blogs;
 using Dtos.Subscriptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RSSReader.Helpers;
 using ServiceLayer._Command;
 using ServiceLayer._Queries;
+using ServiceLayer.BlogCommands;
 using ServiceLayer.BlogQueries;
 using ServiceLayer.SubscriptionCommands;
 using ServiceLayer.SubscriptionServices;
@@ -33,12 +34,28 @@ namespace RSSReader.Controllers
         [HttpPost("subscribe")]
         public async Task<ApiResponse> Subscribe(SubscribeRequestDto dto, [FromServices] ISubscribeService service)
         {
-            var result = await service.Subscribe(dto, this.GetCurUserId());
+            var command = new SubscribeCommand()
+            {
+                UserId = this.GetCurUserId(),
+                Data = dto
+            };
 
-            if (service.Errors.Any())
-                return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);
+            try
+            {
+                await _commandBus.Send(command);
+            } 
+            catch (Exception e)
+            {
+                return new ApiResponse(e.Message, null, Status400BadRequest);
+            }
 
-            return new ApiResponse(MsgSucceed, result, Status200OK);
+            var response = await _queriesBus.Get(
+                new GetBlogResponseDtoBySubIdQuery()
+                {
+                    Predicate = x => x.Id == command.GetSubscribedEntityId()
+                });
+
+            return new ApiResponse(MsgSucceed, response, Status200OK);
         }
 
         [HttpPut("{id}/unsubscribe")]
@@ -65,7 +82,7 @@ namespace RSSReader.Controllers
             var response = await _queriesBus.Get(
                 new GetBlogResponseDtoBySubIdQuery()
                 { 
-                    SubId = subId
+                    Predicate = x => x.Id == subId
                 });
 
             return new ApiResponse(MsgSucceed, response, Status200OK);
@@ -84,7 +101,7 @@ namespace RSSReader.Controllers
             var response = await _queriesBus.Get(
                 new GetBlogResponseDtoBySubIdQuery()
                 {
-                    SubId = subId
+                    Predicate = x => x.Id == subId
                 });
 
             return new ApiResponse(MsgSucceed, response, Status200OK);

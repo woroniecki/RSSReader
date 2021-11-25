@@ -4,14 +4,16 @@ using DataLayer.Models;
 using Dtos.Blogs;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer._Queries;
+using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ServiceLayer.BlogQueries
 {
     public class GetBlogResponseDtoBySubIdQuery : IQuery
     {
-        public int SubId { get; set; }
+        public Expression<Func<Subscription, bool>> Predicate;
     }
 
     public class GetBlogResponseDtoByIdQueryHandler : IHandleQuery<GetBlogResponseDtoBySubIdQuery>
@@ -30,7 +32,7 @@ namespace ServiceLayer.BlogQueries
             var sub = await _context.Subscriptions
                 .Include(x => x.User)
                 .Include(x => x.Blog)
-                .Where(x => x.Id == query.SubId)
+                .Where(query.Predicate)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 

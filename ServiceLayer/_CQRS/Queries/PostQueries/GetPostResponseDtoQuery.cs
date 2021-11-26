@@ -1,38 +1,34 @@
 ﻿using AutoMapper;
 using DataLayer.Code;
-using DataLayer.Models;
-using Dtos.Blogs;
 using Dtos.Posts;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ServiceLayer._CQRS.PostQueries
 {
-    public class GetPostResponseDtoListQuery : IQuery
+    public class GetPostResponseDtoQuery : IQuery
     {
         public string UserId { get; set; }
-        public int BlogId { get; set; }
+        public int PostId { get; set; }
     }
 
-    public class GetPostResponseDtoListQueryHandler : IHandleQuery<GetPostResponseDtoListQuery>
+    public class GetPostResponseDtoQueryHandler : IHandleQuery<GetPostResponseDtoQuery>
     {
         private DataContext _context;
         private IMapper _mapper;
 
-        public GetPostResponseDtoListQueryHandler(DataContext context, IMapper mapper)
+        public GetPostResponseDtoQueryHandler(DataContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public async Task<object> Handle(GetPostResponseDtoListQuery query)
+        public async Task<object> Handle(GetPostResponseDtoQuery query)
         {
             var db_query = (from post in _context.Posts
-                            where post.BlogId == query.BlogId
+                            where post.Id == query.PostId
                             select new PostAndUserDataSelection()
                             {
                                 Post = post,
@@ -45,9 +41,9 @@ namespace ServiceLayer._CQRS.PostQueries
                                     .FirstOrDefault()
                             });
 
-            var result = await db_query.ToListAsync();
+            var result = await db_query.FirstAsync();
 
-            return _mapper.Map<IEnumerable<PostAndUserDataSelection>, IEnumerable<PostResponseDto>>(result); ;
+            return _mapper.Map<PostAndUserDataSelection, PostResponseDto>(result); ;
         }
     }
 }

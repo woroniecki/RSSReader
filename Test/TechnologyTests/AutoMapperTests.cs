@@ -5,7 +5,7 @@ using DbAccess.Core;
 using Dtos.Posts;
 using Moq;
 using NUnit.Framework;
-using ServiceLayer._CQRS.BlogQueries;
+using ServiceLayer._CQRS.PostQueries;
 using System;
 using System.Threading.Tasks;
 using Tests.Helpers;

@@ -25,5 +25,20 @@ namespace DataLayer.Models
         public ApiUser User { get; set; }
         public int? SubscriptionId { get; set; }
         public Subscription Subscription { get; set; }
+
+        public void SetReaded(bool value)
+        {
+            if (value == true)
+                LastDateOpen = DateTime.UtcNow;
+
+            Readed = value;
+        }
+
+        public void SetFavourite(bool value)
+        {
+            Post.FavouriteAmount += value ? 1 : -1;
+            Post.FavouriteAmount = Math.Max(0, Post.FavouriteAmount);
+            Favourite = value;
+        }
     }
 }

@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.Toolkit.Parsers.Rss;
-
 using Dtos.Auth;
 using DataLayer.Models;
 using Dtos.Groups;
 using Dtos.Subscriptions;
 using Dtos.Blogs;
 using Dtos.Posts;
-using ServiceLayer._CQRS.BlogQueries;
+using ServiceLayer._CQRS.PostQueries;
 
 namespace RSSReader.Helpers
 {

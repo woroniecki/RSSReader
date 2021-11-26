@@ -27,8 +27,13 @@ namespace RSSReader.Controllers
         [HttpGet("subscribedList")]
         public async Task<ApiResponse> List([FromServices] IBlogListService service)
         {
-            var list = await service.GetListAsync(this.GetCurUserId());
-            return new ApiResponse(MsgSucceed, list, Status200OK);
+            var response = await _queriesBus.Get(
+                new GetSubscribedBlogsListQuery()
+                {
+                    UserId = this.GetCurUserId()
+                });
+
+            return new ApiResponse(MsgSucceed, response, Status200OK);
         }
 
         [HttpGet("search")]

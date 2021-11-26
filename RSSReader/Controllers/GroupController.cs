@@ -42,7 +42,7 @@ namespace RSSReader.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<ApiResponse> Add([FromBody] AddGroupRequestDto data, [FromServices] IGroupAddService service)
+        public async Task<ApiResponse> Add([FromBody] AddGroupRequestDto data)
         {
             Guid guid = Guid.NewGuid();
 
@@ -70,12 +70,13 @@ namespace RSSReader.Controllers
         }
 
         [HttpDelete("remove")]
-        public async Task<ApiResponse> Remove([FromBody] RemoveGroupRequestDto data, [FromServices] IGroupRemoveService service)
+        public async Task<ApiResponse> Remove([FromBody] RemoveGroupRequestDto data)
         {
-            await service.Remove(data, this.GetCurUserId());
-
-            if (service.Errors.Any())
-                return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);
+            await _commandBus.Send(new DeleteGroupCommand()
+            {
+                UserId = this.GetCurUserId(),
+                Data = data
+            });
 
             return new ApiResponse(MsgSucceed, null, Status204NoContent);
         }

@@ -8,7 +8,6 @@ using RSSReader.Helpers;
 using ServiceLayer._CQRS;
 using ServiceLayer._CQRS.BlogQueries;
 using ServiceLayer._CQRS.SubscriptionCommands;
-using ServiceLayer.SubscriptionServices;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 
@@ -29,7 +28,7 @@ namespace RSSReader.Controllers
         }
 
         [HttpPost("subscribe")]
-        public async Task<ApiResponse> Subscribe(SubscribeRequestDto dto, [FromServices] ISubscribeService service)
+        public async Task<ApiResponse> Subscribe(SubscribeRequestDto dto)
         {
             var command = new SubscribeCommand()
             {

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using RSSReader.Helpers;
 using ServiceLayer._CQRS;
 using ServiceLayer._CQRS.BlogQueries;
-using ServiceLayer.BlogServices;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 
@@ -25,7 +24,7 @@ namespace RSSReader.Controllers
         }
 
         [HttpGet("subscribedList")]
-        public async Task<ApiResponse> List([FromServices] IBlogListService service)
+        public async Task<ApiResponse> List()
         {
             var response = await _queriesBus.Get(
                 new GetSubscribedBlogsListQuery()

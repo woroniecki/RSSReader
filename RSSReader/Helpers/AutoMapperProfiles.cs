@@ -7,6 +7,7 @@ using Dtos.Groups;
 using Dtos.Subscriptions;
 using Dtos.Blogs;
 using Dtos.Posts;
+using ServiceLayer._CQRS.BlogQueries;
 
 namespace RSSReader.Helpers
 {
@@ -35,7 +36,7 @@ namespace RSSReader.Helpers
                     dest => dest.GroupId,
                     opt => opt.MapFrom(src => src.Group != null ? src.Group.Id : (int?)null)
                     );
-            CreateMap<Post, PostResponseDto>();
+
             CreateMap<RssSchema, Post>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Title))
                 .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.FeedUrl))
@@ -44,6 +45,16 @@ namespace RSSReader.Helpers
                 .ForMember(dest => dest.Summary, opt => opt.MapFrom(src => src.Summary))
                 .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
                 .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => src.PublishDate));
+
+            CreateMap<UserPostData, UserPostDataResponseDto>();
+            CreateMap<Post, PostResponseDto>();
+            CreateMap<PostAndUserDataSelection, PostResponseDto>()
+                .ConstructUsing((src, ctx) => ctx.Mapper.Map<PostResponseDto>(src.Post))
+                .AfterMap((src, dest, context) => {
+                    dest.UserData = src.UserPostData == null
+                        ? new UserPostDataResponseDto()
+                        : context.Mapper.Map<UserPostData, UserPostDataResponseDto>(src.UserPostData);
+            });
         }
     }
 }

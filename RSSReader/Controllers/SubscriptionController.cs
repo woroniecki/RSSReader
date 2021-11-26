@@ -47,7 +47,7 @@ namespace RSSReader.Controllers
             }
 
             var response = await _queriesBus.Get(
-                new GetBlogResponseDtoBySubIdQuery()
+                new GetBlogResponseDtoQuery()
                 {
                     Predicate = x => x.Id == command.GetSubscribedEntityId()
                 });
@@ -77,7 +77,7 @@ namespace RSSReader.Controllers
             });
 
             var response = await _queriesBus.Get(
-                new GetBlogResponseDtoBySubIdQuery()
+                new GetBlogResponseDtoQuery()
                 { 
                     Predicate = x => x.Id == subId
                 });
@@ -96,7 +96,7 @@ namespace RSSReader.Controllers
             });
 
             var response = await _queriesBus.Get(
-                new GetBlogResponseDtoBySubIdQuery()
+                new GetBlogResponseDtoQuery()
                 {
                     Predicate = x => x.Id == subId
                 });

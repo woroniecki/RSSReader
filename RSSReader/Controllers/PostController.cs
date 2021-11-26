@@ -5,6 +5,8 @@ using Dtos.UserPostData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RSSReader.Helpers;
+using ServiceLayer._CQRS;
+using ServiceLayer._CQRS.BlogQueries;
 using ServiceLayer.PostServices;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
@@ -16,6 +18,13 @@ namespace RSSReader.Controllers
     [Route("api/blog/{blogId}/[controller]/")]
     public class PostController : Controller
     {
+        private IQueriesBus _queriesBus;
+
+        public PostController(IQueriesBus queriesBus)
+        {
+            _queriesBus = queriesBus;
+        }
+
         [HttpPatch("{postId}/update")]
         public async Task<ApiResponse> UpdateUserPostData(int postId, [FromBody] UpdateUserPostDataRequestDto inData, [FromServices] IUpdateUserPostDataService service)
         {
@@ -43,16 +52,16 @@ namespace RSSReader.Controllers
 
         [HttpGet("list/{page}")]
         [AllowAnonymous]
-        public async Task<ApiResponse> GetPosts(int blogid, int page, [FromServices] IPostListService service)
+        public async Task<ApiResponse> GetPosts(int blogid, int page)
         {
-            string user_id = this.IsLoggedIn() ? this.GetCurUserId() : "";
+            var response = await _queriesBus.Get(
+                new GetPostResponseDtoListQuery()
+                {
+                    UserId = this.GetCurUserId(),
+                    BlogId = blogid
+                });
 
-            var result = await service.GetList(user_id, blogid, page);
-
-            if (service.Errors.Any())
-                return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);
-
-            return new ApiResponse(MsgSucceed, result, Status200OK);
+            return new ApiResponse(MsgSucceed, response, Status200OK);
         }
     }
 }

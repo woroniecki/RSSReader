@@ -10,23 +10,23 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer._CQRS.BlogQueries
 {
-    public class GetBlogResponseDtoBySubIdQuery : IQuery
+    public class GetBlogResponseDtoQuery : IQuery
     {
         public Expression<Func<Subscription, bool>> Predicate;
     }
 
-    public class GetBlogResponseDtoByIdQueryHandler : IHandleQuery<GetBlogResponseDtoBySubIdQuery>
+    public class GetBlogResponseDtoQueryHandler : IHandleQuery<GetBlogResponseDtoQuery>
     {
         private DataContext _context;
         private IMapper _mapper;
 
-        public GetBlogResponseDtoByIdQueryHandler(DataContext context, IMapper mapper)
+        public GetBlogResponseDtoQueryHandler(DataContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public async Task<object> Handle(GetBlogResponseDtoBySubIdQuery query)
+        public async Task<object> Handle(GetBlogResponseDtoQuery query)
         {
             var sub = await _context.Subscriptions
                 .Include(x => x.User)

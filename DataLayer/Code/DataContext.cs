@@ -28,6 +28,7 @@ namespace DataLayer.Code
 
             modelBuilder.ApplyConfiguration(new BlogConfig());
             modelBuilder.ApplyConfiguration(new SubscriptionConfig());
+            modelBuilder.ApplyConfiguration(new GroupConfig());
         }
     }
 }

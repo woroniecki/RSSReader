@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoWrapper.Wrappers;
 using Dtos.Groups;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RSSReader.Helpers;
 using ServiceLayer._CQRS;
+using ServiceLayer._CQRS.GroupCommands;
 using ServiceLayer._CQRS.GroupQueries;
 using ServiceLayer.GroupServices;
 using static Microsoft.AspNetCore.Http.StatusCodes;
@@ -42,12 +44,29 @@ namespace RSSReader.Controllers
         [HttpPost("add")]
         public async Task<ApiResponse> Add([FromBody] AddGroupRequestDto data, [FromServices] IGroupAddService service)
         {
-            var result = await service.AddNewGroup(data, this.GetCurUserId());
+            Guid guid = Guid.NewGuid();
 
-            if (service.Errors.Any())
-                return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);
+            try
+            {
+                await _commandBus.Send(new AddGroupCommand()
+                {
+                    UserId = this.GetCurUserId(),
+                    GroupName = data.Name,
+                    Guid = guid
+                });
+            }
+            catch (Exception e)
+            {
+                return new ApiResponse(e.Message, null, Status400BadRequest);
+            }
 
-            return new ApiResponse(MsgSucceed, result, Status201Created);
+            var response = await _queriesBus.Get(
+                new GetGroupResponseDtoQuery()
+                {
+                    Predicate = x => x.Guid == guid
+                });
+
+            return new ApiResponse(MsgSucceed, response, Status200OK);
         }
 
         [HttpDelete("remove")]

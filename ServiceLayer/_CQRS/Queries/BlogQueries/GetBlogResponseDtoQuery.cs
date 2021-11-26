@@ -28,14 +28,21 @@ namespace ServiceLayer._CQRS.BlogQueries
 
         public async Task<object> Handle(GetBlogResponseDtoQuery query)
         {
-            var sub = await _context.Subscriptions
-                .Include(x => x.User)
-                .Include(x => x.Blog)
-                .Where(query.Predicate)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
+            var db_query = (from s in _context.Subscriptions
+                                           .Include(x => x.Blog)
+                                           .Include(x => x.Group)
+                                           .AsNoTracking()
+                                           .Where(query.Predicate)
+                            select new
+                            {
+                                Subscription = s,
+                                UnreadedAmount = s.Blog.Posts.Count - s.UserPostDatas.Where(x => x.Readed).Count()
+                            });
 
-            return _mapper.Map<Subscription, BlogResponseDto>(sub);
+            var result = await db_query.FirstAsync();
+            result.Subscription.UnreadedCount = result.UnreadedAmount;
+
+            return _mapper.Map<Subscription, BlogResponseDto>(result.Subscription);
         }
     }
 }

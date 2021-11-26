@@ -33,6 +33,7 @@ namespace ServiceLayer._CQRS.BlogQueries
             var db_query = (from s in _context.Subscriptions
                                            .Include(x => x.Blog)
                                            .Include(x => x.Group)
+                                           .AsNoTracking()
                          where s.UserId == query.UserId && s.Active
                          select new
                          {

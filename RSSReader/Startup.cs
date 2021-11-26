@@ -22,11 +22,8 @@ using RSSReader.Helpers;
 using DataLayer.Code;
 using DataLayer.Models;
 using RSSReader.Config;
-using System;
 using ServiceLayer.CronServices;
 using ServiceLayer.SmtpService;
-using ServiceLayer._Command;
-using ServiceLayer.SubscriptionCommands;
 using ServiceLayer._CQRS;
 
 namespace RSSReader

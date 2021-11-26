@@ -3,13 +3,12 @@ using DataLayer.Code;
 using DataLayer.Models;
 using Dtos.Blogs;
 using Microsoft.EntityFrameworkCore;
-using ServiceLayer._Queries;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace ServiceLayer.BlogQueries
+namespace ServiceLayer._CQRS.BlogQueries
 {
     public class GetBlogResponseDtoBySubIdQuery : IQuery
     {

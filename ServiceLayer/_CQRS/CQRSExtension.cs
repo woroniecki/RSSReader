@@ -2,9 +2,7 @@
 using System.Reflection;
 using NetCore.AutoRegisterDi;
 using System;
-using ServiceLayer._Command;
-using ServiceLayer.SubscriptionCommands;
-using ServiceLayer._Queries;
+using ServiceLayer._CQRS.SubscriptionCommands;
 
 namespace ServiceLayer._CQRS
 {

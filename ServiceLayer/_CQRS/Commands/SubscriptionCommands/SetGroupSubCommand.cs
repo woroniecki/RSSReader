@@ -1,12 +1,12 @@
 ﻿using DataLayer.Code;
 using DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
-using ServiceLayer._Command;
+using ServiceLayer._CQRS;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ServiceLayer.SubscriptionCommands
+namespace ServiceLayer._CQRS.SubscriptionCommands
 {
     public class SetGroupSubCommand : ICommand
     {

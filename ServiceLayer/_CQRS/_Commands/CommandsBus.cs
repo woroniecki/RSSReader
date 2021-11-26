@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServiceLayer._Command
+namespace ServiceLayer._CQRS
 {
     public class CommandsBus : ICommandsBus
     {

@@ -1,31 +1,33 @@
 ﻿using DataLayer.Code;
-using ServiceLayer._Command;
+using Dtos.Subscriptions;
+using ServiceLayer._CQRS;
 using System.Threading.Tasks;
 
-namespace ServiceLayer.SubscriptionCommands
+namespace ServiceLayer._CQRS.SubscriptionCommands
 {
-    public class DisableSubCommand : ICommand
+    public class UpdateSubCommand : ICommand
     {
         public string UserId { get; set; }
         public int SubId { get; set; }
+        public UpdateSubscriptionRequestDto UpdateData { get; set; }
     }
 
-    public class DisableSubCommandHandler : IHandleCommand<DisableSubCommand>
+    public class UpdateSubCommandHandler : IHandleCommand<UpdateSubCommand>
     {
         private DataContext _context;
 
-        public DisableSubCommandHandler(DataContext context)
+        public UpdateSubCommandHandler(DataContext context)
         {
             _context = context;
         }
 
-        public async Task Handle(DisableSubCommand command)
+        public async Task Handle(UpdateSubCommand command)
         {
             using (var tx = _context.Database.BeginTransaction())
             {
                 var sub = await _context.Subscriptions.FindAsync(command.SubId);
 
-                sub.Disable(command.UserId);
+                sub.Update(command.UserId, command.UpdateData);
 
                 _context.SaveChanges();
 

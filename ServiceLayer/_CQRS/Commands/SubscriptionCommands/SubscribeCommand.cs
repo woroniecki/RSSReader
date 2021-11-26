@@ -6,13 +6,13 @@ using HtmlAgilityPack;
 using LogicLayer.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Toolkit.Parsers.Rss;
-using ServiceLayer._Command;
+using ServiceLayer._CQRS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ServiceLayer.SubscriptionCommands
+namespace ServiceLayer._CQRS.SubscriptionCommands
 {
     public class SubscribeCommand : ICommand
     {

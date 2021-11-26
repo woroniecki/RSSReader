@@ -5,6 +5,8 @@ using Dtos.Groups;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RSSReader.Helpers;
+using ServiceLayer._CQRS;
+using ServiceLayer._CQRS.GroupQueries;
 using ServiceLayer.GroupServices;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
@@ -16,15 +18,25 @@ namespace RSSReader.Controllers
     [Route("api/[controller]")]
     public class GroupController : Controller
     {
+        private IQueriesBus _queriesBus;
+        private ICommandsBus _commandBus;
+
+        public GroupController(ICommandsBus commandBus, IQueriesBus queriesBus)
+        {
+            _queriesBus = queriesBus;
+            _commandBus = commandBus;
+        }
+
         [HttpGet("list")]
         public async Task<ApiResponse> GetList([FromServices] IGroupListService service)
         {
-            var result = await service.GetList(this.GetCurUserId());
+            var response = await _queriesBus.Get(
+                new GetGroupResponseDtoListQuery()
+                {
+                    UserId = this.GetCurUserId()
+                });
 
-            if (service.Errors.Any())
-                return new ApiResponse(service.Errors.First().ErrorMessage, null, Status400BadRequest);
-
-            return new ApiResponse(MsgSucceed, result, Status200OK);
+            return new ApiResponse(MsgSucceed, response, Status200OK);
         }
 
         [HttpPost("add")]

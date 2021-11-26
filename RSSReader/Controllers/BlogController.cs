@@ -4,6 +4,8 @@ using AutoWrapper.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RSSReader.Helpers;
+using ServiceLayer._CQRS;
+using ServiceLayer._CQRS.BlogQueries;
 using ServiceLayer.BlogServices;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
@@ -15,10 +17,11 @@ namespace RSSReader.Controllers
     [Route("api/[controller]")]
     public class BlogController : Controller
     {
-        [HttpGet("{blogid}")]
-        public async Task<ApiResponse> Get(int blogid)
+        private IQueriesBus _queriesBus;
+
+        public BlogController(IQueriesBus queriesBus)
         {
-            return null;
+            _queriesBus = queriesBus;
         }
 
         [HttpGet("subscribedList")]
@@ -30,10 +33,15 @@ namespace RSSReader.Controllers
 
         [HttpGet("search")]
         [AllowAnonymous]
-        public async Task<ApiResponse> SearchPost([FromServices] IBlogSearchService service, string value)
+        public async Task<ApiResponse> Search(string value)
         {
-            var list = await service.Search(value);
-            return new ApiResponse(MsgSucceed, list, Status200OK);
+            var response = await _queriesBus.Get(
+                new SearchBlogsQuery()
+                {
+                    SearchValue = value
+                });
+
+            return new ApiResponse(MsgSucceed, response, Status200OK);
         }
     }
 }

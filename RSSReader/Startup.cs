@@ -17,7 +17,6 @@ using System.Reflection;
 using ServiceLayer.AuthServices;
 using NetCore.AutoRegisterDi;
 using LogicLayer.Helpers;
-using DbAccess.Core;
 using RSSReader.Helpers;
 using DataLayer.Code;
 using DataLayer.Models;
@@ -95,7 +94,6 @@ namespace RSSReader
 
             services.AddHttpContextAccessor();
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IHttpHelperService, HttpHelperService>();
 
             services.AddControllers().AddNewtonsoftJson(opt =>

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
+using DataLayer.Code;
 using DataLayer.Models;
-using DbAccess.Core;
 using Dtos.Jobs;
 using LogicLayer.Helpers;
 using Microsoft.EntityFrameworkCore;
@@ -20,21 +17,21 @@ namespace ServiceLayer.JobServices
     {
         //private IAction _action;
         private IMapper _mapper;
-        private IUnitOfWork _unitOfWork;
         private IHttpHelperService _httpService;
+        private DataContext _context;
         private ILogger<UpdateBlogsJobService> _logger;
 
         //public IImmutableList<ValidationResult> Errors => _action != null ? _action.Errors : null;
 
         public UpdateBlogsJobService(
             IMapper mapper,
-            IUnitOfWork unitOfWork,
             IHttpHelperService httpService,
+            DataContext context,
             ILogger<UpdateBlogsJobService> logger)
         {
             _mapper = mapper;
-            _unitOfWork = unitOfWork;
             _httpService = httpService;
+            _context = context;
             _logger = logger;
         }
 
@@ -50,7 +47,11 @@ namespace ServiceLayer.JobServices
             List<Blog> blogs;
             do
             {
-                blogs = await _unitOfWork.BlogRepo.GetListWithPosts(skip_amount, big_step);
+                blogs = await _context.Blogs
+                                      .Include(x => x.Posts)
+                                      .OrderBy(x => x.Id)
+                                      .Skip(skip_amount).Take(big_step)
+                                      .ToListAsync();
 
                 _logger.LogInformation($"UpdateBlogs progress: {skip_amount} updated");
 
@@ -68,7 +69,7 @@ namespace ServiceLayer.JobServices
 
                     await Task.WhenAll(tasks);
 
-                    await _unitOfWork.Context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
                 }
             }
             while (blogs.Count() > 0);

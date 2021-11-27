@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DataLayer.Code;
 using DataLayer.Models;
-using DbAccess.Core;
 using LogicLayer.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -128,7 +127,6 @@ namespace LogicLayer.PopulateDB
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<DataContext>();
-                var uow = new UnitOfWork(context);
 
                 //PREPARE CONTEXT
                 try

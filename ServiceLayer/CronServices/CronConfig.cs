@@ -1,9 +1,4 @@
-﻿using DataLayer.Models;
-using DbAccess.Core;
-using LogicLayer._GenericActions;
-using System.Threading.Tasks;
-
-namespace ServiceLayer.CronServices
+﻿namespace ServiceLayer.CronServices
 {
     public class CronConfig : ICronConfig
     {

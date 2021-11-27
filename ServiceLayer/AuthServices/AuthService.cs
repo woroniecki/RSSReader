@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -9,9 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 
 using DataLayer.Models;
-using LogicLayer._GenericActions;
 using Dtos.Auth;
-using DbAccess.Core;
 
 using LogicLayer.Helpers;
 using LogicLayer._const;

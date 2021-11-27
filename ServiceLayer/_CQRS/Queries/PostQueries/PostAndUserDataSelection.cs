@@ -1,7 +1,4 @@
 ﻿using DataLayer.Models;
-using DbAccess.Core;
-using LogicLayer._GenericActions;
-using System.Threading.Tasks;
 
 namespace ServiceLayer._CQRS.PostQueries
 {

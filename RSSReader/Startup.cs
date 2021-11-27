@@ -122,7 +122,7 @@ namespace RSSReader
                     };
                 });
 
-            services.RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(AuthLoginService)))
+            services.RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(AuthService)))
                             .Where(c => c.Name.EndsWith("Service"))
                             .AsPublicImplementedInterfaces();
 

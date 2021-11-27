@@ -9,7 +9,6 @@ using RSSReader.Helpers;
 using ServiceLayer._CQRS;
 using ServiceLayer._CQRS.PostQueries;
 using ServiceLayer._CQRS.UserPostDataCommands;
-using ServiceLayer.PostServices;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 

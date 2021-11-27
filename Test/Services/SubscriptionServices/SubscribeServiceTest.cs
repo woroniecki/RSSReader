@@ -8,7 +8,6 @@ using Dtos.Subscriptions;
 using LogicLayer._const;
 using LogicLayer.Helpers;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using NUnit.Framework;
 using ServiceLayer.SubscriptionServices;
 using Tests.Helpers;

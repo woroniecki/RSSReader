@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoWrapper.Wrappers;
 using Dtos.Groups;
@@ -9,7 +8,6 @@ using RSSReader.Helpers;
 using ServiceLayer._CQRS;
 using ServiceLayer._CQRS.GroupCommands;
 using ServiceLayer._CQRS.GroupQueries;
-using ServiceLayer.GroupServices;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static RSSReader.Data.Response;
 
@@ -30,7 +28,7 @@ namespace RSSReader.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<ApiResponse> GetList([FromServices] IGroupListService service)
+        public async Task<ApiResponse> GetList()
         {
             var response = await _queriesBus.Get(
                 new GetGroupResponseDtoListQuery()

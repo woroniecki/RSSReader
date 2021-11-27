@@ -1,12 +1,7 @@
-﻿using DataLayer.Code;
-using DataLayer.Models;
-using DbAccess.Core;
+﻿using DataLayer.Models;
 using Dtos.Subscriptions;
-using Moq;
 using NUnit.Framework;
 using System;
-using System.Threading.Tasks;
-using Tests.Helpers;
 
 namespace Tests.UnitTests
 {

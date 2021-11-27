@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
-    <ProjectReference Include="..\DbAccess\DbAccess.csproj" />
     <ProjectReference Include="..\Dtos\Dtos.csproj" />
   </ItemGroup>
   

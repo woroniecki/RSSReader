@@ -1,10 +1,7 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Threading.Tasks;
 using DataLayer.Code;
-using DbAccess.Core;
 using LogicLayer.Helpers;
-using Moq;
 using NUnit.Framework;
 using Tests.Helpers;
 
@@ -14,20 +11,17 @@ namespace Tests.LogicTests
     class BlogIconMethods_GetHigherIconResolution
     {
         private DataContext _context;
-        private UnitOfWork _unitOfWork;
 
         [SetUp]
         public void SetUp()
         {
             var options = InMemoryDb.CreateNewContextOptions();
             _context = new DataContext(options);
-            _unitOfWork = new UnitOfWork(_context);
         }
 
         [TearDown]
         public void TearDown()
         {
-            _unitOfWork.Dispose();
         }
 
         [Test]

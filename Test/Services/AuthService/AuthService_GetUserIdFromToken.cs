@@ -1,14 +1,10 @@
-﻿using DataLayer.Code;
-using DataLayer.Models;
-using DbAccess.Core;
-using Moq;
+﻿using DataLayer.Models;
 using NUnit.Framework;
 using ServiceLayer.AuthServices;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tests.Fake;
-using Tests.Helpers;
 
 namespace Tests.UnitTests
 {

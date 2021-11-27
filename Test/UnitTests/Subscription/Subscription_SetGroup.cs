@@ -1,10 +1,7 @@
 ﻿using DataLayer.Code;
 using DataLayer.Models;
-using DbAccess.Core;
-using Moq;
 using NUnit.Framework;
 using System;
-using System.Threading.Tasks;
 using Tests.Helpers;
 
 namespace Tests.UnitTests
@@ -13,20 +10,17 @@ namespace Tests.UnitTests
     class Subscription_SetGroup
     {
         private DataContext _context;
-        private UnitOfWork _unitOfWork;
 
         [SetUp]
         public void SetUp()
         {
             var options = InMemoryDb.CreateNewContextOptions();
             _context = new DataContext(options);
-            _unitOfWork = new UnitOfWork(_context);
         }
 
         [TearDown]
         public void TearDown()
         {
-            _unitOfWork.Dispose();
         }
 
         [Test]

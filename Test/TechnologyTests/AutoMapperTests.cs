@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
-using DataLayer.Code;
 using DataLayer.Models;
-using DbAccess.Core;
 using Dtos.Posts;
-using Moq;
 using NUnit.Framework;
 using ServiceLayer._CQRS.PostQueries;
 using System;
 using System.Threading.Tasks;
-using Tests.Helpers;
 
 namespace Tests.TechnologyTests
 {

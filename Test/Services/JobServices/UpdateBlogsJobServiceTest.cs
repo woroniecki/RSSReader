@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using DataLayer.Code;
 using DataLayer.Models;
-using DbAccess.Core;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
@@ -18,20 +16,17 @@ namespace Tests.Services.JobServices
     class UpdateBlogsJobServiceTest
     {
         private DataContext _context;
-        private UnitOfWork _unitOfWork;
 
         [SetUp]
         public void SetUp()
         {
             var options = InMemoryDb.CreateNewContextOptions();
             _context = new DataContext(options);
-            _unitOfWork = new UnitOfWork(_context);
         }
 
         [TearDown]
         public void TearDown()
         {
-            _unitOfWork.Dispose();
         }
 
         [Test]
@@ -47,17 +42,17 @@ namespace Tests.Services.JobServices
             for (int i = 0; i < amount; i++)
             {
                 var blog = new Blog() { Url = $"www.url{i}.com", LastPostsRefreshDate = refreshDate };
-                _unitOfWork.Context.Add(blog);
+                _context.Add(blog);
 
                 httpHelperService.GetStringContentFromFile(blog.Url, $"../../../Data/feeddata{(i % 3) + 1}.xml");
             }
 
-            _unitOfWork.Context.SaveChanges();
+            _context.SaveChanges();
 
             var service = new UpdateBlogsJobService(
                     MapperHelper.GetNewInstance(),
-                    _unitOfWork,
                     httpHelperService.Object,
+                    _context,
                     new Mock<ILogger<UpdateBlogsJobService>>().Object
                 );
 
@@ -88,7 +83,7 @@ namespace Tests.Services.JobServices
             for (int i = 0; i < amount; i++)
             {
                 var blog = new Blog() { Url = $"www.url{i}.com", LastPostsRefreshDate = refreshDate };
-                _unitOfWork.Context.Add(blog);
+                _context.Add(blog);
 
                 if (i % 3 == 0)//success
                 {
@@ -104,12 +99,12 @@ namespace Tests.Services.JobServices
                 }
             }
 
-            _unitOfWork.Context.SaveChanges();
+            _context.SaveChanges();
 
             var service = new UpdateBlogsJobService(
                     MapperHelper.GetNewInstance(),
-                    _unitOfWork,
                     httpHelperService.Object,
+                    _context,
                     new Mock<ILogger<UpdateBlogsJobService>>().Object
                 );
 

@@ -8,12 +8,14 @@ import {
   FormHelperText,
   TextField,
 } from '@material-ui/core'
+import React, { useState } from 'react'
 import { Alert } from '@material-ui/lab'
 import { useFormik } from 'formik'
 import { useHistory } from 'react-router-dom'
 import { authSlice, layoutSlice, snackbarSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import { applyValidationErrors } from 'utils/utils'
+import SpinnerElement from 'components/Spinner/SpinnerElement'
 import * as Yup from 'yup'
 
 export interface LoginProps {}
@@ -21,6 +23,7 @@ export interface LoginProps {}
 export const Login: React.FC<LoginProps> = () => {
   const { push } = useHistory()
   const dispatch = useAppDispatch()
+  const [isInAction, setIsInAction] = useState(false)
 
   const formik = useFormik({
     initialValues: {
@@ -33,14 +36,15 @@ export const Login: React.FC<LoginProps> = () => {
       password: Yup.string().required('Required'),
     }),
     onSubmit: async values => {
-      dispatch(layoutSlice.actions.setLoader(layoutSlice.type.partial))
+      if (isInAction) return
+      setIsInAction(true)
+
       const promise = await dispatch(
         authSlice.login({
           username: values.username,
           password: values.password,
         })
       )
-      dispatch(layoutSlice.actions.setLoader(layoutSlice.type.none))
 
       if (authSlice.login.fulfilled.match(promise)) {
         push('/')
@@ -54,8 +58,15 @@ export const Login: React.FC<LoginProps> = () => {
           })
         )
       }
+
+      setIsInAction(false)
     },
   })
+
+  function renderSubmitButton() {
+    if (!isInAction) return 'Login'
+    return <SpinnerElement size={18} />
+  }
 
   return (
     <Dialog
@@ -108,7 +119,7 @@ export const Login: React.FC<LoginProps> = () => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button type="submit">Login</Button>
+          <Button type="submit">{renderSubmitButton()}</Button>
           <Button onClick={() => push('/')}>Close</Button>
         </DialogActions>
       </form>

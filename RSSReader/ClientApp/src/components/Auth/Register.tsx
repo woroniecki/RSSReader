@@ -8,11 +8,12 @@ import {
 } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import { useFormik } from 'formik'
-import React from 'react'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { layoutSlice, snackbarSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import { applyValidationErrors } from 'utils/utils'
+import SpinnerElement from 'components/Spinner/SpinnerElement'
 import * as Yup from 'yup'
 import { register } from '../../api/authApi'
 
@@ -21,6 +22,7 @@ export interface RegisterProps {}
 export const Register: React.FC<RegisterProps> = () => {
   const { push } = useHistory()
   const dispatch = useAppDispatch()
+  const [isInAction, setIsInAction] = useState(false)
 
   const formik = useFormik({
     initialValues: {
@@ -41,7 +43,9 @@ export const Register: React.FC<RegisterProps> = () => {
         .required('Required'),
     }),
     onSubmit: async values => {
-      dispatch(layoutSlice.actions.setLoader(layoutSlice.type.partial))
+      if (isInAction) return
+      setIsInAction(true)
+
       try {
         await register(values)
         push('/login')
@@ -55,9 +59,15 @@ export const Register: React.FC<RegisterProps> = () => {
           })
         )
       }
-      dispatch(layoutSlice.actions.setLoader(layoutSlice.type.none))
+
+      setIsInAction(false)
     },
   })
+
+  function renderSubmitButton() {
+    if (!isInAction) return 'Register'
+    return <SpinnerElement size={18} />
+  }
 
   return (
     <Dialog
@@ -129,7 +139,7 @@ export const Register: React.FC<RegisterProps> = () => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button type="submit">Login</Button>
+          <Button type="submit">{renderSubmitButton()}</Button>
           <Button onClick={() => push('/')}>Close</Button>
         </DialogActions>
       </form>

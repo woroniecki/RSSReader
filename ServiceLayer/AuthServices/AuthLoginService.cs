@@ -74,7 +74,7 @@ namespace ServiceLayer.AuthServices
                 _config
                 );
 
-            var runner = new RunnerWriteDb<ApiUser, AuthTokens>(
+            var runner = new RunnerWriteDb<ApiUser, AuthTokensDto>(
                 _generateTokensAction,
                 _unitOfWork.Context
                 );

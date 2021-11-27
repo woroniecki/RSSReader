@@ -55,15 +55,19 @@ namespace RSSReader.Controllers
         [Route("login")]
         public async Task<ApiResponse> Login([FromBody] LoginRequestDto model, [FromServices] IAuthLoginService service)
         {
-            var response = await service.Login(model);
+            var command = new LoginUserCommand()
+            {
+                Data = model
+            };
 
-            if (service.Errors.Any())
-                return new ApiResponse
-                    (
-                        "Error",
-                        ModelErrors.ConvertResponse(service.Errors),
-                        Status400BadRequest
-                    );
+            await _commandBus.Send(command);
+
+            var response = await _queriesBus.Get(
+                new GetAuthenticationDataResponseQuery()
+                {
+                    Username = model.Username,
+                    Tokens = command.GetGeneratedTokens()
+                });
 
             return new ApiResponse(MsgSucceed, response, Status200OK);
         }

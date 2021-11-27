@@ -16,30 +16,25 @@ using DbAccess.Core;
 using LogicLayer.Helpers;
 using LogicLayer._const;
 
-namespace LogicLayer.Auth
+namespace ServiceLayer.AuthServices
 {
-    public class GenerateAuthTokensAction :
-        ActionErrors,
-        IAction<ApiUser, AuthTokensDto>
+    public class AuthService : IAuthService
     {
         private IConfiguration _config;
 
-        public GenerateAuthTokensAction(
+        public AuthService(
             IConfiguration config
             )
         {
             _config = config;
         }
 
-        public AuthTokensDto Action(ApiUser user)
+        public AuthTokensDto GenerateAuthTokens(ApiUser user)
         {
-            if (user.RefreshTokens == null)
-                throw new ArgumentException("User doesn't include refreshtokens.");
-
             var key = _config.GetSection("AppSettings:Token").Value;
 
             var authToken = CreateAuthToken(
-                            user.Id, 
+                            user.Id,
                             user.UserName,
                             key,
                             out DateTime expiresTime
@@ -56,10 +51,10 @@ namespace LogicLayer.Auth
             };
         }
 
-        public static string CreateAuthToken(string id, string name, string key, out DateTime expiresTime)
+        static string CreateAuthToken(string id, string name, string key, out DateTime expiresTime)
         {
             var creds = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)), 
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
                 SecurityAlgorithms.HmacSha512Signature);
 
             expiresTime = DateTime.UtcNow.AddSeconds(RssConsts.AUTH_TOKEN_EXPIRES_TIME_S);
@@ -82,7 +77,7 @@ namespace LogicLayer.Auth
             return tokenHandler.WriteToken(token);
         }
 
-        public static RefreshToken CreateRefreshToken(string authToken)
+        static RefreshToken CreateRefreshToken(string authToken)
         {
             using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
             {
@@ -95,9 +90,14 @@ namespace LogicLayer.Auth
                     Expires = DateTime.UtcNow.AddSeconds(RssConsts.REFRESH_TOKEN_EXPIRES_TIME_S),
                     Created = DateTime.UtcNow
                 };
-                
+
                 return refreshToken;
             }
         }
+    }
+
+    public interface IAuthService
+    {
+        public AuthTokensDto GenerateAuthTokens(ApiUser user);
     }
 }

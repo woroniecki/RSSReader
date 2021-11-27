@@ -70,11 +70,9 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      maxWidth: 845,
       margin: '15px 5px',
     },
     rootTransparent: {
-      maxWidth: 845,
       margin: '15px 5px',
       opacity: 0.7,
     },

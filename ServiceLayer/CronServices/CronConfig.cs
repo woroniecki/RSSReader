@@ -1,22 +1,24 @@
-﻿namespace ServiceLayer.CronServices
+﻿using System.Collections.Generic;
+
+namespace ServiceLayer.CronServices
 {
     public class CronConfig : ICronConfig
     {
-        private string BaseUrl { get; }
+        private List<string> UrlsToPing { get; }
 
-        public CronConfig(string baseUrl)
+        public CronConfig(List<string> urlsToPing)
         {
-            BaseUrl = baseUrl;
+            UrlsToPing = urlsToPing;
         }
 
-        public string GetBaseUrl()
+        public IEnumerable<string> GetBaseUrl()
         {
-            return BaseUrl;
+            return UrlsToPing;
         }
     }
 
     public interface ICronConfig
     {
-        string GetBaseUrl();
+        IEnumerable<string> GetBaseUrl();
     }
 }

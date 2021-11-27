@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using ServiceLayer.SmtpService;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -9,25 +10,25 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer.CronServices
 {
-    public class ImStillAliveCron : CronJobService
+    public class KeepServerAliveCron : CronJobService
     {
-        const string TASK_NAME = "[I AM STILL ALIVE]";
+        const string TASK_NAME = "[Keep Server Alive]";
         const string URL_HEALTH_CHECK = "/api/blog/search?value=https://dev";
 
         private readonly ISmtpService _smtpService;
-        private readonly ILogger<ImStillAliveCron> _logger;
-        private readonly string _urlBase;
+        private readonly ILogger<KeepServerAliveCron> _logger;
+        private readonly IEnumerable<string> _urls;
 
-        public ImStillAliveCron(
-            IScheduleConfig<ImStillAliveCron> config,
+        public KeepServerAliveCron(
+            IScheduleConfig<KeepServerAliveCron> config,
             ISmtpService smtpService,
-            ILogger<ImStillAliveCron> logger,
+            ILogger<KeepServerAliveCron> logger,
             ICronConfig cron_config)
             : base(config.CronExpression, config.TimeZoneInfo)
         {
             _smtpService = smtpService;
             _logger = logger;
-            _urlBase = cron_config.GetBaseUrl();
+            _urls = cron_config.GetBaseUrl();
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
@@ -43,28 +44,32 @@ namespace ServiceLayer.CronServices
         {
             _logger.LogInformation($"{DateTime.Now:hh:mm:ss} {TASK_NAME} is working.");
 
-            using (var client = new HttpClient())
+            foreach (var urlBase in _urls)
             {
-                try
+                using (var client = new HttpClient())
                 {
-                    string url = _urlBase + URL_HEALTH_CHECK;
-
-                    var request = WebRequest.Create(url);
-                    request.Method = "GET";
-
-                    using var webResponse = request.GetResponse();
-                    using var webStream = webResponse.GetResponseStream();
-
-                    using (var reader = new StreamReader(webStream))
+                    try
                     {
-                        var data = reader.ReadToEnd();
+                        string url = urlBase + URL_HEALTH_CHECK;
 
-                        _logger.LogInformation($"{TASK_NAME} success.");
+                        var request = WebRequest.Create(url);
+                        request.Method = "GET";
+
+                        using var webResponse = request.GetResponse();
+                        using var webStream = webResponse.GetResponseStream();
+
+                        using (var reader = new StreamReader(webStream))
+                        {
+                            var data = reader.ReadToEnd();
+
+                            _logger.LogInformation($"{TASK_NAME} success.");
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    _smtpService.SendEmailToAdministration($"{TASK_NAME} server refresh failer", $"{ex}");
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"{TASK_NAME} failed to ping {urlBase}.");
+                        //_smtpService.SendEmailToAdministration($"{TASK_NAME} server refresh failer", $"{ex}");
+                    }
                 }
             }
 

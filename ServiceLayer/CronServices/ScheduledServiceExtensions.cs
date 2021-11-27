@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Linq;
 
 namespace ServiceLayer.CronServices
 {
@@ -18,7 +19,7 @@ namespace ServiceLayer.CronServices
                 c.CronExpression = @"0 0 * * *";
             });
 
-            services.AddCronJob<ImStillAliveCron>(c =>
+            services.AddCronJob<KeepServerAliveCron>(c =>
             {
                 c.TimeZoneInfo = TimeZoneInfo.Local;
                 c.CronExpression = @"*/3 * * * *";
@@ -35,7 +36,7 @@ namespace ServiceLayer.CronServices
             }
 
             services.AddSingleton<ICronConfig>(sp => new CronConfig(
-                config.GetSection("BaseUrl").Get<string>()
+                    config.GetSection("PingUrls").Get<string[]>().ToList()
                 ));
         }
 

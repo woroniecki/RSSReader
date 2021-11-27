@@ -34,8 +34,8 @@ export default function ParagraphOne() {
               <div>
                 <h1>A great reading experience</h1>
                 <h3>
-                  RSS Box has a clean interface with customizable themes and
-                  typography for the optimal reading experience.
+                  RSS Box has a clean and intuitive interface to make reading
+                  experience fun and easy.
                 </h3>
               </div>
             </GridItem>
@@ -55,17 +55,16 @@ export default function ParagraphOne() {
               />
             </GridItem>
             <GridItem xs={11} sm={11} md={8} lg={3}>
-              <h2>Fullscreen</h2>
+              <h2>In One Place</h2>
               <h4>
-                Reading is something that demands your full attention. Use the
-                immersive full screen mode to bring the content you care about
-                front and center.
+                You don&apos;t have to go on thru the whole internet anymore to
+                find all posts which interest you. Gather all blogs & news
+                services in one place by using RSS Box.
               </h4>
-              <h2>Fullscreen</h2>
+              <h2>Updated Articles</h2>
               <h4>
-                Reading is something that demands your full attention. Use the
-                immersive full screen mode to bring the content you care about
-                front and center.
+                Articles are kept updated. You don&apos;t need to worry about
+                missing any important news.
               </h4>
             </GridItem>
           </GridContainer>

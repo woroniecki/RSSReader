@@ -45,9 +45,7 @@ export default function MainPage(props) {
           <GridContainer>
             <GridItem>
               <div className={classes.brand}>
-                <h1 className={classes.title}>
-                  A nice place to read on the web.
-                </h1>
+                <h1 className={classes.title}>A nice place to read.</h1>
                 <h3 className={classes.subtitle}>
                   Follow your interests with RSS and keep everything in one
                   place.

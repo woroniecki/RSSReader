@@ -34,10 +34,10 @@ export default function ParagraphOne() {
                 }}
               />
               <div>
-                <h1>Organize, Manage & Share</h1>
+                <h1>Organize & Manage</h1>
                 <h3>
-                  Stay organized, share your faves, and find that really great
-                  article you read last month.
+                  Stay organized and find that really great article you read
+                  last month.
                 </h3>
               </div>
             </GridItem>
@@ -48,17 +48,19 @@ export default function ParagraphOne() {
         <div id="navigation-pills">
           <GridContainer>
             <GridItem xs={11} sm={11} md={8} lg={4}>
-              <h2>Full-Text</h2>
+              <h2>Search</h2>
               <h4>
-                Feedbin can help get full-text of an article for feeds that only
-                offer partial-content. This way you can keep reading without
-                leaving Feedbin.
+                RSS Box supports a powerful and expressive search syntax to find
+                exactly what you&apos;re looking for.
               </h4>
-              <h2>Updated Articles</h2>
+              <h2>Organiaze</h2>
               <h4>
-                Articles are updated whenever the original changes so you dont
-                miss any important changes. You can even see the differences to
-                know what changed.
+                Group your feeds by a simple to use and clear organized system.
+              </h4>
+              <h2>All devices</h2>
+              <h4>
+                Use the platform on any type of device which you want. It&apos;s
+                fully responsive and looks great on all resolutions.
               </h4>
             </GridItem>
             <GridItem xs={11} sm={11} md={8} lg={8}>

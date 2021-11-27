@@ -30,7 +30,7 @@ export default function Footer(props) {
     <footer className={footerClasses}>
       <div className={classes.container}>
         <div className={classes.left}>
-          <List className={classes.list}>
+          {/* <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
               <a href="" className={classes.block} target="_blank">
                 Contact us
@@ -41,7 +41,7 @@ export default function Footer(props) {
                 Github
               </a>
             </ListItem>
-          </List>
+          </List> */}
         </div>
         <div className={classes.right}>
           &copy; {1900 + new Date().getYear()} , made with{' '}

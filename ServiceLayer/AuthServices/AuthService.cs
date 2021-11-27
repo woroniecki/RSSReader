@@ -51,6 +51,31 @@ namespace ServiceLayer.AuthServices
             };
         }
 
+        public string GetUserIdFromToken(string token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = false,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                    .GetBytes(_config.GetSection("AppSettings:Token").Value)),
+                ValidateLifetime = false
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512, StringComparison.InvariantCultureIgnoreCase))
+                return null;
+
+            var id_claim = principal.FindFirst(ClaimTypes.NameIdentifier);
+            return id_claim != null ? id_claim.Value : null;
+        }
+
         static string CreateAuthToken(string id, string name, string key, out DateTime expiresTime)
         {
             var creds = new SigningCredentials(
@@ -99,5 +124,6 @@ namespace ServiceLayer.AuthServices
     public interface IAuthService
     {
         public AuthTokensDto GenerateAuthTokens(ApiUser user);
+        public string GetUserIdFromToken(string token);
     }
 }

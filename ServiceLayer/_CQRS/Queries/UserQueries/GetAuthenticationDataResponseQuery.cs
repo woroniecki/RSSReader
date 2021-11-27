@@ -1,16 +1,19 @@
 ﻿
 using AutoMapper;
 using DataLayer.Code;
+using DataLayer.Models;
 using Dtos.Auth;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ServiceLayer._CQRS.UserQueries
 {
     public class GetAuthenticationDataResponseQuery : IQuery
     {
-        public string Username { get; set; }
+        public Expression<Func<ApiUser, bool>> Predicate;
         public AuthTokensDto Tokens { get; set; }
     }
 
@@ -28,7 +31,7 @@ namespace ServiceLayer._CQRS.UserQueries
         public async Task<object> Handle(GetAuthenticationDataResponseQuery query)
         {
             var user = await _context.Users
-                .Where(x => x.UserName == query.Username)
+                .Where(query.Predicate)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 

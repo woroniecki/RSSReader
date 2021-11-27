@@ -32,7 +32,7 @@ namespace RSSReader.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<ApiResponse> Register([FromBody] RegisterNewUserRequestDto model, [FromServices] IAuthRegisterService service)
+        public async Task<ApiResponse> Register([FromBody] RegisterNewUserRequestDto model)
         {
             string id = Guid.NewGuid().ToString();
 
@@ -53,7 +53,7 @@ namespace RSSReader.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<ApiResponse> Login([FromBody] LoginRequestDto model, [FromServices] IAuthLoginService service)
+        public async Task<ApiResponse> Login([FromBody] LoginRequestDto model)
         {
             var command = new LoginUserCommand()
             {
@@ -65,7 +65,7 @@ namespace RSSReader.Controllers
             var response = await _queriesBus.Get(
                 new GetAuthenticationDataResponseQuery()
                 {
-                    Username = model.Username,
+                    Predicate = x => x.UserName == model.Username,
                     Tokens = command.GetGeneratedTokens()
                 });
 
@@ -74,17 +74,21 @@ namespace RSSReader.Controllers
 
         [HttpPost]
         [Route("refresh")]
-        public async Task<ApiResponse> Refresh([FromBody] TokensRequestDto data, [FromServices] IAuthRefreshTokensService service)
+        public async Task<ApiResponse> Refresh([FromBody] TokensRequestDto data, [FromServices] IAuthService authService)
         {
-            var response = await service.RefreshTokens(data);
+            var command = new RefreshTokensCommand()
+            {
+                Data = data
+            };
 
-            if (service.Errors.Any())
-                return new ApiResponse
-                    (
-                        "Error",
-                        ModelErrors.ConvertResponse(service.Errors),
-                        Status400BadRequest
-                    );
+            await _commandBus.Send(command);
+
+            var response = await _queriesBus.Get(
+                new GetAuthenticationDataResponseQuery()
+                {
+                    Predicate = x => x.Id == authService.GetUserIdFromToken(data.AuthToken),
+                    Tokens = command.GetGeneratedTokens()
+                });
 
             return new ApiResponse(MsgSucceed, response, Status200OK);
         }

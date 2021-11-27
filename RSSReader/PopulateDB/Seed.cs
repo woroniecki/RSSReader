@@ -2,19 +2,17 @@
 using DataLayer.Code;
 using DataLayer.Models;
 using DbAccess.Core;
-using LogicLayer.Blogs;
 using LogicLayer.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RSSReader.Helpers;
+using ServiceLayer.BlogServices;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace LogicLayer.PopulateDB
@@ -135,15 +133,16 @@ namespace LogicLayer.PopulateDB
                 //PREPARE CONTEXT
                 try
                 {
-                    GetOrCreateBlogAction getOrCreateBlogAction = new GetOrCreateBlogAction(httpService, uow, mapper);
-
-                    Blog blog = await getOrCreateBlogAction.ActionAsync(url);
-
-                    if (blog == null || getOrCreateBlogAction.HasErrors)
+                    try
                     {
-                        logger.LogError($"Failed to add blog {url}\n{getOrCreateBlogAction.Errors[0]}");
+                        IBlogService blog_service = new BlogService(context, httpService, mapper);
+                        Blog blog = await blog_service.GetOrCreateBlog(url);
+                    }
+                    catch(Exception ex)
+                    {
+                        logger.LogError($"Failed to add blog {url}\n{ex.Message}");
 
-                        lock (failed) failed.Add($"{url} - {getOrCreateBlogAction.Errors[0]}"); 
+                        lock (failed) failed.Add($"{url} - {ex.Message}");
 
                         lock (finishedTasksAmount) finishedTasksAmount.value++;
                         return false;

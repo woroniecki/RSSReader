@@ -8,6 +8,7 @@ import ArticleCard from '../Article/ArticleCard'
 import useGetArticles from './../Article/useGetArticles'
 import BlogAvatar from './BlogAvatar'
 import BlogGroup from './BlogGroup'
+import AppButton from 'components/layout/AppButton'
 
 export interface SingleBlogProps {}
 
@@ -47,10 +48,9 @@ export const SingleBlog: React.FC<SingleBlogProps> = () => {
     return (
       <>
         <CardHeader
-          avatar={<BlogAvatar title={blog.name} imageUrl={blog.imageUrl} />}
           action={
             <>
-              <Button
+              <AppButton weight={700}
                 className={getFilterButtonClass(blog.userData.filterReaded)}
                 onClick={() => {
                   patchSubscription(
@@ -60,8 +60,8 @@ export const SingleBlog: React.FC<SingleBlogProps> = () => {
                 }}
               >
                 Filtr readed
-              </Button>
-              <Button onClick={() => push('/')}>Return</Button>
+              </AppButton>
+              <AppButton weight={700} onClick={() => push('/')}>Return</AppButton>
             </>
           }
           title={<Typography variant="h4">{blog.name}</Typography>}

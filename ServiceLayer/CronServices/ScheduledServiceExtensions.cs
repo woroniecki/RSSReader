@@ -36,7 +36,8 @@ namespace ServiceLayer.CronServices
             }
 
             services.AddSingleton<ICronConfig>(sp => new CronConfig(
-                    config.GetSection("PingUrls").Get<string[]>().ToList()
+                    config.GetSection("PingUrls").Get<string[]>().ToList(),
+                    config.GetValue<string>("ConfigName")
                 ));
         }
 

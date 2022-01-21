@@ -18,6 +18,7 @@ namespace ServiceLayer.CronServices
         private readonly ISmtpService _smtpService;
         private readonly ILogger<KeepServerAliveCron> _logger;
         private readonly IEnumerable<string> _urls;
+        private readonly string _configName;
 
         public KeepServerAliveCron(
             IScheduleConfig<KeepServerAliveCron> config,
@@ -29,13 +30,14 @@ namespace ServiceLayer.CronServices
             _smtpService = smtpService;
             _logger = logger;
             _urls = cron_config.GetBaseUrl();
+            _configName = cron_config.GetConfigName();
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"{TASK_NAME} job starts.");
+            _logger.LogInformation($"{TASK_NAME} job starts");
 
-            _smtpService.SendEmailToAdministration($"{TASK_NAME} StartAsync", $"Server is working");
+            _smtpService.SendEmailToAdministration($"{TASK_NAME} StartAsync - {_configName}", $"Server is working");
 
             return base.StartAsync(cancellationToken);
         }
@@ -62,7 +64,7 @@ namespace ServiceLayer.CronServices
                         {
                             var data = reader.ReadToEnd();
 
-                            _logger.LogInformation($"{TASK_NAME} success.");
+                            _logger.LogInformation($"{TASK_NAME} success to ping {urlBase}.");
                         }
                     }
                     catch (Exception ex)
@@ -80,7 +82,7 @@ namespace ServiceLayer.CronServices
         {
             _logger.LogInformation($"{TASK_NAME} is stopping.");
 
-            _smtpService.SendEmailToAdministration($"{TASK_NAME} StopAsync", $"{Environment.StackTrace}");
+            _smtpService.SendEmailToAdministration($"{TASK_NAME} StopAsync - {_configName}", $"{Environment.StackTrace}");
 
             return base.StopAsync(cancellationToken);
         }

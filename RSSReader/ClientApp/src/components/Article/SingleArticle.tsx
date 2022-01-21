@@ -103,7 +103,7 @@ export const SingleArticle: React.FC<SingleArticleProps> = () => {
           subheader={`${formatDate(article.publishDate)}, ${article.author}`}
         />
         <Divider />
-        <SingleArticleWrapper>{parse(article.content)}</SingleArticleWrapper>
+        <SingleArticleWrapper>{parse(article.content ? article.content : "")}</SingleArticleWrapper>
       </>
     )
   }

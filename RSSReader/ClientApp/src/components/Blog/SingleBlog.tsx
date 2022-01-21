@@ -48,6 +48,7 @@ export const SingleBlog: React.FC<SingleBlogProps> = () => {
     return (
       <>
         <CardHeader
+          avatar={<BlogAvatar title={blog.name} imageUrl={blog.imageUrl} />}
           action={
             <>
               <AppButton weight={700}
@@ -59,7 +60,7 @@ export const SingleBlog: React.FC<SingleBlogProps> = () => {
                   )
                 }}
               >
-                Filtr readed
+                Filtr<br /> Readed
               </AppButton>
               <AppButton weight={700} onClick={() => push('/')}>Return</AppButton>
             </>

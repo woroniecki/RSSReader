@@ -1,5 +1,6 @@
 import { Button, CardHeader, Divider, Typography } from '@material-ui/core'
 import AppButton from 'components/layout/AppButton'
+import AppTypography from 'components/layout/AppTypography'
 import parse from 'html-react-parser'
 import React from 'react'
 import { useSelector } from 'react-redux'
@@ -99,7 +100,7 @@ export const SingleArticle: React.FC<SingleArticleProps> = () => {
               <Button onClick={() => push(`/blog/${blogid}`)}>Return</Button>
             </>
           }
-          title={<Typography variant="h4">{article.name}</Typography>}
+          title={<AppTypography variant="h4">{article.name}</AppTypography>}
           subheader={`${formatDate(article.publishDate)}, ${article.author}`}
         />
         <Divider />

@@ -4,6 +4,7 @@ import CardContent from '@material-ui/core/CardContent'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import { PostUserData } from 'api/api.types'
+import AppTypography from 'components/layout/AppTypography'
 import React from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { formatDate } from 'utils/utils'
@@ -37,7 +38,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
       }
     >
       <CardHeader
-        title={<Typography variant="h5">{props.title}</Typography>}
+        title={<AppTypography variant="h5">{props.title}</AppTypography>}
         subheader={
           <time dateTime={props.publishDate}>
             {formatDate(props.publishDate)}

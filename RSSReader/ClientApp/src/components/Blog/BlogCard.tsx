@@ -4,6 +4,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import SubjectOutlinedIcon from '@material-ui/icons/SubjectOutlined'
 import { Blog } from 'api/api.types'
+import AppTypography from 'components/layout/AppTypography'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -63,9 +64,9 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
         avatar={
           <BlogAvatar title={props.blog.name} imageUrl={props.blog.imageUrl} />
         }
-        action={<>{DrawUnreadedAmount()}</>}
-        title={<Typography variant="h5">{props.blog.name}</Typography>}
-        subheader={props.blog.description}
+        action={<Typography noWrap>{DrawUnreadedAmount()}</Typography>}
+        title={<AppTypography variant="h5">{props.blog.name}</AppTypography>}
+        subheader={<AppTypography>{props.blog.description}</AppTypography>}
       />
       <Divider />
       <CardActions disableSpacing>

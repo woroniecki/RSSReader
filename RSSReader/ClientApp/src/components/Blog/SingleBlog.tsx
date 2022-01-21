@@ -9,6 +9,7 @@ import useGetArticles from './../Article/useGetArticles'
 import BlogAvatar from './BlogAvatar'
 import BlogGroup from './BlogGroup'
 import AppButton from 'components/layout/AppButton'
+import AppTypography from 'components/layout/AppTypography'
 
 export interface SingleBlogProps {}
 
@@ -65,7 +66,7 @@ export const SingleBlog: React.FC<SingleBlogProps> = () => {
               <AppButton weight={700} onClick={() => push('/')}>Return</AppButton>
             </>
           }
-          title={<Typography variant="h4">{blog.name}</Typography>}
+          title={<AppTypography variant="h4">{blog.name}</AppTypography>}
           subheader={
             <BlogGroup
               subId={blog.userData.subId}

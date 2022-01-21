@@ -12,6 +12,10 @@ export const BlogsList: React.FC<BlogsListProps> = () => {
   const { groupId } = useParams<{ groupId: string }>()
   const { loader } = useSelector(layoutSlice.stateSelector)
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   const renderBlogList = () => {
     const noGroupId = parseInt(groupId)
 

@@ -22,6 +22,10 @@ export const SingleBlog: React.FC<SingleBlogProps> = () => {
 
   useGetArticles()
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   const patchSubscription = async (subId: number, filterReaded: boolean) => {
     const promise = await dispatch(
       blogsSlice.patchSubscription({

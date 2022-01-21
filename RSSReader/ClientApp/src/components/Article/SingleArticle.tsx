@@ -48,6 +48,10 @@ export const SingleArticle: React.FC<SingleArticleProps> = () => {
 
   useGetArticles()
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   const readPostRequest = async () => {
     const promise = await dispatch(
       articlesSlice.putReadArticle({

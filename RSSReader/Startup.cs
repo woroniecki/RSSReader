@@ -24,6 +24,7 @@ using RSSReader.Config;
 using ServiceLayer.CronServices;
 using ServiceLayer.SmtpService;
 using ServiceLayer._CQRS;
+using System.Linq;
 
 namespace RSSReader
 {
@@ -104,6 +105,8 @@ namespace RSSReader
 
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
+            services.AddSwagger();
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => configuration.RootPath = $"ClientApp/{ConfigName}");
 
@@ -134,6 +137,8 @@ namespace RSSReader
         {
             if (env.IsDevelopment())
             {
+                app.UseSwagger();
+                app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
             }
             else

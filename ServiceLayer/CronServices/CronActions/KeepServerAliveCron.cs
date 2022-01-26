@@ -24,7 +24,7 @@ namespace ServiceLayer.CronServices
             IScheduleConfig<KeepServerAliveCron> config,
             ISmtpService smtpService,
             ILogger<KeepServerAliveCron> logger,
-            ICronConfig cron_config)
+            IAppConfig cron_config)
             : base(config.CronExpression, config.TimeZoneInfo)
         {
             _smtpService = smtpService;

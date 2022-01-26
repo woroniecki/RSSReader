@@ -11,7 +11,7 @@ namespace ServiceLayer.CronServices
             this IServiceCollection services, 
             IConfiguration config)
         {
-            AddCronConfig(services, config);
+            AddAppConfig(services, config);
 
             services.AddCronJob<UpdateBlogsCron>(c =>
             {
@@ -28,16 +28,17 @@ namespace ServiceLayer.CronServices
             return services;
         }
 
-        private static void AddCronConfig(IServiceCollection services, IConfiguration config)
+        private static void AddAppConfig(IServiceCollection services, IConfiguration config)
         {
             if (config == null)
             {
                 throw new ArgumentNullException(nameof(config), @"Please provide Configuration.");
             }
 
-            services.AddSingleton<ICronConfig>(sp => new CronConfig(
+            services.AddSingleton<IAppConfig>(sp => new AppConfig(
                     config.GetSection("PingUrls").Get<string[]>().ToList(),
-                    config.GetValue<string>("ConfigName")
+                    config.GetValue<string>("ConfigName"),
+                    config.GetValue<string>("AppVersion")
                 ));
         }
 

@@ -2,15 +2,17 @@
 
 namespace ServiceLayer.CronServices
 {
-    public class CronConfig : ICronConfig
+    public class AppConfig : IAppConfig
     {
         private List<string> UrlsToPing { get; }
         private string ConfigName { get; }
+        private string AppVersion{ get; }
 
-        public CronConfig(List<string> urlsToPing, string configName)
+        public AppConfig(List<string> urlsToPing, string configName, string appVersion)
         {
             UrlsToPing = urlsToPing;
             ConfigName = configName;
+            AppVersion = appVersion;
         }
 
         public IEnumerable<string> GetBaseUrl()
@@ -22,11 +24,17 @@ namespace ServiceLayer.CronServices
         {
             return ConfigName;
         }
+
+        public string GetAppVersion()
+        {
+            return AppVersion;
+        }
     }
 
-    public interface ICronConfig
+    public interface IAppConfig
     {
         IEnumerable<string> GetBaseUrl();
         string GetConfigName();
+        string GetAppVersion();
     }
 }

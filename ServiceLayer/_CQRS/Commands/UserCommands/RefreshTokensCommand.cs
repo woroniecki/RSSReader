@@ -54,7 +54,9 @@ namespace ServiceLayer._CQRS.UserCommands
 
                 refresh_token.MarkAsUsed();
 
-                AuthTokensDto tokens = _authService.GenerateAuthTokens(user);
+                var role = await _authService.GetAndCreateRole(user);
+
+                AuthTokensDto tokens = _authService.GenerateAuthTokens(user, role);
 
                 command.SetGeneratedTokens(tokens);
 

@@ -14,7 +14,7 @@ using static RSSReader.Data.Response;
 namespace RSSReader.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "User, Admin")]
     [Route("api/[controller]")]
     public class SubscriptionController : Controller
     {

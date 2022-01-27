@@ -12,27 +12,34 @@ using Dtos.Auth;
 
 using LogicLayer.Helpers;
 using LogicLayer._const;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using System.Linq;
 
 namespace ServiceLayer.AuthServices
 {
     public class AuthService : IAuthService
     {
+        private UserManager<ApiUser> _userManager;
         private IConfiguration _config;
 
         public AuthService(
+            UserManager<ApiUser> userManager,
             IConfiguration config
             )
         {
+            _userManager = userManager;
             _config = config;
         }
 
-        public AuthTokensDto GenerateAuthTokens(ApiUser user)
+        public AuthTokensDto GenerateAuthTokens(ApiUser user, string role)
         {
             var key = _config.GetSection("AppSettings:Token").Value;
 
             var authToken = CreateAuthToken(
                             user.Id,
                             user.UserName,
+                            role,
                             key,
                             out DateTime expiresTime
                             );
@@ -46,6 +53,18 @@ namespace ServiceLayer.AuthServices
                 AuthToken = new TokenResponseDto(authToken, expiresTime.From1970()),
                 RefreshToken = new TokenResponseDto(refreshToken.Token, refreshToken.Expires.From1970())
             };
+        }
+
+        public async Task<string> GetAndCreateRole(ApiUser user)
+        {
+            var user_role = await _userManager.GetRolesAsync(user);
+            if (user_role.Count <= 0)
+            {
+                await _userManager.AddToRoleAsync(user, "User");
+                user_role = await _userManager.GetRolesAsync(user);
+            }
+
+            return user_role.First();
         }
 
         public string GetUserIdFromToken(string token)
@@ -73,7 +92,7 @@ namespace ServiceLayer.AuthServices
             return id_claim != null ? id_claim.Value : null;
         }
 
-        static string CreateAuthToken(string id, string name, string key, out DateTime expiresTime)
+        static string CreateAuthToken(string id, string name, string role, string key, out DateTime expiresTime)
         {
             var creds = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
@@ -85,7 +104,8 @@ namespace ServiceLayer.AuthServices
                 Subject = new ClaimsIdentity(
                     new Claim[]{
                                 new Claim(ClaimTypes.NameIdentifier, id),
-                                new Claim(ClaimTypes.Name, name)
+                                new Claim(ClaimTypes.Name, name),
+                                new Claim(ClaimTypes.Role, role)
                     }
                 ),
                 //Issuer = "http://localhost:5000/",//TODO
@@ -120,7 +140,8 @@ namespace ServiceLayer.AuthServices
 
     public interface IAuthService
     {
-        public AuthTokensDto GenerateAuthTokens(ApiUser user);
+        public AuthTokensDto GenerateAuthTokens(ApiUser user, string role);
         public string GetUserIdFromToken(string token);
+        public Task<string> GetAndCreateRole(ApiUser user);
     }
 }

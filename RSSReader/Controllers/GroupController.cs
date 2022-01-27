@@ -14,7 +14,7 @@ using static RSSReader.Data.Response;
 namespace RSSReader.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "User")]
     [Route("api/[controller]")]
     public class GroupController : Controller
     {

@@ -11,6 +11,7 @@ using ServiceLayer._Commons;
 using Dtos.Auth.Login;
 using ServiceLayer.AuthServices;
 using Dtos.Auth;
+using System.Linq;
 
 namespace ServiceLayer._CQRS.UserCommands
 {
@@ -47,8 +48,10 @@ namespace ServiceLayer._CQRS.UserCommands
                 var user = await GetUser(command.Data.Username);
 
                 await CheckPassword(command, user);
+                
+                var role = await _authService.GetAndCreateRole(user);
 
-                AuthTokensDto tokens = _authService.GenerateAuthTokens(user);
+                AuthTokensDto tokens = _authService.GenerateAuthTokens(user, role);
 
                 command.SetGeneratedTokens(tokens);
 

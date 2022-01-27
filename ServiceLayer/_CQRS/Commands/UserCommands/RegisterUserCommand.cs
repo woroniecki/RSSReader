@@ -60,6 +60,8 @@ namespace ServiceLayer._CQRS.UserCommands
                     command.Data.Password
                     );
 
+                await _userManager.AddToRoleAsync(registered_user, "User");
+
                 if (!result.Succeeded)
                     throw ApiExceptions.General(
                             "Internale server error.",

@@ -25,6 +25,7 @@ using ServiceLayer.CronServices;
 using ServiceLayer.SmtpService;
 using ServiceLayer._CQRS;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RSSReader
 {
@@ -55,8 +56,10 @@ namespace RSSReader
                 sqlConnectionStr,
                 b => b.MigrationsAssembly("DataLayer"))
             );
+            services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApiUser>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<DataContext>();
 
             services.Configure<IdentityOptions>(options =>

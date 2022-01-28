@@ -49,7 +49,7 @@ namespace ServiceLayer._CQRS.UserCommands
 
                 await CheckPassword(command, user);
                 
-                var role = await _authService.GetAndCreateRole(user);
+                var role = await user.GetRoleAndAssignToUserIfNull(_userManager);
 
                 AuthTokensDto tokens = _authService.GenerateAuthTokens(user, role);
 

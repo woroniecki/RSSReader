@@ -34,14 +34,17 @@ namespace ServiceLayer._CQRS.UserCommands
     {
         private DataContext _context;
         private IAuthService _authService;
+        private UserManager<ApiUser> _userManager;
 
         public RefreshTokensCommandHandler(
             DataContext context,
-            IAuthService authService
+            IAuthService authService,
+            UserManager<ApiUser> userManager
             )
         {
             _context = context;
             _authService = authService;
+            _userManager = userManager;
         }
 
         public async Task Handle(RefreshTokensCommand command)
@@ -54,7 +57,7 @@ namespace ServiceLayer._CQRS.UserCommands
 
                 refresh_token.MarkAsUsed();
 
-                var role = await _authService.GetAndCreateRole(user);
+                var role = await user.GetRoleAndAssignToUserIfNull(_userManager);
 
                 AuthTokensDto tokens = _authService.GenerateAuthTokens(user, role);
 

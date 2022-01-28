@@ -55,18 +55,6 @@ namespace ServiceLayer.AuthServices
             };
         }
 
-        public async Task<string> GetAndCreateRole(ApiUser user)
-        {
-            var user_role = await _userManager.GetRolesAsync(user);
-            if (user_role.Count <= 0)
-            {
-                await _userManager.AddToRoleAsync(user, "User");
-                user_role = await _userManager.GetRolesAsync(user);
-            }
-
-            return user_role.First();
-        }
-
         public string GetUserIdFromToken(string token)
         {
             var tokenValidationParameters = new TokenValidationParameters
@@ -142,6 +130,5 @@ namespace ServiceLayer.AuthServices
     {
         public AuthTokensDto GenerateAuthTokens(ApiUser user, string role);
         public string GetUserIdFromToken(string token);
-        public Task<string> GetAndCreateRole(ApiUser user);
     }
 }

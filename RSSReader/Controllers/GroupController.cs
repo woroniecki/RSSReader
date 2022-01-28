@@ -14,7 +14,7 @@ using static RSSReader.Data.Response;
 namespace RSSReader.Controllers
 {
     [ApiController]
-    [Authorize(Roles = "User")]
+    [Authorize]
     [Route("api/[controller]")]
     public class GroupController : Controller
     {
@@ -40,6 +40,7 @@ namespace RSSReader.Controllers
         }
 
         [HttpPost("add")]
+        [Authorize(Roles = "User, Admin")]
         public async Task<ApiResponse> Add([FromBody] AddGroupRequestDto data)
         {
             Guid guid = Guid.NewGuid();
@@ -68,6 +69,7 @@ namespace RSSReader.Controllers
         }
 
         [HttpDelete("remove")]
+        [Authorize(Roles = "User, Admin")]
         public async Task<ApiResponse> Remove([FromBody] RemoveGroupRequestDto data)
         {
             await _commandBus.Send(new DeleteGroupCommand()

@@ -15,7 +15,7 @@ using static RSSReader.Data.Response;
 namespace RSSReader.Controllers
 {
     [ApiController]
-    [Authorize(Roles = "User, Admin")]
+    [Authorize]
     [Route("api/blog/{blogId}/[controller]/")]
     public class PostController : Controller
     {

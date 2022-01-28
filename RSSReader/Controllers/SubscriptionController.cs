@@ -14,7 +14,7 @@ using static RSSReader.Data.Response;
 namespace RSSReader.Controllers
 {
     [ApiController]
-    [Authorize(Roles = "User, Admin")]
+    [Authorize]
     [Route("api/[controller]")]
     public class SubscriptionController : Controller
     {
@@ -28,6 +28,7 @@ namespace RSSReader.Controllers
         }
 
         [HttpPost("subscribe")]
+        [Authorize(Roles = "User, Admin")]
         public async Task<ApiResponse> Subscribe(SubscribeRequestDto dto)
         {
             var command = new SubscribeCommand()
@@ -55,6 +56,7 @@ namespace RSSReader.Controllers
         }
 
         [HttpPut("{id}/unsubscribe")]
+        [Authorize(Roles = "User, Admin")]
         public async Task<ApiResponse> Unsubscribe(int id)
         {
             await _commandBus.Send(new DisableSubCommand() { 
@@ -66,6 +68,7 @@ namespace RSSReader.Controllers
         }
 
         [HttpPatch("{subid}/set_group/{groupid}")]
+        [Authorize(Roles = "User, Admin")]
         public async Task<ApiResponse> SetGroup(int subId, int groupId)
         {
             await _commandBus.Send(new SetGroupSubCommand()

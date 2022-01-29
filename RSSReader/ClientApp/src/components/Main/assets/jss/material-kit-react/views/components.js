@@ -19,6 +19,7 @@ const componentsStyle = {
   },
   main: {
     background: '#FFFFFF',
+    color: '#000000',
     position: 'relative',
     zIndex: '3',
   },

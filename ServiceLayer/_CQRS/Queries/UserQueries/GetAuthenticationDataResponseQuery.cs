@@ -3,6 +3,7 @@ using AutoMapper;
 using DataLayer.Code;
 using DataLayer.Models;
 using Dtos.Auth;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -21,11 +22,13 @@ namespace ServiceLayer._CQRS.UserQueries
     {
         private DataContext _context;
         private IMapper _mapper;
+        private UserManager<ApiUser> _userManager;
 
-        public GetAuthenticationDataResponseQueryHandler(DataContext context, IMapper mapper)
+        public GetAuthenticationDataResponseQueryHandler(DataContext context, IMapper mapper, UserManager<ApiUser> userManager)
         {
             _context = context;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<object> Handle(GetAuthenticationDataResponseQuery query)
@@ -39,7 +42,8 @@ namespace ServiceLayer._CQRS.UserQueries
             {
                 AuthToken = query.Tokens.AuthToken,
                 RefreshToken = query.Tokens.RefreshToken,
-                User = _mapper.Map<UserResponseDto>(user)
+                User = _mapper.Map<UserResponseDto>(user),
+                Role = await user.GetRoleAndAssignToUserIfNull(_userManager)
             };
         }
     }

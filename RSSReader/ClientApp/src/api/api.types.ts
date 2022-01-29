@@ -21,6 +21,7 @@ export interface LoginResponse {
   authToken: Token
   refreshToken: Token
   user: User
+  role: string
 }
 
 export interface Blog {

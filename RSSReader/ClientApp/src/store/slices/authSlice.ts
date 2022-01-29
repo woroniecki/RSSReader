@@ -12,16 +12,19 @@ import {
 } from '../../api/api.types'
 import * as authApi from '../../api/authApi'
 const AUTH = 'auth'
+
 interface AuthState {
   token?: string
   expiration?: number
   userName?: string
+  role?: string
 }
 
 const initialState: AuthState = {
   expiration: 0,
   token: '',
   userName: '',
+  role: 'user'
 }
 
 export const login = createAsyncThunk<
@@ -75,6 +78,7 @@ const authSlice = createSlice({
         state.token = payload.authToken.token
         state.expiration = payload.authToken.expires
         state.userName = payload.user.userName
+        state.role = payload.role
         setAuthHeader(payload.authToken.token)
         saveTokenDataToStorage(
           payload.authToken.token,
@@ -89,6 +93,7 @@ const authSlice = createSlice({
         state.token = payload.authToken.token
         state.expiration = payload.authToken.expires
         state.userName = payload.user.userName
+        state.role = payload.role
         setAuthHeader(payload.authToken.token)
         saveTokenDataToStorage(
           payload.authToken.token,

@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography'
 import MenuIcon from '@material-ui/icons/Menu'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { layoutSlice, navbarSlice } from 'store/slices'
+import { authSlice, layoutSlice, navbarSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import { drawerWidth } from '../UserApp'
 import ActionsBar from './NavbarActions/ActionsBar'
@@ -24,6 +24,7 @@ export const AppNavbar: React.FC<AppNavbarProps> = () => {
   const classes = useStyles()
   const theme = useTheme()
   const { navOpen } = useSelector(navbarSlice.stateSelector)
+  const { role } = useSelector(authSlice.stateSelector)
 
   const handleDrawerToggle = () => {
     dispatch(navbarSlice.actions.setOpen(!navOpen))
@@ -37,6 +38,14 @@ export const AppNavbar: React.FC<AppNavbarProps> = () => {
       <ActionsBar />
     </div>
   )
+
+  const renderTestInfo = () => {
+    if(role == "Test")
+      return <Typography variant="body2" noWrap>
+        This is a test account, some features can be limited.
+      </Typography>
+    return
+  }
 
   const renderNavbar = () => {
     if (loader != layoutSlice.type.fullScreen) {
@@ -55,6 +64,7 @@ export const AppNavbar: React.FC<AppNavbarProps> = () => {
               </IconButton>
               <Typography variant="h6" noWrap>
                 Rss Box
+                {renderTestInfo()}
               </Typography>
             </Toolbar>
           </AppBar>

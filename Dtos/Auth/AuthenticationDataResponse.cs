@@ -11,5 +11,6 @@ namespace Dtos.Auth
         public TokenResponseDto AuthToken { get; set; }
         public TokenResponseDto RefreshToken { get; set; }
         public UserResponseDto User { get; set; }
+        public string Role { get; set; }
     }
 }

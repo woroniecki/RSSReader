@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 import { useFormik } from 'formik'
 import React from 'react'
-import { groupsSlice } from 'store/slices'
+import { groupsSlice, snackbarSlice } from 'store/slices'
 import { useAppDispatch } from 'store/store'
 import { applyValidationErrors } from 'utils/utils'
 import * as Yup from 'yup'
@@ -41,6 +41,13 @@ export const AddGroupFormPrompt: React.FC<AddGroupFormPromptProps> = props => {
         props.onClose(this)
       } else {
         applyValidationErrors(formik, promise.error)
+        dispatch(
+          snackbarSlice.actions.setSnackbar({
+            open: true,
+            color: 'error',
+            msg: 'Failed to add group',
+          })
+        )
       }
     },
   })

@@ -40,6 +40,17 @@ namespace RSSReader
                     var logger = services.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error accured during creating roles");
                 }
+
+                try
+                {
+                    var task = ApiAuthorization.CreateAdmin(services);
+                    Task.WaitAll(task);
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error accured during creating admin user");
+                }
             }
 
             host.Run();

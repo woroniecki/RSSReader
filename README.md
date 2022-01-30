@@ -1,5 +1,4 @@
-# Application to manage RSS channels
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md) [![.NET](https://github.com/edandersen/core-admin/actions/workflows/dotnet-core.yml/badge.svg)](https://github.com/edandersen/core-admin/actions/workflows/dotnet-core.yml)
+# Application to manage RSS channels [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 
 > [🤩 Click here to check how the app works, by using test account](https://rssbox.org/autologin/test_account/password)
 

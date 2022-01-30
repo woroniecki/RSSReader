@@ -69,10 +69,20 @@ namespace ServiceLayer.JobServices
 
                     await Task.WhenAll(tasks);
 
-                    await _context.SaveChangesAsync();
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        _context.ChangeTracker.Clear();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Failed to call database update\n {ex}");
+                    }
                 }
             }
             while (blogs.Count() > 0);
+
+            _logger.LogInformation($"UpdateBlogs progress: DONE");
 
             var result = new UpdateBlogsJobResponse()
             {

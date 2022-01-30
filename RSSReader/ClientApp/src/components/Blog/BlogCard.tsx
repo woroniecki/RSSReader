@@ -30,18 +30,23 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
 
     if (props.blog.userData == null) return
 
-    let amount = articlesList.filter(
+    const all_posts_amount = articlesList.filter(
+      el =>
+        el.blogId == props.blog.id
+    ).length
+
+    let amount_unreaded = articlesList.filter(
       el =>
         el.blogId == props.blog.id && el.userData != null && !el.userData.readed
     ).length
 
-    if (amount <= 0 && props.blog.userData.unreadedCount != null) {
-      amount = props.blog.userData.unreadedCount
+    if (all_posts_amount <= 0 && props.blog.userData.unreadedCount != null) {
+      amount_unreaded = props.blog.userData.unreadedCount
     }
 
-    if (amount <= 0) return
+    if (amount_unreaded <= 0) return
 
-    return `New ` + amount.toString() + (amount >= 10 ? `+` : ` `)
+    return `New ` + amount_unreaded.toString() + `+`
   }
 
   function DrawGroup() {

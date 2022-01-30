@@ -1,4 +1,4 @@
-# Application to manage RSS channels [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE.md)
+# Application to manage RSS channels [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/woroniecki/RSSReader/blob/main/License.md)
 
 > [🤩 Click here to check how the app works, by using test account](https://rssbox.org/autologin/test_account/password)
 

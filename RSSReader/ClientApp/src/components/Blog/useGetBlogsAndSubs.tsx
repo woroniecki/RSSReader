@@ -9,7 +9,7 @@ export const useGetBlogsAndSubs = (): void => {
   const { token } = useSelector(authSlice.stateSelector)
 
   const fetchSubscribedBlogs = async () => {
-    dispatch(layoutSlice.actions.setLoader(layoutSlice.type.partial))
+    dispatch(layoutSlice.actions.setLoader(layoutSlice.type.fullScreen))
 
     const promise = await dispatch(blogsSlice.getSubscribedList())
 

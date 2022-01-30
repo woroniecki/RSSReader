@@ -50,9 +50,9 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
       />
       <Divider />
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
+        <AppTypography variant="body2" color="textSecondary">
           {props.summary}
-        </Typography>
+        </AppTypography>
       </CardContent>
       <CardActions disableSpacing>
         <Button

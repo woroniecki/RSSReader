@@ -9,6 +9,7 @@ import React from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { formatDate } from 'utils/utils'
 import ArticlePatchButtons from './ArticlePatchButtons'
+import { getUrlWithGroupId } from 'utils/utils'
 
 export interface ArticleCardProps {
   articleid: number
@@ -24,6 +25,7 @@ export interface ArticleCardProps {
 export const ArticleCard: React.FC<ArticleCardProps> = props => {
   const { push } = useHistory()
   const { blogid } = useParams<{ blogid: string }>()
+  const { groupId } = useParams<{ groupId: string }>()
   const classes = useStyles()
 
   const blogId = parseInt(blogid)
@@ -54,7 +56,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = props => {
       </CardContent>
       <CardActions disableSpacing>
         <Button
-          onClick={() => push(`/blog/${blogid}/article/${props.articleid}`)}
+          onClick={() => push(getUrlWithGroupId(`/blog/${blogid}/article/${props.articleid}`, groupId))}
         >
           Read
         </Button>

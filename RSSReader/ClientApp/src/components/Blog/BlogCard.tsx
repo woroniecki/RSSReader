@@ -7,11 +7,12 @@ import { Blog } from 'api/api.types'
 import AppTypography from 'components/layout/AppTypography'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { articlesSlice, blogsSlice } from 'store/slices'
 import BlogAvatar from './BlogAvatar'
 import { BlogGroup } from './BlogGroup'
 import UnsubscribeBlogBtn from './UnsubscribeBlogBtn'
+import { getUrlWithGroupId } from 'utils/utils'
 
 export interface BlogCardProps {
   blog: Blog
@@ -24,6 +25,8 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
 
   const blogsList = useSelector(blogsSlice.selectAll)
   const articlesList = useSelector(articlesSlice.selectAll)
+
+  const { groupId } = useParams<{ groupId: string }>()
 
   function DrawUnreadedAmount() {
     if (props.blog == null) return
@@ -65,7 +68,7 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
   return (
     <Card className={classes.root}>
       <CardHeader
-        onClick={() => push(`/blog/${props.blog.id}`)}
+        onClick={() => push(getUrlWithGroupId(`/blog/${props.blog.id}`, groupId))}
         avatar={
           <BlogAvatar title={props.blog.name} imageUrl={props.blog.imageUrl} />
         }
@@ -75,7 +78,7 @@ export const BlogCard: React.FC<BlogCardProps> = props => {
       />
       <Divider />
       <CardActions disableSpacing>
-        <Button onClick={() => push(`/blog/${props.blog.id}`)}>
+        <Button onClick={() => push(getUrlWithGroupId(`/blog/${props.blog.id}`, groupId))}>
           <SubjectOutlinedIcon />
           Read
         </Button>

@@ -10,6 +10,7 @@ import BlogAvatar from './BlogAvatar'
 import BlogGroup from './BlogGroup'
 import AppButton from 'components/layout/AppButton'
 import AppTypography from 'components/layout/AppTypography'
+import { getUrlWithGroupId } from 'utils/utils'
 
 export interface SingleBlogProps {}
 
@@ -17,6 +18,7 @@ export const SingleBlog: React.FC<SingleBlogProps> = () => {
   const dispatch = useAppDispatch()
   const { push } = useHistory()
   const { blogid } = useParams<{ blogid: string }>()
+  const { groupId } = useParams<{ groupId: string }>()
   const blogsList = useSelector(blogsSlice.selectAll)
   const articlesList = useSelector(articlesSlice.selectAll)
 
@@ -67,7 +69,7 @@ export const SingleBlog: React.FC<SingleBlogProps> = () => {
               >
                 Filtr<br /> Readed
               </AppButton>
-              <AppButton weight={700} onClick={() => push('/')}>Return</AppButton>
+              <AppButton weight={700} onClick={() => push(getUrlWithGroupId('', groupId))}>Return</AppButton>
             </>
           }
           title={<AppTypography variant="h4">{blog.name}</AppTypography>}

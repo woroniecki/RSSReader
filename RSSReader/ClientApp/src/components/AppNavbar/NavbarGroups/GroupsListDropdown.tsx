@@ -7,6 +7,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { blogsSlice } from 'store/slices'
 import AppListItemText from '../AppListItemText'
 import { useStyles } from '../UserNavbar'
+import { getUrlWithGroupId } from 'utils/utils'
 
 export interface GroupsListDropdownProps {
   groupId?: number
@@ -40,7 +41,7 @@ export const GroupsListDropdown: React.FC<GroupsListDropdownProps> = props => {
         <ListItem
           button
           key={el.id}
-          onClick={() => push(`/blog/` + el.id.toString())}
+          onClick={() => push(getUrlWithGroupId('/blog/' + el.id.toString(), groupId))}
         >
           <BlogAvatar
             title={el.name}

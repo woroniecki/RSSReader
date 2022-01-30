@@ -11,6 +11,7 @@ import styled from 'styled-components'
 import { formatDate } from 'utils/utils'
 import ArticlePatchButtons from './ArticlePatchButtons'
 import useGetArticles from './useGetArticles'
+import { getUrlWithGroupId } from 'utils/utils'
 
 const SingleArticleWrapper = styled.div`
   img {
@@ -43,6 +44,7 @@ export const SingleArticle: React.FC<SingleArticleProps> = () => {
   const { push } = useHistory()
   const { blogid } = useParams<{ blogid: string }>()
   const { articleid } = useParams<{ articleid: string }>()
+  const { groupId } = useParams<{ groupId: string }>()
   const articlesList = useSelector(articlesSlice.selectAll)
   const { token } = useSelector(authSlice.stateSelector)
 
@@ -101,7 +103,7 @@ export const SingleArticle: React.FC<SingleArticleProps> = () => {
                 userData={article.userData}
               />
               {renderVisitPageButton(article.url)}
-              <Button onClick={() => push(`/blog/${blogid}`)}>Return</Button>
+              <Button onClick={() => push(getUrlWithGroupId(`/blog/${blogid}`, groupId))}>Return</Button>
             </>
           }
           title={<AppTypography variant="h4">{article.name}</AppTypography>}

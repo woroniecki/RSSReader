@@ -62,9 +62,9 @@ function UserApp(props: Props) {
               <Switch>
                 <Route path="/login" component={Login} />
                 <Route path="/register" component={Register} />
-                <Route path="/blog/:blogid" exact component={SingleBlog} />
+                <Route path={['/blog/:blogid', '/:groupId/blog/:blogid']} exact component={SingleBlog} />
                 <Route
-                  path="/blog/:blogid/article/:articleid"
+                  path={['/blog/:blogid/article/:articleid', '/:groupId/blog/:blogid/article/:articleid']}
                   component={SingleArticle}
                 />
                 <Route exact path={['/', '/:groupId']} component={BlogsList} />

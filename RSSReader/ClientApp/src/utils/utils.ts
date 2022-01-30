@@ -19,3 +19,12 @@ export const applyValidationErrors = (formik: any, data: any): void => {
 export const formatDate = (date: string): string => {
   return moment(date).format('DD/MM/YYYY')
 }
+
+export const getUrlWithGroupId = (url: string, groupIndex: string) => {
+  let location = '';
+  if(!isNaN(parseInt(groupIndex)))
+  {
+    location += '/' + parseInt(groupIndex).toString()
+  }
+  return location + url
+}

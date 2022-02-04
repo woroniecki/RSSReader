@@ -28,5 +28,4 @@ Database: MS SQL </br>
 <h2>Requirments</h2>
 
 Visual Studio 2019 v16.8+ (with .NET 5.0) </br>
-Node.js v10+ </br>
-npm v6.4.1+ (installed with Node.js) </br>
+npm v6.4.1+ </br>

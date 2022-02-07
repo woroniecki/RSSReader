@@ -22,7 +22,7 @@ It implements features like: </br>
 <h2>Tech stack</h2>
 
 Frontend: react 17.0.1 </br>
-Backend: net5.0, ef, asp.net </br>
+Backend: net5.0, ef, asp.net web api</br>
 Database: MS SQL </br>
 
 <h2>Requirments</h2>
